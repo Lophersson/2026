@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Gastos Clasificados</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&display=swap');
+    body {
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-size: 18px;
+      background: linear-gradient(135deg, #333333 0%, #333333 100%);
+      color: #cccccc;
+      margin: 0;
+      padding: 6px;
+      line-height: 1.0;
+    }
+    h1, h2, h3 {
+      text-align: center;
+      color: #cccccc;
+      margin: 8px 0;
+      font-weight: 500;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      background: #424242;
+      border-radius: 14px;
+      font-size: 0.9em;
+      overflow: hidden;
+      box-shadow: 0 4px 14px rgba(74,144,226,0.12);
+    }
+    th, td {
+      padding: 16px 10px;
+      border-bottom: 1.5px solid #616161;
+      text-align: left;
+    }
+    th {
+      background: linear-gradient(90deg, #666363 40%, #666363 100%);
+      color: #cccccc;
+      font-weight: 700;
+      font-size: 0.9em;
+      letter-spacing: 0.1px;
+      border-bottom: 2.5px solid #6b6b6b;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.08);
+    }
+  td.left a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  td.left a:hover {
+    text-decoration: underline; /* opcional si quieres que se subraye al pasar el ratón */
+  }
+    .total {
+      padding: 8px;
+      font-weight: 700;
+      background: linear-gradient(90deg, #666363 0%, #666363 100%);
+      color: #cccccc;
+      font-size: 0.9em;
+    }
+    tr:hover {
+      background: #e8eb5b;
+      color: #028ffa;
+      transition: background 0.16s;
+    }
+    /* Responsive design mobile-first */
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.90em;
+        padding: 8px;
+      }
+      th {
+        padding: 2px 8px;
+        font-size: 0.90em;
+      }
+      td {
+        padding: 2px 8px;
+        font-size: 0.90em;
+      }
+      table {
+        font-size: 0.90em;
+        margin: 22px 0px 22px 0px;
+        margin-right: 0px;
+        border-radius: 11px;
+      }
+      h1 {
+        font-size: 0.90em;
+      }
+      h2 {
+        font-size: 0.90em;
+        margin-top: 30px;
+      }
+    .left { text-align: left; }
+    .right { text-align: right; }
+    .center { text-align: center; }
+      .total {
+      padding: 2px 8px;
+      font-weight: 700;
+      background: linear-gradient(90deg, #666363 0%, #666363 100%);
+      color: #cccccc;
+      font-size: 0.90em;
+    }
+    }
+  </style>
+</head>
+<body>
+  <h1>Clasificación de Gastos</h1>
+  
+  <h2>🏦 Banco</h2>
+<table id="banco">
+  <tr><th class="left">concepto</th><th class="right">importe (€)</th></tr>
+  <tr><td class="left">entrega_480 (50%) febrero 2026</td><td class="right">240.00</td></tr>
+  <tr><td class="left">gastos corrientes</td><td class="right">1.80</td></tr>
+  <tr><td class="left">supercor 5 diciembre 2025</td><td class="right">0.67</td></tr>
+  <tr><td class="left">peaje 9 noviembre 2025</td><td class="right">0.00</td></tr>
+  <tr><td class="left">comisión tarjeta telepeaje</td><td class="right">0.00</td></tr>
+  <tr><td class="left">relojes 06/12 diciembre 2025</td><td class="right">0.00</td></tr>
+  <tr><td class="left">relojes 07/12 enero 2026</td><td class="right">24.93</td></tr>
+  <tr><td class="left">relojes 08/12 febrero 2026</td><td class="right">24.93</td></tr>
+  <tr><td class="left">relojes 09/12 marzo 2026</td><td class="right">24.93</td></tr>
+  <tr><td class="left">relojes 10/12 abril 2026</td><td class="right">24.93</td></tr>
+  <tr><td class="left">relojes 11/12 mayo 2026</td><td class="right">24.93</td></tr>
+  <tr><td class="left">relojes 12/12 junio 2026</td><td class="right">25.05</td></tr>
+  <tr><td class="left">ahorros 2026</td><td class="right">100.00</td></tr>
+  <tr><td class="left">residual</td><td class="right">0.39</td></tr>
+  <tr class="total"><td class="left">TOTAL</td><td class="right"></td></tr>
+</table>
+
+  <h2>🧾 Gastos corrientes 2025</h2>
+  <table id="corrientes">
+    <tr><th class="left">concepto</th><th class="right">importe (€)</th></tr>
+    <tr><td class="left">gasoil diciembre</td><td class="right">30.00</td></tr>
+    <tr><td class="left">cafés</td><td class="right">0.00</td></tr>
+    <tr><td class="left">euromillones 9 diciembre</td><td class="right">2.50</td></tr>
+    <tr><td class="left">euromillones 12 diciembre</td><td class="right">2.50</td></tr>
+    <tr><td class="left">molde metálico tartas 251203</td><td class="right">0.00</td></tr>
+    <tr><td class="left">cine diciembre</td><td class="right">9.00</td></tr>
+    <tr><td class="left">farmacia diciembre</td><td class="right">2.00</td></tr>
+    <tr><td class="left">parking</td><td class="right">4.00</td></tr>
+    <tr><td class="left">peajes</td><td class="right">0.00</td></tr>
+    <tr><td class="left">comida o cena diciembre</td><td class="right">20.00</td></tr>
+    <tr><td class="left">otras cosas</td><td class="right">0.00</td></tr>
+    <tr class="total"><td class="left">TOTAL</td><td class="right"></td></tr>
+  </table>
+  
+  <h2>📦 Efectivo inBox</h2>
+  <table id="inbox">
+    <tr><th class="left">concepto</th><th class="right">importe (€)</th></tr>
+    <tr><td class="left">edp lefties black graphite ginger noir 26 100ml</td><td class="right">13.50</td></tr>
+    <tr><td class="left">sudadera lefties rosa empolvado talla m 5054/539/676 9,99e</td><td class="right">0.00</td></tr>
+    <tr><td class="left">women'secret 6,99 € (saldo: 1.01 €)</td><td class="right">5.98</td></tr>
+    <tr><td class="left">colonia té verde natural honey</td><td class="right">5.00</td></tr>
+    <tr><td class="left"><a href="https://www.todoconsolas.com/juegos-ps5/180126-007_first_light_ps5_sp_244589-884095225322.html?gad_source=1&gad_campaignid=16975272905&gbraid=0AAAAADml-y04BLUopygp9dvDZI5TDA9cW&gclid=EAIaIQobChMI-bajoOPDjwMVQc9EBx0hZQAAEAQYASABEgKhhvD_BwE" target="_blank" rel="noopener noreferrer">juego ps5 007 first light</a></td><td class="right">70.00</td>
+    <tr><td class="left">zapatillas de casa vul ladi vicky nores 35e</td><td class="right">35.00</td></tr>
+    <tr><td class="left">otros</td><td class="right">0.52</td></tr>
+    <tr class="total"><td class="left">TOTAL</td><td class="right"></td></tr>
+  </table>
+  
+  <h2>🛒 Supermercado</h2>
+  <table id="corrientes">
+    <tr><th class="left">concepto</th><th class="right">importe (€)</th></tr>
+    <tr><td class="left">gotas de chocolate 250gr Carrefour</td><td class="right">2.75</td></tr>
+    <tr><td class="left">té latte chai Hornimans 12 bolsitas</td><td class="right">3.35</td></tr>
+    <tr><td class="left">bizcocho yogur chocolate Lidl</td><td class="right">2.09</td></tr>
+    <tr><td class="left">salsa de soja</td><td class="right">2.50</td></tr>
+    <tr><td class="left">salsa pesto</td><td class="right">3.00</td></tr>
+    <tr><td class="left">mostaza antigua</td><td class="right">3.50</td></tr>
+    <tr><td class="left">milka 250gr Alcampo 3.41e</td><td class="right">0.00</td></tr>
+    <tr><td class="left">Panes de leche 480gr Supercor 1.85e</td><td class="right">0.00</td></tr>
+    <tr><td class="left">otros</td><td class="right">2.81</td></tr>
+    <tr class="total"><td class="left">TOTAL</td><td class="right"></td></tr>
+  </table>
+  
+  <h2>🛀🏼 Cuidado personal</h2>
+  <table id="hogar">
+    <tr><th class="left">concepto</th><th class="right">importe (€)</th></tr>
+    <tr><td class="left">desodorante Axe</td><td class="right">2.25</td></tr>
+    <tr><td class="left">otros</td><td class="right">0.75</td></tr>
+    <tr class="total"><td class="left">TOTAL</td><td class="right"></td></tr>
+  </table>
+  
+  <h2>🛋️ Cuidado del hogar</h2>
+  <table id="hogar">
+    <tr><th class="left">concepto</th><th class="right">importe (€)</th></tr>
+    <tr><td class="left">detergente lavadora Carrefour</td><td class="right">3.50</td></tr>
+    <tr><td class="left">otros</td><td class="right">0.50</td></tr>
+    <tr class="total"><td class="left">TOTAL</td><td class="right"></td></tr>
+  </table>
+
+  <h2>😎 Compras personales</h2>
+  <table id="hogar">
+    <tr><th class="left">concepto</th><th class="right">importe (€)</th></tr>
+    <tr><td class="left"><a href="https://www.panamajack.es/products/panama-03-c8?variant=46003909165343&utm_source=ig&utm_medium=paid_social&utm_campaign=ES_ADV_MAXCONV_BROAD_2025&utm_content=ES_ADV_MAXCONV_BROAD_2025_HOMBRE_IMG_BOATC5&utm_id=6888758195012&utm_term=6888758194012&fbclid=PAZXh0bgNhZW0BMABhZGlkAAAGQ-pwOywBp8O-LW9N1BhUcslNcY2aKJvAAELBIp9U7vawQa91_p50uZqYQ97RORkRa9wt_aem_F3bXoXBtKH0AVQUOfSGvNg&campaign_id=6888758195012&ad_id=6888758194412" target="_blank" rel="noopener noreferrer">panama jack 03 C8/Wool C7 marrones [Compradas 251126]</a></td><td class="right">0.00</td></tr>
+    <tr><td class="left">jjones liam (W30/L30 + W30/L34)</td><td class="right">60.00</td></tr>
+    <tr class="total"><td class="left">TOTAL</td><td class="right"></td></tr>
+  </table>
+  
+    
+    <!--<h2>⏸️ Compras aplazadas
+    </h2>
+  <table id="hogar">
+    <tr class="total"><td class="left">TOTAL</td><td class="right"></td></tr>
+  </table>
+
+  <h2>🌍 Gran Total General</h2>
+  <table id="general">
+    <tr><th class="left">Concepto</th><th class="right">Importe (€)</th></tr>
+    <tr class="total"><td class="left">TOTAL GENERAL</td><td class="right" id="granTotal"></td></tr>
+  </table>-->
+  
+    <h2>📆 Sin fecha definida</h2>
+  <table id="aplazado">
+    <tr><th class="left">concepto</th><th class="right">importe (€)</th></tr>
+    <tr><td class="left">tissot seastar 1000 45.5mm T120.417.11.041.03</td><td class="right">645.00</td></tr>
+    <tr><td class="left">festina chrono bike F20725/2 rosa</td><td class="right">167.00</td></tr>
+    <tr><td class="left">dr.martens 1460 cereza 70% dto.</td><td class="right">140.00</td></tr>
+    <tr><td class="left">funda edredón ikea</td><td class="right">40.00</td></tr>
+    <tr><td class="left">cortina beige/marrón </td><td class="right">40.00</td></tr>
+    <tr><td class="left">correa amarilla reloj F20330</td><td class="right">32.00</td></tr>
+    <tr><td class="left">toalla xl blanca z.home</td><td class="right">30.00</td></tr>
+    <tr><td class="left">funda imper. colchón 150cm x 190cm</td><td class="right">20.00</td></tr>
+    <tr><td class="left">sábana blanca bajera zara home</td><td class="right">20.00</td></tr>
+    <tr><td class="left">cinturón tricolor decathlon</td><td class="right">8.00</td></tr>
+    <tr><td class="left">leggings y hot pant lefties 4€ x2</td><td class="right">8.00</td></tr>
+    <tr><td class="left">cinturón trenzado de piel marrón Pedro del Hierro</td><td class="right">40.00</td></tr>
+    <tr><td class="left">otros</td><td class="right">10.00</td></tr>
+    <tr class="total"><td class="left">TOTAL</td><td class="right"></td></tr>
+  </table>
+    
+    <h2>💎 Special</h2>
+  <table id="aplazado">
+    <tr><th class="left">concepto</th><th class="right">importe (€)</th></tr>
+    <tr><td class="left">cazadora plumas amarillo gorham prl 495e/371,25e BFriday</td><td class="right">371.25</td></tr>
+    <tr><td class="left">calcetines x6 colores prl 50e/37,50e BFriday</td><td class="right">37.50</td></tr>
+    <tr><td class="left">bóxers x3 prl</td><td class="right">50.00</td></tr>
+    <tr><td class="left">jersey ochos rosa prl</td><td class="right">200.00</td></tr>
+    <tr><td class="left">polo classic slim fit azul fall royal otoño real manga corta prl</td><td class="right">135.00</td></tr>
+    <tr><td class="left">camisa oxford slim celeste prl</td><td class="right">155.00</td></tr>
+    <tr><td class="left">jersey ochos amarillo prl - 200e</td><td class="right">0.00</td></tr>
+    <tr><td class="left">jersey ochos naranja prl - 200e</td><td class="right">0.00</td></tr>
+    <tr><td class="left">otros</td><td class="right">51.25</td></tr>
+    <tr class="total"><td class="left">TOTAL</td><td class="right"></td></tr>
+  </table>
+    
+    <h2>🔁 Recuperable</h2>
+  <table id="aplazado">
+    <tr><th class="left">concepto</th><th class="right">importe (€)</th></tr>
+    <tr><td class="left"><a href="https://www.zara.com/es/es/oud-vibrant-leather-extreme-edp-100ml--3-38-fl-oz--p20210610.html?v1=452717293" target="_blank" rel="noopener noreferrer">Perfume zara oud vibrant leather extreme edp 100ml - 23e</a></td><td class="right">0.00</td></tr>
+    <tr><td class="left"><a href="https://www.druni.es/the-club-scalpers-eau-parfum-hombre" target="_blank" rel="noopener noreferrer">eau de parfum the club scalpers 75ml - 26e</a></td><td class="right">0.00</td></tr>
+    <tr><td class="left">agenda 2026 - 17e</td><td class="right">0.00</td></tr>
+    <tr><td class="left">pantalla cristal flexible móvil - 20e</td><td class="right">0.00</td></tr>
+    <tr><td class="left">funda protectora móvil - 15e</td><td class="right">0.00</td></tr>
+    <tr><td class="left">hugo boss edp 50ml 28/Nov/25 - 50e</td><td class="right">0.00</td></tr>
+    <tr><td class="left">funda tablet mmarkt - 20e</td><td class="right">0.00</td></tr>
+    <tr><td class="left">airfryer - 60e</td><td class="right">0.00</td></tr>
+    <tr><td class="left">correa cuero liso marrón reloj m. dutti</td><td class="right">0.00</td></tr>
+    <tr><td class="left">correa blanca watch 6 samsung</td><td class="right">0.00</td></tr>
+    <tr><td class="left">cazadora CLK 1990 moa roja t:S - 60e</td><td class="right">0.00</td></tr>
+    <tr><td class="left">camisas oxford celeste mango</td><td class="right">0.00</td></tr>
+    <tr><td class="left">sneakers hrt court II prl - 130e</td><td class="right">0.00</td></tr>
+    <tr><td class="left">vaquero verde oliva skinny</td><td class="right">0.00</td></tr>
+    <tr><td class="left">sudadera rosa chicle cuello redondo</td><td class="right">0.00</td></tr>
+    <tr><td class="left">otros</td><td class="right">0.00</td></tr>
+    <tr class="total"><td class="left">TOTAL</td><td class="right"></td></tr>
+  </table>
+    
+    <h2>👔 Nuevas ideas</h2>
+  <table id="aplazado">
+    <tr><th class="left">concepto</th><th class="right">importe (€)</th></tr>
+    <tr><td class="left">alfombrilla baño color azul</td><td class="right">10.00</td></tr>
+    <tr><td class="left">esponja ducha ikea (pinks)</td><td class="right">6.00</td></tr>
+    <tr><td class="left">gafas wayfarer ray ban acetato negras gruesas</td><td class="right">300.00</td></tr>
+    <tr><td class="left">guantes marrones piel napa o serraje</td><td class="right">60.00</td></tr>
+    <tr><td class="left">drivers tommy serraje azul</td><td class="right">100.00</td></tr>
+    <tr><td class="left">edt black xs/Invictus rabanne</td><td class="right">60.00</td></tr>
+    <tr><td class="left">botas chelsea napa marrón</td><td class="right">100.00</td></tr>
+    <tr><td class="left">camiseta PdH</td><td class="right">20.00</td></tr>
+    <tr><td class="left">camiseta mango</td><td class="right">10.00</td></tr>
+    <tr><td class="left">camisa cuadros colores</td><td class="right">60.00</td></tr>
+    <tr><td class="left">chino beige slim/skinny</td><td class="right">30.00</td></tr>
+    <tr><td class="left">pantalón cargo beige/verde/azul</td><td class="right">30.00</td></tr>
+    <tr><td class="left">cazadora nautica azul capucha ligera</td><td class="right">60.00</td></tr>
+    <tr><td class="left">pañuelo para el cuello suave azul</td><td class="right">14.00</td></tr>
+    <tr><td class="left">abrigo largo azul</td><td class="right">100.00</td></tr>
+    <tr><td class="left">otros</td><td class="right">40.00</td></tr>
+    <tr class="total"><td class="left">TOTAL</td><td class="right"></td></tr>
+  </table>
+    
+    <h2>🏡👨‍👩‍👧‍👦 Gastos mensuales</h2>
+  <table id="hogar">
+    <tr><th class="left">concepto</th><th class="right">importe (€)</th></tr>
+    <tr><td class="left">alquiler del piso</td><td class="right">900.00</td></tr>
+    <tr><td class="left">electricidad</td><td class="right">80.00</td></tr>
+    <tr><td class="left">agua</td><td class="right">40.00</td></tr>
+    <tr><td class="left">móvil</td><td class="right">90.00</td></tr>
+    <tr><td class="left">comida, cuidado personal, limpieza hogar</td><td class="right">240.00</td></tr>
+    <tr><td class="left">cuota coche</td><td class="right">360.00</td></tr>
+    <tr><td class="left">seguro coche</td><td class="right">60.00</td></tr>
+    <tr><td class="left">mantenimiento coche</td><td class="right">60.00</td></tr>
+    <tr><td class="left">kilometraje coche</td><td class="right">80.00</td></tr>
+    <tr><td class="left">vida social</td><td class="right">60.00</td></tr>
+    <tr><td class="left">ropa</td><td class="right">70.00</td></tr>
+    <tr><td class="left">calzado</td><td class="right">30.00</td></tr>
+    <tr><td class="left">hogar</td><td class="right">40.00</td></tr>
+    <tr><td class="left">otros</td><td class="right">40.00</td></tr>
+    <tr><td class="left">hija</td><td class="right">120.00</td></tr>
+    <tr><td class="left">viajes</td><td class="right">80.00</td></tr>
+    <tr><td class="left">ahorros</td><td class="right">150.00</td></tr>
+    <tr class="total"><td class="left">TOTAL</td><td class="right"></td></tr>
+  </table>
+    
+    <h2>🏡👨‍👩‍👧‍👦 Gastos mensuales</h2>
+  <table id="hogar">
+    <tr><th class="left">concepto</th><th class="right">importe (€)</th></tr>
+    <tr><td class="left">hipoteca del piso</td><td class="right">3000.00</td></tr>
+    <tr><td class="left">comunidad</td><td class="right">100.00</td></tr>
+    <tr><td class="left">ibi</td><td class="right">100.00</td></tr>
+    <tr><td class="left">seguro del hogar</td><td class="right">100.00</td></tr>
+    <tr><td class="left">alarma vivienda</td><td class="right">100.00</td></tr>
+    <tr><td class="left">electricidad</td><td class="right">100.00</td></tr>
+    <tr><td class="left">agua</td><td class="right">50.00</td></tr>
+    <tr><td class="left">móvil</td><td class="right">100.00</td></tr>
+    <tr><td class="left">comida, cuidado personal, limpieza hogar</td><td class="right">300.00</td></tr>
+    <tr><td class="left">cuota coche</td><td class="right">1000.00</td></tr>
+    <tr><td class="left">seguro coche</td><td class="right">150.00</td></tr>
+    <tr><td class="left">mantenimiento coche</td><td class="right">150.00</td></tr>
+    <tr><td class="left">kilometraje coche</td><td class="right">100.00</td></tr>
+    <tr><td class="left">vida social</td><td class="right">100.00</td></tr>
+    <tr><td class="left">ropa</td><td class="right">100.00</td></tr>
+    <tr><td class="left">calzado</td><td class="right">50.00</td></tr>
+    <tr><td class="left">hogar</td><td class="right">50.00</td></tr>
+    <tr><td class="left">otros</td><td class="right">50.00</td></tr>
+    <tr><td class="left">hija</td><td class="right">150.00</td></tr>
+    <tr><td class="left">viajes</td><td class="right">150.00</td></tr>
+    <tr><td class="left">ahorros</td><td class="right">400.00</td></tr>
+    <tr class="total"><td class="left">TOTAL</td><td class="right"></td></tr>
+  </table>
+    
+    <h2>🏡👨‍👩‍👧‍👦 Gastos anuales</h2>
+  <table id="hogar">
+    <tr><th class="left">concepto</th><th class="right">importe (€)</th></tr>
+    <tr><td class="left">alquiler del piso</td><td class="right">0.00</td></tr>
+    <tr><td class="left">electricidad</td><td class="right">0.00</td></tr>
+    <tr><td class="left">agua</td><td class="right">0.00</td></tr>
+    <tr><td class="left">móvil</td><td class="right">0.00</td></tr>
+    <tr><td class="left">comida, cuidado personal, limpieza hogar</td><td class="right">168.00</td></tr>
+    <tr><td class="left">cuota coche</td><td class="right">0.00</td></tr>
+    <tr><td class="left">seguro coche</td><td class="right">0.00</td></tr>
+    <tr><td class="left">mantenimiento coche</td><td class="right">240.00</td></tr>
+    <tr><td class="left">kilometraje coche</td><td class="right">516.00</td></tr>
+    <tr><td class="left">vida social</td><td class="right">396.00</td></tr>
+    <tr><td class="left">ropa</td><td class="right">480.00</td></tr>
+    <tr><td class="left">calzado</td><td class="right">360.00</td></tr>
+    <tr><td class="left">complementos de moda</td><td class="right">300.00</td></tr>
+    <tr><td class="left">hogar</td><td class="right">120.00</td></tr>
+    <tr><td class="left">otros</td><td class="right">300.00</td></tr>
+    <tr><td class="left">hija</td><td class="right">0.00</td></tr>
+    <tr><td class="left">viajes</td><td class="right">0.00</td></tr>
+    <tr><td class="left">ahorros</td><td class="right">0.00</td></tr>
+    <tr class="total"><td class="left">TOTAL</td><td class="right"></td></tr>
+  </table>
+    
+    <h2>🏡👨‍👩‍👧‍👦 Gastos Mensuales 2026</h2>
+<table id="hogar">
+  <tr><th class="left">concepto</th><th class="right">importe (€)</th></tr>
+
+  <tr><td class="left">gasoil</td><td class="right">45.00</td></tr>
+  <tr><td class="left">calzado</td><td class="right">35.00</td></tr>
+  <tr><td class="left">ropa</td><td class="right">30.00</td></tr>
+  <tr><td class="left">complementos de moda</td><td class="right">25.00</td></tr>
+  <tr><td class="left">taller coche</td><td class="right">20.00</td></tr>
+  <tr><td class="left">cafés</td><td class="right">15.00</td></tr>
+  <tr><td class="left">comidas y cenas</td><td class="right">15.00</td></tr>
+  <tr><td class="left">supermercado</td><td class="right">12.00</td></tr>
+  <tr><td class="left">sorteos</td><td class="right">8.00</td></tr>
+  <tr><td class="left">ocio</td><td class="right">7.00</td></tr>
+  <tr><td class="left">peajes</td><td class="right">6.00</td></tr>
+  <tr><td class="left">perfumería</td><td class="right">6.00</td></tr>
+  <tr><td class="left">tributos</td><td class="right">5.00</td></tr>
+  <tr><td class="left">itv</td><td class="right">5.00</td></tr>
+  <tr><td class="left">hogar</td><td class="right">5.00</td></tr>
+  <tr><td class="left">electrónica</td><td class="right">5.00</td></tr>
+  <tr><td class="left">parking</td><td class="right">4.00</td></tr>
+  <tr><td class="left">cine</td><td class="right">4.00</td></tr>
+  <tr><td class="left">cuidado personal</td><td class="right">2.50</td></tr>
+  <tr><td class="left">limpieza hogar</td><td class="right">2.50</td></tr>
+  <tr><td class="left">entregas</td><td class="right">2.50</td></tr>
+  <tr><td class="left">farmacia</td><td class="right">2.00</td></tr>
+  <tr><td class="left">papelería y fotocopias</td><td class="right">2.00</td></tr>
+  <tr><td class="left">reparaciones/bricolage</td><td class="right">2.00</td></tr>
+  <tr><td class="left">regalos</td><td class="right">2.00</td></tr>
+  <tr><td class="left">comisión disp. telepeaje</td><td class="right">1.25</td></tr>
+  <tr><td class="left">otros</td><td class="right">1.25</td></tr>
+
+  <tr class="total"><td class="left">TOTAL</td><td class="right"></td></tr>
+</table>
+    
+    <h2>🏡👨‍👩‍👧‍👦 Gastos Anuales 2026</h2>
+<table id="hogar">
+  <tr><th class="left">concepto</th><th class="right">importe (€)</th></tr>
+
+  <tr><td class="left">gasoil</td><td class="right">540.00</td></tr>
+  <tr><td class="left">calzado</td><td class="right">420.00</td></tr>
+  <tr><td class="left">ropa</td><td class="right">360.00</td></tr>
+  <tr><td class="left">complementos de moda</td><td class="right">300.00</td></tr>
+  <tr><td class="left">taller coche</td><td class="right">240.00</td></tr>
+  <tr><td class="left">cafés</td><td class="right">180.00</td></tr>
+  <tr><td class="left">comidas y cenas</td><td class="right">180.00</td></tr>
+  <tr><td class="left">supermercado</td><td class="right">144.00</td></tr>
+  <tr><td class="left">sorteos</td><td class="right">96.00</td></tr>
+  <tr><td class="left">ocio</td><td class="right">84.00</td></tr>
+  <tr><td class="left">peajes</td><td class="right">72.00</td></tr>
+  <tr><td class="left">perfumería</td><td class="right">72.00</td></tr>
+  <tr><td class="left">tributos</td><td class="right">60.00</td></tr>
+  <tr><td class="left">itv</td><td class="right">60.00</td></tr>
+  <tr><td class="left">hogar</td><td class="right">60.00</td></tr>
+  <tr><td class="left">electrónica</td><td class="right">60.00</td></tr>
+  <tr><td class="left">parking</td><td class="right">48.00</td></tr>
+  <tr><td class="left">cine</td><td class="right">48.00</td></tr>
+  <tr><td class="left">cuidado personal</td><td class="right">30.00</td></tr>
+  <tr><td class="left">limpieza hogar</td><td class="right">30.00</td></tr>
+  <tr><td class="left">entregas</td><td class="right">30.00</td></tr>
+  <tr><td class="left">farmacia</td><td class="right">24.00</td></tr>
+  <tr><td class="left">papelería y fotocopias</td><td class="right">24.00</td></tr>
+  <tr><td class="left">reparaciones/bricolage</td><td class="right">24.00</td></tr>
+  <tr><td class="left">regalos</td><td class="right">24.00</td></tr>
+  <tr><td class="left">comisión disp. telepeaje</td><td class="right">15.00</td></tr>
+  <tr><td class="left">otros</td><td class="right">15.00</td></tr>
+
+  <tr class="total"><td class="left">TOTAL</td><td class="right"></td></tr>
+</table>
+    
+  <script>
+  function calcularTotales() {
+    let granTotal = 0;
+    const tablas = document.querySelectorAll("table");
+    tablas.forEach(tabla => {
+      let total = 0;
+      const filas = tabla.querySelectorAll("tr");
+      filas.forEach(fila => {
+        const celdas = fila.querySelectorAll("td");
+        if (celdas.length > 1 && !fila.classList.contains("total")) {
+          total += parseFloat(celdas[1].innerText) || 0;
+        }
+      });
+      const filaTotal = tabla.querySelector(".total td.right");
+      if (filaTotal) {
+        filaTotal.innerText = total.toFixed(2);
+        // Excluir "general" y "aplazado" del Gran Total
+        if (tabla.id !== "general" && tabla.id !== "banco" && tabla.id !== "aplazado" && tabla.id !== "inbox") {
+          granTotal += total;
+        }
+      }
+    });
+    document.getElementById("granTotal").innerText = granTotal.toFixed(2);
+  }
+  calcularTotales();
+  </script>
+</body>
+</html>
