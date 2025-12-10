@@ -1,0 +1,345 @@
+Conversación abierta. 1 mensaje no leído.
+
+Ir al contenido
+Uso de Gmail con lectores de pantalla
+Conversaciones
+
+No leídos
+ 
+1–13 de 13
+ 
+
+Todo lo demás
+ 
+1–50 de 1.691
+ 
+Le Avionnette
+Eb26all
+ - Enviado desde Outlook para Android
+Archivo adjunto:
+eb26.html
+Archivo adjunto:
+hipoteca_precio.html
+Archivo adjunto:
+hipoteca_cuota.html
++1
+19:27
+Estás usando el 9 % de 15 GB
+Términos · Privacidad · Política del programa
+Última actividad de la cuenta: dentro de 1 minuto
+Abierta en 1 ubicación más · Detalles
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Contactos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #2a2a2a;
+            color: #b0b0b0;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #909090;
+            margin-bottom: 30px;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .contact-list {
+            background-color: #333;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .contact-item {
+            border-bottom: 1px solid #3a3a3a;
+            transition: background-color 0.2s;
+        }
+
+        .contact-item:last-child {
+            border-bottom: none;
+        }
+
+        .contact-header {
+            padding: 18px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.2s;
+        }
+
+        .contact-header:hover {
+            background-color: #3a3a3a;
+        }
+
+        .contact-name {
+            font-size: 18px;
+            font-weight: 400;
+            color: #a0a0a0;
+            letter-spacing: 0.5px;
+        }
+
+        .chevron {
+            color: #707070;
+            transition: transform 0.3s;
+            font-size: 14px;
+        }
+
+        .chevron.active {
+            transform: rotate(180deg);
+        }
+
+        .contact-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background-color: #2e2e2e;
+        }
+
+        .contact-details.active {
+            max-height: 300px;
+        }
+
+        .details-content {
+            padding: 20px;
+        }
+
+        .detail-row {
+            margin-bottom: 12px;
+            color: #909090;
+            font-size: 14px;
+        }
+
+        .detail-label {
+            color: #707070;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .detail-value {
+            color: #a0a0a0;
+            font-size: 15px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 400;
+            cursor: pointer;
+            transition: all 0.2s;
+            letter-spacing: 0.5px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-call {
+            background-color: #4a4a4a;
+            color: #b0b0b0;
+        }
+
+        .btn-call:hover {
+            background-color: #555;
+        }
+
+        .btn-whatsapp {
+            background-color: #3a5a3a;
+            color: #90b090;
+        }
+
+        .btn-whatsapp:hover {
+            background-color: #456545;
+        }
+
+        .icon {
+            font-size: 16px;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .contact-header {
+                padding: 15px;
+            }
+
+            .contact-name {
+                font-size: 16px;
+            }
+
+            .details-content {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Contactos</h1>
+    <div class="contact-list" id="contactList"></div>
+
+    <script>
+        const contacts = [
+            { name: "guillin", phone: "610609254" },
+            { name: "tamara", phone: "637353593", birthday: "1983-10-14" },
+            { name: "marta", phone: "+34626140796", birthday: "1973-08-11" },
+            { name: "myri", phone: "+5491154866213", birthday: "1979-01-25" },
+            { name: "anet", phone: "604003196", birthday: "1978-05-12" },
+            { name: "nydia", phone: "630319381", birthday: "1978-04-12", organization: "CEIP Arteixo", note: "NyAriana" },
+            { name: "alfredo", phone: "696006166" },
+            { name: "felix", phone: "610489401", altPhone: "+5491134200716" },
+            { name: "miguel", phone: "689306263" },
+            { name: "𝙇𝙤𝙥𝙝𝙚𝙧𝙨𝙨𝙤𝙣", phone: "+34658868490" },
+            { name: "susana", phone: "+34656258957" },
+            { name: "isabel", phone: "676579157" },
+            { name: "alfredo casa", phone: "981313065" },
+            { name: "valeria_hija_angee", phone: "667662431" },
+            { name: "jimmy", phone: "722382770" },
+            { name: "Chat GPT", phone: "+18002428478" },
+            { name: "jenny", phone: "632034064" },
+            { name: "laura Prima de angee", phone: "613384704" },
+            { name: "noelia camelia", phone: "600671726" }
+        ];
+
+        function formatPhone(phone) {
+            return phone.replace(/\s/g, '');
+        }
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            const options = { day: 'numeric', month: 'long', year: 'numeric' };
+            return date.toLocaleDateString('es-ES', options);
+        }
+
+        function createContactElement(contact) {
+            const item = document.createElement('div');
+            item.className = 'contact-item';
+
+            const header = document.createElement('div');
+            header.className = 'contact-header';
+            
+            const nameDiv = document.createElement('div');
+            nameDiv.className = 'contact-name';
+            nameDiv.textContent = contact.name;
+            
+            const chevron = document.createElement('div');
+            chevron.className = 'chevron';
+            chevron.innerHTML = '▼';
+            
+            header.appendChild(nameDiv);
+            header.appendChild(chevron);
+
+            const details = document.createElement('div');
+            details.className = 'contact-details';
+            
+            const content = document.createElement('div');
+            content.className = 'details-content';
+
+            let detailsHTML = `
+                <div class="detail-row">
+                    <div class="detail-label">Teléfono</div>
+                    <div class="detail-value">${contact.phone}</div>
+                </div>
+            `;
+
+            if (contact.altPhone) {
+                detailsHTML += `
+                    <div class="detail-row">
+                        <div class="detail-label">Teléfono alternativo</div>
+                        <div class="detail-value">${contact.altPhone}</div>
+                    </div>
+                `;
+            }
+
+            if (contact.birthday) {
+                detailsHTML += `
+                    <div class="detail-row">
+                        <div class="detail-label">Cumpleaños</div>
+                        <div class="detail-value">${formatDate(contact.birthday)}</div>
+                    </div>
+                `;
+            }
+
+            if (contact.organization) {
+                detailsHTML += `
+                    <div class="detail-row">
+                        <div class="detail-label">Organización</div>
+                        <div class="detail-value">${contact.organization}</div>
+                    </div>
+                `;
+            }
+
+            if (contact.note) {
+                detailsHTML += `
+                    <div class="detail-row">
+                        <div class="detail-label">Nota</div>
+                        <div class="detail-value">${contact.note}</div>
+                    </div>
+                `;
+            }
+
+            const cleanPhone = formatPhone(contact.phone);
+            detailsHTML += `
+                <div class="action-buttons">
+                    <a href="tel:${cleanPhone}" class="btn btn-call">
+                        <span class="icon">📞</span>
+                        <span>Llamar</span>
+                    </a>
+                    <a href="https://wa.me/${cleanPhone}" target="_blank" class="btn btn-whatsapp">
+                        <span class="icon">💬</span>
+                        <span>WhatsApp</span>
+                    </a>
+                </div>
+            `;
+
+            content.innerHTML = detailsHTML;
+            details.appendChild(content);
+
+            header.addEventListener('click', () => {
+                details.classList.toggle('active');
+                chevron.classList.toggle('active');
+            });
+
+            item.appendChild(header);
+            item.appendChild(details);
+
+            return item;
+        }
+
+        const contactList = document.getElementById('contactList');
+        contacts.forEach(contact => {
+            contactList.appendChild(createContactElement(contact));
+        });
+    </script>
+</body>
+</html>
+contactos_sep25.html
+Mostrando contactos_sep25.html.
