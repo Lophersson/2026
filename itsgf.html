@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Simulador IP e ITSGF Galicia 2025</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+  background: linear-gradient(135deg, #2a2a2a 0%, #2a2a2a 100%);
+  color: #888888;
+  margin: 0;
+  padding: 12px;
+  line-height: 1.4;
+  min-height: 100vh;
+}
+
+/* CABECERA */
+header {
+  background: linear-gradient(135deg, #4a4a4a, #3a3a3a);
+  color: #888888;
+  text-align: center;
+  padding: 20px 10px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+header h1 {
+  font-size: 1.4em;
+  letter-spacing: 0.5px;
+  font-weight: 400;
+  color: #888888;
+}
+
+header p {
+  font-weight: 300;
+  margin-top: 4px;
+  font-size: 0.9em;
+  opacity: 0.8;
+}
+
+/* PRINCIPAL */
+main {
+  max-width: 750px;
+  margin: auto;
+  background: #333333;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  border: 1px solid #404040;
+}
+
+/* INFO */
+.info-box {
+  background: #3a3a3a;
+  border-left: 4px solid #555555;
+  padding: 12px;
+  margin-bottom: 16px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 0.9em;
+  color: #888888;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* TITULOS */
+h2 {
+  text-align: center;
+  color: #888888;
+  font-size: 1.1em;
+  font-weight: 400;
+  margin: 20px 0 10px;
+}
+
+h2::after {
+  content: "";
+  display: block;
+  width: 40px;
+  height: 2px;
+  background: #555555;
+  margin: 6px auto 0;
+  border-radius: 2px;
+}
+
+/* INPUTS */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+label {
+  color: #888888;
+  font-size: 0.9em;
+  margin-bottom: 6px;
+  font-weight: 400;
+}
+
+input[type="number"] {
+  width: 85%;
+  max-width: 250px;
+  padding: 8px 12px;
+  font-size: 0.9em;
+  border: 1px solid #4a4a4a;
+  border-radius: 8px;
+  text-align: center;
+  transition: 0.3s all ease;
+  background: #2e2e2e;
+  color: #888888;
+}
+
+input[type="number"]:focus {
+  border-color: #555555;
+  box-shadow: 0 0 4px rgba(85, 85, 85, 0.4);
+  outline: none;
+}
+
+/* TABLA */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 12px 0;
+  font-size: 0.9em;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #2e2e2e;
+}
+
+th, td {
+  padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid #404040;
+}
+
+th {
+  background: #3a3a3a;
+  color: #888888;
+  text-transform: uppercase;
+  font-size: 0.8em;
+  font-weight: 400;
+  letter-spacing: 0.3px;
+}
+
+tr:nth-child(even) {
+  background-color: #2a2a2a;
+}
+
+tr:hover {
+  background-color: #3d3d3d;
+  transition: 0.2s ease;
+}
+
+/* RESULTADOS */
+.resultado {
+  background: #2e2e2e;
+  border: 1px solid #404040;
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 16px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.resultado-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-weight: 400;
+  color: #888888;
+  font-size: 0.9em;
+}
+
+.resultado-item strong {
+  color: #888888;
+  font-weight: 400;
+}
+
+.resultado-item span {
+  color: #888888;
+  font-weight: 500;
+}
+
+.highlight {
+  background: #4a4a4a;
+  color: #aaaaaa;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+/* SEPARADOR */
+.divisor {
+  height: 1px;
+  background: #404040;
+  margin: 10px 0;
+}
+
+.hidden {
+  display: none;
+}
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  body {
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  header h1 {
+    font-size: 1.2em;
+  }
+
+  header {
+    padding: 16px 10px;
+  }
+
+  main {
+    padding: 16px;
+  }
+
+  input[type="number"] {
+    width: 100%;
+  }
+
+  .resultado-item {
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  table, th, td {
+    font-size: 0.85em;
+  }
+
+  h2 {
+    font-size: 1em;
+  }
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>Simulador IP e ITSGF</h1>
+  <p>Galicia 2025</p>
+</header>
+
+<main>
+  <div class="info-box">
+    <strong>Mínimo exento:</strong> 700.000 €<br />
+    Galicia aplica una <strong>bonificación del 50%</strong> en el Impuesto sobre el Patrimonio, ajustado según el ITSGF.
+  </div>
+
+  <h2>Escala ITSGF (Tramos Estatales)</h2>
+  <table>
+    <tr>
+      <th>Base Liquidable (€)</th>
+      <th>Tipo (%)</th>
+      <th>Cuota (€)</th>
+    </tr>
+    <tr><td>0 – 3.000.000</td><td>0,0</td><td>0</td></tr>
+    <tr><td>3.000.000 – 5.347.998,03</td><td>1,7</td><td>Desde 0</td></tr>
+    <tr><td>5.347.998,03 – 10.695.996,06</td><td>2,1</td><td>39.915,97</td></tr>
+    <tr><td>Más de 10.695.996,06</td><td>3,5</td><td>152.223,93</td></tr>
+  </table>
+
+  <h2>Calcula tu Impuesto</h2>
+
+  <div class="input-group">
+    <label for="importeBruto">Importe Bruto (€)</label>
+    <input type="number" id="importeBruto" placeholder="Ej: 5000000" />
+  </div>
+
+  <div id="resultado" class="resultado hidden"></div>
+
+  <div id="extraCalculos" class="hidden">
+    <h2>Cálculo de Rentabilidad</h2>
+    
+    <div class="input-group">
+      <label for="ingresoDeseado">Ingreso Neto Deseado (€)</label>
+      <input type="number" id="ingresoDeseado" placeholder="Ej: 252000" />
+    </div>
+
+    <div id="resultadoRentabilidad" class="resultado"></div>
+  </div>
+</main>
+
+<script>
+let totalAPagarGlobal = 0;
+let patrimonioGlobal = 0;
+
+document.getElementById("importeBruto").addEventListener("input", actualizarTodo);
+document.getElementById("ingresoDeseado").addEventListener("input", actualizarTodo);
+
+function actualizarTodo() {
+  calcularImpuestos();
+  calcularRentabilidad();
+}
+
+function calcularImpuestos() {
+  const importeBruto = parseFloat(document.getElementById("importeBruto").value);
+  const resultado = document.getElementById("resultado");
+  const extraCalculos = document.getElementById("extraCalculos");
+
+  if (isNaN(importeBruto) || importeBruto <= 0) {
+    resultado.classList.add("hidden");
+    extraCalculos.classList.add("hidden");
+    totalAPagarGlobal = 0;
+    patrimonioGlobal = 0;
+    return;
+  }
+
+  const patrimonio = importeBruto * 0.8;
+  patrimonioGlobal = patrimonio;
+
+  const minimoExento = 700000;
+  const baseAntesDeduccion = Math.max(0, patrimonio - minimoExento);
+  const deduccionVivienda = Math.max(0, Math.min(300000, baseAntesDeduccion));
+  const baseLiquidable = Math.max(0, baseAntesDeduccion - deduccionVivienda);
+
+  if (baseLiquidable <= 0) {
+    resultado.innerHTML = `
+      <div class="resultado-item">
+        <span class="highlight" style="min-width: auto;">Tu patrimonio está exento del IP e ITSGF tras aplicar mínimo exento y deducción por vivienda</span>
+      </div>
+      <div class="resultado-item">
+        <strong>Importe bruto:</strong>
+        <span>${importeBruto.toLocaleString("es-ES", {maximumFractionDigits: 0})} €</span>
+      </div>
+      <div class="resultado-item">
+        <strong>Patrimonio neto (80%):</strong>
+        <span>${patrimonio.toLocaleString("es-ES", {maximumFractionDigits: 0})} €</span>
+      </div>
+      <div class="resultado-item">
+        <strong>Base antes de deducción:</strong>
+        <span>${baseAntesDeduccion.toLocaleString("es-ES", {maximumFractionDigits: 0})} €</span>
+      </div>
+      <div class="resultado-item">
+        <strong>Deducción por primera vivienda aplicada:</strong>
+        <span>${deduccionVivienda.toLocaleString("es-ES", {maximumFractionDigits: 0})} €</span>
+      </div>
+    `;
+    resultado.classList.remove("hidden");
+    extraCalculos.classList.add("hidden");
+    totalAPagarGlobal = 0;
+    return;
+  }
+
+  function calcularCuota(base) {
+    let cuota = 0;
+    if (base <= 3000000) {
+      cuota = 0;
+    } else if (base <= 5347998.03) {
+      cuota = (base - 3000000) * 0.017;
+    } else if (base <= 10695996.06) {
+      cuota = 39915.97 + (base - 5347998.03) * 0.021;
+    } else {
+      cuota = 152223.93 + (base - 10695996.06) * 0.035;
+    }
+    return cuota;
+  }
+
+  const cuotaIPsinBonificacion = calcularCuota(baseLiquidable);
+  const cuotaIPbonificada = cuotaIPsinBonificacion * 0.5;
+  const cuotaITSGF = calcularCuota(baseLiquidable);
+  const bonificacionAjustada = Math.max(0, (cuotaIPsinBonificacion * 0.5) - cuotaITSGF);
+  const cuotaFinalIP = Math.max(0, cuotaIPsinBonificacion - bonificacionAjustada);
+  const totalAPagar = Math.max(cuotaITSGF, cuotaFinalIP);
+  totalAPagarGlobal = totalAPagar;
+
+  const porcentajeSobrePatrimonio = (totalAPagar / patrimonio) * 100;
+
+  resultado.innerHTML = `
+    <div class="resultado-item">
+      <strong>Importe bruto:</strong>
+      <span>${importeBruto.toLocaleString("es-ES", {maximumFractionDigits: 0})} €</span>
+    </div>
+    <div class="resultado-item">
+      <strong>Patrimonio neto (80%):</strong>
+      <span>${patrimonio.toLocaleString("es-ES", {maximumFractionDigits: 0})} €</span>
+    </div>
+
+    <div class="resultado-item">
+      <strong>Base antes de deducción (patrimonio - mínimo exento):</strong>
+      <span>${baseAntesDeduccion.toLocaleString("es-ES", {maximumFractionDigits: 0})} €</span>
+    </div>
+    <div class="resultado-item">
+      <strong>Deducción por primera vivienda (máx. 300.000 €):</strong>
+      <span>${deduccionVivienda.toLocaleString("es-ES", {maximumFractionDigits: 0})} €</span>
+    </div>
+    <div class="resultado-item">
+      <strong>Base liquidable final:</strong>
+      <span>${baseLiquidable.toLocaleString("es-ES", {maximumFractionDigits: 0})} €</span>
+    </div>
+
+    <div class="divisor"></div>
+    
+    <div class="resultado-item">
+      <strong>Cuota IP (sin bonificar):</strong>
+      <span>${cuotaIPsinBonificacion.toLocaleString("es-ES", {minimumFractionDigits: 2})} €</span>
+    </div>
+    <div class="resultado-item">
+      <strong>Cuota IP (bonificada 50%):</strong>
+      <span>${cuotaIPbonificada.toLocaleString("es-ES", {minimumFractionDigits: 2})} €</span>
+    </div>
+    <div class="resultado-item">
+      <strong>Cuota ITSGF:</strong>
+      <span>${cuotaITSGF.toLocaleString("es-ES", {minimumFractionDigits: 2})} €</span>
+    </div>
+    <div class="resultado-item">
+      <strong>Cuota IP e ITSGF final tras ajuste:</strong>
+      <span>${cuotaFinalIP.toLocaleString("es-ES", {minimumFractionDigits: 2})} €</span>
+    </div>
+
+    <div class="divisor"></div>
+    <div class="resultado-item">
+      <strong>Total a pagar:</strong>
+      <span class="highlight">${totalAPagar.toLocaleString("es-ES", {minimumFractionDigits: 2})} €</span>
+    </div>
+    <div class="resultado-item">
+      <strong>Porcentaje sobre patrimonio:</strong>
+      <span>${porcentajeSobrePatrimonio.toFixed(4)} %</span>
+    </div>
+  `;
+
+  resultado.classList.remove("hidden");
+  extraCalculos.classList.remove("hidden");
+}
+
+function calcularRentabilidad() {
+  const ingresoDeseado = parseFloat(document.getElementById("ingresoDeseado").value);
+  const resultadoR = document.getElementById("resultadoRentabilidad");
+
+  if (isNaN(ingresoDeseado) || patrimonioGlobal <= 0 || ingresoDeseado <= 0) {
+    resultadoR.innerHTML = "";
+    return;
+  }
+
+  // Total necesario = impuestos + ingreso deseado
+  const totalNecesario = totalAPagarGlobal + ingresoDeseado;
+  
+  // El 77% de la rentabilidad bruta debe ser igual al total necesario
+  // rentabilidadNeta = rentabilidadBruta * 0.77
+  // totalNecesario = rentabilidadBruta * 0.77
+  // rentabilidadBruta = totalNecesario / 0.77
+  const rentabilidadBruta = totalNecesario / 0.77;
+  
+  // Porcentaje de rentabilidad = (rentabilidadBruta / patrimonio) * 100
+  const porcentajeRentabilidad = (rentabilidadBruta / patrimonioGlobal) * 100;
+  
+  const rentabilidadNeta = rentabilidadBruta * 0.77;
+  const ingresoMensual = ingresoDeseado / 14;
+
+  resultadoR.innerHTML = `
+    <div class="resultado-item">
+      <strong>Rentabilidad anual necesaria:</strong>
+      <span class="highlight">${porcentajeRentabilidad.toFixed(4)} %</span>
+    </div>
+    <div class="divisor"></div>
+    <div class="resultado-item">
+      <strong>Rentabilidad bruta:</strong>
+      <span>${rentabilidadBruta.toLocaleString("es-ES", {minimumFractionDigits: 2})} €</span>
+    </div>
+    <div class="resultado-item">
+      <strong>Rentabilidad neta (77%):</strong>
+      <span>${rentabilidadNeta.toLocaleString("es-ES", {minimumFractionDigits: 2})} €</span>
+    </div>
+    <div class="divisor"></div>
+    <div class="resultado-item">
+      <strong>Impuestos a pagar:</strong>
+      <span>${totalAPagarGlobal.toLocaleString("es-ES", {minimumFractionDigits: 2})} €</span>
+    </div>
+    <div class="resultado-item">
+      <strong>Ingreso neto deseado:</strong>
+      <span class="highlight">${ingresoDeseado.toLocaleString("es-ES", {maximumFractionDigits: 0})} €</span>
+    </div>
+    <div class="resultado-item">
+      <strong>Total necesario:</strong>
+      <span>${totalNecesario.toLocaleString("es-ES", {minimumFractionDigits: 2})} €</span>
+    </div>
+    <div class="divisor"></div>
+    <div class="resultado-item">
+      <strong>Ingreso mensual (14 pagas):</strong>
+      <span class="highlight">${ingresoMensual.toLocaleString("es-ES", {maximumFractionDigits: 0})} €</span>
+    </div>
+  `;
+}
+</script>
+</body>
+</html>
