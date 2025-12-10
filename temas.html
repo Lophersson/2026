@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selector de Temas de Interés</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 10px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            background: #2d3748;
+            border-radius: 16px;
+            padding: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            color: #cbd5e0;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .topic-counter {
+            position: relative;
+            cursor: pointer;
+            font-size: 32px;
+            transition: transform 0.3s;
+        }
+
+        .topic-counter:hover {
+            transform: scale(1.1);
+        }
+
+        .badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 16px;
+            font-style: italic;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.5);
+        }
+
+        .stats {
+            color: #a0aec0;
+            margin-bottom: 12px;
+            font-weight: 600;
+            font-size: 11px;
+        }
+
+        .selectors {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .selector-header {
+            padding: 3px 6px 6px 16px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .selector-header:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .selector-label {
+            font-weight: 750;
+            font-style: italic;
+            color: white;
+            font-size: 24px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            letter-spacing: -1.5px;
+        }
+
+        .selector-arrow {
+            font-size: 18px;
+            transition: transform 0.3s ease;
+            color: white;
+            font-weight: 700;
+        }
+
+        .selector-arrow.open {
+            transform: rotate(180deg);
+        }
+
+        .selector-content {
+            display: none;
+            background: #1f2937;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 0;
+            gap: 6px;
+            flex-direction: column;
+        }
+
+        .selector-content.show {
+            display: flex;
+        }
+
+        .topic-btn {
+            padding: 10px 14px;
+            border: 2px solid #4a5568;
+            border-radius: 6px;
+            background: #374151;
+            cursor: pointer;
+            font-weight: 700;
+            font-style: italic;
+            font-size: 12px;
+            transition: all 0.2s;
+            color: #cbd5e0;
+            text-align: left;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .topic-btn:hover {
+            background: #4a5568;
+            border-color: #718096;
+            transform: translateX(4px);
+        }
+
+        .topic-btn.selected {
+            background: #16a34a;
+            color: white;
+            border-color: #16a34a;
+            box-shadow: 0 4px 12px rgba(22, 163, 74, 0.4);
+            font-weight: 700;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: #2d3748;
+            border-radius: 12px;
+            padding: 20px;
+            max-width: 95%;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: slideDown 0.3s;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            font-size: 18px;
+            font-weight: 700;
+            color: #cbd5e0;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #718096;
+        }
+
+        .close-btn:hover {
+            color: #cbd5e0;
+        }
+
+        .selected-topics-list {
+            display: grid;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .selected-topic-item {
+            padding: 12px;
+            background: #374151;
+            border-left: 4px solid;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .topic-info {
+            flex: 1;
+        }
+
+        .topic-name {
+            font-weight: 700;
+            font-style: italic;
+            color: #cbd5e0;
+            margin-bottom: 3px;
+            font-size: 12px;
+        }
+
+        .topic-category {
+            font-size: 10px;
+            color: #718096;
+            font-weight: 600;
+            font-style: italic;
+        }
+
+        .remove-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 11px;
+            transition: all 0.3s;
+        }
+
+        .remove-btn:hover {
+            background: #dc2626;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .print-btn, .close-modal-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 12px;
+        }
+
+        .print-btn {
+            background: #4299e1;
+            color: white;
+        }
+
+        .print-btn:hover {
+            background: #3182ce;
+        }
+
+        .close-modal-btn {
+            background: #4a5568;
+            color: #cbd5e0;
+        }
+
+        .close-modal-btn:hover {
+            background: #718096;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 30px 15px;
+            color: #718096;
+        }
+
+        .empty-state-icon {
+            font-size: 36px;
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            font-size: 12px;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .container {
+                box-shadow: none;
+                padding: 15px;
+                max-width: 100%;
+                background: white;
+            }
+
+            .header {
+                margin-bottom: 15px;
+            }
+
+            .selectors {
+                display: none !important;
+            }
+
+            .stats {
+                display: none !important;
+            }
+
+            .modal {
+                position: static;
+                background: white;
+            }
+
+            .modal-content {
+                max-width: 100%;
+                width: 100%;
+                padding: 0;
+                box-shadow: none;
+                background: white;
+            }
+
+            .modal-actions {
+                display: none !important;
+            }
+
+            .print-btn {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 49 Temas de Interés. 7 días x 7 horas</h1>
+            <div class="topic-counter" onclick="openModal()">
+                ⭐
+                <div class="badge" id="counter">0</div>
+            </div>
+        </div>
+
+        <div class="stats" id="stats"></div>
+
+        <div class="selectors" id="selectorsContainer"></div>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>⭐ Seleccionados</span>
+                <button class="close-btn" onclick="closeModal()">×</button>
+            </div>
+            <div id="selectedTopicsList" class="selected-topics-list"></div>
+            <div class="modal-actions">
+                <button class="print-btn" onclick="printTopics()">🖨️ Imprimir</button>
+                <button class="close-modal-btn" onclick="closeModal()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const categories = {
+            'estilo_vida': {
+                color: '#f97316',
+                label: 'Estilo de Vida',
+                topics: [
+                    'automóviles',
+                    'gastronomía y cocina',
+                    'decoración',
+                    'viviendas',
+                    'moda, calzado y complementos',
+                    'relojes y gafas',
+                    'bolígrafos, estilográficas y papelería'
+                ]
+            },
+            'salud': {
+                color: '#22c55e',
+                label: 'Salud',
+                topics: [
+                    'salud y bienestar',
+                    'nutrición',
+                    'cuidado personal',
+                    'belleza',
+                    'familia',
+                    'desarrollo personal y profesional',
+                    'relaciones humanas'
+                ]
+            },
+            'tecnologia': {
+                color: '#3b82f6',
+                label: 'Tecnología',
+                topics: [
+                    'tecnología',
+                    'informática',
+                    'videojuegos',
+                    'internet',
+                    'fotografía',
+                    'televisión-radio-prensa',
+                    'ciencia'
+                ]
+            },
+            'cultura': {
+                color: '#8b5cf6',
+                label: 'Cultura',
+                topics: [
+                    'música',
+                    'cine y películas',
+                    'arquitectura',
+                    'cultura',
+                    'arte',
+                    'lectura y aprendizaje',
+                    'astronomía'
+                ]
+            },
+            'humanidades': {
+                color: '#ec4899',
+                label: 'Humanidades',
+                topics: [
+                    'psicología',
+                    'sociología',
+                    'eventos sociales y culturales',
+                    'astrología y horóscopos',
+                    'animales',
+                    'medioambiente',
+                    'naturaleza y paisajes'
+                ]
+            },
+            'actualidad': {
+                color: '#ef4444',
+                label: 'Actualidad',
+                topics: [
+                    'política',
+                    'economía',
+                    'finanzas e inversiones',
+                    'empresas y negocios',
+                    'geopolítica y relaciones internacionales',
+                    'lujo',
+                    'actualidad'
+                ]
+            },
+            'sociedad': {
+                color: '#eab308',
+                label: 'Sociedad',
+                topics: [
+                    'hoteles',
+                    'restaurantes',
+                    'cafeterías',
+                    'tiendas',
+                    'ciudades',
+                    'pueblos',
+                    'edificios',
+                    'viajes'
+                ]
+            }
+        };
+
+        let selectedTopics = [];
+        let expandedCategories = {};
+
+        function init() {
+            renderSelectors();
+            updateCounter();
+        }
+
+        function renderSelectors() {
+            const container = document.getElementById('selectorsContainer');
+            container.innerHTML = '';
+
+            Object.entries(categories).forEach(([key, category]) => {
+                const wrapper = document.createElement('div');
+
+                const header = document.createElement('div');
+                header.className = 'selector-header';
+                header.style.background = category.color;
+                header.onclick = () => toggleCategory(key);
+
+                const label = document.createElement('div');
+                label.className = 'selector-label';
+                label.textContent = category.label;
+
+                const arrow = document.createElement('div');
+                arrow.className = 'selector-arrow';
+                arrow.textContent = '▲';
+                arrow.id = `arrow-${key}`;
+
+                header.appendChild(label);
+                header.appendChild(arrow);
+
+                const content = document.createElement('div');
+                content.className = 'selector-content';
+                content.id = `content-${key}`;
+
+                category.topics.forEach(topic => {
+                    const btn = createTopicButton(topic, category);
+                    content.appendChild(btn);
+                });
+
+                if (expandedCategories[key]) {
+                    content.classList.add('show');
+                    arrow.classList.add('open');
+                }
+
+                wrapper.appendChild(header);
+                wrapper.appendChild(content);
+                container.appendChild(wrapper);
+            });
+        }
+
+        function createTopicButton(topicName, category) {
+            const btn = document.createElement('button');
+            btn.className = 'topic-btn';
+            btn.textContent = topicName;
+            
+            const isSelected = selectedTopics.some(t => t.name === topicName && t.category === category.label);
+            if (isSelected) {
+                btn.classList.add('selected');
+            }
+
+            btn.onclick = (e) => {
+                e.stopPropagation();
+                selectTopic(topicName, category);
+            };
+
+            return btn;
+        }
+
+        function toggleCategory(key) {
+            const content = document.getElementById(`content-${key}`);
+            const arrow = document.getElementById(`arrow-${key}`);
+
+            expandedCategories[key] = !expandedCategories[key];
+
+            if (expandedCategories[key]) {
+                content.classList.add('show');
+                arrow.classList.add('open');
+            } else {
+                content.classList.remove('show');
+                arrow.classList.remove('open');
+            }
+        }
+
+        function selectTopic(topicName, category) {
+            const topicExists = selectedTopics.some(t => t.name === topicName && t.category === category.label);
+            
+            if (topicExists) {
+                selectedTopics = selectedTopics.filter(t => !(t.name === topicName && t.category === category.label));
+            } else {
+                selectedTopics.push({
+                    name: topicName,
+                    category: category.label,
+                    color: category.color,
+                    id: Date.now() + Math.random()
+                });
+            }
+
+            updateCounter();
+            renderSelectors();
+        }
+
+        function updateCounter() {
+            document.getElementById('counter').textContent = selectedTopics.length;
+            const categoryCounts = {};
+            selectedTopics.forEach(topic => {
+                categoryCounts[topic.category] = (categoryCounts[topic.category] || 0) + 1;
+            });
+            
+            const counts = Object.entries(categoryCounts)
+                .map(([cat, count]) => `${count} ${cat.toLowerCase()}`)
+                .join(' • ');
+            
+            document.getElementById('stats').textContent = selectedTopics.length > 0 
+                ? `${selectedTopics.length} tema${selectedTopics.length !== 1 ? 's' : ''} • ${counts}`
+                : '';
+        }
+
+        function openModal() {
+            const modal = document.getElementById('modal');
+            const list = document.getElementById('selectedTopicsList');
+            
+            if (selectedTopics.length === 0) {
+                list.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><p>No hay temas seleccionados</p></div>';
+            } else {
+                list.innerHTML = selectedTopics.map((topic, index) => `
+                    <div class="selected-topic-item" style="border-left-color: ${topic.color}">
+                        <div class="topic-info">
+                            <div class="topic-name">${topic.name}</div>
+                            <div class="topic-category">${topic.category}</div>
+                        </div>
+                        <button class="remove-btn" onclick="removeTopic(${index})">✕</button>
+                    </div>
+                `).join('');
+            }
+            
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        function removeTopic(index) {
+            selectedTopics.splice(index, 1);
+            updateCounter();
+            renderSelectors();
+            openModal();
+        }
+
+        function printTopics() {
+            window.print();
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+
+        init();
+    </script>
+</body>
+</html>
