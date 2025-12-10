@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selector de Ocio, Cultura y Entretenimiento</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+            padding: 10px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            background: #2d3748;
+            border-radius: 16px;
+            padding: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            color: #cbd5e0;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .task-counter {
+            position: relative;
+            cursor: pointer;
+            font-size: 32px;
+            transition: transform 0.3s;
+        }
+
+        .task-counter:hover {
+            transform: scale(1.1);
+        }
+
+        .badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #ec4899;
+            color: white;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 16px;
+            font-style: italic;
+            box-shadow: 0 4px 12px rgba(236, 72, 153, 0.5);
+        }
+
+        .stats {
+            color: #a0aec0;
+            margin-bottom: 12px;
+            font-weight: 600;
+            font-size: 11px;
+        }
+
+        .selectors {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .selector-header {
+            padding: 3px 6px 6px 16px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .selector-header:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .selector-label {
+            font-weight: 750;
+            font-style: italic;
+            color: white;
+            font-size: 24px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            letter-spacing: -1.5px;
+        }
+
+        .selector-arrow {
+            font-size: 18px;
+            transition: transform 0.3s ease;
+            color: white;
+            font-weight: 700;
+        }
+
+        .selector-arrow.open {
+            transform: rotate(180deg);
+        }
+
+        .selector-content {
+            display: none;
+            background: #1f2937;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 0;
+            gap: 8px;
+            flex-direction: column;
+        }
+
+        .selector-content.show {
+            display: flex;
+        }
+
+        .subcategory {
+            background: #374151;
+            border-radius: 6px;
+            padding: 8px;
+            border-left: 4px solid;
+        }
+
+        .subcategory-header {
+            font-weight: 700;
+            font-style: italic;
+            font-size: 14px;
+            color: #cbd5e0;
+            margin-bottom: 6px;
+            padding-left: 4px;
+        }
+
+        .subcategory-tasks {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .task-btn {
+            padding: 10px 14px;
+            border: 2px solid #4a5568;
+            border-radius: 6px;
+            background: #2d3748;
+            cursor: pointer;
+            font-weight: 700;
+            font-style: italic;
+            font-size: 12px;
+            transition: all 0.2s;
+            color: #cbd5e0;
+            text-align: left;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .task-btn:hover {
+            background: #4a5568;
+            border-color: #718096;
+            transform: translateX(4px);
+        }
+
+        .task-btn.selected {
+            background: #ec4899;
+            color: white;
+            border-color: #ec4899;
+            box-shadow: 0 4px 12px rgba(236, 72, 153, 0.4);
+            font-weight: 700;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: #2d3748;
+            border-radius: 12px;
+            padding: 20px;
+            max-width: 95%;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: slideDown 0.3s;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            font-size: 18px;
+            font-weight: 700;
+            color: #cbd5e0;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #718096;
+        }
+
+        .close-btn:hover {
+            color: #cbd5e0;
+        }
+
+        .selected-tasks-list {
+            display: grid;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .selected-task-item {
+            padding: 12px;
+            background: #374151;
+            border-left: 4px solid;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .task-info {
+            flex: 1;
+        }
+
+        .task-name {
+            font-weight: 700;
+            font-style: italic;
+            color: #cbd5e0;
+            margin-bottom: 3px;
+            font-size: 12px;
+        }
+
+        .task-category {
+            font-size: 10px;
+            color: #718096;
+            font-weight: 600;
+            font-style: italic;
+        }
+
+        .remove-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 11px;
+            transition: all 0.3s;
+        }
+
+        .remove-btn:hover {
+            background: #dc2626;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .print-btn, .close-modal-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 12px;
+        }
+
+        .print-btn {
+            background: #4299e1;
+            color: white;
+        }
+
+        .print-btn:hover {
+            background: #3182ce;
+        }
+
+        .close-modal-btn {
+            background: #4a5568;
+            color: #cbd5e0;
+        }
+
+        .close-modal-btn:hover {
+            background: #718096;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 30px 15px;
+            color: #718096;
+        }
+
+        .empty-state-icon {
+            font-size: 36px;
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            font-size: 12px;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .container {
+                box-shadow: none;
+                padding: 15px;
+                max-width: 100%;
+                background: white;
+            }
+
+            .header {
+                margin-bottom: 15px;
+            }
+
+            .selectors {
+                display: none !important;
+            }
+
+            .stats {
+                display: none !important;
+            }
+
+            .modal {
+                position: static;
+                background: white;
+            }
+
+            .modal-content {
+                max-width: 100%;
+                width: 100%;
+                padding: 0;
+                box-shadow: none;
+                background: white;
+            }
+
+            .modal-actions {
+                display: none !important;
+            }
+
+            .print-btn {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎭 Ocio, Cultura y Entretenimiento</h1>
+            <div class="task-counter" onclick="openModal()">
+                ✨
+                <div class="badge" id="counter">0</div>
+            </div>
+        </div>
+
+        <div class="stats" id="stats"></div>
+
+        <div class="selectors" id="selectorsContainer"></div>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>✨ Seleccionadas</span>
+                <button class="close-btn" onclick="closeModal()">×</button>
+            </div>
+            <div id="selectedTasksList" class="selected-tasks-list"></div>
+            <div class="modal-actions">
+                <button class="print-btn" onclick="printTasks()">🖨️ Imprimir</button>
+                <button class="close-modal-btn" onclick="closeModal()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const categories = {
+            'tecnologia_digital': {
+                color: '#ec4899',
+                label: 'Tecnología Digital',
+                tasks: [
+                    'navegar por internet',
+                    'explorar redes sociales',
+                    'ver vídeos en youtube',
+                    'ver series y películas en streaming',
+                    'escuchar podcasts',
+                    'videojuegos en consola',
+                    'videojuegos en pc',
+                    'videojuegos móviles',
+                    'realidad virtual',
+                    'ver televisión',
+                    'investigar sobre móviles',
+                    'investigar sobre tablets',
+                    'investigar sobre electrónica',
+                    'contenido en tiktok',
+                    'contenido en instagram',
+                    'contenido en twitter/x',
+                    'streaming en twitch',
+                    'fotografía digital',
+                    'edición de fotos',
+                    'edición de vídeos'
+                ]
+            },
+            'musica': {
+                color: '#db2777',
+                label: 'Música',
+                tasks: [
+                    'escuchar música en spotify',
+                    'escuchar música en youtube',
+                    'descubrir nuevos artistas',
+                    'crear listas de reproducción',
+                    'asistir a conciertos',
+                    'asistir a festivales de música',
+                    'tocar un instrumento musical',
+                    'cantar',
+                    'asistir a karaoke',
+                    'ver videoclips musicales',
+                    'leer sobre historia de la música',
+                    'comprar música física (vinilos, cds)'
+                ]
+            },
+            'lectura_escritura': {
+                color: '#f472b6',
+                label: 'Lectura y Escritura',
+                tasks: [
+                    'leer libros de ficción',
+                    'leer libros de no ficción',
+                    'leer novelas',
+                    'leer poesía',
+                    'leer cómics y manga',
+                    'leer revistas',
+                    'leer periódicos',
+                    'leer blogs',
+                    'escribir diario personal',
+                    'escribir cuentos',
+                    'escribir poemas',
+                    'escribir blog personal',
+                    'participar en clubes de lectura',
+                    'visitar bibliotecas',
+                    'visitar librerías'
+                ]
+            },
+            'cine_audiovisual': {
+                color: '#f9a8d4',
+                label: 'Cine y Audiovisual',
+                tasks: [
+                    'ir al cine',
+                    'ver películas en casa',
+                    'ver series en netflix',
+                    'ver series en hbo',
+                    'ver series en disney+',
+                    'ver series en prime video',
+                    'ver documentales',
+                    'ver cortometrajes',
+                    'asistir a festivales de cine',
+                    'ver cine clásico',
+                    'ver cine independiente',
+                    'ver películas de culto',
+                    'maratones de series',
+                    'análisis y crítica cinematográfica'
+                ]
+            },
+            'arte_cultura': {
+                color: '#a855f7',
+                label: 'Arte y Cultura',
+                tasks: [
+                    'visitar museos',
+                    'visitar galerías de arte',
+                    'asistir a exposiciones',
+                    'asistir a ferias de arte',
+                    'pintura',
+                    'dibujo',
+                    'escultura',
+                    'cerámica y alfarería',
+                    'fotografía artística',
+                    'asistir a talleres artísticos',
+                    'visitar monumentos históricos',
+                    'visitar patrimonio cultural',
+                    'aprender sobre historia del arte',
+                    'coleccionar arte'
+                ]
+            },
+            'teatro_espectaculos': {
+                color: '#9333ea',
+                label: 'Teatro y Espectáculos',
+                tasks: [
+                    'asistir al teatro',
+                    'ver obras de teatro',
+                    'asistir a musicales',
+                    'ver ópera',
+                    'ver ballet y danza',
+                    'asistir a circo',
+                    'ver espectáculos de magia',
+                    'ver monólogos de comedia',
+                    'participar en teatro amateur',
+                    'asistir a festivales de teatro'
+                ]
+            },
+            'gastronomia': {
+                color: '#c084fc',
+                label: 'Gastronomía',
+                tasks: [
+                    'investigar sobre gastronomía',
+                    'investigar sobre nutrición',
+                    'descubrir nuevos restaurantes',
+                    'probar cocina internacional',
+                    'catas de vino',
+                    'catas de cerveza',
+                    'catas de café',
+                    'visitar mercados gastronómicos',
+                    'asistir a festivales gastronómicos',
+                    'cocinar recetas nuevas',
+                    'repostería creativa',
+                    'ver programas de cocina',
+                    'leer libros de cocina',
+                    'coctelería',
+                    'comprar ingredientes gourmet'
+                ]
+            },
+            'deportes_espectaculo': {
+                color: '#d8b4fe',
+                label: 'Deportes como Espectáculo',
+                tasks: [
+                    'ver fútbol',
+                    'ver baloncesto',
+                    'ver tenis',
+                    'ver fórmula 1',
+                    'ver motogp',
+                    'ver ciclismo',
+                    'asistir a partidos en estadio',
+                    'asistir a eventos deportivos',
+                    'ver olimpiadas',
+                    'ver deportes extremos',
+                    'seguir noticias deportivas',
+                    'analizar estadísticas deportivas'
+                ]
+            },
+            'viajes_turismo': {
+                color: '#e9d5ff',
+                label: 'Viajes y Turismo',
+                tasks: [
+                    'planificar viajes',
+                    'investigar destinos',
+                    'viajar a ciudades',
+                    'viajar a pueblos',
+                    'turismo rural',
+                    'turismo urbano',
+                    'turismo cultural',
+                    'turismo gastronómico',
+                    'excursiones de un día',
+                    'visitar lugares históricos',
+                    'explorar paisajes naturales',
+                    'fotografía de viajes',
+                    'leer guías de viaje',
+                    'ver documentales de viajes',
+                    'aprender sobre geografía',
+                    'coleccionar souvenirs'
+                ]
+            },
+            'moda_estilo': {
+                color: '#fae8ff',
+                label: 'Moda y Estilo',
+                tasks: [
+                    'seguir tendencias de moda',
+                    'explorar marcas de ropa',
+                    'investigar sobre zapatos',
+                    'investigar sobre relojes',
+                    'investigar sobre gafas',
+                    'investigar sobre perfumes',
+                    'ver desfiles de moda',
+                    'leer revistas de moda',
+                    'seguir influencers de moda',
+                    'visitar tiendas de diseñador',
+                    'compras por placer',
+                    'estilismo personal',
+                    'coleccionar accesorios'
+                ]
+            },
+            'arquitectura_diseño': {
+                color: '#fbcfe8',
+                label: 'Arquitectura y Diseño',
+                tasks: [
+                    'investigar sobre arquitectura',
+                    'visitar edificios emblemáticos',
+                    'investigar sobre decoración',
+                    'visitar showrooms de diseño',
+                    'investigar sobre viviendas',
+                    'ver programas de reforma',
+                    'leer sobre diseño de interiores',
+                    'visitar casas museo',
+                    'asistir a ferias de diseño',
+                    'explorar estilos arquitectónicos',
+                    'investigar sobre urbanismo'
+                ]
+            },
+            'automocion': {
+                color: '#f9a8d4',
+                label: 'Automoción',
+                tasks: [
+                    'investigar sobre coches',
+                    'ver carreras de coches',
+                    'visitar concesionarios',
+                    'asistir a salones del automóvil',
+                    'leer revistas de motor',
+                    'ver vídeos de pruebas de coches',
+                    'investigar sobre coches clásicos',
+                    'investigar sobre coches deportivos',
+                    'investigar sobre coches eléctricos',
+                    'visitar museos del automóvil',
+                    'simracing'
+                ]
+            },
+            'naturaleza_aire_libre': {
+                color: '#f472b6',
+                label: 'Naturaleza y Aire Libre',
+                tasks: [
+                    'observar paisajes',
+                    'fotografía de naturaleza',
+                    'senderismo',
+                    'picnics en el campo',
+                    'observación de aves',
+                    'observación de estrellas',
+                    'visitar parques naturales',
+                    'visitar jardines botánicos',
+                    'visitar playas',
+                    'visitar montañas',
+                    'acampar',
+                    'ver documentales de naturaleza'
+                ]
+            },
+            'juegos_mesa': {
+                color: '#db2777',
+                label: 'Juegos de Mesa y Cartas',
+                tasks: [
+                    'juegos de mesa con amigos',
+                    'juegos de mesa en familia',
+                    'juegos de cartas',
+                    'póker',
+                    'ajedrez',
+                    'juegos de rol',
+                    'escape rooms',
+                    'puzzles',
+                    'coleccionar juegos de mesa',
+                    'participar en torneos',
+                    'visitar tiendas especializadas'
+                ]
+            },
+            'coleccionismo': {
+                color: '#ec4899',
+                label: 'Coleccionismo',
+                tasks: [
+                    'coleccionar figuras',
+                    'coleccionar cómics',
+                    'coleccionar cromos',
+                    'coleccionar sellos',
+                    'coleccionar monedas',
+                    'coleccionar memorabilia',
+                    'coleccionar vinilos',
+                    'coleccionar objetos vintage',
+                    'visitar mercadillos',
+                    'visitar tiendas de antigüedades',
+                    'buscar objetos raros online',
+                    'organizar mi colección'
+                ]
+            },
+            'aprendizaje_ocio': {
+                color: '#be185d',
+                label: 'Aprendizaje por Placer',
+                tasks: [
+                    'aprender idiomas',
+                    'ver documentales educativos',
+                    'hacer cursos online',
+                    'aprender sobre ciencia',
+                    'aprender sobre historia',
+                    'aprender sobre filosofía',
+                    'ver charlas ted',
+                    'visitar planetarios',
+                    'visitar acuarios',
+                    'visitar zoológicos',
+                    'asistir a conferencias',
+                    'participar en talleres'
+                ]
+            },
+            'bienestar_mindfulness': {
+                color: '#9f1239',
+                label: 'Bienestar y Mindfulness',
+                tasks: [
+                    'meditación',
+                    'yoga',
+                    'tai chi',
+                    'spa y tratamientos',
+                    'masajes',
+                    'aromaterapia',
+                    'terapias alternativas',
+                    'mindfulness',
+                    'ejercicios de respiración',
+                    'retiros de bienestar'
+                ]
+            },
+            'social_ocio': {
+                color: '#881337',
+                label: 'Social y Ocio Nocturno',
+                tasks: [
+                    'ir a bares',
+                    'ir a pubs',
+                    'ir a discotecas',
+                    'asistir a fiestas',
+                    'visitar terrazas',
+                    'jugar al billar',
+                    'jugar a los dardos',
+                    'ir a boleras',
+                    'visitar salones recreativos',
+                    'karaoke con amigos',
+                    'noches temáticas'
+                ]
+            }
+        };
+
+        let selectedTasks = [];
+        let expandedCategories = {};
+
+        function init() {
+            renderSelectors();
+            updateCounter();
+        }
+
+        function renderSelectors() {
+            const container = document.getElementById('selectorsContainer');
+            container.innerHTML = '';
+
+            Object.entries(categories).forEach(([key, category]) => {
+                const wrapper = document.createElement('div');
+
+                const header = document.createElement('div');
+                header.className = 'selector-header';
+                header.style.background = category.color;
+                header.onclick = () => toggleCategory(key);
+
+                const label = document.createElement('div');
+                label.className = 'selector-label';
+                label.textContent = category.label;
+
+                const arrow = document.createElement('div');
+                arrow.className = 'selector-arrow';
+                arrow.textContent = '▲';
+                arrow.id = `arrow-${key}`;
+
+                header.appendChild(label);
+                header.appendChild(arrow);
+
+                const content = document.createElement('div');
+                content.className = 'selector-content';
+                content.id = `content-${key}`;
+
+                const tasksDiv = document.createElement('div');
+                tasksDiv.className = 'subcategory-tasks';
+                tasksDiv.style.padding = '0';
+
+                category.tasks.forEach(task => {
+                    const btn = createTaskButton(task, category);
+                    tasksDiv.appendChild(btn);
+                });
+
+                content.appendChild(tasksDiv);
+
+                if (expandedCategories[key]) {
+                    content.classList.add('show');
+                    arrow.classList.add('open');
+                }
+
+                wrapper.appendChild(header);
+                wrapper.appendChild(content);
+                container.appendChild(wrapper);
+            });
+        }
+
+        function createTaskButton(taskName, category) {
+            const btn = document.createElement('button');
+            btn.className = 'task-btn';
+            btn.textContent = taskName;
+            
+            const isSelected = selectedTasks.some(t => t.name === taskName && t.category === category.label);
+            if (isSelected) {
+                btn.classList.add('selected');
+            }
+
+            btn.onclick = (e) => {
+                e.stopPropagation();
+                selectTask(taskName, category);
+            };
+
+            return btn;
+        }
+
+        function toggleCategory(key) {
+            const content = document.getElementById(`content-${key}`);
+            const arrow = document.getElementById(`arrow-${key}`);
+
+            expandedCategories[key] = !expandedCategories[key];
+
+            if (expandedCategories[key]) {
+                content.classList.add('show');
+                arrow.classList.add('open');
+            } else {
+                content.classList.remove('show');
+                arrow.classList.remove('open');
+            }
+        }
+
+        function selectTask(taskName, category) {
+            const taskExists = selectedTasks.some(t => t.name === taskName && t.category === category.label);
+            
+            if (taskExists) {
+                selectedTasks = selectedTasks.filter(t => !(t.name === taskName && t.category === category.label));
+            } else {
+                selectedTasks.push({
+                    name: taskName,
+                    category: category.label,
+                    color: category.color,
+                    id: Date.now() + Math.random()
+                });
+            }
+
+            updateCounter();
+            renderSelectors();
+        }
+
+        function updateCounter() {
+            document.getElementById('counter').textContent = selectedTasks.length;
+            const categoryCounts = {};
+            selectedTasks.forEach(task => {
+                categoryCounts[task.category] = (categoryCounts[task.category] || 0) + 1;
+            });
+            
+            const counts = Object.entries(categoryCounts)
+                .map(([cat, count]) => `${count} ${cat.toLowerCase()}`)
+                .join(' • ');
+            
+            document.getElementById('stats').textContent = selectedTasks.length > 0 
+                ? `${selectedTasks.length} actividad${selectedTasks.length !== 1 ? 'es' : ''} • ${counts}`
+                : '';
+        }
+
+        function openModal() {
+            const modal = document.getElementById('modal');
+            const list = document.getElementById('selectedTasksList');
+            
+            if (selectedTasks.length === 0) {
+                list.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><p>No hay actividades seleccionadas</p></div>';
+            } else {
+                list.innerHTML = selectedTasks.map((task, index) => `
+                    <div class="selected-task-item" style="border-left-color: ${task.color}">
+                        <div class="task-info">
+                            <div class="task-name">${task.name}</div>
+                            <div class="task-category">${task.category}</div>
+                        </div>
+                        <button class="remove-btn" onclick="removeTask(${index})">✕</button>
+                    </div>
+                `).join('');
+            }
+            
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        function removeTask(index) {
+            selectedTasks.splice(index, 1);
+            updateCounter();
+            renderSelectors();
+            openModal();
+        }
+
+        function printTasks() {
+            window.print();
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+
+        init();
+    </script>
+</body>
+</html>
