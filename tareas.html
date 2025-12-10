@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selector de Tareas - Cards</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 10px; min-height: 100vh; }
+        .container { max-width: 100%; margin: 0 auto; background: #2d3748; border-radius: 16px; padding: 15px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        h1 { color: #cbd5e0; font-size: 20px; font-weight: 700; }
+        .task-counter { position: relative; cursor: pointer; font-size: 32px; transition: transform 0.3s; }
+        .task-counter:hover { transform: scale(1.1); }
+        .badge { position: absolute; top: -10px; right: -10px; background: #ef4444; color: white; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 16px; font-style: italic; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.5); }
+        .stats { color: #a0aec0; margin-bottom: 12px; font-weight: 600; font-size: 11px; }
+        .selectors { display: flex; flex-direction: column; gap: 8px; }
+        .selector-header { padding: 3px 6px 6px 16px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); }
+        .selector-header:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3); }
+        .selector-label { font-weight: 750; font-style: italic; color: white; font-size: 24px; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); letter-spacing: -1.5px; }
+        .selector-arrow { font-size: 18px; transition: transform 0.3s ease; color: white; font-weight: 700; }
+        .selector-arrow.open { transform: rotate(180deg); }
+        .selector-content { display: none; background: #1f2937; border-radius: 8px; padding: 10px; margin-top: 0; gap: 12px; flex-direction: column; }
+        .selector-content.show { display: flex; }
+        .subcategory { background: #374151; border-radius: 6px; padding: 12px; border-left: 4px solid; }
+        .subcategory-header { font-weight: 700; font-style: italic; font-size: 14px; color: #cbd5e0; margin-bottom: 10px; padding-left: 4px; }
+        .subcategory-tasks { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+        .task-card { position: relative; padding: 16px 12px; border: 2px solid #4a5568; border-radius: 10px; background: #2d3748; cursor: pointer; transition: all 0.3s ease; color: #cbd5e0; text-align: center; min-height: 80px; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); }
+        .task-card:hover { transform: translateY(-4px); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3); border-color: #718096; }
+        .task-card-name { font-weight: 700; font-style: italic; font-size: 12px; line-height: 1.4; word-wrap: break-word; overflow-wrap: break-word; }
+        .task-card.selected { background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: white; border-color: #16a34a; box-shadow: 0 6px 20px rgba(22, 163, 74, 0.5); }
+        .task-card.selected::before { content: '✓'; position: absolute; top: 4px; right: 4px; width: 20px; height: 20px; background: white; color: #16a34a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 12px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); }
+        .task-card.selected:hover { transform: translateY(-4px) scale(1.02); }
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); }
+        .modal.active { display: flex; align-items: center; justify-content: center; }
+        .modal-content { background: #2d3748; border-radius: 12px; padding: 20px; max-width: 95%; width: 100%; max-height: 80vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); }
+        .modal-header { font-size: 18px; font-weight: 700; color: #cbd5e0; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .close-btn { background: none; border: none; font-size: 20px; cursor: pointer; color: #718096; }
+        .close-btn:hover { color: #cbd5e0; }
+        .selected-tasks-list { display: grid; gap: 8px; margin-bottom: 15px; }
+        .selected-task-item { padding: 12px; background: #374151; border-left: 4px solid; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .task-info { flex: 1; }
+        .task-name { font-weight: 700; font-style: italic; color: #cbd5e0; margin-bottom: 3px; font-size: 12px; }
+        .task-category { font-size: 10px; color: #718096; font-weight: 600; font-style: italic; }
+        .remove-btn { background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 11px; transition: all 0.3s; }
+        .remove-btn:hover { background: #dc2626; }
+        .modal-actions { display: flex; gap: 8px; margin-top: 15px; }
+        .print-btn, .close-modal-btn { flex: 1; padding: 10px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 12px; }
+        .print-btn { background: #4299e1; color: white; }
+        .print-btn:hover { background: #3182ce; }
+        .close-modal-btn { background: #4a5568; color: #cbd5e0; }
+        .close-modal-btn:hover { background: #718096; }
+        .empty-state { text-align: center; padding: 30px 15px; color: #718096; }
+        .empty-state-icon { font-size: 36px; margin-bottom: 8px; }
+        .empty-state p { font-size: 12px; }
+        @media (max-width: 480px) {
+            .subcategory-tasks { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+            .task-card { min-height: 70px; padding: 12px 8px; }
+            .task-card-name { font-size: 11px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 Tareas</h1>
+            <div class="task-counter" onclick="openModal()">✅<div class="badge" id="counter">0</div></div>
+        </div>
+        <div class="stats" id="stats"></div>
+        <div class="selectors" id="selectorsContainer"></div>
+    </div>
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header"><span>✅ Seleccionadas</span><button class="close-btn" onclick="closeModal()">×</button></div>
+            <div id="selectedTasksList" class="selected-tasks-list"></div>
+            <div class="modal-actions">
+                <button class="print-btn" onclick="printTasks()">🖨️ Imprimir</button>
+                <button class="close-modal-btn" onclick="closeModal()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+    <script>
+const categories={"tareas_casa":{color:"#ef4444",label:"Tareas en Casa",subcategories:{"limpieza_orden":{color:"#dc2626",label:"Limpieza y Orden",tasks:["hacer la cama","limpiar suelo y muebles","limpiar la cocina","limpiar baños y terraza","lavar y ordenar la vajilla","lavar la ropa en la lavadora","tender la ropa","planchar camisas y camisetas","cambiar sábanas cama","limpiar el colchón"]},"organizacion_hogar":{color:"#f97316",label:"Organización del Hogar",tasks:["ordenar pertenencias en el armario","doblar y ordenar ropa en cajones y armario","ordenar el calzado","ordenar pertenencias en cajones y estanterías","ordenar y revisar pertenencias","buscar documentos en estanterías","buscar pertenencias en cajones y armario","preparar ropa y pertenencias para salir de casa"]},"trastero":{color:"#fb923c",label:"Gestión de Trastero",tasks:["trastero subir cosas","trastero ordenar cosas","trastero vender cosas","trastero eliminar cosas","buscar pertenencias en el trastero"]},"cocina_alimentacion":{color:"#fbbf24",label:"Cocina y Alimentación",tasks:["cocinar algo rico","desayunar","comer","merendar","cenar"]},"mantenimiento":{color:"#f59e0b",label:"Mantenimiento y Reparaciones",tasks:["bricolaje y reparaciones en casa","limpieza y reparación de calzado","revisar material de oficina y estudio"]},"compras_hogar":{color:"#d97706",label:"Compras para el Hogar",tasks:["compra en el supermercado","comprar pilas","comprar recambios hogar","comprar higiene personal y limpieza hogar","comprar en papelería","llevar ropa a la lavandería"]}}},"trabajo":{color:"#3b82f6",label:"Trabajo",tasks:["asistencia a clases","tiempo de trabajo","actualizar mi currículum","enviar mi currículum","buscar empleos en infojobs/linkedin","actualizar mi web profesional","actualizar archivos de mi github"]},"organizacion_personal":{color:"#8b5cf6",label:"Organización Personal",subcategories:{"gestion_financiera":{color:"#7c3aed",label:"Gestión Financiera",tasks:["contabilidad diaria","presupuestos listas categorías y meses","finanzas","sueldos y capital"]},"planificacion":{color:"#9333ea",label:"Planificación",tasks:["programación","listas de coches","actualizar listas de compras"]},"gestion_digital":{color:"#a855f7",label:"Gestión Digital",tasks:["guardar archivos del móvil en el disco duro externo","guardar archivos de la tablet en el disco duro externo","guardar archivos del portátil a discos duros externos","guardar chats de whatsapp al disco duro externo","guardar mails en el disco duro externo","guardar archivos de nubes al disco duro externo","buscar archivos digitales en discos duros","actualizar registros web, apps y contraseñas"]},"documentacion":{color:"#c084fc",label:"Documentación",tasks:["ordenar y preparar documentación","elaborar documentos en el portátil","hacer fotocopias"]},"compras_general":{color:"#d8b4fe",label:"Compras",tasks:["comprar en tiendas","comprar online","buscar información y productos online"]}}},"ocio_entretenimiento":{color:"#ec4899",label:"Ocio y Entretenimiento",subcategories:{"tecnologia_digital":{color:"#db2777",label:"Tecnología Digital",tasks:["móvil","tablet","internet","televisión","videojuegos","electrónica"]},"cultura":{color:"#f472b6",label:"Cultura",tasks:["escuchar música","lectura","asistir a eventos culturales y deportivos con amigos/familia","asistir a exposiciones","asistir a ferias"]},"intereses_personales":{color:"#f9a8d4",label:"Intereses Personales",tasks:["coches","moda","zapatos","relojes","gafas","decoración","viviendas","arquitectura","ciudades","pueblos","viajes","perfumes","restaurantes","paisajes","gastronomía y nutrición"]}}},"coche":{color:"#22c55e",label:"Coche",subcategories:{"mantenimiento_coche":{color:"#16a34a",label:"Mantenimiento",tasks:["repostar gasoil","neumáticos","revisión taller","accesorios","recambios"]},"limpieza_coche":{color:"#15803d",label:"Limpieza",tasks:["limpieza interior","limpieza exterior","quitar cosas del maletero","ambientador"]},"gestiones_coche":{color:"#65a30d",label:"Gestiones",tasks:["pasar y pagar la ITV","pagar impuesto municipal","parking","peajes"]},"desplazamientos":{color:"#84cc16",label:"Desplazamientos",tasks:["trayectos a pie y en coche"]}}},"cuidado_salud":{color:"#06b6d4",label:"Cuidado y Salud",subcategories:{"higiene_personal":{color:"#0891b2",label:"Higiene Personal",tasks:["aseo personal","ducha","lavar el cabello","lavar los dientes","vestirse y calzarse","cambiarse de ropa"]},"cuidado_corporal":{color:"#0e7490",label:"Cuidado Corporal",tasks:["cortar las uñas de las manos","crema de manos","cortar las uñas de los pies","echar crema nivea en los pies","afeitado","echar crema nivea en la cara","desodorante","perfume","bálsamo de labios"]},"salud_bienestar":{color:"#155e75",label:"Salud y Bienestar",tasks:["dormir","pasear","ejercicio físico","practicar deportes","medicación y tratamientos","comprar en la farmacia","médicos"]}}},"relaciones_interpersonales":{color:"#eab308",label:"Relaciones Interpersonales",subcategories:{"comunicacion":{color:"#ca8a04",label:"Comunicación",tasks:["actualizar los contactos de teléfono","enviar mensajes por whatsapp","interaccionar en redes sociales"]},"eventos_sociales":{color:"#a16207",label:"Eventos Sociales",tasks:["felicitar y/o asistir a cumpleaños","cafés con amigos/familia","comida/cena con amigos/familia","ir al cine con amigos"]},"tiempo_compartido":{color:"#854d0e",label:"Tiempo Compartido",tasks:["visitar a un amigo o familiar","tareas con amigos/familiares"]}}},"administraciones_publicas":{color:"#f97316",label:"Administraciones Públicas",tasks:["concello","xunta","administración central","gestiones burocráticas online","gestiones burocráticas presencialmente"]}};
+let selectedTasks=[],expandedCategories={};
+function init(){renderSelectors();updateCounter()}
+function renderSelectors(){const c=document.getElementById("selectorsContainer");c.innerHTML="";Object.entries(categories).forEach(([k,cat])=>{const w=document.createElement("div"),h=document.createElement("div");h.className="selector-header";h.style.background=cat.color;h.onclick=()=>toggleCategory(k);const l=document.createElement("div");l.className="selector-label";l.textContent=cat.label;const a=document.createElement("div");a.className="selector-arrow";a.textContent="▲";a.id=`arrow-${k}`;h.appendChild(l);h.appendChild(a);const content=document.createElement("div");content.className="selector-content";content.id=`content-${k}`;if(cat.subcategories){Object.entries(cat.subcategories).forEach(([sk,sub])=>{const sd=document.createElement("div");sd.className="subcategory";sd.style.borderLeftColor=sub.color;const sh=document.createElement("div");sh.className="subcategory-header";sh.textContent=sub.label;const st=document.createElement("div");st.className="subcategory-tasks";sub.tasks.forEach(t=>{st.appendChild(createTaskCard(t,sub))});sd.appendChild(sh);sd.appendChild(st);content.appendChild(sd)})}else{const td=document.createElement("div");td.className="subcategory-tasks";td.style.padding="0";cat.tasks.forEach(t=>{td.appendChild(createTaskCard(t,cat))});content.appendChild(td)}if(expandedCategories[k]){content.classList.add("show");a.classList.add("open")}w.appendChild(h);w.appendChild(content);c.appendChild(w)})}
+function createTaskCard(n,cat){const c=document.createElement("div");c.className="task-card";const tn=document.createElement("div");tn.className="task-card-name";tn.textContent=n;c.appendChild(tn);if(selectedTasks.some(t=>t.name===n&&t.category===cat.label))c.classList.add("selected");c.onclick=e=>{e.stopPropagation();selectTask(n,cat)};return c}
+function toggleCategory(k){const c=document.getElementById(`content-${k}`),a=document.getElementById(`arrow-${k}`);expandedCategories[k]=!expandedCategories[k];if(expandedCategories[k]){c.classList.add("show");a.classList.add("open")}else{c.classList.remove("show");a.classList.remove("open")}}
+function selectTask(n,cat){const e=selectedTasks.some(t=>t.name===n&&t.category===cat.label);if(e)selectedTasks=selectedTasks.filter(t=>!(t.name===n&&t.category===cat.label));else selectedTasks.push({name:n,category:cat.label,color:cat.color,id:Date.now()+Math.random()});updateCounter();renderSelectors()}
+function updateCounter(){document.getElementById("counter").textContent=selectedTasks.length;const cc={};selectedTasks.forEach(t=>{cc[t.category]=(cc[t.category]||0)+1});const counts=Object.entries(cc).map(([c,n])=>`${n} ${c.toLowerCase()}`).join(" • ");document.getElementById("stats").textContent=selectedTasks.length>0?`${selectedTasks.length} tarea${selectedTasks.length!==1?"s":""} • ${counts}`:""}
+function openModal(){const m=document.getElementById("modal"),l=document.getElementById("selectedTasksList");if(selectedTasks.length===0)l.innerHTML='<div class="empty-state"><div class="empty-state-icon">📭</div><p>No hay tareas seleccionadas</p></div>';else l.innerHTML=selectedTasks.map((t,i)=>`<div class="selected-task-item" style="border-left-color:${t.color}"><div class="task-info"><div class="task-name">${t.name}</div><div class="task-category">${t.category}</div></div><button class="remove-btn" onclick="removeTask(${i})">✕</button></div>`).join("");m.classList.add("active")}
+function closeModal(){document.getElementById("modal").classList.remove("active")}
+function removeTask(i){selectedTasks.splice(i,1);updateCounter();renderSelectors();openModal()}
+function printTasks(){window.print()}
+window.onclick=e=>{if(e.target===document.getElementById("modal"))closeModal()};
+init();
+    </script>
+</body>
+</html>
