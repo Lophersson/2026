@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Rentabilidad</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            font-size: 2em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .calculators {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+        }
+
+        .calculator {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .calculator h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9ff;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-value {
+            font-size: 1.8em;
+            color: #667eea;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .result-label {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .calculators {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💰 Calculadora de Rentabilidad de Inversiones</h1>
+        
+        <div class="calculators">
+            <!-- Calculadora 1: Calcular Rentabilidad -->
+            <div class="calculator">
+                <h2>📊 Calcular Rentabilidad Anual</h2>
+                
+                <div class="input-group">
+                    <label for="fechaInicio1">Fecha de inicio:</label>
+                    <input type="date" id="fechaInicio1" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="fechaFin1">Fecha de fin:</label>
+                    <input type="date" id="fechaFin1" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="inversion1">Inversión inicial (€):</label>
+                    <input type="number" id="inversion1" placeholder="Ej: 10000" step="0.01" min="0" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="ganancias1">Ganancias totales (€):</label>
+                    <input type="number" id="ganancias1" placeholder="Ej: 1500" step="0.01" required>
+                </div>
+                
+                <button onclick="calcularRentabilidad()">Calcular Rentabilidad</button>
+                
+                <div id="resultado1" class="result">
+                    <div class="result-label">Rentabilidad Anual:</div>
+                    <div class="result-value" id="rentabilidadValor"></div>
+                    <div class="result-label" style="margin-top: 10px;">Rentabilidad Total: <span id="rentabilidadTotal"></span></div>
+                    <div class="result-label">Días transcurridos: <span id="diasTranscurridos"></span></div>
+                </div>
+            </div>
+            
+            <!-- Calculadora 2: Calcular Ganancias -->
+            <div class="calculator">
+                <h2>💵 Calcular Ganancias Esperadas</h2>
+                
+                <div class="input-group">
+                    <label for="fechaInicio2">Fecha de inicio:</label>
+                    <input type="date" id="fechaInicio2" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="fechaFin2">Fecha de fin:</label>
+                    <input type="date" id="fechaFin2" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="inversion2">Inversión inicial (€):</label>
+                    <input type="number" id="inversion2" placeholder="Ej: 10000" step="0.01" min="0" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="rentabilidad2">Rentabilidad anual (%):</label>
+                    <input type="number" id="rentabilidad2" placeholder="Ej: 8.5" step="0.01" required>
+                </div>
+                
+                <button onclick="calcularGanancias()">Calcular Ganancias</button>
+                
+                <div id="resultado2" class="result">
+                    <div class="result-label">Ganancias Esperadas:</div>
+                    <div class="result-value" id="gananciasValor"></div>
+                    <div class="result-label" style="margin-top: 10px;">Capital final: <span id="capitalFinal"></span></div>
+                    <div class="result-label">Días transcurridos: <span id="diasTranscurridos2"></span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function calcularRentabilidad() {
+            const fechaInicio = new Date(document.getElementById('fechaInicio1').value);
+            const fechaFin = new Date(document.getElementById('fechaFin1').value);
+            const inversion = parseFloat(document.getElementById('inversion1').value);
+            const ganancias = parseFloat(document.getElementById('ganancias1').value);
+            
+            if (!fechaInicio || !fechaFin || !inversion || isNaN(ganancias)) {
+                alert('Por favor, completa todos los campos correctamente');
+                return;
+            }
+            
+            if (fechaFin <= fechaInicio) {
+                alert('La fecha de fin debe ser posterior a la fecha de inicio');
+                return;
+            }
+            
+            if (inversion <= 0) {
+                alert('La inversión debe ser mayor que 0');
+                return;
+            }
+            
+            // Calcular días transcurridos
+            const unDia = 1000 * 60 * 60 * 24;
+            const dias = Math.round((fechaFin - fechaInicio) / unDia);
+            
+            // Calcular años (considerando año de 365 días)
+            const anos = dias / 365;
+            
+            // Calcular rentabilidad total
+            const rentabilidadTotal = (ganancias / inversion) * 100;
+            
+            // Calcular rentabilidad anualizada
+            const rentabilidadAnual = (rentabilidadTotal / anos);
+            
+            // Mostrar resultados
+            document.getElementById('rentabilidadValor').textContent = rentabilidadAnual.toFixed(2) + '%';
+            document.getElementById('rentabilidadTotal').textContent = rentabilidadTotal.toFixed(2) + '%';
+            document.getElementById('diasTranscurridos').textContent = dias;
+            document.getElementById('resultado1').classList.add('show');
+        }
+        
+        function calcularGanancias() {
+            const fechaInicio = new Date(document.getElementById('fechaInicio2').value);
+            const fechaFin = new Date(document.getElementById('fechaFin2').value);
+            const inversion = parseFloat(document.getElementById('inversion2').value);
+            const rentabilidadAnual = parseFloat(document.getElementById('rentabilidad2').value);
+            
+            if (!fechaInicio || !fechaFin || !inversion || isNaN(rentabilidadAnual)) {
+                alert('Por favor, completa todos los campos correctamente');
+                return;
+            }
+            
+            if (fechaFin <= fechaInicio) {
+                alert('La fecha de fin debe ser posterior a la fecha de inicio');
+                return;
+            }
+            
+            if (inversion <= 0) {
+                alert('La inversión debe ser mayor que 0');
+                return;
+            }
+            
+            // Calcular días transcurridos
+            const unDia = 1000 * 60 * 60 * 24;
+            const dias = Math.round((fechaFin - fechaInicio) / unDia);
+            
+            // Calcular años
+            const anos = dias / 365;
+            
+            // Calcular ganancias esperadas
+            const rentabilidadTotal = rentabilidadAnual * anos;
+            const ganancias = (inversion * rentabilidadTotal) / 100;
+            const capitalFinal = inversion + ganancias;
+            
+            // Mostrar resultados
+            document.getElementById('gananciasValor').textContent = ganancias.toFixed(2) + ' €';
+            document.getElementById('capitalFinal').textContent = capitalFinal.toFixed(2) + ' €';
+            document.getElementById('diasTranscurridos2').textContent = dias;
+            document.getElementById('resultado2').classList.add('show');
+        }
+    </script>
+</body>
+</html>
