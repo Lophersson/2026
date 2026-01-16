@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Rentabilidad</title>
+    <title>Lophersson Investments Portfolio</title>
     <style>
         * {
             margin: 0;
@@ -12,300 +12,456 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0e27;
             min-height: 100vh;
-            padding: 20px;
+            color: #ffffff;
+            padding: 0;
+        }
+
+        .header {
+            background: #151932;
+            padding: 16px 20px;
+            border-bottom: 1px solid #1e2442;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
         }
 
-        .container {
-            max-width: 900px;
-            width: 100%;
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
-        h1 {
-            text-align: center;
-            color: white;
-            margin-bottom: 30px;
-            font-size: 2em;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-        }
-
-        .calculators {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 20px;
-        }
-
-        .calculator {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-
-        .calculator h2 {
-            color: #667eea;
-            margin-bottom: 20px;
-            font-size: 1.4em;
-            border-bottom: 3px solid #667eea;
-            padding-bottom: 10px;
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 600;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        button {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        button:active {
-            transform: translateY(0);
-        }
-
-        .result {
-            margin-top: 20px;
-            padding: 20px;
-            background: #f8f9ff;
-            border-radius: 8px;
-            border-left: 4px solid #667eea;
-            display: none;
-        }
-
-        .result.show {
-            display: block;
-            animation: slideIn 0.3s ease-out;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .result-value {
-            font-size: 1.8em;
-            color: #667eea;
+        .logo {
             font-weight: 700;
-            margin: 10px 0;
+            font-size: 18px;
+            color: #00d4aa;
         }
 
-        .result-label {
-            color: #666;
-            font-size: 0.9em;
+        .time {
+            font-size: 13px;
+            color: #6b7ba2;
         }
 
-        @media (max-width: 768px) {
-            .calculators {
-                grid-template-columns: 1fr;
-            }
-            
-            h1 {
-                font-size: 1.5em;
-            }
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .account-summary {
+            background: linear-gradient(135deg, #1a4d2e 0%, #134d3a 100%);
+            padding: 24px 20px;
+            margin: 0;
+        }
+
+        .account-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .account-value {
+            font-size: 36px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 12px;
+        }
+
+        .account-change {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 15px;
+        }
+
+        .change-positive {
+            color: #00d4aa;
+        }
+
+        .change-arrow {
+            font-size: 12px;
+        }
+
+        .stats-grid {
+            background: #151932;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .stat-card {
+            background: #1e2442;
+            border-radius: 8px;
+            padding: 16px;
+            border: 1px solid #252b4a;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: #6b7ba2;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .section-title {
+            font-size: 13px;
+            color: #6b7ba2;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 20px 20px 12px 20px;
+            background: #0a0e27;
+        }
+
+        .details-list {
+            background: #151932;
+            padding: 0 20px 20px 20px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid #1e2442;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-size: 14px;
+            color: #8a94b8;
+        }
+
+        .detail-value {
+            font-size: 15px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .position-row {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 14px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border: 1px solid #1e2442;
+            transition: background 0.3s ease;
+        }
+
+        .position-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .position-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .position-ticker {
+            font-size: 11px;
+            color: #6b7ba2;
+            margin-top: 2px;
+        }
+
+        .position-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+        }
+
+        .position-amount {
+            color: #8a94b8;
+        }
+
+        .position-profit {
+            font-weight: 600;
+        }
+
+        .positive-bg {
+            background: rgba(0, 212, 170, 0.05);
+            border-color: rgba(0, 212, 170, 0.2);
+        }
+
+        .negative-bg {
+            background: rgba(239, 68, 68, 0.05);
+            border-color: rgba(239, 68, 68, 0.2);
+        }
+
+        .profit-positive {
+            color: #00d4aa;
+        }
+
+        .profit-negative {
+            color: #ef4444;
+        }
+
+        .performance-card {
+            background: #1e2442;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 20px;
+            border: 1px solid #252b4a;
+        }
+
+        .perf-label {
+            font-size: 11px;
+            color: #6b7ba2;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .perf-value {
+            font-size: 22px;
+            font-weight: 600;
+            color: #00d4aa;
+        }
+
+        .pill {
+            display: inline-block;
+            background: rgba(0, 212, 170, 0.1);
+            color: #00d4aa;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        @keyframes shimmer {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        .live-indicator {
+            width: 6px;
+            height: 6px;
+            background: #00d4aa;
+            border-radius: 50%;
+            animation: shimmer 2s infinite;
+            display: inline-block;
+            margin-left: 8px;
         }
     </style>
 </head>
 <body>
+    <div class="header">
+        <div class="header-left">
+            <div class="logo">Lophersson Investments</div>
+            <div class="time" id="headerTime">--:--:--</div>
+        </div>
+        <div class="live-indicator"></div>
+    </div>
+
     <div class="container">
-        <h1>💰 Calculadora de Rentabilidad de Inversiones</h1>
-        
-        <div class="calculators">
-            <!-- Calculadora 1: Calcular Rentabilidad -->
-            <div class="calculator">
-                <h2>📊 Calcular Rentabilidad Anual</h2>
-                
-                <div class="input-group">
-                    <label for="fechaInicio1">Fecha de inicio:</label>
-                    <input type="date" id="fechaInicio1" required>
-                </div>
-                
-                <div class="input-group">
-                    <label for="fechaFin1">Fecha de fin:</label>
-                    <input type="date" id="fechaFin1" required>
-                </div>
-                
-                <div class="input-group">
-                    <label for="inversion1">Inversión inicial (€):</label>
-                    <input type="number" id="inversion1" placeholder="Ej: 10000" step="0.01" min="0" required>
-                </div>
-                
-                <div class="input-group">
-                    <label for="ganancias1">Ganancias totales (€):</label>
-                    <input type="number" id="ganancias1" placeholder="Ej: 1500" step="0.01" required>
-                </div>
-                
-                <button onclick="calcularRentabilidad()">Calcular Rentabilidad</button>
-                
-                <div id="resultado1" class="result">
-                    <div class="result-label">Rentabilidad Anual:</div>
-                    <div class="result-value" id="rentabilidadValor"></div>
-                    <div class="result-label" style="margin-top: 10px;">Rentabilidad Total: <span id="rentabilidadTotal"></span></div>
-                    <div class="result-label">Días transcurridos: <span id="diasTranscurridos"></span></div>
-                </div>
+        <div class="account-summary">
+            <div class="account-label">Valor Neto de Liquidación</div>
+            <div class="account-value" id="currentInvestment">1.200,00 €</div>
+            <div class="account-change">
+                <span class="change-arrow">▲</span>
+                <span class="change-positive" id="totalProfit">+0,00 €</span>
+                <span class="change-positive" id="profitPercent">(+0,00%)</span>
             </div>
-            
-            <!-- Calculadora 2: Calcular Ganancias -->
-            <div class="calculator">
-                <h2>💵 Calcular Ganancias Esperadas</h2>
-                
-                <div class="input-group">
-                    <label for="fechaInicio2">Fecha de inicio:</label>
-                    <input type="date" id="fechaInicio2" required>
-                </div>
-                
-                <div class="input-group">
-                    <label for="fechaFin2">Fecha de fin:</label>
-                    <input type="date" id="fechaFin2" required>
-                </div>
-                
-                <div class="input-group">
-                    <label for="inversion2">Inversión inicial (€):</label>
-                    <input type="number" id="inversion2" placeholder="Ej: 10000" step="0.01" min="0" required>
-                </div>
-                
-                <div class="input-group">
-                    <label for="rentabilidad2">Rentabilidad anual (%):</label>
-                    <input type="number" id="rentabilidad2" placeholder="Ej: 8.5" step="0.01" required>
-                </div>
-                
-                <button onclick="calcularGanancias()">Calcular Ganancias</button>
-                
-                <div id="resultado2" class="result">
-                    <div class="result-label">Ganancias Esperadas:</div>
-                    <div class="result-value" id="gananciasValor"></div>
-                    <div class="result-label" style="margin-top: 10px;">Capital final: <span id="capitalFinal"></span></div>
-                    <div class="result-label">Días transcurridos: <span id="diasTranscurridos2"></span></div>
-                </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Inversión Inicial</div>
+                <div class="stat-value" id="initialAmount">1.200,00 €</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Días Invertido</div>
+                <div class="stat-value" id="daysElapsed">0</div>
+            </div>
+        </div>
+
+        <div class="performance-card">
+            <div class="perf-label">Ganancia Diaria Promedio</div>
+            <div class="perf-value" id="perDay">0,00 €/día</div>
+            <div class="pill">Rendimiento en tiempo real</div>
+        </div>
+
+        <div class="section-title">Posiciones</div>
+        <div class="details-list" id="positionsList">
+            <!-- Las posiciones se generarán dinámicamente -->
+        </div>
+
+        <div class="section-title">Detalles de la Inversión</div>
+        <div class="details-list">
+            <div class="detail-row">
+                <div class="detail-label">Fecha Inicial</div>
+                <div class="detail-value" id="startDate">31/12/2025</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Fecha Actual</div>
+                <div class="detail-value" id="currentDate">--/--/----</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Rentabilidad Global</div>
+                <div class="detail-value" id="annualRate">0.00%</div>
             </div>
         </div>
     </div>
 
     <script>
-        function calcularRentabilidad() {
-            const fechaInicio = new Date(document.getElementById('fechaInicio1').value);
-            const fechaFin = new Date(document.getElementById('fechaFin1').value);
-            const inversion = parseFloat(document.getElementById('inversion1').value);
-            const ganancias = parseFloat(document.getElementById('ganancias1').value);
+        // ===== CARTERA DE ETFs =====
+        const PORTFOLIO = [
+            // Renta Variable
+            { name: 'Vanguard S&P 500', ticker: 'VOO', region: 'EEUU', type: 'RV', amount: 180, annualReturn: 24.86 },
+            { name: 'iShares MSCI World', ticker: 'IWDA', region: 'Global', type: 'RV', amount: 150, annualReturn: 21.25 },
+            { name: 'SPDR EURO STOXX 50', ticker: 'FEZ', region: 'Europa', type: 'RV', amount: 120, annualReturn: -0.27 },
             
-            if (!fechaInicio || !fechaFin || !inversion || isNaN(ganancias)) {
-                alert('Por favor, completa todos los campos correctamente');
-                return;
-            }
+            // Mercados Emergentes
+            { name: 'iShares MSCI EM', ticker: 'EEM', region: 'Emergentes', type: 'EM', amount: 100, annualReturn: 39.8 },
+            { name: 'iShares BRICS ETF', ticker: 'BRICS', region: 'BRICS', type: 'EM', amount: 80, annualReturn: 38.7 },
             
-            if (fechaFin <= fechaInicio) {
-                alert('La fecha de fin debe ser posterior a la fecha de inicio');
-                return;
-            }
+            // Renta Fija
+            { name: 'Vanguard Total Bond', ticker: 'BND', region: 'EEUU', type: 'RF', amount: 150, annualReturn: -0.15 },
+            { name: 'iShares Euro Govt Bond', ticker: 'IEAG', region: 'Europa', type: 'RF', amount: 100, annualReturn: 31.7 },
             
-            if (inversion <= 0) {
-                alert('La inversión debe ser mayor que 0');
-                return;
-            }
+            // Bonos Corporativos
+            { name: 'iShares Corp Bond', ticker: 'LQD', region: 'EEUU', type: 'BC', amount: 90, annualReturn: 32.9 },
+            { name: 'iShares Euro Corp Bond', ticker: 'IEAC', region: 'Europa', type: 'BC', amount: 70, annualReturn: -0.7 },
+            
+            // Bonos Soberanos
+            { name: 'iShares Treasury Bond', ticker: 'TLT', region: 'EEUU', type: 'BS', amount: 80, annualReturn: 34.8 },
+            
+            // Real Estate (REITs)
+            { name: 'Vanguard Real Estate', ticker: 'VNQ', region: 'EEUU', type: 'RE', amount: 50, annualReturn: 36.9 },
+            { name: 'iShares Global REIT', ticker: 'REET', region: 'Global', type: 'RE', amount: 30, annualReturn: -1.8 }
+        ];
+
+        const startDate = new Date('2025-12-31T00:00:00');
+
+        function formatEuro(amount) {
+            return amount.toLocaleString('es-ES', { 
+                minimumFractionDigits: 2, 
+                maximumFractionDigits: 6 
+            }) + ' €';
+        }
+
+        function calculatePosition(position, daysElapsed) {
+            const yearsElapsed = daysElapsed / 365;
+            const returnDecimal = position.annualReturn / 100;
+            const currentValue = position.amount * Math.pow(1 + returnDecimal, yearsElapsed);
+            const profit = currentValue - position.amount;
+            const profitPercent = (profit / position.amount) * 100;
+            
+            return {
+                ...position,
+                currentValue,
+                profit,
+                profitPercent
+            };
+        }
+
+        function renderPositions(positions) {
+            const container = document.getElementById('positionsList');
+            container.innerHTML = '';
+            
+            positions.forEach(pos => {
+                const isPositive = pos.profit >= 0;
+                const bgClass = isPositive ? 'positive-bg' : 'negative-bg';
+                const profitClass = isPositive ? 'profit-positive' : 'profit-negative';
+                const arrow = isPositive ? '▲' : '▼';
+                
+                const row = document.createElement('div');
+                row.className = `position-row ${bgClass}`;
+                row.innerHTML = `
+                    <div class="position-header">
+                        <div>
+                            <div class="position-name">${pos.name}</div>
+                            <div class="position-ticker">${pos.ticker} · ${pos.region}</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div class="position-name">${formatEuro(pos.currentValue)}</div>
+                            <div class="position-ticker">${pos.annualReturn.toFixed(1)}% anual</div>
+                        </div>
+                    </div>
+                    <div class="position-stats">
+                        <div class="position-amount">Invertido: ${formatEuro(pos.amount)}</div>
+                        <div class="position-profit ${profitClass}">
+                            ${arrow} ${formatEuro(Math.abs(pos.profit))} (${pos.profitPercent >= 0 ? '+' : ''}${pos.profitPercent.toFixed(2)}%)
+                        </div>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        function updateInvestment() {
+            const now = new Date();
+            
+            // Actualizar hora
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('headerTime').textContent = `${hours}:${minutes}:${seconds}`;
+            
+            // Actualizar fecha actual
+            const day = String(now.getDate()).padStart(2, '0');
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const year = now.getFullYear();
+            document.getElementById('currentDate').textContent = `${day}/${month}/${year}`;
             
             // Calcular días transcurridos
-            const unDia = 1000 * 60 * 60 * 24;
-            const dias = Math.round((fechaFin - fechaInicio) / unDia);
+            const msElapsed = now.getTime() - startDate.getTime();
+            const msPerDay = 1000 * 60 * 60 * 24;
+            const daysElapsed = msElapsed / msPerDay;
             
-            // Calcular años (considerando año de 365 días)
-            const anos = dias / 365;
+            document.getElementById('daysElapsed').textContent = Math.floor(daysElapsed).toLocaleString('es-ES');
             
-            // Calcular rentabilidad total
-            const rentabilidadTotal = (ganancias / inversion) * 100;
+            // Calcular cada posición
+            const calculatedPositions = PORTFOLIO.map(pos => calculatePosition(pos, daysElapsed));
             
-            // Calcular rentabilidad anualizada
-            const rentabilidadAnual = (rentabilidadTotal / anos);
+            // Calcular totales
+            const totalInitial = PORTFOLIO.reduce((sum, pos) => sum + pos.amount, 0);
+            const totalCurrent = calculatedPositions.reduce((sum, pos) => sum + pos.currentValue, 0);
+            const totalProfit = totalCurrent - totalInitial;
+            const totalProfitPercent = (totalProfit / totalInitial) * 100;
+            const profitPerDay = daysElapsed > 0 ? totalProfit / daysElapsed : 0;
             
-            // Mostrar resultados
-            document.getElementById('rentabilidadValor').textContent = rentabilidadAnual.toFixed(2) + '%';
-            document.getElementById('rentabilidadTotal').textContent = rentabilidadTotal.toFixed(2) + '%';
-            document.getElementById('diasTranscurridos').textContent = dias;
-            document.getElementById('resultado1').classList.add('show');
+            // Calcular rentabilidad global ponderada
+            const globalReturn = calculatedPositions.reduce((sum, pos) => {
+                const weight = pos.amount / totalInitial;
+                return sum + (pos.annualReturn * weight);
+            }, 0);
+            
+            // Actualizar valores globales
+            document.getElementById('initialAmount').textContent = formatEuro(totalInitial);
+            document.getElementById('currentInvestment').textContent = formatEuro(totalCurrent);
+            document.getElementById('totalProfit').textContent = (totalProfit >= 0 ? '+' : '') + formatEuro(totalProfit);
+            document.getElementById('profitPercent').textContent = `(${totalProfitPercent >= 0 ? '+' : ''}${totalProfitPercent.toFixed(2)}%)`;
+            document.getElementById('perDay').textContent = formatEuro(profitPerDay) + '/día';
+            document.getElementById('annualRate').textContent = globalReturn.toFixed(2) + '%';
+            
+            // Renderizar posiciones
+            renderPositions(calculatedPositions);
         }
-        
-        function calcularGanancias() {
-            const fechaInicio = new Date(document.getElementById('fechaInicio2').value);
-            const fechaFin = new Date(document.getElementById('fechaFin2').value);
-            const inversion = parseFloat(document.getElementById('inversion2').value);
-            const rentabilidadAnual = parseFloat(document.getElementById('rentabilidad2').value);
-            
-            if (!fechaInicio || !fechaFin || !inversion || isNaN(rentabilidadAnual)) {
-                alert('Por favor, completa todos los campos correctamente');
-                return;
-            }
-            
-            if (fechaFin <= fechaInicio) {
-                alert('La fecha de fin debe ser posterior a la fecha de inicio');
-                return;
-            }
-            
-            if (inversion <= 0) {
-                alert('La inversión debe ser mayor que 0');
-                return;
-            }
-            
-            // Calcular días transcurridos
-            const unDia = 1000 * 60 * 60 * 24;
-            const dias = Math.round((fechaFin - fechaInicio) / unDia);
-            
-            // Calcular años
-            const anos = dias / 365;
-            
-            // Calcular ganancias esperadas
-            const rentabilidadTotal = rentabilidadAnual * anos;
-            const ganancias = (inversion * rentabilidadTotal) / 100;
-            const capitalFinal = inversion + ganancias;
-            
-            // Mostrar resultados
-            document.getElementById('gananciasValor').textContent = ganancias.toFixed(2) + ' €';
-            document.getElementById('capitalFinal').textContent = capitalFinal.toFixed(2) + ' €';
-            document.getElementById('diasTranscurridos2').textContent = dias;
-            document.getElementById('resultado2').classList.add('show');
-        }
+
+        // Actualizar cada medio segundo
+        updateInvestment();
+        setInterval(updateInvestment, 500);
     </script>
 </body>
 </html>
