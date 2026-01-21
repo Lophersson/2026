@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Informe de traspaso agencia de viajes - Cuatro Caminos (A Coruña)</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f7fb;
+      color: #222;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 900px;
+      margin: 20px auto 40px;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+      padding: 32px 28px;
+    }
+    h1, h2, h3, h4 {
+      margin-top: 0;
+      color: #111827;
+    }
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+    h2 {
+      font-size: 1.3rem;
+      margin-top: 1.8rem;
+      border-bottom: 2px solid #e5e7eb;
+      padding-bottom: 0.25rem;
+    }
+    h3 {
+      font-size: 1.1rem;
+      margin-top: 1.4rem;
+    }
+    p {
+      margin: 0.4rem 0 0.6rem;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      background: #e0f2fe;
+      color: #0369a1;
+      margin-left: 6px;
+    }
+    .highlight {
+      background: #fef3c7;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+      margin: 12px 0 8px;
+    }
+    .card {
+      border-radius: 10px;
+      padding: 14px 16px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 6px;
+    }
+    .card-title {
+      font-weight: 600;
+      font-size: 0.98rem;
+    }
+    .pill {
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      background: #d1fae5;
+      color: #047857;
+      font-weight: 600;
+    }
+    .pill-alt {
+      background: #e5e7eb;
+      color: #374151;
+    }
+    ul {
+      padding-left: 18px;
+      margin: 0.2rem 0 0.6rem;
+    }
+    li {
+      margin-bottom: 0.25rem;
+    }
+    .table-wrap {
+      overflow-x: auto;
+      margin: 10px 0 8px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      background: #f9fafb;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    th, td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #e5e7eb;
+      text-align: left;
+    }
+    th {
+      background: #111827;
+      color: #f9fafb;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+    .tag-row {
+      font-size: 0.8rem;
+      color: #4b5563;
+    }
+    .ok {
+      color: #047857;
+      font-weight: 600;
+    }
+    .warn {
+      color: #b45309;
+      font-weight: 600;
+    }
+    .risk {
+      color: #b91c1c;
+      font-weight: 600;
+    }
+    .footer-note {
+      font-size: 0.78rem;
+      color: #6b7280;
+      margin-top: 1.6rem;
+      border-top: 1px dashed #e5e7eb;
+      padding-top: 0.6rem;
+    }
+    .code {
+      font-family: "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.84rem;
+    }
+    .scenario-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #4b5563;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .bubble {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #eef2ff;
+      color: #4338ca;
+      font-size: 0.78rem;
+      margin-right: 6px;
+    }
+    @media (max-width: 600px) {
+      .container {
+        border-radius: 0;
+        box-shadow: none;
+        padding: 20px 14px 28px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>
+      Informe de traspaso – Agencia de viajes (Cuatro Caminos, A Coruña)
+      <span class="badge">Borrador para negociar</span>
+    </h1>
+    <p>
+      Objetivo personal: conseguir un flujo equivalente a <span class="highlight">700 €/mes durante 10 años (84.000 €)</span>,
+      haciendo el acuerdo lo suficientemente atractivo para que un comprador lo pueda aceptar y mantener el negocio operativo.
+    </p>
+  </header>
+
+  <section>
+    <h2>1. Situación actual de la agencia</h2>
+    <div class="grid">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Actividad y resultados recientes</div>
+        </div>
+        <ul>
+          <li>Facturación: aprox. 150.000 €/año (2023–2024).</li>
+          <li>Beneficio estimado: ~20 % → unos 30.000 €/año.</li>
+          <li>Más de 10 años de trayectoria y cartera de clientes fieles.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Costes fijos clave</div>
+        </div>
+        <ul>
+          <li>Alquiler local Cuatro Caminos: 1.500 €/mes → 18.000 €/año.</li>
+          <li>Otros costes operativos no detallados en este informe.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Deuda existente</div>
+        </div>
+        <ul>
+          <li>Deuda con clientes: aprox. 20.000 €.</li>
+          <li>Deuda bancaria: aprox. 40.000 €.</li>
+          <li>Pagos a Hacienda: unos 1.800 €/mes (aplazamientos/regularizaciones).</li>
+        </ul>
+      </div>
+    </div>
+    <p>
+      El negocio es <span class="highlight">rentable en términos operativos</span>, pero la mochila de deuda reduce de forma importante
+      el valor de mercado directo del traspaso y la capacidad del comprador para asumir cuotas muy altas.
+    </p>
+  </section>
+
+  <section>
+    <h2>2. Objetivo del traspaso y enfoque</h2>
+    <p>
+      Objetivo: obtener el equivalente a 84.000 € (700 €/mes × 120 meses) sin hacer inasumible la operación para el comprador,
+      combinando pago inicial y pagos periódicos ligados a la continuidad del negocio.
+    </p>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Principios del acuerdo propuesto</div>
+      </div>
+      <ul>
+        <li>Traspaso con parte <strong>fija</strong> (pago inicial) y parte <strong>diferida</strong> (pagos mensuales).</li>
+        <li>Pagos mensuales razonables en relación con el beneficio estimado (30.000 €/año).</li>
+        <li>Cláusulas de seguridad para ambas partes (revisión si el negocio cae por debajo de ciertos niveles).</li>
+        <li>Esfuerzo previo de “limpiar” en lo posible las deudas más problemáticas antes del traspaso.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>3. Escenario base: objetivo de 84.000 €</h2>
+    <p>
+      El objetivo teórico de 84.000 € se puede construir combinando entrada inicial, mensualidad y plazo.
+      A continuación se resumen tres propuestas que persiguen ese objetivo con distinto equilibrio riesgo/atractivo.
+    </p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Propuesta</th>
+            <th>Pago inicial</th>
+            <th>Pago mensual</th>
+            <th>Duración</th>
+            <th>Total previsto</th>
+            <th>Perfiles típicos interesados</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Escenario A – Plazos largos</td>
+            <td>0 €</td>
+            <td>700 €/mes</td>
+            <td>120 meses</td>
+            <td>84.000 €</td>
+            <td>Comprador con poca liquidez inicial pero dispuesto a asumir riesgo y deuda.</td>
+          </tr>
+          <tr>
+            <td>Escenario B – Equilibrado</td>
+            <td>10.000 €</td>
+            <td>600 €/mes</td>
+            <td>120 meses</td>
+            <td>82.000 €</td>
+            <td>Comprador que prefiere bajar la cuota mensual a cambio de una entrada moderada.</td>
+          </tr>
+          <tr>
+            <td>Escenario C – Plazo más corto</td>
+            <td>15.000 €</td>
+            <td>1.000 €/mes</td>
+            <td>60 meses</td>
+            <td>75.000 €</td>
+            <td>Comprador que quiere liberar carga a largo plazo y tiene más músculo financiero.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      El escenario A se aproxima exactamente a tu objetivo mensual, el B suaviza la carga para el comprador
+      y el C reduce la duración a cambio de pagos más altos y un total ligeramente menor.
+    </p>
+  </section>
+
+  <section>
+    <h2>4. Detalle de cada propuesta</h2>
+
+    <h3>4.1 Escenario A – Sin entrada, 700 €/mes durante 10 años</h3>
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="scenario-label">Escenario A</div>
+          <div class="card-title">Traspaso sin entrada inicial</div>
+        </div>
+        <span class="pill warn">Más agresivo</span>
+      </div>
+      <ul>
+        <li>Pago inicial: 0 €.</li>
+        <li>Pago mensual: 700 € durante 120 meses.</li>
+        <li>Total previsto: 84.000 €.</li>
+        <li>El comprador no desembolsa al principio, pero asume una obligación larga de pago.</li>
+      </ul>
+      <p class="tag-row">
+        <span class="bubble">Ventajas para ti</span> Flujo estable 10 años, sin necesidad de negociar una entrada.
+      </p>
+      <p class="tag-row">
+        <span class="bubble">Riesgos para ti</span> Dependes totalmente de que el comprador mantenga el negocio y no deje de pagar.
+      </p>
+      <p class="tag-row">
+        <span class="bubble">Percepción comprador</span> Obligación larga; puede exigir <span class="risk">fuertes descuentos</span> en el total
+        o cláusulas de revisión si la facturación cae.
+      </p>
+    </div>
+
+    <h3>4.2 Escenario B – Entrada moderada + 600 €/mes</h3>
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="scenario-label">Escenario B</div>
+          <div class="card-title">Equilibrado (entrada + cuota asumible)</div>
+        </div>
+        <span class="pill">Recomendado para negociar</span>
+      </div>
+      <ul>
+        <li>Pago inicial: 10.000 € al firmar el traspaso.</li>
+        <li>Pago mensual: 600 € durante 120 meses.</li>
+        <li>Total previsto: 82.000 € (muy cercano a tu objetivo de 84.000 €).</li>
+        <li>Impacto en comprador: cuota fija equivalente a 7.200 €/año, aprox. 24 % del beneficio estimado actual.</li>
+      </ul>
+      <p class="tag-row">
+        <span class="bubble">Ventajas para ti</span> Cobras algo significativo al principio y mantienes un flujo largo y relativamente estable.
+      </p>
+      <p class="tag-row">
+        <span class="bubble">Ventajas para comprador</span> Cuota más baja que 700 €/mes, con la sensación de “pago mensual razonable”.
+      </p>
+      <p class="tag-row">
+        <span class="bubble">Uso sugerido</span> Presentar este escenario como tu <span class="ok">opción preferente</span>, dejando A y C como alternativas.
+      </p>
+    </div>
+
+    <h3>4.3 Escenario C – Entrada mayor + 1.000 €/mes durante 5 años</h3>
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="scenario-label">Escenario C</div>
+          <div class="card-title">Plazo corto, total menor</div>
+        </div>
+        <span class="pill-alt">Alternativa</span>
+      </div>
+      <ul>
+        <li>Pago inicial: 15.000 €.</li>
+        <li>Pago mensual: 1.000 € durante 60 meses (5 años).</li>
+        <li>Total previsto: 75.000 €.</li>
+        <li>Para ti: menos importe total que A/B, pero cobrado en menos tiempo, con menor riesgo de impagos a muy largo plazo.</li>
+      </ul>
+      <p class="tag-row">
+        <span class="bubble">Perfil comprador</span> Persona o empresa con más liquidez inicial y visión de medio plazo.
+      </p>
+      <p class="tag-row">
+        <span class="bubble">Uso estratégico</span> Te permite tener una opción de “cierre rápido” si el comprador quiere evitar 10 años de pagos.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <h2>5. Cláusulas clave a considerar</h2>
+    <div class="grid">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">1) Tratamiento de la deuda</div>
+        </div>
+        <ul>
+          <li>Definir qué deudas asume el comprador (si alguna) y cuáles mantienes tú.</li>
+          <li>Intentar dejar fuera del traspaso deudas con Hacienda y con clientes, o regularizarlas antes.</li>
+          <li>Dejar por escrito que el precio del traspaso no incluye reclamaciones futuras por deudas no declaradas.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">2) Condición de pagos mensuales</div>
+        </div>
+        <ul>
+          <li>Opción A: pagos fijos (700/600/1.000 € según escenario) pase lo que pase.</li>
+          <li>Opción B: parte fija + parte variable (porcentaje de beneficio o facturación).</li>
+          <li>Cláusula de revisión si la facturación cae por debajo de un mínimo acordado durante X meses.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">3) Garantías y seguridad</div>
+        </div>
+        <ul>
+          <li>Posible aval personal, garantía bancaria o reconocimiento de deuda notarial.</li>
+          <li>Definir con claridad qué ocurre en caso de impago de 2–3 cuotas (resolución, reducciones, etc.).</li>
+          <li>Regular tu posible apoyo inicial (formación, traspaso de contactos, acompañamiento unos meses).</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>6. Cómo presentar el informe al comprador</h2>
+    <p>
+      Recomendación práctica:
+    </p>
+    <ul>
+      <li>Imprimir este documento o convertirlo a PDF para presentarlo en una reunión.</li>
+      <li>Marcar claramente el <strong>“escenario B”</strong> como tu opción preferida, usando A y C como margen de negociación.</li>
+      <li>Tener a mano tus números reales (balances, resultados, detalle de deudas) para dar confianza.</li>
+    </ul>
+  </section>
+
+  <footer class="footer-note">
+    Este informe es un borrador orientativo para negociar el traspaso de la agencia de viajes.
+    No sustituye el asesoramiento jurídico ni fiscal profesional. Revisa siempre con una gestoría/abogado
+    los contratos de traspaso, el tratamiento de las deudas y las implicaciones fiscales.
+  </footer>
+</div>
+</body>
+</html>
