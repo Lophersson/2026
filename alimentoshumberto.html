@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>60 alimentos aptos para RGE y reducir LDL</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #f4f6f8;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+    p {
+      text-align: center;
+      max-width: 900px;
+      margin: 0 auto 30px;
+      font-size: 15px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .category-section {
+      background: #ffffff;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+    .category-header {
+      background: #1abc9c;
+      color: white;
+      padding: 15px 20px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.3s;
+    }
+    .category-header:hover {
+      background: #16a085;
+    }
+    .category-header::after {
+      content: '▼';
+      font-size: 12px;
+      transition: transform 0.3s;
+    }
+    .category-header.active::after {
+      transform: rotate(180deg);
+    }
+    .category-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+    .category-content.active {
+      max-height: 1000px;
+      transition: max-height 0.5s ease-in;
+    }
+    .foods-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 10px;
+      padding: 20px;
+    }
+    .food-item {
+      background: #f8f9fa;
+      padding: 10px 15px;
+      border-radius: 6px;
+      font-size: 14px;
+      border-left: 3px solid #1abc9c;
+    }
+  </style>
+</head>
+<body>
+  <h1>60 alimentos aptos para el RGE y reducción del colesterol LDL</h1>
+  <p>Lista orientativa de alimentos bien tolerados para el reflujo gastroesofágico (RGE) y favorables para reducir el colesterol LDL, priorizando opciones bajas en grasa saturada y de fácil digestión.</p>
+
+  <div class="container">
+    <!-- Verduras -->
+    <div class="category-section">
+      <div class="category-header" onclick="toggleCategory(this)">
+        Verduras (10 alimentos)
+      </div>
+      <div class="category-content">
+        <div class="foods-grid">
+          <div class="food-item">Calabacín</div>
+          <div class="food-item">Zanahoria</div>
+          <div class="food-item">Judía verde</div>
+          <div class="food-item">Calabaza</div>
+          <div class="food-item">Patata cocida</div>
+          <div class="food-item">Espinaca cocida</div>
+          <div class="food-item">Berenjena al horno</div>
+          <div class="food-item">Brócoli cocido</div>
+          <div class="food-item">Coliflor cocida</div>
+          <div class="food-item">Remolacha cocida</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Frutas -->
+    <div class="category-section">
+      <div class="category-header" onclick="toggleCategory(this)">
+        Frutas (7 alimentos)
+      </div>
+      <div class="category-content">
+        <div class="foods-grid">
+          <div class="food-item">Plátano maduro</div>
+          <div class="food-item">Manzana cocida</div>
+          <div class="food-item">Pera</div>
+          <div class="food-item">Melón</div>
+          <div class="food-item">Papaya</div>
+          <div class="food-item">Melocotón</div>
+          <div class="food-item">Sandía</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Proteínas -->
+    <div class="category-section">
+      <div class="category-header" onclick="toggleCategory(this)">
+        Proteínas (10 alimentos)
+      </div>
+      <div class="category-content">
+        <div class="foods-grid">
+          <div class="food-item">Pechuga de pollo</div>
+          <div class="food-item">Pechuga de pavo</div>
+          <div class="food-item">Merluza</div>
+          <div class="food-item">Lenguado</div>
+          <div class="food-item">Bacalao</div>
+          <div class="food-item">Atún al natural</div>
+          <div class="food-item">Sardinas al horno</div>
+          <div class="food-item">Caballa al natural</div>
+          <div class="food-item">Huevo cocido</div>
+          <div class="food-item">Claras de huevo</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cereales -->
+    <div class="category-section">
+      <div class="category-header" onclick="toggleCategory(this)">
+        Cereales (5 alimentos)
+      </div>
+      <div class="category-content">
+        <div class="foods-grid">
+          <div class="food-item">Arroz blanco</div>
+          <div class="food-item">Arroz integral</div>
+          <div class="food-item">Avena</div>
+          <div class="food-item">Pan integral</div>
+          <div class="food-item">Pasta integral</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Legumbres -->
+    <div class="category-section">
+      <div class="category-header" onclick="toggleCategory(this)">
+        Legumbres (3 alimentos)
+      </div>
+      <div class="category-content">
+        <div class="foods-grid">
+          <div class="food-item">Lentejas cocidas</div>
+          <div class="food-item">Garbanzos cocidos</div>
+          <div class="food-item">Judías blancas</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grasas saludables -->
+    <div class="category-section">
+      <div class="category-header" onclick="toggleCategory(this)">
+        Grasas saludables (2 alimentos)
+      </div>
+      <div class="category-content">
+        <div class="foods-grid">
+          <div class="food-item">Aceite de oliva virgen extra</div>
+          <div class="food-item">Aguacate (moderado)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lácteos -->
+    <div class="category-section">
+      <div class="category-header" onclick="toggleCategory(this)">
+        Lácteos (2 alimentos)
+      </div>
+      <div class="category-content">
+        <div class="foods-grid">
+          <div class="food-item">Yogur natural desnatado</div>
+          <div class="food-item">Queso fresco bajo en grasa</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Otros -->
+    <div class="category-section">
+      <div class="category-header" onclick="toggleCategory(this)">
+        Otros (2 alimentos)
+      </div>
+      <div class="category-content">
+        <div class="foods-grid">
+          <div class="food-item">Bebida de avena sin azúcar</div>
+          <div class="food-item">Bebida de almendra sin azúcar</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleCategory(header) {
+      const content = header.nextElementSibling;
+      const isActive = content.classList.contains('active');
+      
+      // Cerrar todas las categorías
+      document.querySelectorAll('.category-content').forEach(c => {
+        c.classList.remove('active');
+      });
+      document.querySelectorAll('.category-header').forEach(h => {
+        h.classList.remove('active');
+      });
+      
+      // Abrir la categoría clickeada si no estaba abierta
+      if (!isActive) {
+        content.classList.add('active');
+        header.classList.add('active');
+      }
+    }
+  </script>
+</body>
+</html>
