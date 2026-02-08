@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>100 Alimentos Seguros para RGE + LDL Bajo</title>
+<style>
+    :root {
+        --spacing-xs: 8px;
+        --spacing-sm: 12px;
+        --spacing-md: 20px;
+        --spacing-lg: 30px;
+        --spacing-xl: 40px;
+        --spacing-2xl: 50px;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: var(--spacing-xl) var(--spacing-md);
+        line-height: 1.6;
+        min-height: 100vh;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 20px;
+        padding: var(--spacing-2xl) var(--spacing-xl);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    h1 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: var(--spacing-md);
+        padding-bottom: var(--spacing-sm);
+        font-size: 1.5em;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .subtitle {
+        text-align: center;
+        color: #7f8c8d;
+        margin-bottom: var(--spacing-2xl);
+        padding: var(--spacing-md);
+        font-size: 1.1em;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: var(--spacing-lg);
+        margin-bottom: var(--spacing-xl);
+    }
+
+    .category {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        border-radius: 15px;
+        padding: var(--spacing-lg);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .category:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .category h2 {
+        color: #2c3e50;
+        /*margin-bottom: var(--spacing-md);
+        padding-bottom: var(--spacing-sm);*/
+        margin-bottom: 1px;
+        padding-bottom: 1px;
+        font-size: 1.5em;
+        border-bottom: 3px solid #667eea;
+        display: flex;
+        align-items: center;
+    }
+
+    .icon {
+        margin-right: var(--spacing-sm);
+        font-size: 1.3em;
+    }
+
+    .count {
+        margin-left: auto;
+        background: #667eea;
+        color: white;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 600;
+    }
+
+    .category ol {
+        list-style: none;
+        padding-left: 0;
+        /*margin-top: var(--spacing-md);*/
+        margin-top: 5px;
+        font-size: 12px;
+    }
+
+    .category li {
+        /*padding: var(--spacing-sm) 0 var(--spacing-sm) 28px;
+        margin-bottom: var(--spacing-xs);*/
+        padding: 1px;
+        margin: 1px;
+        color: #34495e;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        position: relative;
+        font-size: 12px;
+    }
+
+    .category li:before {
+        /*content: "✓";*/
+        position: absolute;
+        left: 0;
+        color: #27ae60;
+        font-weight: bold;
+        font-size: 12px;
+        padding: 1px;
+        margin: 1px;
+    }
+
+    .category li:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding: 1px;
+    }
+
+    .proteinas {
+        background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+    }
+
+    .calcio {
+        background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+    }
+
+    .carbohidratos {
+        background: linear-gradient(135deg, #ffd89b 0%, #90de9e 100%);
+    }
+
+    .vitaminas {
+        background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    }
+
+    .minerales {
+        background: linear-gradient(135deg, #f8baff 0%, #d48dfc 100%);
+    }
+
+    .fibra {
+        background: linear-gradient(135deg, #96fbc4 0%, #f9f586 100%);
+    }
+
+    .grasas {
+        background: linear-gradient(135deg, #fda085 0%, #f6d365 100%);
+    }
+
+    .total {
+        margin-top: var(--spacing-2xl);
+        padding: var(--spacing-lg);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 15px;
+        font-weight: bold;
+        font-size: 12px;
+        text-align: center;
+        color: white;
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .notas {
+        background: #fff9e6;
+        border-left: 5px solid #f39c12;
+        padding: var(--spacing-lg);
+        margin-top: var(--spacing-xl);
+        border-radius: 10px;
+    }
+
+    .notas h3 {
+        color: #e67e22;
+        margin-bottom: var(--spacing-md);
+        font-size: 12px;
+    }
+
+    .notas ul {
+        margin-left: var(--spacing-md);
+        padding-left: var(--spacing-md);
+        color: #555;
+    }
+
+    .notas li {
+        margin: var(--spacing-sm) 0;
+        padding: var(--spacing-xs) 0;
+    }
+
+    @media (max-width: 768px) {
+        body {
+            padding: var(--spacing-md) var(--spacing-sm);
+        }
+
+        .container {
+            padding: var(--spacing-lg) var(--spacing-md);
+        }
+
+        h1 {
+            font-size: 1.0em;
+            /*margin-bottom: var(--spacing-md);*/
+            margin-bottom: 4px;
+        }
+
+        .subtitle {
+            /*margin-bottom: var(--spacing-lg);
+            padding: var(--spacing-sm);*/
+            margin-bottom: 16px;
+            padding: 1px;
+            font-size: 12px;
+        }
+        
+        .li {
+        font-size: 10px !important!;
+    }
+        .grid {
+            grid-template-columns: 1fr;
+            gap: var(--spacing-md);
+        }
+
+        .category {
+            /*padding: var(--spacing-md);*/
+            padding: 4px;
+        }
+
+        .category h2 {
+            font-size: 16px;
+        }
+
+        .total {
+            /*padding: var(--spacing-md);*/
+            margin: 1px !important;
+            padding: 2px;
+            font-size: 12px;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🍎 100 Alimentos Seguros para RGE + LDL Bajo</h1>
+    <div class="subtitle">
+        Guía completa de alimentos organizados por grupo nutricional
+    </div>
+
+    <div class="grid">
+        <div class="category proteinas">
+            <h2><span class="icon">🧬</span> Proteínas Magras <span class="count">18</span></h2>
+            <ol>
+                <li>Pollo sin piel</li>
+                <li>Pavo</li>
+                <li>Merluza</li>
+                <li>Lenguado</li>
+                <li>Salmón</li>
+                <li>Atún fresco</li>
+                <li>Trucha</li>
+                <li>Clara de huevo</li>
+                <li>Tofu</li>
+                <li>Tempeh</li>
+                <li>Lentejas</li>
+                <li>Garbanzos</li>
+                <li>Alubias negras/pintas/blancas/rojas</li>
+                <li>Edamame - Vainas de habas de soja</li>
+                <li>Habas verdes tiernas</li>
+                <li>Guisantes frescos</li>
+                <li>Pechuga de pato sin piel</li>
+                <li>Bacalao fresco</li>
+            </ol>
+        </div>
+
+        <div class="category calcio">
+            <h2><span class="icon">🧀</span> Calcio Biodisponible <span class="count">17</span></h2>
+            <ol>
+                <li>Leche descremada</li>
+                <li>Yogur natural bajo en grasa</li>
+                <li>Yogur griego desnatado</li>
+                <li>Yogur natural 0%</li>
+                <li>Kéfir desnatado bajo en grasa</li>
+                <li>Queso cottage bajo en grasa</li>
+                <li>Queso ricotta descremado</li>
+                <li>Queso fresco bajo en grasa</li>
+                <li>Queso fresco batido</li>
+                <li>Requesón</li>
+                <li>Leche de almendra sin azúcar</li>
+                <li>Leche de nueces sin azúcar (100ml máximo por día)</li>
+                <li>Brócoli</li>
+                <li>Col rizada</li>
+                <li>Espinacas</li>
+                <li>Almendras</li>
+                <li>Semillas de chía</li>
+            </ol>
+        </div>
+
+        <div class="category vitaminas">
+            <h2><span class="icon">🌈</span> Vitaminas Antioxidantes <span class="count">17</span></h2>
+            <ol>
+                <li>Zanahoria</li>
+                <li>Pimientos verdes</li>
+                <li>Pimientos rojos</li>
+                <li>Melón</li>
+                <li>Papaya</li>
+                <li>Mango</li>
+                <li>Arándanos</li>
+                <li>Espárragos</li>
+                <li>Aguacate (máximo una mitad)</li>
+                <li>Calabaza</li>
+                <li>Plátano</li>
+                <li>Sandía</li>
+                <li>Fresas frescas</li>
+                <li>Uvas (12 unidades máximo)</li>
+                <li>Pepino sin piel</li>
+                <li>Kiwi amarillo maduro</li>
+                <li>Nectarina</li>
+            </ol>
+        </div>
+
+        <div class="category minerales">
+            <h2><span class="icon">⚡</span> Minerales Esenciales <span class="count">14</span></h2>
+            <ol>
+                <li>Acelgas</li>
+                <li>Remolacha</li>
+                <li>Alcachofa</li>
+                <li>Perejil</li>
+                <li>Jengibre</li>
+                <li>Cúrcuma</li>
+                <li>Semillas de girasol</li>
+                <li>Nueces</li>
+                <li>Semillas de lino</li>
+                <li>Avellanas naturales</li>
+                <li>Pistachos sin sal</li>
+                <li>Semillas de sésamo (Tahini)</li>
+                <li>Cilantro fresco</li>
+                <li>Albahaca fresca</li>
+            </ol>
+        </div>
+
+        <div class="category fibra">
+            <h2><span class="icon">🥦</span> Fibra Soluble e Insoluble <span class="count">15</span></h2>
+            <ol>
+                <li>Avena</li>
+                <li>Quinoa</li>
+                <li>Pera</li>
+                <li>Manzana dulce con piel</li>
+                <li>Manzana cocida en compota</li>
+                <li>Pera cocida al vapor</li>
+                <li>Coliflor</li>
+                <li>Judías verdes/Ejotes</li>
+                <li>Calabacín</li>
+                <li>Berenjenas</li>
+                <li>Higos frescos</li>
+                <li>Dátiles</li>
+                <li>Ciruelas pasas</li>
+                <li>Lechuga romana</li>
+                <li>Espárragos verdes hervidos</li>
+            </ol>
+        </div>
+
+        <div class="category carbohidratos">
+            <h2><span class="icon">🥔</span> Carbohidratos Complejos <span class="count">15</span></h2>
+            <ol>
+                <li>Avena integral</li>
+                <li>Arroz integral</li>
+                <li>Cebada</li>
+                <li>Cebada perlada</li>
+                <li>Pasta integral</li>
+                <li>Pan integral</li>
+                <li>Pan de centeno integral</li>
+                <li>Amaranto</li>
+                <li>Mijo</li>
+                <li>Trigo sarraceno</li>
+                <li>Patata cocida</li>
+                <li>Patata al horno sin piel</li>
+                <li>Batata/Camote</li>
+                <li>Boniato al horno</li>
+                <li>Salvado de avena</li>
+            </ol>
+        </div>
+
+        <div class="category grasas">
+            <h2><span class="icon">🥑</span> Grasas Saludables <span class="count">4</span></h2>
+            <ol>
+                <li>Aceite de oliva virgen extra</li>
+                <li>Aceite de aguacate</li>
+                <li>Aceite de canola</li>
+                <li>Aceite de sésamo</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="total">
+        ✅ Total: 100 alimentos seguros
+    </div>
+</div>
+
+</body>
+</html>
