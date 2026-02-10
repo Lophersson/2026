@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Guía Nutricional Diaria</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --cream: #faf7f2;
+      --white: #ffffff;
+      --green-dark: #2d5a27;
+      --green-mid: #4a7c42;
+      --terracotta: #c4622d;
+      --brown: #7a4f30;
+      --text: #2c2416;
+      --text-light: #6b5c4e;
+      --shadow: rgba(44, 36, 22, 0.1);
+
+      --tag-rge-bg: #edf7ed;
+      --tag-rge: #2e7d32;
+      --tag-ldl-bg: #e8f3fc;
+      --tag-ldl: #1a5f8a;
+      --tag-dig-bg: #fef3e8;
+      --tag-dig: #c45e00;
+      --tag-inm-bg: #f4ecf9;
+      --tag-inm: #6a1b9a;
+      --tag-mus-bg: #fdeef3;
+      --tag-mus: #ad1457;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background-color: var(--cream);
+      color: var(--text);
+      min-height: 100vh;
+      background-image:
+        radial-gradient(ellipse at 10% 10%, rgba(74,124,66,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse at 90% 90%, rgba(196,98,45,0.07) 0%, transparent 60%);
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      background: linear-gradient(135deg, var(--green-dark) 0%, #1a3d17 60%, #2d5a27 100%);
+      color: white;
+      padding: 3rem 2rem 2.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 30px,
+        rgba(255,255,255,0.03) 30px,
+        rgba(255,255,255,0.03) 60px
+      );
+    }
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      position: relative;
+    }
+    header p {
+      margin-top: 0.75rem;
+      font-size: 0.95rem;
+      font-weight: 300;
+      opacity: 0.88;
+      position: relative;
+      max-width: 600px;
+      margin-inline: auto;
+      line-height: 1.6;
+    }
+    .header-leaf {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      display: block;
+      position: relative;
+    }
+
+    /* ─── LEGEND ─── */
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.6rem;
+      padding: 1.4rem 1.5rem;
+      background: var(--white);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+    .legend-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ─── SECTION HEADERS ─── */
+    .section-header {
+      text-align: center;
+      padding: 2.5rem 1rem 1rem;
+    }
+    .section-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--green-dark);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .section-header h2::before,
+    .section-header h2::after {
+      content: '';
+      display: inline-block;
+      width: 40px;
+      height: 1px;
+      background: var(--green-dark);
+      opacity: 0.4;
+    }
+
+    /* ─── GRID ─── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 1.25rem;
+      padding: 1rem 1.5rem 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* ─── CARD ─── */
+    .card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 1.4rem 1.4rem 1rem;
+      box-shadow: 0 2px 10px var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+      border-top: 4px solid var(--green-mid);
+      position: relative;
+      overflow: hidden;
+    }
+    .card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; right: 0;
+      width: 60px; height: 60px;
+      background: radial-gradient(circle at bottom right, rgba(74,124,66,0.06), transparent 70%);
+      pointer-events: none;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 22px rgba(44,36,22,0.14);
+    }
+    .card.extra {
+      border-top-color: var(--terracotta);
+    }
+    .card.extra::after {
+      background: radial-gradient(circle at bottom right, rgba(196,98,45,0.07), transparent 70%);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+    .card-emoji {
+      font-size: 2rem;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .card-title-block { flex: 1; }
+    .card-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .card-amount {
+      display: inline-block;
+      margin-top: 0.3rem;
+      background: var(--green-dark);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+    }
+    .card.extra .card-amount {
+      background: var(--terracotta);
+    }
+
+    /* ─── TAGS ─── */
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+    .tag {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 0.18rem 0.55rem;
+      border-radius: 20px;
+    }
+    .tag-rge  { background: var(--tag-rge-bg);  color: var(--tag-rge); }
+    .tag-ldl  { background: var(--tag-ldl-bg);  color: var(--tag-ldl); }
+    .tag-dig  { background: var(--tag-dig-bg);  color: var(--tag-dig); }
+    .tag-inm  { background: var(--tag-inm-bg);  color: var(--tag-inm); }
+    .tag-mus  { background: var(--tag-mus-bg);  color: var(--tag-mus); }
+
+    /* ─── NOTES ─── */
+    .notes {
+      border-top: 1px dashed rgba(0,0,0,0.1);
+      padding-top: 0.65rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .note {
+      font-size: 0.74rem;
+      color: var(--text-light);
+      line-height: 1.55;
+      padding-left: 1rem;
+      position: relative;
+    }
+    .note::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--green-mid);
+      font-size: 0.7rem;
+    }
+    .card.extra .note::before {
+      color: var(--terracotta);
+    }
+    .note-warn {
+      color: #a05c00;
+      font-style: italic;
+    }
+    .note-warn::before {
+      content: '⚠';
+      font-style: normal;
+    }
+
+    /* ─── NEW BADGE ─── */
+    .badge-new {
+      position: absolute;
+      top: 10px; right: 12px;
+      background: var(--terracotta);
+      color: white;
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 0.78rem;
+      color: var(--text-light);
+      border-top: 1px solid rgba(0,0,0,0.07);
+      background: var(--white);
+      margin-top: 1rem;
+    }
+    footer strong { color: var(--green-dark); }
+
+    /* ─── ANIM ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .card {
+      animation: fadeUp 0.45s ease both;
+    }
+    .card:nth-child(1)  { animation-delay: 0.04s; }
+    .card:nth-child(2)  { animation-delay: 0.08s; }
+    .card:nth-child(3)  { animation-delay: 0.12s; }
+    .card:nth-child(4)  { animation-delay: 0.16s; }
+    .card:nth-child(5)  { animation-delay: 0.20s; }
+    .card:nth-child(6)  { animation-delay: 0.24s; }
+    .card:nth-child(7)  { animation-delay: 0.28s; }
+    .card:nth-child(8)  { animation-delay: 0.32s; }
+    .card:nth-child(9)  { animation-delay: 0.36s; }
+    .card:nth-child(10) { animation-delay: 0.40s; }
+    .card:nth-child(11) { animation-delay: 0.44s; }
+    .card:nth-child(12) { animation-delay: 0.48s; }
+
+    @media (max-width: 500px) {
+      .grid { padding: 0.75rem; gap: 1rem; }
+      header { padding: 2rem 1rem 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <span class="header-leaf">🌿</span>
+  <h1>Guía Nutricional Diaria</h1>
+  <p>Cantidades recomendadas y beneficios específicos para el control del RGE, reducción del LDL, salud digestiva, inmunidad y masa muscular.</p>
+</header>
+
+<div class="legend">
+  <div class="legend-item"><span class="legend-dot" style="background:var(--tag-rge)"></span><span style="color:var(--tag-rge)">RGE</span></div>
+  <div class="legend-item"><span class="legend-dot" style="background:var(--tag-ldl)"></span><span style="color:var(--tag-ldl)">LDL</span></div>
+  <div class="legend-item"><span class="legend-dot" style="background:var(--tag-dig)"></span><span style="color:var(--tag-dig)">Digestivo</span></div>
+  <div class="legend-item"><span class="legend-dot" style="background:var(--tag-inm)"></span><span style="color:var(--tag-inm)">Inmunidad</span></div>
+  <div class="legend-item"><span class="legend-dot" style="background:var(--tag-mus)"></span><span style="color:var(--tag-mus)">Masa Muscular</span></div>
+</div>
+
+<!-- ░░░ TU LISTA ░░░ -->
+<div class="section-header">
+  <h2>Tu lista de alimentos</h2>
+</div>
+<div class="grid">
+
+  <!-- HUEVO -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-emoji">🥚</span>
+      <div class="card-title-block">
+        <div class="card-name">Huevo</div>
+        <span class="card-amount">1–2 uds · 50–100 g/día</span>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag tag-mus">Masa Muscular</span>
+      <span class="tag tag-inm">Inmunidad</span>
+      <span class="tag tag-rge">RGE</span>
+    </div>
+    <div class="notes">
+      <span class="note">Proteína completa de alto valor biológico con todos los aminoácidos esenciales para la síntesis muscular.</span>
+      <span class="note">Rico en leucina, el aminoácido clave para activar la síntesis proteica muscular.</span>
+      <span class="note">Vitamina D y B12 refuerzan el sistema inmunitario y la función neuromuscular.</span>
+      <span class="note">La yema aporta colina, esencial para la membrana celular y la función hepática.</span>
+      <span class="note note-warn">RGE: preferir cocido, escalfado o en tortilla sin aceite en exceso. Evitar frito.</span>
+    </div>
+  </div>
+
+  <!-- LONCHA DE PAVO -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-emoji">🦃</span>
+      <div class="card-title-block">
+        <div class="card-name">Loncha de pavo</div>
+        <span class="card-amount">2–3 lonchas · 50–80 g/día</span>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag tag-mus">Masa Muscular</span>
+      <span class="tag tag-ldl">LDL</span>
+      <span class="tag tag-rge">RGE</span>
+    </div>
+    <div class="notes">
+      <span class="note">Proteína magra de alta calidad: ~20 g de proteína por cada 100 g, ideal para construir músculo.</span>
+      <span class="note">Bajo en grasas saturadas, favorece un perfil lipídico saludable y ayuda a reducir el LDL.</span>
+      <span class="note">Triptófano precursor de serotonina y melatonina: favorece el descanso reparador y la recuperación muscular.</span>
+      <span class="note">Bien tolerado en el RGE al ser un alimento alcalinizante y bajo en grasa.</span>
+      <span class="note note-warn">Elegir versiones con poco sodio añadido; algunas marcas llevan aditivos que pueden irritar.</span>
+    </div>
+  </div>
+
+  <!-- QUESO -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-emoji">🧀</span>
+      <div class="card-title-block">
+        <div class="card-name">Queso</div>
+        <span class="card-amount">30–40 g/día</span>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag tag-mus">Masa Muscular</span>
+      <span class="tag tag-dig">Digestivo</span>
+      <span class="tag tag-inm">Inmunidad</span>
+    </div>
+    <div class="notes">
+      <span class="note">Calcio y fósforo fundamentales para la contracción muscular y la densidad ósea.</span>
+      <span class="note">Alto contenido proteico (caseína de absorción lenta), ideal para la reparación muscular nocturna.</span>
+      <span class="note">Los quesos curados fermentados (manchego, parmesano) aportan bacterias beneficiosas para la microbiota.</span>
+      <span class="note note-warn">RGE: preferir queso fresco, ricotta o mozzarella baja en grasa. Los curados grasos pueden agravar el reflujo.</span>
+    </div>
+  </div>
+
+  <!-- PLÁTANO -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-emoji">🍌</span>
+      <div class="card-title-block">
+        <div class="card-name">Plátano</div>
+        <span class="card-amount">1 pieza mediana · 100–120 g/día</span>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag tag-rge">RGE</span>
+      <span class="tag tag-dig">Digestivo</span>
+      <span class="tag tag-mus">Masa Muscular</span>
+      <span class="tag tag-inm">Inmunidad</span>
+    </div>
+    <div class="notes">
+      <span class="note">Efecto antiácido natural: crea una capa protectora sobre la mucosa esofágica y gástrica.</span>
+      <span class="note">Potasio y magnesio reducen los calambres musculares y favorecen la recuperación post-esfuerzo.</span>
+      <span class="note">Fructooligosacáridos (FOS) actúan como prebióticos, alimentando las bacterias beneficiosas del intestino.</span>
+      <span class="note">Vitamina B6 refuerza el sistema inmunitario y la síntesis de neurotransmisores.</span>
+      <span class="note note-warn">Mejor ligeramente maduro para mayor digestibilidad; muy verde puede causar gases.</span>
+    </div>
+  </div>
+
+  <!-- COMPOTA DE MANZANA -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-emoji">🍎</span>
+      <div class="card-title-block">
+        <div class="card-name">Compota de manzana</div>
+        <span class="card-amount">100–150 g/día</span>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag tag-rge">RGE</span>
+      <span class="tag tag-ldl">LDL</span>
+      <span class="tag tag-dig">Digestivo</span>
+    </div>
+    <div class="notes">
+      <span class="note">Pectina (fibra soluble) se une a los ácidos biliares en el intestino y reduce la reabsorción de colesterol LDL.</span>
+      <span class="note">Textura blanda y alcalinizante: ideal para calmar el esófago irritado por el reflujo.</span>
+      <span class="note">Polifenoles y quercetina con efecto antiinflamatorio sobre la mucosa intestinal.</span>
+      <span class="note">El almidón resistente (si se deja enfriar) actúa como prebiótico para la microbiota.</span>
+      <span class="note note-warn">Sin azúcar añadida. Casera o ecológica a ser posible para conservar los polifenoles.</span>
+    </div>
+  </div>
+
+  <!-- CANÓNIGOS -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-emoji">🥗</span>
+      <div class="card-title-block">
+        <div class="card-name">Canónigos</div>
+        <span class="card-amount">50–80 g/día</span>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag tag-inm">Inmunidad</span>
+      <span class="tag tag-dig">Digestivo</span>
+      <span class="tag tag-rge">RGE</span>
+      <span class="tag tag-ldl">LDL</span>
+    </div>
+    <div class="notes">
+      <span class="note">Altísimo contenido en vitaminas A, C y K: apoyo directo al sistema inmunitario y a la coagulación.</span>
+      <span class="note">Hierro y ácido fólico para la formación de glóbulos rojos y el transporte de oxígeno al músculo.</span>
+      <span class="note">Textura suave y naturaleza alcalinizante: excelente tolerancia en personas con RGE.</span>
+      <span class="note">Fibra soluble contribuye a reducir el colesterol LDL y a regular el tránsito intestinal.</span>
+    </div>
+  </div>
+
+  <!-- JAMÓN CURADO -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-emoji">🍖</span>
+      <div class="card-title-block">
+        <div class="card-name">Jamón curado</div>
+        <span class="card-amount">20–30 g/día (moderado)</span>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag tag-mus">Masa Muscular</span>
+      <span class="tag tag-inm">Inmunidad</span>
+    </div>
+    <div class="notes">
+      <span class="note">Proteína de alta calidad y alta digestibilidad gracias al proceso de maduración.</span>
+      <span class="note">Hierro hemo de fácil absorción, esencial para el transporte de oxígeno y la energía muscular.</span>
+      <span class="note">Zinc y selenio del cerdo ibérico contribuyen a la función inmunitaria y antioxidante.</span>
+      <span class="note note-warn">RGE: el alto contenido en sodio y grasa puede relajar el esfínter esofágico. Consumir en dosis pequeñas.</span>
+      <span class="note note-warn">LDL: moderar cantidad; preferir piezas magras (jamón ibérico puro de bellota tiene mejor perfil graso).</span>
+    </div>
+  </div>
+
+  <!-- LECHE VEGETAL DE NUECES -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-emoji">🥛</span>
+      <div class="card-title-block">
+        <div class="card-name">Leche vegetal de nueces</div>
+        <span class="card-amount">200–250 ml/día</span>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag tag-ldl">LDL</span>
+      <span class="tag tag-rge">RGE</span>
+      <span class="tag tag-dig">Digestivo</span>
+      <span class="tag tag-inm">Inmunidad</span>
+    </div>
+    <div class="notes">
+      <span class="note">Omega-3 de cadena larga (ALA) con efecto antiinflamatorio demostrado y reductor del LDL oxidado.</span>
+      <span class="note">Sin lactosa ni caseína: excelente digestibilidad y especialmente indicada en personas con intolerancia.</span>
+      <span class="note">Vitamina E (tocoferol) potente antioxidante que protege las membranas celulares inmunitarias.</span>
+      <span class="note">Carácter alcalino: no irrita el esófago ni el estómago, ideal para el RGE.</span>
+      <span class="note note-warn">Sin azúcares añadidos ni carragenanos; revisar el etiquetado con atención.</span>
+    </div>
+  </div>
+
+  <!-- NUECES PECANAS -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-emoji">🌰</span>
+      <div class="card-title-block">
+        <div class="card-name">Nueces pecanas</div>
+        <span class="card-amount">20–30 g/día (~20 mitades)</span>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag tag-ldl">LDL</span>
+      <span class="tag tag-inm">Inmunidad</span>
+      <span class="tag tag-mus">Masa Muscular</span>
+    </div>
+    <div class="notes">
+      <span class="note">Grasas monoinsaturadas (ácido oleico) que reducen el LDL sin afectar al HDL protector.</span>
+      <span class="note">Antioxidantes potentes (ellagitaninas, gamma-tocoferol): protegen al LDL de la oxidación.</span>
+      <span class="note">Magnesio esencial para más de 300 reacciones enzimáticas, incluyendo la síntesis proteica muscular.</span>
+      <span class="note">Beta-sitosterol de origen vegetal compite con el colesterol en su absorción intestinal.</span>
+      <span class="note note-warn">Calóricamente densas; respetar la ración diaria para no superar el balance calórico.</span>
+    </div>
+  </div>
+
+  <!-- AVENA -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-emoji">🌾</span>
+      <div class="card-title-block">
+        <div class="card-name">Avena</div>
+        <span class="card-amount">40–60 g en seco/día</span>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag tag-ldl">LDL</span>
+      <span class="tag tag-rge">RGE</span>
+      <span class="tag tag-dig">Digestivo</span>
+      <span class="tag tag-mus">Masa Muscular</span>
+    </div>
+    <div class="notes">
+      <span class="note">Beta-glucano: fibra soluble que forma un gel en el intestino y captura el colesterol LDL antes de su absorción.</span>
+      <span class="note">Cocida en agua/leche vegetal forma una papilla suave y alcalinizante que protege la mucosa en el RGE.</span>
+      <span class="note">Prebiótico natural que alimenta bifidobacterias y lactobacilos, fortaleciendo la microbiota.</span>
+      <span class="note">Carbohidratos de absorción lenta + proteína vegetal: soporte energético sostenido para el entrenamiento.</span>
+      <span class="note note-warn">Celíacos o sensibles al gluten: usar avena certificada sin gluten.</span>
+    </div>
+  </div>
+
+  <!-- CHÍA -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-emoji">🌱</span>
+      <div class="card-title-block">
+        <div class="card-name">Semillas de chía</div>
+        <span class="card-amount">15–20 g/día (~2 cdas)</span>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag tag-ldl">LDL</span>
+      <span class="tag tag-rge">RGE</span>
+      <span class="tag tag-dig">Digestivo</span>
+      <span class="tag tag-mus">Masa Muscular</span>
+    </div>
+    <div class="notes">
+      <span class="note">Mayor fuente vegetal de omega-3 (ALA): reduce triglicéridos y LDL con efecto antiinflamatorio.</span>
+      <span class="note">Mucílago: gel protector que recubre y suaviza la mucosa esofágica y gástrica, aliviando el RGE.</span>
+      <span class="note">5 g de proteína completa por cada 28 g, con todos los aminoácidos esenciales.</span>
+      <span class="note">Calcio vegetal (179 mg/28 g) comparable al de los lácteos: soporte para la contracción muscular.</span>
+      <span class="note note-warn">Hidratar siempre 30 min antes de consumir para activar el mucílago y evitar problemas de deglución.</span>
+    </div>
+  </div>
+
+  <!-- KÉFIR -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-emoji">🫙</span>
+      <div class="card-title-block">
+        <div class="card-name">Kéfir</div>
+        <span class="card-amount">150–200 ml/día</span>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag tag-dig">Digestivo</span>
+      <span class="tag tag-inm">Inmunidad</span>
+      <span class="tag tag-mus">Masa Muscular</span>
+      <span class="tag tag-ldl">LDL</span>
+    </div>
+    <div class="notes">
+      <span class="note">Hasta 60 cepas de bacterias y levaduras beneficiosas: el alimento probiótico más completo disponible.</span>
+      <span class="note">Lactobacilos y bifidobacterias refuerzan la barrera intestinal y regulan la respuesta inmunitaria.</span>
+      <span class="note">Alta biodisponibilidad del calcio y proteínas (caseína + whey) para la masa muscular.</span>
+      <span class="note">Bacteriocinas producidas durante la fermentación reducen el colesterol LDL en el intestino.</span>
+      <span class="note note-warn">RGE: el kéfir suele tolerarse mejor que la leche, pero valorar individualmente (es ligeramente ácido).</span>
+      <span class="note note-warn">Si hay intolerancia severa a la lactosa, optar por kéfir de agua o kéfir de leche vegetal.</span>
+    </div>
+  </div>
+
+  <!-- SÉSAMO -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-emoji">⚪</span>
+      <div class="card-title-block">
+        <div class="card-name">Semillas de sésamo</div>
+        <span class="card-amount">10–15 g/día (~1 cda)</span>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag tag-ldl">LDL</span>
+      <span class="tag tag-inm">Inmunidad</span>
+      <span class="tag tag-mus">Masa Muscular</span>
+    </div>
+    <div class="notes">
+      <span class="note">Calcio vegetal altísimo (975 mg/100 g): esencial para la contracción muscular y la mineralización ósea.</span>
+      <span class="note">Lignanos (sesamina y sesamol): reducen el colesterol LDL y el LDL oxidado de forma significativa.</span>
+      <span class="note">Zinc y selenio: minerales clave para la activación de linfocitos T y el sistema inmunitario adaptativo.</span>
+      <span class="note">Ácidos grasos insaturados (linoleico y oleico): perfil antiinflamatorio favorable para el corazón.</span>
+      <span class="note note-warn">Tostar ligeramente para mejorar la digestibilidad y la absorción del calcio.</span>
+    </div>
+  </div>
+
+  <!-- SEMILLAS DE LINO -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-emoji">🟤</span>
+      <div class="card-title-block">
+        <div class="card-name">Semillas de lino</div>
+        <span class="card-amount">15–20 g/día (~2 cdas)</span>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag tag-ldl">LDL</span>
+      <span class="tag tag-rge">RGE</span>
+      <span class="tag tag-dig">Digestivo</span>
+      <span class="tag tag-inm">Inmunidad</span>
+    </div>
+    <div class="notes">
+      <span class="note">La mayor fuente vegetal de lignanos: reducen el LDL y el colesterol total en estudios controlados.</span>
+      <span class="note">Mucílago similar a la chía: recubre la mucosa gástrica y esofágica, aliviando el ardor del RGE.</span>
+      <span class="note">Omega-3 (ALA) con potente efecto antiinflamatorio intestinal y sistémico.</span>
+      <span class="note">Fibra soluble e insoluble: regula el tránsito intestinal y sirve de prebiótico para la microbiota.</span>
+      <span class="note note-warn">Consumir siempre molidas (no enteras) para una absorción óptima de omega-3 y lignanos.</span>
+    </div>
+  </div>
+
+  <!-- SEMILLAS DE CALABAZA -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-emoji">🎃</span>
+      <div class="card-title-block">
+        <div class="card-name">Semillas de calabaza</div>
+        <span class="card-amount">20–30 g/día (~2 cdas)</span>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag tag-inm">Inmunidad</span>
+      <span class="tag tag-mus">Masa Muscular</span>
+      <span class="tag tag-dig">Digestivo</span>
+    </div>
+    <div class="notes">
+      <span class="note">Mayor contenido en zinc de todos los frutos secos y semillas: clave para la síntesis de proteínas musculares.</span>
+      <span class="note">Magnesio (168 mg/28 g): reduce el cortisol, mejora el sueño reparador y la recuperación muscular.</span>
+      <span class="note">Cucurbitacinas con efecto antiparasitario y protector de la mucosa intestinal.</span>
+      <span class="note">Triptófano precursor de serotonina y melatonina: regula el eje intestino-cerebro.</span>
+      <span class="note">Proteína vegetal completa (~9 g/28 g) con buena proporción de arginina para el flujo sanguíneo muscular.</span>
+    </div>
+  </div>
+
+  <!-- CÚRCUMA -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-emoji">🟡</span>
+      <div class="card-title-block">
+        <div class="card-name">Cúrcuma</div>
+        <span class="card-amount">1–3 g/día (½–1 cdta)</span>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag tag-dig">Digestivo</span>
+      <span class="tag tag-inm">Inmunidad</span>
+      <span class="tag tag-ldl">LDL</span>
+      <span class="tag tag-rge">RGE</span>
+    </div>
+    <div class="notes">
+      <span class="note">Curcumina: antiinflamatorio natural que inhibe el NF-κB, regulador maestro de la inflamación sistémica.</span>
+      <span class="note">Protege la mucosa gástrica estimulando la producción de moco protector y reduciendo el H. pylori.</span>
+      <span class="note">Reduce el LDL oxidado y favorece la conversión del colesterol en bilis, disminuyendo la absorción intestinal.</span>
+      <span class="note">Inmunomoduladora: activa macrófagos y células NK (natural killer) del sistema inmune innato.</span>
+      <span class="note note-warn">Combinar siempre con pimienta negra (piperina): aumenta la absorción de curcumina un 2000%.</span>
+      <span class="note note-warn">RGE: en dosis moderadas es protectora; en exceso puede causar irritación. No superar 3 g/día.</span>
+    </div>
+  </div>
+
+  <!-- ORÉGANO -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-emoji">🌿</span>
+      <div class="card-title-block">
+        <div class="card-name">Orégano</div>
+        <span class="card-amount">1–2 g/día (½ cdta)</span>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag tag-inm">Inmunidad</span>
+      <span class="tag tag-dig">Digestivo</span>
+      <span class="tag tag-rge">RGE</span>
+    </div>
+    <div class="notes">
+      <span class="note">Carvacrol y timol: antibacterianos naturales que combaten patógenos como E. coli y H. pylori sin afectar la microbiota beneficiosa.</span>
+      <span class="note">Antioxidante ORAC extremadamente alto: neutraliza radicales libres que dañan las células inmunitarias.</span>
+      <span class="note">Carminativo: reduce los gases y la distensión abdominal, aliviando la presión sobre el esfínter esofágico.</span>
+      <span class="note">Rosmarinico: ácido con potente actividad antiinflamatoria sobre el epitelio del tracto digestivo.</span>
+    </div>
+  </div>
+
+</div><!-- /grid -->
+
+
+<!-- ░░░ ALIMENTOS ADICIONALES ░░░ -->
+<div class="section-header" style="padding-top:1.5rem;">
+  <h2>Alimentos adicionales recomendados</h2>
+</div>
+<p style="text-align:center;font-size:0.82rem;color:var(--text-light);margin-bottom:1.2rem;padding:0 1rem;">Seleccionados especialmente para reforzar los cinco objetivos: RGE · LDL · Digestivo · Inmunidad · Masa muscular</p>
+<div class="grid">
+
+  <!-- JENGIBRE -->
+  <div class="card extra">
+    <span class="badge-new">+ Recomendado</span>
+    <div class="card-header">
+      <span class="card-emoji">🫚</span>
+      <div class="card-title-block">
+        <div class="card-name">Jengibre fresco</div>
+        <span class="card-amount">2–5 g/día (rodajitas)</span>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag tag-rge">RGE</span>
+      <span class="tag tag-dig">Digestivo</span>
+      <span class="tag tag-inm">Inmunidad</span>
+    </div>
+    <div class="notes">
+      <span class="note">Gingerol y shogaol: aceleran el vaciado gástrico, reduciendo la presión sobre el esfínter y aliviando el reflujo.</span>
+      <span class="note">Potente antiemético natural: alivia náuseas, indigestión y la sensación de plenitud postprandial.</span>
+      <span class="note">Inmunomodulador: estimula la producción de interferones y células T, reforzando la inmunidad adaptativa.</span>
+      <span class="note">Efecto antiinflamatorio sistémico (inhibe COX-2) comparable a algunos AINEs sin sus efectos adversos.</span>
+      <span class="note note-warn">RGE: dosis pequeñas son beneficiosas; cantidades grandes pueden ser irritantes. No exceder 5 g/día en RGE activo.</span>
+    </div>
+  </div>
+
+  <!-- ACEITE DE OLIVA -->
+  <div class="card extra">
+    <span class="badge-new">+ Recomendado</span>
+    <div class="card-header">
+      <span class="card-emoji">🫒</span>
+      <div class="card-title-block">
+        <div class="card-name">Aceite de oliva virgen extra</div>
+        <span class="card-amount">15–30 ml/día (1–2 cdas)</span>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag tag-ldl">LDL</span>
+      <span class="tag tag-rge">RGE</span>
+      <span class="tag tag-dig">Digestivo</span>
+      <span class="tag tag-inm">Inmunidad</span>
+    </div>
+    <div class="notes">
+      <span class="note">Ácido oleico (omega-9): reduce el LDL y protege el LDL de la oxidación, el paso clave en la aterosclerosis.</span>
+      <span class="note">Oleocantal: antiinflamatorio natural con mecanismo de acción similar al ibuprofeno, protege la mucosa digestiva.</span>
+      <span class="note">Oleína estimula la producción de bilis, mejorando la digestión de grasas y la motilidad intestinal.</span>
+      <span class="note">Polifenoles (hidroxitirosol, oleuropeína): potentes antioxidantes con efecto inmunomodulador demostrado.</span>
+      <span class="note note-warn">Usar en crudo para preservar los polifenoles. El cocinado a alta temperatura los degrada parcialmente.</span>
+    </div>
+  </div>
+
+  <!-- BRÓCOLI -->
+  <div class="card extra">
+    <span class="badge-new">+ Recomendado</span>
+    <div class="card-header">
+      <span class="card-emoji">🥦</span>
+      <div class="card-title-block">
+        <div class="card-name">Brócoli</div>
+        <span class="card-amount">80–150 g/día (1 taza)</span>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag tag-inm">Inmunidad</span>
+      <span class="tag tag-dig">Digestivo</span>
+      <span class="tag tag-ldl">LDL</span>
+      <span class="tag tag-mus">Masa Muscular</span>
+    </div>
+    <div class="notes">
+      <span class="note">Sulforafano: el compuesto más estudiado contra H. pylori, principal bacteria que daña la mucosa gástrica y empeora el RGE.</span>
+      <span class="note">Vitamina C (89 mg/100 g): cofactor esencial para la síntesis de colágeno y el funcionamiento del sistema inmunitario.</span>
+      <span class="note">Fibra insoluble y soluble: mejora el tránsito intestinal y reduce la absorción del colesterol LDL.</span>
+      <span class="note">Calcio vegetal, vitamina K y cromo: soporte para la mineralización ósea y el metabolismo de la glucosa.</span>
+      <span class="note note-warn">Cocinar al vapor 3–5 min para activar el sulforafano sin destruir vitamina C. Evitar hervir en exceso.</span>
+    </div>
+  </div>
+
+  <!-- AJO -->
+  <div class="card extra">
+    <span class="badge-new">+ Recomendado</span>
+    <div class="card-header">
+      <span class="card-emoji">🧄</span>
+      <div class="card-title-block">
+        <div class="card-name">Ajo</div>
+        <span class="card-amount">1–2 dientes · 5–10 g/día</span>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag tag-ldl">LDL</span>
+      <span class="tag tag-inm">Inmunidad</span>
+      <span class="tag tag-dig">Digestivo</span>
+    </div>
+    <div class="notes">
+      <span class="note">Alicina (liberada al machacar): inhibe la HMG-CoA reductasa, la misma enzima que bloquean las estatinas, reduciendo el LDL.</span>
+      <span class="note">Potente inmunoestimulante: aumenta la actividad de las células NK y la producción de anticuerpos.</span>
+      <span class="note">Efecto prebiótico (inulina del ajo) que alimenta especialmente a las bifidobacterias intestinales.</span>
+      <span class="note">S-alil-cisteína: antioxidante que protege las células inmunitarias del estrés oxidativo.</span>
+      <span class="note note-warn">RGE: puede irritar en personas sensibles. Usar cocido o confitado reduce la intensidad sin perder todos los beneficios.</span>
+      <span class="note note-warn">Machacar y esperar 10 min antes de cocinar para maximizar la formación de alicina.</span>
+    </div>
+  </div>
+
+  <!-- SALMÓN / SARDINAS -->
+  <div class="card extra">
+    <span class="badge-new">+ Recomendado</span>
+    <div class="card-header">
+      <span class="card-emoji">🐟</span>
+      <div class="card-title-block">
+        <div class="card-name">Salmón o sardinas</div>
+        <span class="card-amount">80–120 g · 3–4 veces/semana</span>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag tag-ldl">LDL</span>
+      <span class="tag tag-mus">Masa Muscular</span>
+      <span class="tag tag-inm">Inmunidad</span>
+      <span class="tag tag-dig">Digestivo</span>
+    </div>
+    <div class="notes">
+      <span class="note">Omega-3 de cadena larga (EPA y DHA): los más potentes para reducir triglicéridos y LDL oxidado, con efecto antiinflamatorio sistémico.</span>
+      <span class="note">Proteína de altísima calidad (~25 g/100 g) y alta biodisponibilidad: la mejor opción para la síntesis muscular.</span>
+      <span class="note">Vitamina D3 (el nutriente más deficiente en España): activa los linfocitos T del sistema inmunitario.</span>
+      <span class="note">Astaxantina (salmón): carotenoide antiinflamatorio que protege la mucosa gastrointestinal del estrés oxidativo.</span>
+      <span class="note note-warn">Las sardinas en conserva al natural son igual de eficaces y más económicas. Evitar en aceite de girasol (omega-6 inflamatorio).</span>
+    </div>
+  </div>
+
+  <!-- ALOE VERA / KOMBUCHA -->
+  <div class="card extra">
+    <span class="badge-new">+ Recomendado</span>
+    <div class="card-header">
+      <span class="card-emoji">🪴</span>
+      <div class="card-title-block">
+        <div class="card-name">Aloe vera (jugo)</div>
+        <span class="card-amount">30–50 ml en ayunas/día</span>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag tag-rge">RGE</span>
+      <span class="tag tag-dig">Digestivo</span>
+      <span class="tag tag-inm">Inmunidad</span>
+    </div>
+    <div class="notes">
+      <span class="note">Acemanano (polisacárido del aloe): crea una película protectora y calmante sobre la mucosa esofágica y gástrica; especialmente eficaz en el RGE.</span>
+      <span class="note">Enzimas digestivas naturales (amilasa, lipasa) que mejoran la descomposición y absorción de nutrientes.</span>
+      <span class="note">Inmunomodulador: el acemanano activa macrófagos y estimula la producción de citocinas antiinflamatorias.</span>
+      <span class="note">Efecto laxante suave (aloína en la piel): regula el tránsito sin irritar el intestino si se usa pulpa sin aloína.</span>
+      <span class="note note-warn">Usar jugo de pulpa interna sin aloína (decolorado). La aloína puede ser irritante y está desaconsejada en embarazo.</span>
+    </div>
+  </div>
+
+</div><!-- /grid extra -->
+
+<footer>
+  <p>Esta guía es de carácter informativo y no sustituye el consejo médico. <strong>Consulta siempre con tu médico o nutricionista</strong> antes de realizar cambios significativos en tu alimentación, especialmente en presencia de RGE u otras patologías.</p>
+  <p style="margin-top:0.5rem;opacity:0.6;">cdta = cucharadita · cda = cucharada · RGE = Reflujo Gastroesofágico · LDL = Lipoproteínas de baja densidad</p>
+</footer>
+
+</body>
+</html>
