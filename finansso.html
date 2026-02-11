@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora de Financiación</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface-2: #1a2235;
+    --border: rgba(255,255,255,0.06);
+    --gold: #c9a84c;
+    --gold-light: #e8c96a;
+    --gold-dim: rgba(201,168,76,0.15);
+    --red: #e05a5a;
+    --green: #4ecdc4;
+    --text: #f0f4ff;
+    --text-dim: #8892a4;
+    --text-muted: #4a5568;
+    --shadow: 0 25px 60px rgba(0,0,0,0.5);
+    --radius: 16px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(201,168,76,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,168,76,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  .wrapper {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+  }
+
+  /* HEADER */
+  header {
+    text-align: center;
+    margin-bottom: 48px;
+    animation: fadeDown 0.6s ease both;
+  }
+
+  .logo-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .logo-icon {
+    width: 40px; height: 40px;
+    background: var(--gold);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 5vw, 40px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #fff 0%, var(--gold-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .subtitle {
+    color: var(--text-dim);
+    font-size: 14px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* MAIN CARD */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 36px;
+    box-shadow: var(--shadow);
+    animation: fadeUp 0.6s ease 0.1s both;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* INPUTS GRID */
+  .inputs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  @media (max-width: 580px) {
+    .inputs-grid { grid-template-columns: 1fr; }
+    .card { padding: 24px 18px; }
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .field.full { grid-column: 1 / -1; }
+
+  label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .input-wrap .unit {
+    position: absolute;
+    right: 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--text-muted);
+    pointer-events: none;
+    transition: color 0.2s;
+  }
+
+  input[type="number"], input[type="range"] {
+    width: 100%;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 13px 46px 13px 16px;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+  input[type="number"]:focus {
+    border-color: var(--gold);
+    background: rgba(201,168,76,0.04);
+    box-shadow: 0 0 0 3px rgba(201,168,76,0.1);
+  }
+
+  input[type="number"]:focus + .unit { color: var(--gold); }
+
+  /* Slider for months */
+  .slider-field { gap: 10px; }
+
+  .slider-value-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .slider-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--gold-light);
+  }
+
+  input[type="range"] {
+    padding: 0;
+    height: 4px;
+    border-radius: 2px;
+    border: none;
+    background: var(--surface-2);
+    cursor: pointer;
+    -webkit-appearance: none;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--gold);
+    box-shadow: 0 0 10px rgba(201,168,76,0.5);
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 18px rgba(201,168,76,0.7);
+  }
+
+  .slider-marks {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 4px;
+  }
+
+  .slider-marks span {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+  }
+
+  /* BUTTON */
+  .calc-btn {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--gold) 0%, #a8832e 100%);
+    border: none;
+    border-radius: 12px;
+    color: #0a0e1a;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s, filter 0.15s;
+    box-shadow: 0 8px 24px rgba(201,168,76,0.3);
+  }
+
+  .calc-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 32px rgba(201,168,76,0.4);
+    filter: brightness(1.05);
+  }
+
+  .calc-btn:active { transform: translateY(0); }
+
+  /* RESULTS */
+  .results-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 36px;
+    box-shadow: var(--shadow);
+    margin-top: 20px;
+    display: none;
+    animation: fadeUp 0.5s ease both;
+  }
+
+  .results-card.visible { display: block; }
+
+  /* Main cuota highlight */
+  .cuota-hero {
+    background: var(--gold-dim);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 12px;
+    padding: 24px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .cuota-hero-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .cuota-hero-value {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 6vw, 48px);
+    font-weight: 700;
+    color: var(--gold-light);
+    line-height: 1;
+  }
+
+  .cuota-hero-value span {
+    font-size: 0.5em;
+    color: var(--gold);
+    font-weight: 400;
+  }
+
+  /* Results rows */
+  .result-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-bottom: 28px;
+  }
+
+  .result-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 13px 16px;
+    border-radius: 8px;
+    transition: background 0.15s;
+  }
+
+  .result-row:hover { background: var(--surface-2); }
+
+  .result-row.highlight {
+    background: rgba(78,205,196,0.06);
+    border: 1px solid rgba(78,205,196,0.12);
+  }
+
+  .result-row.highlight:hover { background: rgba(78,205,196,0.1); }
+
+  .rr-label {
+    font-size: 13px;
+    color: var(--text-dim);
+    font-weight: 400;
+  }
+
+  .rr-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .rr-value.tae { color: var(--red); }
+  .rr-value.tin { color: var(--text-dim); }
+  .rr-value.total { color: var(--gold-light); font-size: 15px; }
+
+  /* TAE badge */
+  .badge-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .badge {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+  }
+
+  .badge-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+
+  .badge-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 24px;
+    font-weight: 500;
+  }
+
+  .badge-value.tae-v { color: var(--red); }
+  .badge-value.tin-v { color: #7eb3ff; }
+
+  /* Amortization toggle */
+  .toggle-btn {
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text-dim);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s;
+    margin-bottom: 16px;
+  }
+
+  .toggle-btn:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: var(--gold-dim);
+  }
+
+  .toggle-icon { transition: transform 0.3s; }
+  .toggle-btn.open .toggle-icon { transform: rotate(180deg); }
+
+  /* Amortization table */
+  .amort-wrap {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.5s ease;
+  }
+
+  .amort-wrap.open { max-height: 600px; }
+
+  .amort-scroll {
+    max-height: 580px;
+    overflow-y: auto;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+
+  .amort-scroll::-webkit-scrollbar { width: 4px; }
+  .amort-scroll::-webkit-scrollbar-track { background: transparent; }
+  .amort-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+  }
+
+  thead tr {
+    background: var(--surface-2);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+
+  th {
+    padding: 10px 12px;
+    text-align: right;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  th:first-child { text-align: left; }
+
+  td {
+    padding: 8px 12px;
+    text-align: right;
+    color: var(--text-dim);
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+  }
+
+  td:first-child { text-align: left; color: var(--text-muted); }
+
+  tr:hover td { background: rgba(255,255,255,0.02); }
+
+  td.interest-cell { color: var(--red); opacity: 0.7; }
+  td.principal-cell { color: var(--green); opacity: 0.8; }
+  td.balance-cell { color: var(--text); }
+
+  /* Chart area */
+  .chart-area {
+    margin-top: 24px;
+    margin-bottom: 4px;
+  }
+
+  canvas {
+    width: 100% !important;
+    border-radius: 8px;
+  }
+
+  /* Footer note */
+  .legal-note {
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    margin-top: 8px;
+  }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes countUp {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .animate-in {
+    animation: countUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+
+  /* Provider badge */
+  .provider-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 12px;
+  }
+
+  .santander-badge {
+    background: #ec0000;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.05em;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo-row">
+      <div class="logo-icon">🚗</div>
+    </div>
+    <h1>Calculadora de Financiación</h1>
+    <p class="subtitle">Vehículo · Santander Consumer Bank</p>
+  </header>
+
+  <!-- INPUT CARD -->
+  <div class="card">
+    <div class="section-label">Datos del préstamo</div>
+
+    <div class="inputs-grid">
+
+      <div class="field">
+        <label>Precio del vehículo</label>
+        <div class="input-wrap">
+          <input type="number" id="precio" value="22900" min="0" step="100">
+          <span class="unit">€</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Entrada (pago inicial)</label>
+        <div class="input-wrap">
+          <input type="number" id="entrada" value="0" min="0" step="100">
+          <span class="unit">€</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Comisión de apertura</label>
+        <div class="input-wrap">
+          <input type="number" id="comision" value="3.95" min="0" max="20" step="0.01">
+          <span class="unit">%</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>TIN (tipo de interés nominal)</label>
+        <div class="input-wrap">
+          <input type="number" id="tin" value="7.50" min="0.1" max="30" step="0.01">
+          <span class="unit">%</span>
+        </div>
+      </div>
+
+      <div class="field full slider-field">
+        <label>Plazo de financiación</label>
+        <div class="slider-value-row">
+          <span style="font-size:12px;color:var(--text-muted)">Meses</span>
+          <span class="slider-val" id="mesesVal">120 meses</span>
+        </div>
+        <input type="range" id="meses" min="12" max="120" step="12" value="120">
+        <div class="slider-marks">
+          <span>12</span><span>24</span><span>36</span><span>48</span><span>60</span>
+          <span>72</span><span>84</span><span>96</span><span>108</span><span>120</span>
+        </div>
+      </div>
+
+    </div>
+
+    <button class="calc-btn" onclick="calcular()">
+      ⚡ Calcular financiación
+    </button>
+  </div>
+
+  <!-- RESULTS CARD -->
+  <div class="results-card" id="resultsCard">
+
+    <div class="section-label">Resultado</div>
+
+    <!-- CUOTA HERO -->
+    <div class="cuota-hero">
+      <div>
+        <div class="cuota-hero-label">Cuota mensual desde</div>
+        <div class="cuota-hero-value animate-in" id="cuotaHero">
+          — <span>€/mes</span>
+        </div>
+      </div>
+      <div style="text-align:right">
+        <div class="cuota-hero-label" style="margin-bottom:4px">Primera cuota</div>
+        <div style="font-family:'DM Mono',monospace;font-size:20px;color:var(--text)" id="primeraCuota">—</div>
+      </div>
+    </div>
+
+    <!-- TAE / TIN BADGES -->
+    <div class="badge-row">
+      <div class="badge">
+        <div class="badge-label">TIN</div>
+        <div class="badge-value tin-v" id="tinDisplay">—</div>
+      </div>
+      <div class="badge">
+        <div class="badge-label">TAE</div>
+        <div class="badge-value tae-v" id="taeDisplay">—</div>
+      </div>
+    </div>
+
+    <!-- DETAIL ROWS -->
+    <div class="result-rows">
+      <div class="result-row">
+        <span class="rr-label">Precio financiando</span>
+        <span class="rr-value" id="rPrecio">—</span>
+      </div>
+      <div class="result-row">
+        <span class="rr-label">Entrada</span>
+        <span class="rr-value" id="rEntrada">—</span>
+      </div>
+      <div class="result-row">
+        <span class="rr-label">Capital financiado</span>
+        <span class="rr-value" id="rCapital">—</span>
+      </div>
+      <div class="result-row">
+        <span class="rr-label">Comisión de apertura</span>
+        <span class="rr-value" id="rComision">—</span>
+      </div>
+      <div class="result-row">
+        <span class="rr-label">Plazo</span>
+        <span class="rr-value" id="rMeses">—</span>
+      </div>
+      <div class="result-row highlight">
+        <span class="rr-label" style="color:var(--text);font-weight:600">Importe total a plazos</span>
+        <span class="rr-value total" id="rTotal">—</span>
+      </div>
+      <div class="result-row">
+        <span class="rr-label">Total intereses pagados</span>
+        <span class="rr-value tae" id="rIntereses">—</span>
+      </div>
+    </div>
+
+    <!-- CHART -->
+    <div class="chart-area">
+      <div class="section-label" style="margin-bottom:16px">Distribución del coste</div>
+      <canvas id="myChart" height="120"></canvas>
+    </div>
+
+    <!-- AMORTIZATION TABLE -->
+    <div style="margin-top:24px">
+      <div class="section-label">Cuadro de amortización</div>
+      <button class="toggle-btn" id="toggleBtn" onclick="toggleTable()">
+        <span>Ver tabla de amortización completa</span>
+        <span class="toggle-icon">▼</span>
+      </button>
+      <div class="amort-wrap" id="amortWrap">
+        <div class="amort-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Cuota</th>
+                <th>Intereses</th>
+                <th>Capital</th>
+                <th>Saldo</th>
+              </tr>
+            </thead>
+            <tbody id="amortBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- LEGAL NOTE -->
+    <div class="provider-row">
+      <span>Financiación provista por</span>
+      <span class="santander-badge">Santander</span>
+    </div>
+    <div class="legal-note">
+      * Cálculo orientativo. La TAE se calcula considerando la comisión de apertura financiada en el capital.
+      Primera cuota incluye intereses del período inicial. Los datos mostrados son aproximados y pueden variar
+      según las condiciones específicas del contrato. Consulte siempre las condiciones legales con su financiador.
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ─── Slider live update ───────────────────────────────────────
+const slider = document.getElementById('meses');
+const sliderVal = document.getElementById('mesesVal');
+slider.addEventListener('input', () => {
+  sliderVal.textContent = slider.value + ' meses';
+});
+
+// Also calculate on Enter or blur
+['precio','entrada','comision','tin'].forEach(id => {
+  document.getElementById(id).addEventListener('keydown', e => {
+    if (e.key === 'Enter') calcular();
+  });
+});
+
+// ─── Helpers ─────────────────────────────────────────────────
+function fmt(n, dec=2) {
+  return n.toLocaleString('es-ES', { minimumFractionDigits: dec, maximumFractionDigits: dec }) + ' €';
+}
+function fmtPct(n) {
+  return n.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' %';
+}
+
+// ─── Monthly payment (standard amortization) ─────────────────
+function cuotaMensual(P, r, n) {
+  if (r === 0) return P / n;
+  return P * r / (1 - Math.pow(1 + r, -n));
+}
+
+// ─── TAE via Newton-Raphson (IRR) ────────────────────────────
+// Cash flows: t=0 borrower receives (precio - entrada)
+// Pays monthly_payment[t] for t = 1..n
+// Find monthly rate r so that NPV = 0:
+//   (precio - entrada) = sum(payment_t / (1+r)^t)
+// TAE = (1+r)^12 - 1
+function calcTAE(netAmount, payments) {
+  // Initial guess: TIN/12
+  let r = 0.00625;
+  for (let iter = 0; iter < 200; iter++) {
+    let npv = -netAmount;
+    let dnpv = 0;
+    for (let t = 1; t <= payments.length; t++) {
+      const df = Math.pow(1 + r, t);
+      npv  += payments[t-1] / df;
+      dnpv -= t * payments[t-1] / (df * (1 + r));
+    }
+    const step = npv / dnpv;
+    r -= step;
+    if (Math.abs(step) < 1e-10) break;
+  }
+  return Math.pow(1 + r, 12) - 1;
+}
+
+// ─── Main calculation ─────────────────────────────────────────
+let lastData = null;
+
+function calcular() {
+  const precio      = parseFloat(document.getElementById('precio').value)   || 0;
+  const entrada     = parseFloat(document.getElementById('entrada').value)  || 0;
+  const comisionPct = parseFloat(document.getElementById('comision').value) || 0;
+  const tin         = parseFloat(document.getElementById('tin').value)      || 0;
+  const n           = parseInt(slider.value);
+
+  if (precio <= 0 || tin <= 0 || n <= 0) return;
+
+  const capitalBase       = precio - entrada;                  // importe a financiar
+  const comision          = capitalBase * (comisionPct / 100); // comisión en €
+  const capitalFinanciado = capitalBase + comision;            // capital total financiado
+  const r = tin / 100 / 12;
+
+  // Regular monthly payment (on capital + commission)
+  const cuota = cuotaMensual(capitalFinanciado, r, n);
+
+  // Primera cuota: first installment pays full month interest on capital + comm.
+  // In practice it can be slightly different; we model it as standard but add
+  // extra partial period (here we replicate the exact Santander pattern):
+  // Primera cuota = cuota + interest on comision for one extra period
+  const primeraCuota = cuota + comision * r;
+
+  // Build amortization schedule
+  const schedule = [];
+  let saldo = capitalFinanciado;
+  let totalIntereses = 0;
+  for (let m = 1; m <= n; m++) {
+    const interesesMes = saldo * r;
+    const cuotaM = (m === 1) ? primeraCuota : cuota;
+    const capitalMes = cuotaM - interesesMes;
+    saldo -= capitalMes;
+    if (saldo < 0.005) saldo = 0;
+    totalIntereses += interesesMes;
+    schedule.push({
+      mes: m,
+      cuota: cuotaM,
+      intereses: interesesMes,
+      capital: capitalMes,
+      saldo: saldo
+    });
+  }
+
+  const totalPlazos = primeraCuota + cuota * (n - 1);
+
+  // Payment array for TAE
+  const payments = schedule.map(r => r.cuota);
+  const tae = calcTAE(precio - entrada, payments);
+
+  lastData = { capitalBase, capitalFinanciado, comision, comisionPct, cuota, primeraCuota,
+               totalPlazos, totalIntereses, tae, tin, n, precio, entrada, schedule };
+
+  mostrarResultados(lastData);
+}
+
+function mostrarResultados(d) {
+  const card = document.getElementById('resultsCard');
+  card.classList.add('visible');
+
+  // Animate values
+  animateValue('cuotaHero', d.cuota, true);
+
+  document.getElementById('primeraCuota').textContent = fmt(d.primeraCuota);
+  document.getElementById('tinDisplay').textContent   = fmtPct(d.tin);
+  document.getElementById('taeDisplay').textContent   = fmtPct(d.tae * 100);
+  document.getElementById('rPrecio').textContent    = fmt(d.precio);
+  document.getElementById('rEntrada').textContent   = fmt(d.entrada);
+  document.getElementById('rCapital').textContent   = fmt(d.capitalFinanciado);
+  document.getElementById('rComision').innerHTML =
+    fmt(d.comision) + ' <span style="font-size:11px;color:var(--text-muted)">(' + d.comisionPct.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2}) + '%)</span>';
+  document.getElementById('rMeses').textContent     = d.n + ' meses';
+  document.getElementById('rTotal').textContent     = fmt(d.totalPlazos);
+  document.getElementById('rIntereses').textContent = fmt(d.totalIntereses);
+
+  buildChart(d);
+  buildTable(d.schedule);
+
+  card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ─── Animated number ──────────────────────────────────────────
+function animateValue(id, value, isHero) {
+  const el = document.getElementById(id);
+  el.classList.remove('animate-in');
+  void el.offsetWidth;
+  el.classList.add('animate-in');
+  if (isHero) {
+    el.innerHTML = value.toLocaleString('es-ES', {minimumFractionDigits:2,maximumFractionDigits:2}) + ' <span>€/mes</span>';
+  }
+}
+
+// ─── Chart ────────────────────────────────────────────────────
+let chartInstance = null;
+function buildChart(d) {
+  const ctx = document.getElementById('myChart').getContext('2d');
+  if (chartInstance) chartInstance.destroy();
+
+  const labels = d.schedule.map((r, i) =>
+    i % 12 === 0 ? `Año ${Math.floor(i/12)+1}` : ''
+  );
+
+  const interesesAcum = [];
+  const capitalAcum   = [];
+  let sumI = 0, sumK = 0;
+  d.schedule.forEach(r => {
+    sumI += r.intereses;
+    sumK += r.capital;
+    interesesAcum.push(+sumI.toFixed(2));
+    capitalAcum.push(+sumK.toFixed(2));
+  });
+
+  chartInstance = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: d.schedule.map((_, i) => `Mes ${i+1}`),
+      datasets: [
+        {
+          label: 'Capital amortizado',
+          data: capitalAcum,
+          borderColor: '#4ecdc4',
+          backgroundColor: 'rgba(78,205,196,0.08)',
+          fill: true,
+          tension: 0.4,
+          pointRadius: 0,
+          borderWidth: 2,
+        },
+        {
+          label: 'Intereses pagados',
+          data: interesesAcum,
+          borderColor: '#e05a5a',
+          backgroundColor: 'rgba(224,90,90,0.06)',
+          fill: true,
+          tension: 0.4,
+          pointRadius: 0,
+          borderWidth: 2,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      interaction: { intersect: false, mode: 'index' },
+      plugins: {
+        legend: {
+          labels: {
+            color: '#8892a4',
+            font: { family: 'DM Sans', size: 11 },
+            boxWidth: 10, padding: 16
+          }
+        },
+        tooltip: {
+          backgroundColor: '#1a2235',
+          borderColor: 'rgba(201,168,76,0.2)',
+          borderWidth: 1,
+          titleColor: '#c9a84c',
+          bodyColor: '#f0f4ff',
+          titleFont: { family: 'DM Mono', size: 11 },
+          bodyFont: { family: 'DM Mono', size: 12 },
+          callbacks: {
+            title: items => 'Mes ' + (items[0].dataIndex + 1),
+            label: item => ' ' + item.dataset.label + ': ' + item.raw.toLocaleString('es-ES', {minimumFractionDigits:2}) + ' €'
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: {
+            color: '#4a5568',
+            font: { family: 'DM Mono', size: 9 },
+            maxTicksLimit: 12,
+          },
+          grid: { color: 'rgba(255,255,255,0.03)' },
+        },
+        y: {
+          ticks: {
+            color: '#4a5568',
+            font: { family: 'DM Mono', size: 9 },
+            callback: v => v.toLocaleString('es-ES') + '€'
+          },
+          grid: { color: 'rgba(255,255,255,0.04)' },
+        }
+      }
+    }
+  });
+}
+
+// ─── Amortization table ───────────────────────────────────────
+function buildTable(schedule) {
+  const tbody = document.getElementById('amortBody');
+  tbody.innerHTML = '';
+  schedule.forEach(r => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${r.mes}</td>
+      <td>${r.cuota.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})} €</td>
+      <td class="interest-cell">${r.intereses.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})} €</td>
+      <td class="principal-cell">${r.capital.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})} €</td>
+      <td class="balance-cell">${r.saldo.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})} €</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function toggleTable() {
+  const wrap = document.getElementById('amortWrap');
+  const btn  = document.getElementById('toggleBtn');
+  wrap.classList.toggle('open');
+  btn.classList.toggle('open');
+  btn.querySelector('span').textContent = wrap.classList.contains('open')
+    ? 'Ocultar tabla de amortización'
+    : 'Ver tabla de amortización completa';
+}
+
+// ─── Load Chart.js and auto-calculate ─────────────────────────
+const chartScript = document.createElement('script');
+chartScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js';
+chartScript.onload = () => calcular(); // auto-run with default values
+document.head.appendChild(chartScript);
+</script>
+</body>
+</html>
