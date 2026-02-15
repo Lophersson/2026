@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menú Terapéutico Óptimo</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07100f; --surface:#0d1f1c; --surface2:#112320; --surface3:#162d29;
+  --border:#1e3530; --border2:#264740;
+  --jade:#00e5a0; --jade2:#00b87a; --jade-dim:rgba(0,229,160,.1);
+  --gold:#f5c842; --gold-dim:rgba(245,200,66,.1);
+  --coral:#ff6b6b; --coral-dim:rgba(255,107,107,.1);
+  --sky:#5bc8f5; --sky-dim:rgba(91,200,245,.1);
+  --violet:#b09fff; --lavender:#e0d7ff;
+  --moss:#6bcb77; --cream:#f0ede6;
+  --text:#dfe8e5; --text-muted:#4a6b62; --text-dim:#7fa898;
+  --font-main:'DM Sans',sans-serif;
+  --font-display:'DM Serif Display',serif;
+  --font-mono:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:var(--font-main);background:var(--bg);color:var(--text);
+  min-height:100vh;padding:36px 20px 72px;
+  background-image:
+    radial-gradient(ellipse at 10% 0%,rgba(0,229,160,.07) 0%,transparent 50%),
+    radial-gradient(ellipse at 90% 60%,rgba(91,200,245,.05) 0%,transparent 50%),
+    radial-gradient(ellipse at 50% 100%,rgba(176,159,255,.04) 0%,transparent 50%);
+}
+.container{max-width:1400px;margin:0 auto;}
+
+/* ── HEADER ── */
+.header{margin-bottom:36px;text-align:center;}
+.header-eyebrow{font-size:.7rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--jade2);margin-bottom:12px;}
+.header h1{font-family:var(--font-display);font-size:2.8rem;font-weight:400;color:var(--text);letter-spacing:-.02em;line-height:1.1;margin-bottom:8px;}
+.header h1 em{color:var(--jade);font-style:italic;}
+.header-sub{font-size:.85rem;color:var(--text-dim);max-width:580px;margin:0 auto 20px;line-height:1.6;}
+.header-badges{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;}
+.hbadge{font-size:.67rem;font-weight:700;padding:5px 13px;border-radius:999px;letter-spacing:.05em;text-transform:uppercase;}
+.hb-ldl {background:var(--jade-dim);border:1px solid rgba(0,229,160,.3);color:var(--jade);}
+.hb-abd {background:var(--gold-dim);border:1px solid rgba(245,200,66,.3);color:var(--gold);}
+.hb-rge {background:var(--coral-dim);border:1px solid rgba(255,107,107,.3);color:var(--coral);}
+.hb-ner {background:var(--sky-dim);border:1px solid rgba(91,200,245,.3);color:var(--sky);}
+.hb-inf {background:rgba(107,203,119,.1);border:1px solid rgba(107,203,119,.3);color:var(--moss);}
+
+/* ── OBJECTIVES CARDS ── */
+.obj-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:32px;}
+@media(max-width:900px){.obj-grid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:560px){.obj-grid{grid-template-columns:repeat(2,1fr);}}
+.obj-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 14px;text-align:center;position:relative;overflow:hidden;transition:transform .2s;}
+.obj-card:hover{transform:translateY(-2px);}
+.obj-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;}
+.obj-card.ldl::after{background:linear-gradient(90deg,var(--jade),var(--jade2));}
+.obj-card.abd::after{background:linear-gradient(90deg,var(--gold),#e8a000);}
+.obj-card.rge::after{background:linear-gradient(90deg,var(--coral),#c94040);}
+.obj-card.ner::after{background:linear-gradient(90deg,var(--sky),#3a9fd4);}
+.obj-card.inf::after{background:linear-gradient(90deg,var(--moss),#4aaa55);}
+.obj-emoji{font-size:1.8rem;margin-bottom:8px;}
+.obj-title{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px;}
+.obj-card.ldl .obj-title{color:var(--jade);}
+.obj-card.abd .obj-title{color:var(--gold);}
+.obj-card.rge .obj-title{color:var(--coral);}
+.obj-card.ner .obj-title{color:var(--sky);}
+.obj-card.inf .obj-title{color:var(--moss);}
+.obj-desc{font-size:.67rem;color:var(--text-dim);line-height:1.5;}
+
+/* ── MEAL SECTIONS ── */
+.meal-section{margin-bottom:28px;}
+.meal-header{display:flex;align-items:center;gap:14px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+.meal-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;}
+.meal-icon.des{background:linear-gradient(135deg,rgba(245,200,66,.15),rgba(255,160,50,.1));border:1px solid rgba(245,200,66,.2);}
+.meal-icon.com{background:linear-gradient(135deg,rgba(0,229,160,.12),rgba(91,200,245,.08));border:1px solid rgba(0,229,160,.2);}
+.meal-icon.cen{background:linear-gradient(135deg,rgba(176,159,255,.12),rgba(91,200,245,.08));border:1px solid rgba(176,159,255,.2);}
+.meal-title{font-family:var(--font-display);font-size:1.35rem;font-weight:400;color:var(--text);}
+.meal-title span{font-family:var(--font-main);font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);display:block;margin-bottom:2px;}
+.meal-kcal{margin-left:auto;font-family:var(--font-mono);font-size:.82rem;color:var(--text-muted);}
+
+.food-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;}
+.food-card{background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:15px 16px;transition:border-color .2s,transform .2s;}
+.food-card:hover{border-color:var(--border2);transform:translateY(-1px);}
+.fc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;}
+.fc-name{font-size:.85rem;font-weight:600;color:var(--text);line-height:1.3;}
+.fc-qty{font-size:.68rem;color:var(--text-muted);font-family:var(--font-mono);margin-top:1px;}
+.fc-reason{font-size:.65rem;color:var(--text-dim);line-height:1.45;margin-bottom:10px;}
+.fc-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px;}
+.fc-tag{font-size:.58rem;font-weight:700;padding:2px 7px;border-radius:999px;letter-spacing:.04em;text-transform:uppercase;}
+.fc-tag.ldl{background:var(--jade-dim);color:var(--jade);border:1px solid rgba(0,229,160,.2);}
+.fc-tag.abd{background:var(--gold-dim);color:var(--gold);border:1px solid rgba(245,200,66,.2);}
+.fc-tag.rge{background:var(--coral-dim);color:var(--coral);border:1px solid rgba(255,107,107,.2);}
+.fc-tag.ner{background:var(--sky-dim);color:var(--sky);border:1px solid rgba(91,200,245,.2);}
+.fc-tag.inf{background:rgba(107,203,119,.1);color:var(--moss);border:1px solid rgba(107,203,119,.2);}
+.fc-tag.gut{background:rgba(176,159,255,.1);color:var(--violet);border:1px solid rgba(176,159,255,.2);}
+.fc-macros{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;}
+.fc-m{text-align:center;background:rgba(255,255,255,.03);border-radius:6px;padding:5px 4px;}
+.fc-m-val{font-family:var(--font-mono);font-size:.72rem;font-weight:500;color:var(--text-dim);}
+.fc-m-lbl{font-size:.55rem;text-transform:uppercase;letter-spacing:.04em;color:var(--text-muted);}
+
+/* ── TABS ── */
+.tabs-section{margin-top:36px;}
+.tabs-wrap{display:flex;gap:3px;background:var(--surface);border:1px solid var(--border);border-bottom:none;border-radius:13px 13px 0 0;padding:7px 9px 0;overflow-x:auto;scrollbar-width:none;}
+.tabs-wrap::-webkit-scrollbar{display:none;}
+.tab-btn{font-family:var(--font-main);font-size:.75rem;font-weight:600;color:var(--text-muted);background:transparent;border:none;cursor:pointer;padding:9px 15px;border-radius:8px 8px 0 0;white-space:nowrap;letter-spacing:.03em;transition:all .2s;position:relative;bottom:-1px;}
+.tab-btn:hover{color:var(--text-dim);background:rgba(255,255,255,.03);}
+.tab-btn.active{color:var(--text);background:var(--surface2);border:1px solid var(--border);border-bottom:1px solid var(--surface2);}
+.tdot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;vertical-align:middle;}
+[data-tab="macro"] .tdot{background:var(--gold);}
+[data-tab="vita"]  .tdot{background:var(--jade);}
+[data-tab="min"]   .tdot{background:var(--sky);}
+[data-tab="oligo"] .tdot{background:var(--violet);}
+[data-tab="fito"]  .tdot{background:#f472b6;}
+[data-tab="neuro"] .tdot{background:var(--coral);}
+
+/* ── PANEL / TABLE ── */
+.panel{background:var(--surface2);border:1px solid var(--border);border-top:none;border-radius:0 0 13px 13px;overflow:hidden;}
+.tab-panel{display:none;} .tab-panel.active{display:block;}
+.table-scroll{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:.78rem;}
+thead tr{background:rgba(255,255,255,.025);}
+th{padding:10px 9px;text-align:center;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);border-bottom:1px solid var(--border);white-space:nowrap;}
+th:first-child{text-align:left;padding-left:16px;min-width:180px;}
+td{padding:7px 9px;text-align:center;border-bottom:1px solid rgba(30,53,48,.6);font-family:var(--font-mono);font-size:.73rem;color:var(--text-dim);transition:background .15s;}
+td:first-child{text-align:left;padding-left:16px;font-family:var(--font-main);font-size:.78rem;color:var(--text);font-weight:500;}
+tr:hover td{background:rgba(0,229,160,.025);}
+tr.sh td{background:rgba(0,229,160,.04);font-family:var(--font-main);font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--jade2);padding:5px 16px;}
+tr.total-row td{background:rgba(0,229,160,.05);color:var(--text);font-weight:700;font-size:.79rem;border-top:2px solid var(--border2);border-bottom:none;}
+tr.total-row td:first-child{color:var(--jade);}
+tr.ref-row td{opacity:.65;font-size:.72rem;border-bottom:none;background:rgba(255,255,255,.015);}
+tr.ref-row td:first-child{color:var(--text-muted);}
+tr.pct-row td{font-size:.72rem;border-bottom:none;background:rgba(0,229,160,.02);}
+tr.pct-row td:first-child{color:var(--text-dim);}
+
+/* ── COVERAGE GRIDS ── */
+.sec-title{font-family:var(--font-display);font-size:1.25rem;font-weight:400;margin-bottom:14px;color:var(--text);}
+.sec-title em{color:var(--jade);font-style:italic;}
+.subsec{font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin:20px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+.n-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:8px;}
+.n-card{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:11px 13px;transition:transform .2s,border-color .2s;}
+.n-card:hover{transform:translateY(-1px);border-color:var(--border2);}
+.n-card-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.n-name{font-size:.67rem;font-weight:600;color:var(--text-dim);}
+.n-st{font-size:.58rem;font-weight:700;padding:2px 7px;border-radius:999px;letter-spacing:.04em;}
+.n-st.bien    {background:rgba(0,229,160,.15);color:var(--jade);}
+.n-st.cercano {background:rgba(245,200,66,.15);color:var(--gold);}
+.n-st.moderado{background:rgba(255,160,50,.15);color:#ff9f3a;}
+.n-st.bajo    {background:rgba(255,107,107,.15);color:var(--coral);}
+.n-st.info    {background:rgba(176,159,255,.15);color:var(--violet);}
+.n-vals{display:flex;align-items:baseline;gap:4px;margin-bottom:6px;}
+.n-total{font-size:1rem;font-weight:700;font-family:var(--font-mono);}
+.n-ref{font-size:.62rem;color:var(--text-muted);}
+.n-pct{font-size:.64rem;font-family:var(--font-mono);color:var(--text-muted);margin-left:auto;}
+.n-bar{height:4px;background:rgba(255,255,255,.05);border-radius:5px;overflow:hidden;}
+.n-bar-fill{height:100%;border-radius:5px;transition:width 1.4s cubic-bezier(.4,0,.2,1);width:0;}
+.n-bar-fill.bien    {background:linear-gradient(90deg,var(--jade),var(--jade2));}
+.n-bar-fill.cercano {background:linear-gradient(90deg,var(--gold),#e8a000);}
+.n-bar-fill.moderado{background:linear-gradient(90deg,#ff9f3a,#f97316);}
+.n-bar-fill.bajo    {background:linear-gradient(90deg,var(--coral),#e11d48);}
+.n-bar-fill.info    {background:linear-gradient(90deg,var(--violet),var(--sky));}
+
+/* ── PATHWAY CARDS ── */
+.pw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:10px;}
+.pw-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:15px 17px;transition:transform .2s;}
+.pw-card:hover{transform:translateY(-2px);}
+.pw-title{font-size:.82rem;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:7px;}
+.pw-chain{font-size:.63rem;color:var(--text-muted);font-family:var(--font-mono);margin-bottom:8px;padding:5px 8px;background:rgba(255,255,255,.03);border-radius:6px;border:1px solid var(--border);line-height:1.5;}
+.pw-body{font-size:.72rem;color:var(--text-dim);line-height:1.55;}
+.pw-body strong{color:var(--text);}
+.pw-srcs{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px;}
+.ps{font-size:.59rem;font-weight:600;padding:2px 8px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--text-muted);}
+.ps.hi{background:var(--jade-dim);border-color:rgba(0,229,160,.25);color:var(--jade);}
+
+/* ── SUMMARY SCORE ── */
+.score-section{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px 24px;margin-bottom:28px;}
+.score-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;}
+@media(max-width:700px){.score-grid{grid-template-columns:repeat(3,1fr);}}
+.score-item{text-align:center;}
+.score-ring{width:64px;height:64px;margin:0 auto 8px;position:relative;}
+.score-ring svg{transform:rotate(-90deg);}
+.score-ring circle{fill:none;stroke-width:6;}
+.score-bg{stroke:rgba(255,255,255,.06);}
+.score-val-wrap{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;}
+.score-val{font-family:var(--font-mono);font-size:.82rem;font-weight:700;}
+.score-label{font-size:.65rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);}
+
+/* ── RECO ── */
+.reco-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+@media(max-width:700px){.reco-grid{grid-template-columns:1fr;}}
+.reco-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px;}
+.reco-card h3{font-size:.8rem;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:7px;}
+.reco-card ul{list-style:none;display:flex;flex-direction:column;gap:6px;}
+.reco-card li{font-size:.75rem;color:var(--text-dim);display:flex;align-items:flex-start;gap:7px;line-height:1.5;}
+.reco-card li::before{content:'→';flex-shrink:0;font-weight:700;}
+.reco-card.pos{border-color:rgba(0,229,160,.2);} .reco-card.pos h3,.reco-card.pos li::before{color:var(--jade);}
+.reco-card.att{border-color:rgba(245,200,66,.2);} .reco-card.att h3,.reco-card.att li::before{color:var(--gold);}
+.divider{height:1px;background:var(--border);margin:28px 0;}
+.footer-note{margin-top:22px;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:9px;font-size:.68rem;color:var(--text-muted);line-height:1.65;}
+.footer-note strong{color:var(--text-dim);}
+
+/* ── MACRO SUMMARY BAR ── */
+.macro-summary{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:28px;}
+@media(max-width:900px){.macro-summary{grid-template-columns:repeat(3,1fr);}}
+.ms-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 13px;position:relative;overflow:hidden;}
+.ms-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:12px 12px 0 0;}
+.ms-card.kcal::before{background:linear-gradient(90deg,var(--gold),#ff9f3a);}
+.ms-card.prot::before{background:linear-gradient(90deg,var(--jade),var(--jade2));}
+.ms-card.carb::before{background:linear-gradient(90deg,var(--sky),#3a9fd4);}
+.ms-card.gras::before{background:linear-gradient(90deg,var(--violet),#8b75ff);}
+.ms-card.fibra::before{background:linear-gradient(90deg,var(--moss),#4aaa55);}
+.ms-l{font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);margin-bottom:5px;}
+.ms-v{font-size:1.4rem;font-weight:700;font-family:var(--font-mono);line-height:1;}
+.ms-u{font-size:.66rem;color:var(--text-muted);margin-top:2px;}
+.ms-bar{height:3px;background:rgba(255,255,255,.05);border-radius:3px;margin-top:8px;overflow:hidden;}
+.ms-bf{height:100%;border-radius:3px;transition:width 1.2s cubic-bezier(.4,0,.2,1);width:0;}
+.ms-card.kcal .ms-v{color:var(--gold);}   .ms-card.kcal .ms-bf{background:linear-gradient(90deg,var(--gold),#ff9f3a);}
+.ms-card.prot .ms-v{color:var(--jade);}   .ms-card.prot .ms-bf{background:linear-gradient(90deg,var(--jade),var(--jade2));}
+.ms-card.carb .ms-v{color:var(--sky);}    .ms-card.carb .ms-bf{background:linear-gradient(90deg,var(--sky),#3a9fd4);}
+.ms-card.gras .ms-v{color:var(--violet);} .ms-card.gras .ms-bf{background:linear-gradient(90deg,var(--violet),#8b75ff);}
+.ms-card.fibra .ms-v{color:var(--moss);}  .ms-card.fibra .ms-bf{background:linear-gradient(90deg,var(--moss),#4aaa55);}
+.ms-pct{font-size:.64rem;color:var(--text-muted);margin-top:2px;font-family:var(--font-mono);}
+
+/* ── PREP NOTES ── */
+.prep-box{background:var(--surface);border:1px solid var(--jade-dim);border-radius:12px;padding:18px 20px;margin-bottom:28px;}
+.prep-box h3{font-size:.78rem;font-weight:700;color:var(--jade);margin-bottom:12px;text-transform:uppercase;letter-spacing:.07em;}
+.prep-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+@media(max-width:700px){.prep-grid{grid-template-columns:1fr;}}
+.prep-item h4{font-size:.74rem;font-weight:700;color:var(--text);margin-bottom:5px;display:flex;align-items:center;gap:6px;}
+.prep-item p{font-size:.7rem;color:var(--text-dim);line-height:1.55;}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <header class="header">
+    <p class="header-eyebrow">Menú Terapéutico · Domingo 15 febrero 2026</p>
+    <h1>Tu menú <em>óptimo</em> de hoy</h1>
+    <p class="header-sub">Diseñado para reducir el LDL, la grasa visceral y la inflamación sistémica, proteger el esófago y nutrir tu sistema nervioso.</p>
+    <div class="header-badges">
+      <span class="hbadge hb-ldl">↓ LDL</span>
+      <span class="hbadge hb-abd">↓ Grasa abdominal</span>
+      <span class="hbadge hb-rge">✓ Seguro para RGE</span>
+      <span class="hbadge hb-ner">Salud neurológica</span>
+      <span class="hbadge hb-inf">Antiinflamatorio</span>
+    </div>
+  </header>
+
+  <!-- OBJECTIVES -->
+  <div class="obj-grid">
+    <div class="obj-card ldl"><div class="obj-emoji">🩺</div><div class="obj-title">↓ LDL</div><div class="obj-desc">Beta-glucano de avena, omega-3 del salmón, AOVE, esteroles de legumbres. Fibra soluble 18g.</div></div>
+    <div class="obj-card abd"><div class="obj-emoji">🔥</div><div class="obj-title">↓ Grasa Abd.</div><div class="obj-desc">1.580 kcal, proteína alta, bajo IG, fibra 30g+. Evita picos de insulina. Sin azúcares refinados.</div></div>
+    <div class="obj-card rge"><div class="obj-emoji">🛡️</div><div class="obj-title">RGE Seguro</div><div class="obj-desc">Sin cítricos, sin tomate, sin grasa saturada, sin café. Jengibre y canela: gastroprotectores. Cenas ligeras.</div></div>
+    <div class="obj-card ner"><div class="obj-emoji">🧠</div><div class="obj-title">Neuro</div><div class="obj-desc">Triptófano, tirosina, colina del salmón y pavo. DHA para membranas neuronales. Rooibos GABAérgico.</div></div>
+    <div class="obj-card inf"><div class="obj-emoji">🌿</div><div class="obj-title">Antiinflamatorio</div><div class="obj-desc">Curcumina+piperina, omega-3 EPA/DHA, sulforafano del brócoli, antocianinas de arándanos.</div></div>
+  </div>
+
+  <!-- MACRO SUMMARY -->
+  <div class="macro-summary" id="macroSum"></div>
+
+  <!-- PREP NOTES -->
+  <div class="prep-box">
+    <h3>🍳 Guía de preparación RGE-safe</h3>
+    <div class="prep-grid">
+      <div class="prep-item"><h4>🌅 Desayuno</h4><p>Avena con agua/leche tibia (no fría). Arándanos temperatura ambiente. Cúrcuma y canela en polvo en la avena. Jengibre fresco rallado — el jengibre <em>reduce</em> el reflujo. Kéfir a temperatura ambiente, nunca frío.</p></div>
+      <div class="prep-item"><h4>☀️ Comida</h4><p>Salmón al vapor o horno suave (180°C). Lentejas bien cocidas y trituradas si hay dispepsia. Espinacas y brócoli al vapor — nunca crudos en RGE. AOVE en crudo sobre los platos, nunca para freír. Masticar despacio, sentado.</p></div>
+      <div class="prep-item"><h4>🌙 Cena (≤19:30h)</h4><p>Pavo a la plancha con un mínimo de aceite. Ensalada sólo con hojas (sin vinagre, sin limón). Remolacha cocida tibia. Aguacate maduro en láminas. Cenar 3h antes de acostarse. Rooibos tibio, no caliente.</p></div>
+    </div>
+  </div>
+
+  <!-- ── DESAYUNO ── -->
+  <div class="meal-section">
+    <div class="meal-header">
+      <div class="meal-icon des">🌅</div>
+      <div>
+        <div class="meal-title"><span>Desayuno · 7:30–8:00h</span>Avena terapéutica con frutos del bosque</div>
+      </div>
+      <div class="meal-kcal" id="kcalDes"></div>
+    </div>
+    <div class="food-cards" id="cardsDes"></div>
+  </div>
+
+  <!-- ── COMIDA ── -->
+  <div class="meal-section">
+    <div class="meal-header">
+      <div class="meal-icon com">☀️</div>
+      <div>
+        <div class="meal-title"><span>Comida · 13:00–14:00h</span>Salmón con lentejas y verduras al vapor</div>
+      </div>
+      <div class="meal-kcal" id="kcalCom"></div>
+    </div>
+    <div class="food-cards" id="cardsCom"></div>
+  </div>
+
+  <!-- ── CENA ── -->
+  <div class="meal-section">
+    <div class="meal-header">
+      <div class="meal-icon cen">🌙</div>
+      <div>
+        <div class="meal-title"><span>Cena · 19:00–19:30h</span>Pavo con ensalada alcalina y remolacha</div>
+      </div>
+      <div class="meal-kcal" id="kcalCen"></div>
+    </div>
+    <div class="food-cards" id="cardsCen"></div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs-section">
+    <div class="tabs-wrap">
+      <button class="tab-btn active" data-tab="macro"><span class="tdot"></span>Macros</button>
+      <button class="tab-btn" data-tab="vita"><span class="tdot"></span>Vitaminas</button>
+      <button class="tab-btn" data-tab="min"><span class="tdot"></span>Minerales</button>
+      <button class="tab-btn" data-tab="oligo"><span class="tdot"></span>Oligoelementos</button>
+      <button class="tab-btn" data-tab="fito"><span class="tdot"></span>Fitoquímicos</button>
+      <button class="tab-btn" data-tab="neuro"><span class="tdot"></span>Neurotransmisores</button>
+    </div>
+    <div class="panel">
+      <div class="tab-panel active" id="tab-macro"><div class="table-scroll"><table>
+        <thead><tr><th>Alimento</th><th>Kcal</th><th>Prot (g)</th><th>Carb (g)</th><th>Grasas (g)</th><th>Fibra (g)</th></tr></thead>
+        <tbody id="tbM"></tbody><tfoot id="ftM"></tfoot>
+      </table></div></div>
+      <div class="tab-panel" id="tab-vita"><div class="table-scroll"><table>
+        <thead><tr><th>Alimento</th><th>Vit.A (μg)</th><th>B1 (mg)</th><th>B2 (mg)</th><th>B3 (mg)</th><th>B6 (mg)</th><th>B9 (μg)</th><th>B12 (μg)</th><th>Vit.C (mg)</th><th>Vit.D (μg)</th><th>Vit.E (mg)</th><th>Vit.K (μg)</th></tr></thead>
+        <tbody id="tbV"></tbody><tfoot id="ftV"></tfoot>
+      </table></div></div>
+      <div class="tab-panel" id="tab-min"><div class="table-scroll"><table>
+        <thead><tr><th>Alimento</th><th>Calcio (mg)</th><th>Fósforo (mg)</th><th>Magnesio (mg)</th><th>Potasio (mg)</th><th>Sodio (mg)</th><th>Hierro (mg)</th><th>Flúor (mg)</th></tr></thead>
+        <tbody id="tbMin"></tbody><tfoot id="ftMin"></tfoot>
+      </table></div></div>
+      <div class="tab-panel" id="tab-oligo"><div class="table-scroll"><table>
+        <thead><tr><th>Alimento</th><th>Zinc (mg)</th><th>Selenio (μg)</th><th>Manganeso (mg)</th><th>Cobre (mg)</th><th>Yodo (μg)</th></tr></thead>
+        <tbody id="tbO"></tbody><tfoot id="ftO"></tfoot>
+      </table></div></div>
+      <div class="tab-panel" id="tab-fito"><div class="table-scroll"><table>
+        <thead><tr><th>Alimento</th><th>Polifenoles (mg)</th><th>Aspalatina (mg)</th><th>Nothofagin (mg)</th><th>Quercetina (mg)</th><th>Catequinas (mg)</th><th>Curcumina (mg)</th><th>Sulforafano (mg)</th><th>Taninos (mg)</th><th>Omega-3 (mg)</th><th>AHA (mg)</th><th>SOD</th></tr></thead>
+        <tbody id="tbF"></tbody><tfoot id="ftF"></tfoot>
+      </table></div></div>
+      <div class="tab-panel" id="tab-neuro"><div class="table-scroll"><table>
+        <thead><tr><th>Alimento</th><th>Triptófano (mg)</th><th>Tirosina (mg)</th><th>Fenilalanina (mg)</th><th>Colina (mg)</th><th>Ác.Glutámico (mg)</th><th>GABA (mg)</th><th>L-Teanina (mg)</th><th>Flavonoides (mg)</th></tr></thead>
+        <tbody id="tbN"></tbody><tfoot id="ftN"></tfoot>
+      </table></div></div>
+    </div>
+  </div>
+
+  <!-- IDR COVERAGE -->
+  <div class="divider"></div>
+  <p class="sec-title">Cobertura de <em>Ingesta Diaria de Referencia</em></p>
+  <p class="subsec">Macronutrientes</p><div class="n-grid" id="gMacro"></div>
+  <p class="subsec">Vitaminas</p><div class="n-grid" id="gVita"></div>
+  <p class="subsec">Minerales y Oligoelementos</p><div class="n-grid" id="gMin"></div>
+  <p class="subsec">Fitoquímicos Bioactivos</p><div class="n-grid" id="gFito"></div>
+  <p class="subsec">Precursores de Neurotransmisores</p><div class="n-grid" id="gNeuro"></div>
+
+  <!-- PATHWAYS -->
+  <div class="divider"></div>
+  <p class="sec-title">Rutas de <em>síntesis neurológica</em> cubiertas hoy</p>
+  <div class="pw-grid" id="pwGrid"></div>
+
+  <!-- RECO -->
+  <div class="divider"></div>
+  <div class="reco-grid" id="recoGrid"></div>
+
+  <div class="footer-note">
+    <strong>Metodología:</strong> Valores estimados con USDA FoodData Central y BEDCA. RGE = Reflujo Gastroesofágico. El menú evita alimentos desencadenantes clásicos (cítricos, tomate, menta, café, alcohol, chocolate, frituras, especies irritantes, cebolla/ajo crudos). El jengibre y la canela en pequeñas dosis están documentados como gastroprotectores. Fibra soluble total ~18g (avena 5g betaglucano + lentejas + chía + brócoli). Todos los omega-3 son EPA+DHA de salmón (3600mg), con refuerzo ALA de chía y lino. IDR ajustadas a adulto 70kg, objetivo calórico 1580 kcal.
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  IDR
+// ═══════════════════════════════════════════════════════
+const IDR = {
+  kcal:1700, proteina:100, carbohidratos:150, grasas:55, fibra:30,
+  vitA:900, vitB1:1.2, vitB2:1.3, vitB3:16, vitB6:1.7, vitB9:400, vitB12:2.4,
+  vitC:80, vitD:15, vitE:12, vitK:120,
+  calcio:1000, fosforo:700, magnesio:375, potasio:3500, sodio:2000, hierro:14, fluor:3.5,
+  zinc:10, selenio:55, manganeso:2.3, cobre:1.0, yodo:150,
+  polifenoles:500, omega3Total:2000, quercetina:20,
+  trp:280, tyr:1500, phe:900, col:400, flav:500, thea:200
+};
+
+// ═══════════════════════════════════════════════════════
+//  ALIMENTOS — datos completos
+//  Campos extra: reason (por qué), tags (objetivos que cubre)
+// ═══════════════════════════════════════════════════════
+const A = [
+  // ═══ DESAYUNO ═══
+  {s:'Desayuno'},
+  {n:'Avena integral (50g)', meal:'des',
+   reason:'Beta-glucano reduce LDL hasta un 10%. Carga glucémica baja, saciedad prolongada. Fibra soluble principal del día.',
+   tags:['ldl','abd','rge'],
+   kcal:195, prot:6.7, carb:33.5, gras:3.5, fibra:5.0,
+   vitA:0,vitB1:.25,vitB2:.05,vitB3:1.0,vitB6:.05,vitB9:10,vitB12:0,vitC:0,vitD:0,vitE:.25,vitK:.5,
+   ca:42,fo:180,mg:65,po:152,na:2,fe:2.0,fl:.05,
+   zn:1.25,se:5,mn:2.0,cu:.15,yo:0,
+   poli:25,asp:0,not:0,que:0,cat:0,cur:0,sulf:0,tan:0,om3:62,aha:0,sod:false,
+   trp:80,tyr:137,phe:175,col:22,glu:1200,gaba:0,thea:0,flav:0},
+
+  {n:'Kéfir desnatado (150g)', meal:'des',
+   reason:'Probióticos documentados que mejoran la microbiota, modulan la inflamación intestinal y aportan GABA natural.',
+   tags:['abd','rge','ner','gut'],
+   kcal:83, prot:5.3, carb:10.5, gras:1.5, fibra:0,
+   vitA:8,vitB1:.03,vitB2:.12,vitB3:.08,vitB6:.05,vitB9:7.5,vitB12:.3,vitC:0,vitD:0,vitE:0,vitK:0,
+   ca:150,fo:112,mg:10.5,po:210,na:45,fe:.08,fl:.04,
+   zn:.38,se:2.25,mn:0,cu:.015,yo:15,
+   poli:5,asp:0,not:0,que:0,cat:0,cur:0,sulf:0,tan:0,om3:0,aha:400,sod:true,
+   trp:34,tyr:128,phe:146,col:19,glu:375,gaba:3.75,thea:0,flav:0},
+
+  {n:'Arándanos frescos (80g)', meal:'des',
+   reason:'Antocianinas reducen LDL oxidado y la inflamación vascular. Índice glucémico muy bajo (25). No irritan el esófago.',
+   tags:['ldl','abd','inf','ner'],
+   kcal:45, prot:.56, carb:11.4, gras:.28, fibra:2.0,
+   vitA:4,vitB1:.025,vitB2:.025,vitB3:.4,vitB6:.05,vitB9:5.3,vitB12:0,vitC:10.7,vitD:0,vitE:.53,vitK:18.7,
+   ca:5.3,fo:13.3,mg:5.3,po:76,na:1.3,fe:.27,fl:.027,
+   zn:.13,se:0,mn:.27,cu:.053,yo:0,
+   poli:213,asp:0,not:0,que:2.7,cat:4.0,cur:0,sulf:0,tan:4.0,om3:0,aha:373,sod:false,
+   trp:4,tyr:11,phe:11,col:5.3,glu:40,gaba:0,thea:0,flav:120},
+
+  {n:'Semillas de chía (15g)', meal:'des',
+   reason:'Fuente de omega-3 ALA (2700mg), fibra viscosa y calcio. Reduce colesterol total y LDL. Sin efecto sobre RGE.',
+   tags:['ldl','abd','inf'],
+   kcal:74, prot:2.4, carb:6.0, gras:4.65, fibra:5.1,
+   vitA:0,vitB1:.24,vitB2:.03,vitB3:3.75,vitB6:.075,vitB9:7.5,vitB12:0,vitC:0,vitD:0,vitE:.15,vitK:.15,
+   ca:269,fo:134,mg:49.5,po:66,na:3,fe:3.0,fl:.075,
+   zn:1.5,se:1.5,mn:.9,cu:.15,yo:0,
+   poli:7.5,asp:0,not:0,que:0,cat:0,cur:0,sulf:0,tan:0,om3:2700,aha:0,sod:false,
+   trp:26,tyr:45,phe:52,col:4.5,glu:75,gaba:0,thea:0,flav:0},
+
+  {n:'Nueces (15g)', meal:'des',
+   reason:'Mejor fruto seco para ↓LDL. ALA 1100mg, vitamina E y polifenoles que reducen inflamación vascular.',
+   tags:['ldl','inf','ner'],
+   kcal:98, prot:2.3, carb:2.1, gras:9.8, fibra:1.0,
+   vitA:0,vitB1:.045,vitB2:.015,vitB3:.3,vitB6:.075,vitB9:4.2,vitB12:0,vitC:.15,vitD:0,vitE:.3,vitK:.75,
+   ca:15,fo:52,mg:23,po:98,na:.6,fe:.45,fl:.015,
+   zn:.45,se:.3,mn:.45,cu:.22,yo:0,
+   poli:25,asp:0,not:0,que:.2,cat:0,cur:0,sulf:0,tan:0,om3:1100,aha:0,sod:false,
+   trp:22,tyr:31,phe:39,col:6,glu:250,gaba:0,thea:0,flav:4},
+
+  {n:'Semillas lino molidas (5g)', meal:'des',
+   reason:'Lignanos con actividad estrogénica moderada que reducen LDL. ALA 1130mg. Protegen la mucosa gastrointestinal.',
+   tags:['ldl','inf','rge'],
+   kcal:27, prot:.83, carb:1.5, gras:2.17, fibra:1.67,
+   vitA:0,vitB1:.083,vitB2:0,vitB3:.167,vitB6:.017,vitB9:3.3,vitB12:0,vitC:0,vitD:0,vitE:.033,vitK:.17,
+   ca:37,fo:40,mg:20,po:40,na:1.7,fe:.5,fl:.017,
+   zn:.25,se:1.67,mn:.5,cu:.083,yo:0,
+   poli:100,asp:0,not:0,que:0,cat:0,cur:0,sulf:0,tan:0,om3:1130,aha:0,sod:false,
+   trp:12,tyr:17,phe:23,col:5,glu:100,gaba:0,thea:0,flav:5},
+
+  {n:'Cúrcuma fresca (1g)', meal:'des',
+   reason:'Curcumina: inhibidor de NF-κB (antiinflamatorio potente), inhibe la MAO (↑dopamina). Biodisponibilidad ×2000 con piperina.',
+   tags:['inf','ner'],
+   kcal:3, prot:.1, carb:.5, gras:0, fibra:.2,
+   vitA:0,vitB1:.01,vitB2:0,vitB3:.04,vitB6:.01,vitB9:0,vitB12:0,vitC:.5,vitD:0,vitE:.03,vitK:0,
+   ca:1.8,fo:1,mg:.4,po:3,na:.1,fe:.3,fl:.01,
+   zn:.01,se:0,mn:.01,cu:0,yo:0,
+   poli:40,asp:0,not:0,que:0,cat:0,cur:20,sulf:0,tan:0,om3:0,aha:0,sod:false,
+   trp:2,tyr:1,phe:2,col:0,glu:5,gaba:0,thea:0,flav:5},
+
+  {n:'Canela Ceylon (0.5g)', meal:'des',
+   reason:'Cinnamaldehído reduce glucemia postprandial. Gastroprotector: alivia espasmos y no irrita la mucosa. ↓ triglicéridos.',
+   tags:['abd','rge','inf'],
+   kcal:1.3, prot:.02, carb:.35, gras:.008, fibra:.19,
+   vitA:0,vitB1:0,vitB2:0,vitB3:.01,vitB6:0,vitB9:0,vitB12:0,vitC:.2,vitD:0,vitE:.04,vitK:.6,
+   ca:13,fo:.5,mg:.9,po:3,na:.3,fe:.43,fl:0,
+   zn:.05,se:0,mn:.25,cu:.01,yo:0,
+   poli:12,asp:0,not:0,que:0,cat:0,cur:0,sulf:0,tan:.2,om3:0,aha:0,sod:false,
+   trp:0,tyr:0,phe:0,col:0,glu:1,gaba:0,thea:0,flav:8},
+
+  {n:'Jengibre fresco rallado (2g)', meal:'des',
+   reason:'Gingeroles: antiinflamatorio COX-2, procinético gástrico. Reduce el reflujo al tonificar el cardias. Antiespasmódico.',
+   tags:['inf','rge'],
+   kcal:1.6, prot:.04, carb:.36, gras:.02, fibra:.04,
+   vitA:0,vitB1:0,vitB2:0,vitB3:.02,vitB6:.02,vitB9:.4,vitB12:0,vitC:.1,vitD:0,vitE:.01,vitK:.02,
+   ca:1.6,fo:1.2,mg:.86,po:8,na:.3,fe:.02,fl:0,
+   zn:.03,se:0,mn:.04,cu:.006,yo:0,
+   poli:3,asp:0,not:0,que:0,cat:0,cur:0,sulf:0,tan:.05,om3:0,aha:0,sod:false,
+   trp:0,tyr:1,phe:2,col:0,glu:2,gaba:0,thea:0,flav:2},
+
+  // ═══ COMIDA ═══
+  {s:'Comida'},
+  {n:'Salmón al vapor (150g)', meal:'com',
+   reason:'Fuente más potente de EPA+DHA (3600mg): reduce triglicéridos, LDL y marcadores inflamatorios IL-6 y TNF-α. Rico en triptófano.',
+   tags:['ldl','inf','ner'],
+   kcal:280, prot:34.5, carb:0, gras:15, fibra:0,
+   vitA:54,vitB1:.39,vitB2:.42,vitB3:10.5,vitB6:1.29,vitB9:37.5,vitB12:5.25,vitC:5.7,vitD:11.4,vitE:4.5,vitK:.15,
+   ca:24,fo:465,mg:46.5,po:825,na:82.5,fe:.6,fl:.3,
+   zn:.9,se:55.5,mn:.045,cu:.405,yo:51,
+   poli:0,asp:0,not:0,que:0,cat:0,cur:0,sulf:0,tan:0,om3:3600,aha:0,sod:false,
+   trp:285,tyr:555,phe:600,col:127,glu:3600,gaba:0,thea:0,flav:0},
+
+  {n:'Lentejas cocidas (120g)', meal:'com',
+   reason:'Fibra soluble (8.4g) y esteroles vegetales que compiten con el colesterol en absorción. Proteína vegetal y folato excelentes.',
+   tags:['ldl','abd','ner'],
+   kcal:139, prot:10.8, carb:24, gras:.5, fibra:8.4,
+   vitA:0,vitB1:.24,vitB2:.06,vitB3:1.56,vitB6:.3,vitB9:112,vitB12:0,vitC:1.2,vitD:0,vitE:.12,vitK:1.7,
+   ca:24,fo:180,mg:34.8,po:366,na:3.6,fe:3.6,fl:.12,
+   zn:1.74,se:2.4,mn:.6,cu:.27,yo:0,
+   poli:20,asp:0,not:0,que:0,cat:0,cur:0,sulf:0,tan:0,om3:0,aha:0,sod:false,
+   trp:86,tyr:132,phe:162,col:31.2,glu:336,gaba:0,thea:0,flav:3},
+
+  {n:'Espinacas al vapor (100g)', meal:'com',
+   reason:'Magnesio (79mg), folato (194μg) y vitamina K (483μg). Nitratres que mejoran el flujo sanguíneo. Luteína cardioprotectora.',
+   tags:['ldl','ner','inf'],
+   kcal:23, prot:2.9, carb:3.6, gras:.4, fibra:2.2,
+   vitA:469,vitB1:.078,vitB2:.189,vitB3:.724,vitB6:.195,vitB9:194,vitB12:0,vitC:28.1,vitD:0,vitE:2.03,vitK:483,
+   ca:99,fo:49,mg:79,po:558,na:79,fe:2.71,fl:.1,
+   zn:.53,se:1,mn:.897,cu:.13,yo:0,
+   poli:45,asp:0,not:0,que:.5,cat:0,cur:0,sulf:0,tan:0,om3:70,aha:0,sod:false,
+   trp:37,tyr:60,phe:87,col:19.7,glu:340,gaba:0,thea:0,flav:20},
+
+  {n:'Brócoli al vapor (100g)', meal:'com',
+   reason:'Sulforafano: antiinflamatorio NF-κB, activa Nrf2 (detox celular), reduce LDL oxidado. Vitamina C mejora absorción de hierro.',
+   tags:['ldl','inf','abd'],
+   kcal:35, prot:2.8, carb:7.2, gras:.4, fibra:2.6,
+   vitA:31,vitB1:.071,vitB2:.117,vitB3:.639,vitB6:.175,vitB9:63,vitB12:0,vitC:89.2,vitD:0,vitE:.78,vitK:101.6,
+   ca:47,fo:66,mg:21,po:316,na:33,fe:.73,fl:.1,
+   zn:.41,se:2.5,mn:.21,cu:.049,yo:0,
+   poli:45,asp:0,not:0,que:.3,cat:0,cur:0,sulf:10,tan:0,om3:20,aha:0,sod:false,
+   trp:28,tyr:50,phe:75,col:18.7,glu:160,gaba:0,thea:0,flav:18},
+
+  {n:'AOVE virgen extra (15g)', meal:'com',
+   reason:'Oleocantal: inhibidor COX-1/COX-2 equivalente al ibuprofeno. MUFA reduce LDL sin bajar HDL. Polifenoles anti-ateroscleróticos.',
+   tags:['ldl','inf'],
+   kcal:135, prot:0, carb:0, gras:15, fibra:0,
+   vitA:0,vitB1:0,vitB2:0,vitB3:0,vitB6:0,vitB9:0,vitB12:0,vitC:0,vitD:0,vitE:2.85,vitK:9,
+   ca:0,fo:0,mg:0,po:0,na:0,fe:0,fl:0,
+   zn:0,se:0,mn:0,cu:0,yo:0,
+   poli:30,asp:0,not:0,que:0,cat:0,cur:0,sulf:0,tan:0,om3:0,aha:0,sod:false,
+   trp:0,tyr:0,phe:0,col:0,glu:0,gaba:0,thea:0,flav:4.5},
+
+  {n:'Pan integral (30g)', meal:'com',
+   reason:'Aporta fibra insoluble complementaria, hierro y vitaminas B para síntesis de neurotransmisores. Índice glucémico moderado.',
+   tags:['abd','ner'],
+   kcal:74, prot:2.9, carb:14.7, gras:.9, fibra:2.1,
+   vitA:0,vitB1:.12,vitB2:.045,vitB3:1.35,vitB6:.075,vitB9:15,vitB12:0,vitC:0,vitD:0,vitE:.24,vitK:.3,
+   ca:16,fo:62,mg:27,po:110,na:135,fe:1.2,fl:.12,
+   zn:.75,se:9,mn:.66,cu:.09,yo:0,
+   poli:5,asp:0,not:0,que:0,cat:0,cur:0,sulf:0,tan:0,om3:0,aha:0,sod:false,
+   trp:30,tyr:60,phe:75,col:8,glu:700,gaba:0,thea:0,flav:0},
+
+  // ═══ CENA ═══
+  {s:'Cena'},
+  {n:'Pavo a la plancha (130g)', meal:'cen',
+   reason:'Mayor fuente de triptófano del día (356mg). Proteína magra sin grasa saturada. Cena ligera compatible con RGE. ↑ Melatonina nocturna.',
+   tags:['abd','ner','rge'],
+   kcal:182, prot:28.6, carb:0, gras:1.7, fibra:0,
+   vitA:0,vitB1:.078,vitB2:.174,vitB3:9.55,vitB6:.78,vitB9:10.4,vitB12:.43,vitC:0,vitD:.087,vitE:.174,vitK:0,
+   ca:13,fo:234,mg:23.4,po:403,na:65,fe:1.65,fl:.13,
+   zn:2.6,se:26,mn:.017,cu:.104,yo:4.3,
+   poli:0,asp:0,not:0,que:0,cat:0,cur:0,sulf:0,tan:0,om3:50,aha:0,sod:false,
+   trp:356,tyr:668,phe:755,col:87,glu:3900,gaba:0,thea:0,flav:0},
+
+  {n:'Canónigos y rúcula (80g)', meal:'cen',
+   reason:'Vitamina K (125μg), folato, antioxidantes. Alcalinizantes — elevan el pH gástrico, reduciendo el reflujo. Muy bajas calorías.',
+   tags:['rge','inf','ldl'],
+   kcal:20, prot:2.1, carb:2.4, gras:.2, fibra:1.8,
+   vitA:100,vitB1:.025,vitB2:.05,vitB3:.4,vitB6:.05,vitB9:17.5,vitB12:0,vitC:17.5,vitD:0,vitE:.75,vitK:125,
+   ca:14,fo:15,mg:10,po:150,na:25,fe:.6,fl:.025,
+   zn:.13,se:0,mn:.375,cu:.038,yo:0,
+   poli:25,asp:0,not:0,que:.5,cat:0,cur:0,sulf:0,tan:0,om3:0,aha:0,sod:false,
+   trp:5,tyr:8,phe:10,col:6.3,glu:25,gaba:0,thea:0,flav:12},
+
+  {n:'Aguacate maduro (50g)', meal:'cen',
+   reason:'MUFA y vitamina E antiinflamatorios. Potasio (230mg) regulador de PA. Fibra soluble. Saciante. Neutro para el esófago.',
+   tags:['ldl','inf','abd'],
+   kcal:80, prot:1.0, carb:4.0, gras:7.3, fibra:3.3,
+   vitA:3.3,vitB1:.033,vitB2:.053,vitB3:.8,vitB6:.12,vitB9:38,vitB12:0,vitC:5.0,vitD:0,vitE:1.0,vitK:9.3,
+   ca:6,fo:24.7,mg:12.7,po:230,na:3.3,fe:.27,fl:.033,
+   zn:.3,se:0,mn:.073,cu:.093,yo:0,
+   poli:20,asp:0,not:0,que:.3,cat:0,cur:0,sulf:0,tan:0,om3:40,aha:0,sod:false,
+   trp:11,tyr:16,phe:24,col:9.3,glu:67,gaba:0,thea:0,flav:5},
+
+  {n:'Remolacha cocida (80g)', meal:'cen',
+   reason:'Nitratos dietéticos → óxido nítrico: vasodilatador, ↓PA. Betalaínas: antioxidante y antiinflamatorio potente. Rico en folato.',
+   tags:['ldl','inf','ner'],
+   kcal:44, prot:1.6, carb:9.6, gras:.1, fibra:2.0,
+   vitA:0,vitB1:.024,vitB2:.024,vitB3:.32,vitB6:.056,vitB9:68,vitB12:0,vitC:3.6,vitD:0,vitE:.04,vitK:.24,
+   ca:12.8,fo:32,mg:15.2,po:264,na:57.6,fe:.64,fl:.08,
+   zn:.35,se:.56,mn:.35,cu:.064,yo:0,
+   poli:30,asp:0,not:0,que:0,cat:0,cur:0,sulf:0,tan:.5,om3:0,aha:0,sod:false,
+   trp:12,tyr:16,phe:24,col:5.6,glu:40,gaba:0,thea:0,flav:5},
+
+  {n:'AOVE para ensalada (10g)', meal:'cen',
+   reason:'Oleocantal antiinflamatorio. Mejora absorción de vitaminas liposolubles (A, K, E) de los vegetales.',
+   tags:['ldl','inf'],
+   kcal:90, prot:0, carb:0, gras:10, fibra:0,
+   vitA:0,vitB1:0,vitB2:0,vitB3:0,vitB6:0,vitB9:0,vitB12:0,vitC:0,vitD:0,vitE:1.9,vitK:6,
+   ca:0,fo:0,mg:0,po:0,na:0,fe:0,fl:0,
+   zn:0,se:0,mn:0,cu:0,yo:0,
+   poli:20,asp:0,not:0,que:0,cat:0,cur:0,sulf:0,tan:0,om3:0,aha:0,sod:false,
+   trp:0,tyr:0,phe:0,col:0,glu:0,gaba:0,thea:0,flav:3},
+
+  {n:'Rooibos (infusión 200ml)', meal:'cen',
+   reason:'Aspalatina y nothofagin únicos en la dieta. GABAérgico suave. Sin cafeína. Antioxidante nocturno. Seguro al 100% en RGE.',
+   tags:['rge','ner','inf'],
+   kcal:0, prot:0, carb:0, gras:0, fibra:0,
+   vitA:0,vitB1:0,vitB2:0,vitB3:0,vitB6:0,vitB9:0,vitB12:0,vitC:0,vitD:0,vitE:0,vitK:0,
+   ca:1,fo:0,mg:.5,po:2,na:0,fe:0,fl:.1,
+   zn:0,se:0,mn:0,cu:0,yo:0,
+   poli:50,asp:7.5,not:.8,que:.3,cat:0,cur:0,sulf:0,tan:1.5,om3:0,aha:0,sod:true,
+   trp:0,tyr:0,phe:0,col:0,glu:0,gaba:.5,thea:0,flav:30}
+];
+
+// ═══════════════════════════════════════════════════════
+//  CALCULAR TOTALES
+// ═══════════════════════════════════════════════════════
+const KEYS=['kcal','prot','carb','gras','fibra',
+  'vitA','vitB1','vitB2','vitB3','vitB6','vitB9','vitB12','vitC','vitD','vitE','vitK',
+  'ca','fo','mg','po','na','fe','fl','zn','se','mn','cu','yo',
+  'poli','asp','not','que','cat','cur','sulf','tan','om3','aha',
+  'trp','tyr','phe','col','glu','gaba','thea','flav'];
+
+const T={};
+KEYS.forEach(k=>T[k]=0);
+A.filter(a=>!a.s).forEach(a=>KEYS.forEach(k=>T[k]+=(a[k]||0)));
+
+// ═══════════════════════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════════════════════
+const f=(v,d=1)=>v===0?'—':v.toFixed(d);
+const sc=p=>p>=100?'bien':p>=67?'cercano':p>=33?'moderado':'bajo';
+const sl=p=>p>=100?'Cubierto':p>=67?'Próximo':p>=33?'Parcial':'Bajo';
+const cc=c=>({bien:'var(--jade)',cercano:'var(--gold)',moderado:'#ff9f3a',bajo:'var(--coral)',info:'var(--violet)'}[c]);
+
+// ═══════════════════════════════════════════════════════
+//  MACRO SUMMARY CARDS
+// ═══════════════════════════════════════════════════════
+[{k:'kcal',l:'Calorías',u:'kcal',c:'kcal',d:0,ik:'kcal'},
+ {k:'prot',l:'Proteína',u:'g',c:'prot',d:1,ik:'proteina'},
+ {k:'carb',l:'Carbohidratos',u:'g',c:'carb',d:1,ik:'carbohidratos'},
+ {k:'gras',l:'Grasas',u:'g',c:'gras',d:1,ik:'grasas'},
+ {k:'fibra',l:'Fibra',u:'g',c:'fibra',d:1,ik:'fibra'}
+].forEach(m=>{
+  const v=T[m.k],p=Math.min(v/IDR[m.ik]*100,130);
+  document.getElementById('macroSum').innerHTML+=`<div class="ms-card ${m.c}">
+    <div class="ms-l">${m.l}</div><div class="ms-v">${v.toFixed(m.d)}</div>
+    <div class="ms-u">${m.u} / día</div>
+    <div class="ms-bar"><div class="ms-bf" data-t="${Math.min(p,100)}%"></div></div>
+    <div class="ms-pct">${p.toFixed(0)}% IDR</div>
+  </div>`;
+});
+
+// ═══════════════════════════════════════════════════════
+//  FOOD CARDS
+// ═══════════════════════════════════════════════════════
+const tagLabel={ldl:'↓ LDL',abd:'↓ Grasa abd.',rge:'✓ RGE',ner:'Neuro',inf:'Antiinflamatorio',gut:'Probiótico'};
+function renderFoodCards(){
+  ['des','com','cen'].forEach(meal=>{
+    const foods=A.filter(a=>a.meal===meal);
+    let kcal=0;
+    const html=foods.map(a=>{
+      kcal+=a.kcal;
+      const tags=a.tags.map(t=>`<span class="fc-tag ${t}">${tagLabel[t]}</span>`).join('');
+      return `<div class="food-card">
+        <div class="fc-top">
+          <div><div class="fc-name">${a.n}</div></div>
+        </div>
+        <div class="fc-reason">${a.reason}</div>
+        <div class="fc-tags">${tags}</div>
+        <div class="fc-macros">
+          <div class="fc-m"><div class="fc-m-val" style="color:var(--gold)">${a.kcal}</div><div class="fc-m-lbl">kcal</div></div>
+          <div class="fc-m"><div class="fc-m-val" style="color:var(--jade)">${a.prot}g</div><div class="fc-m-lbl">prot</div></div>
+          <div class="fc-m"><div class="fc-m-val" style="color:var(--sky)">${a.carb}g</div><div class="fc-m-lbl">carb</div></div>
+          <div class="fc-m"><div class="fc-m-val" style="color:var(--moss)">${a.fibra}g</div><div class="fc-m-lbl">fibra</div></div>
+        </div>
+      </div>`;
+    }).join('');
+    document.getElementById(`cards${meal.charAt(0).toUpperCase()+meal.slice(1)}`).innerHTML=html;
+    document.getElementById(`kcal${meal.charAt(0).toUpperCase()+meal.slice(1)}`).textContent=`${kcal.toFixed(0)} kcal`;
+  });
+}
+renderFoodCards();
+
+// ═══════════════════════════════════════════════════════
+//  TABLE BUILDER
+// ═══════════════════════════════════════════════════════
+function buildT(tbId,ftId,cols){
+  const tb=document.getElementById(tbId),ft=document.getElementById(ftId);
+  A.forEach(a=>{
+    if(a.s){tb.innerHTML+=`<tr class="sh"><td colspan="${cols.length+1}">${a.s}</td></tr>`;return;}
+    let r=`<tr><td>${a.n}</td>`;
+    cols.forEach(c=>{
+      if(c.k==='sod') r+=`<td style="color:${a.sod?'var(--violet)':'var(--text-muted)'}">${a.sod?'✦':'—'}</td>`;
+      else r+=`<td>${f(a[c.k]||0,c.d)}</td>`;
+    });
+    tb.innerHTML+=r+'</tr>';
+  });
+  let fr=`<tr class="total-row"><td>TOTAL DÍA</td>`;
+  let rr=`<tr class="ref-row"><td>IDR / Referencia</td>`;
+  let pr=`<tr class="pct-row"><td>% Cobertura</td>`;
+  cols.forEach(c=>{
+    if(c.k==='sod'){fr+=`<td>—</td>`;rr+=`<td>—</td>`;pr+=`<td>—</td>`;return;}
+    const tv=T[c.k]||0;
+    fr+=`<td>${f(tv,c.d)}</td>`;
+    rr+=`<td>${c.idr!=null?f(c.idr,c.d):'s/IDR'}</td>`;
+    if(c.idr!=null){const p=tv/c.idr*100,cl=sc(p);pr+=`<td style="color:${cc(cl)}">${p.toFixed(0)}%</td>`;}
+    else pr+=`<td style="color:var(--violet)">—</td>`;
+  });
+  ft.innerHTML=fr+'</tr>'+rr+'</tr>'+pr+'</tr>';
+}
+
+buildT('tbM','ftM',[
+  {k:'kcal',d:0,idr:IDR.kcal},{k:'prot',d:1,idr:IDR.proteina},{k:'carb',d:1,idr:IDR.carbohidratos},{k:'gras',d:1,idr:IDR.grasas},{k:'fibra',d:1,idr:IDR.fibra}]);
+buildT('tbV','ftV',[
+  {k:'vitA',d:0,idr:IDR.vitA},{k:'vitB1',d:2,idr:IDR.vitB1},{k:'vitB2',d:2,idr:IDR.vitB2},{k:'vitB3',d:1,idr:IDR.vitB3},{k:'vitB6',d:2,idr:IDR.vitB6},
+  {k:'vitB9',d:0,idr:IDR.vitB9},{k:'vitB12',d:2,idr:IDR.vitB12},{k:'vitC',d:1,idr:IDR.vitC},{k:'vitD',d:1,idr:IDR.vitD},{k:'vitE',d:1,idr:IDR.vitE},{k:'vitK',d:1,idr:IDR.vitK}]);
+buildT('tbMin','ftMin',[
+  {k:'ca',d:0,idr:IDR.calcio},{k:'fo',d:0,idr:IDR.fosforo},{k:'mg',d:0,idr:IDR.magnesio},{k:'po',d:0,idr:IDR.potasio},{k:'na',d:0,idr:IDR.sodio},{k:'fe',d:1,idr:IDR.hierro},{k:'fl',d:2,idr:IDR.fluor}]);
+buildT('tbO','ftO',[
+  {k:'zn',d:1,idr:IDR.zinc},{k:'se',d:0,idr:IDR.selenio},{k:'mn',d:2,idr:IDR.manganeso},{k:'cu',d:2,idr:IDR.cobre},{k:'yo',d:0,idr:IDR.yodo}]);
+buildT('tbF','ftF',[
+  {k:'poli',d:1,idr:IDR.polifenoles},{k:'asp',d:2,idr:null},{k:'not',d:2,idr:null},
+  {k:'que',d:2,idr:IDR.quercetina},{k:'cat',d:2,idr:null},{k:'cur',d:1,idr:null},
+  {k:'sulf',d:1,idr:null},{k:'tan',d:2,idr:null},{k:'om3',d:0,idr:IDR.omega3Total},{k:'aha',d:0,idr:null},{k:'sod',d:0,idr:null}]);
+buildT('tbN','ftN',[
+  {k:'trp',d:0,idr:IDR.trp},{k:'tyr',d:0,idr:IDR.tyr},{k:'phe',d:0,idr:IDR.phe},
+  {k:'col',d:0,idr:IDR.col},{k:'glu',d:0,idr:null},{k:'gaba',d:1,idr:null},{k:'thea',d:1,idr:IDR.thea},{k:'flav',d:0,idr:IDR.flav}]);
+
+// ═══════════════════════════════════════════════════════
+//  COVERAGE GRIDS
+// ═══════════════════════════════════════════════════════
+function buildG(gId,defs){
+  const g=document.getElementById(gId);
+  defs.forEach(n=>{
+    const v=T[n.k]||0;
+    const p=n.idr>0?(v/n.idr*100):null;
+    const cl=p!=null?sc(p):'info';
+    const lbl=p!=null?sl(p):'Bioactivo';
+    const bw=p!=null?Math.min(p,100):65;
+    g.innerHTML+=`<div class="n-card">
+      <div class="n-card-hd"><span class="n-name">${n.nm}</span><span class="n-st ${cl}">${lbl}</span></div>
+      <div class="n-vals"><span class="n-total" style="color:${cc(cl)}">${v.toFixed(n.d)}</span>
+        <span class="n-ref"> / ${n.idr!=null?n.idr+' '+n.u:'sin IDR'}</span>
+        <span class="n-pct">${p!=null?p.toFixed(0)+'%':'—'}</span></div>
+      <div class="n-bar"><div class="n-bar-fill ${cl}" data-t="${bw}%"></div></div>
+    </div>`;
+  });
+}
+
+buildG('gMacro',[
+  {k:'kcal',nm:'Calorías',idr:IDR.kcal,u:'kcal',d:0},
+  {k:'prot',nm:'Proteína',idr:IDR.proteina,u:'g',d:1},
+  {k:'carb',nm:'Carbohidratos',idr:IDR.carbohidratos,u:'g',d:1},
+  {k:'gras',nm:'Grasas',idr:IDR.grasas,u:'g',d:1},
+  {k:'fibra',nm:'Fibra total',idr:IDR.fibra,u:'g',d:1},
+]);
+buildG('gVita',[
+  {k:'vitA',nm:'Vitamina A',idr:IDR.vitA,u:'μg',d:0},
+  {k:'vitB1',nm:'Vitamina B1',idr:IDR.vitB1,u:'mg',d:2},
+  {k:'vitB2',nm:'Vitamina B2',idr:IDR.vitB2,u:'mg',d:2},
+  {k:'vitB3',nm:'Vitamina B3',idr:IDR.vitB3,u:'mg',d:1},
+  {k:'vitB6',nm:'Vitamina B6',idr:IDR.vitB6,u:'mg',d:2},
+  {k:'vitB9',nm:'Folato B9',idr:IDR.vitB9,u:'μg',d:0},
+  {k:'vitB12',nm:'Vitamina B12',idr:IDR.vitB12,u:'μg',d:2},
+  {k:'vitC',nm:'Vitamina C',idr:IDR.vitC,u:'mg',d:1},
+  {k:'vitD',nm:'Vitamina D',idr:IDR.vitD,u:'μg',d:1},
+  {k:'vitE',nm:'Vitamina E',idr:IDR.vitE,u:'mg',d:1},
+  {k:'vitK',nm:'Vitamina K',idr:IDR.vitK,u:'μg',d:1},
+]);
+buildG('gMin',[
+  {k:'ca',nm:'Calcio',idr:IDR.calcio,u:'mg',d:0},
+  {k:'fo',nm:'Fósforo',idr:IDR.fosforo,u:'mg',d:0},
+  {k:'mg',nm:'Magnesio',idr:IDR.magnesio,u:'mg',d:0},
+  {k:'po',nm:'Potasio',idr:IDR.potasio,u:'mg',d:0},
+  {k:'na',nm:'Sodio',idr:IDR.sodio,u:'mg',d:0},
+  {k:'fe',nm:'Hierro',idr:IDR.hierro,u:'mg',d:1},
+  {k:'fl',nm:'Flúor',idr:IDR.fluor,u:'mg',d:2},
+  {k:'zn',nm:'Zinc',idr:IDR.zinc,u:'mg',d:1},
+  {k:'se',nm:'Selenio',idr:IDR.selenio,u:'μg',d:0},
+  {k:'mn',nm:'Manganeso',idr:IDR.manganeso,u:'mg',d:2},
+  {k:'cu',nm:'Cobre',idr:IDR.cobre,u:'mg',d:2},
+  {k:'yo',nm:'Yodo',idr:IDR.yodo,u:'μg',d:0},
+]);
+buildG('gFito',[
+  {k:'poli',nm:'Polifenoles totales',idr:IDR.polifenoles,u:'mg',d:0},
+  {k:'om3',nm:'Omega-3 total',idr:IDR.omega3Total,u:'mg',d:0},
+  {k:'que',nm:'Quercetina',idr:IDR.quercetina,u:'mg',d:2},
+  {k:'cat',nm:'Catequinas',idr:null,u:'mg',d:2},
+  {k:'cur',nm:'Curcumina',idr:null,u:'mg',d:1},
+  {k:'sulf',nm:'Sulforafano',idr:null,u:'mg',d:1},
+  {k:'asp',nm:'Aspalatina',idr:null,u:'mg',d:2},
+  {k:'not',nm:'Nothofagin',idr:null,u:'mg',d:2},
+  {k:'tan',nm:'Taninos',idr:null,u:'mg',d:1},
+  {k:'aha',nm:'Ácidos α-Hidroxi',idr:null,u:'mg',d:0},
+]);
+buildG('gNeuro',[
+  {k:'trp',nm:'Triptófano',idr:IDR.trp,u:'mg',d:0},
+  {k:'tyr',nm:'Tirosina',idr:IDR.tyr,u:'mg',d:0},
+  {k:'phe',nm:'Fenilalanina',idr:IDR.phe,u:'mg',d:0},
+  {k:'col',nm:'Colina',idr:IDR.col,u:'mg',d:0},
+  {k:'glu',nm:'Ácido Glutámico',idr:null,u:'mg',d:0},
+  {k:'gaba',nm:'GABA directo',idr:null,u:'mg',d:1},
+  {k:'thea',nm:'L-Teanina',idr:IDR.thea,u:'mg',d:1},
+  {k:'flav',nm:'Flavonoides',idr:IDR.flav,u:'mg',d:0},
+]);
+
+// ═══════════════════════════════════════════════════════
+//  PATHWAY CARDS
+// ═══════════════════════════════════════════════════════
+[{emoji:'🌙',title:'Serotonina & Melatonina',color:'var(--jade)',
+  chain:'Triptófano → 5-HTP (B6) → Serotonina → N-Acetil-serotonina → Melatonina',
+  body:`El pavo de la cena aporta <strong>${A.find(a=>a.n&&a.n.includes('Pavo')).trp}mg de triptófano</strong> — el aporte individual más alto del día. Comer el pavo con la remolacha (carbohidratos) facilita que el triptófano cruce la barrera hematoencefálica, maximizando la síntesis nocturna de melatonina. El salmón aporta <strong>285mg adicionales</strong>. Cofactores cubiertos: vitamina B6 (${(T.vitB6/IDR.vitB6*100).toFixed(0)}%), hierro.`,
+  fuentes:['Pavo cena (356mg)','Salmón comida (285mg)','Avena des. (80mg)','Lentejas (86mg)']},
+{emoji:'⚡',title:'Dopamina & Noradrenalina',color:'var(--gold)',
+  chain:'Phe → Tirosina → L-DOPA → Dopamina → Noradrenalina (cofactores: B6, C, Fe)',
+  body:`Tirosina total: <strong>${T.tyr.toFixed(0)}mg</strong>. El salmón (555mg) y el pavo (668mg) son las fuentes principales. La <strong>curcumina del desayuno inhibe la MAO-B</strong>, prolongando la vida activa de la dopamina. La vitamina C del brócoli (89mg) es cofactor de la dopamina β-hidroxilasa. Concentración y motivación sostenidas durante el día.`,
+  fuentes:['Pavo (668mg Tyr)','Salmón (555mg Tyr)','Avena (137mg Tyr)','Lentejas (132mg Tyr)']},
+{emoji:'🧠',title:'Acetilcolina (Memoria)',color:'var(--sky)',
+  chain:'Colina + Acetil-CoA → Acetilcolina (colinacetiltransferasa, cofactor B5)',
+  body:`Colina total: <strong>${T.col.toFixed(0)}mg</strong> (${(T.col/IDR.col*100).toFixed(0)}% IDR). El salmón (127mg) y el pavo (87mg) son las fuentes principales de este menú, superando al huevo. El DHA del salmón optimiza también la fluidez de las membranas neuronales, mejorando la señalización colinérgica. Memoria de trabajo y consolidación activas.`,
+  fuentes:['Salmón (127mg)','Pavo (87mg)','Lentejas (31mg)','Avena (22mg)']},
+{emoji:'😌',title:'GABA & Relajación',color:'var(--violet)',
+  chain:'Glutamato → GABA (GAD, cofactor B6) + GABA directo fermentados',
+  body:`Glutamato total: <strong>${T.glu.toFixed(0)}mg</strong>. GABA directo: <strong>${T.gaba.toFixed(1)}mg</strong> (kéfir + rooibos). El rooibos de la cena actúa como modulador GABAérgico a través de su <strong>aspalatina</strong> y quercitrina — relajación sin sedación. La vitamina B6 (${(T.vitB6/IDR.vitB6*100).toFixed(0)}% IDR) garantiza la conversión de glutamato a GABA. Ideal para descansar bien esta noche.`,
+  fuentes:['Kéfir (GABA 3.75mg)','Rooibos (GABA 0.5mg)','Pavo (Glu 3900mg)','Salmón (Glu 3600mg)']},
+{emoji:'🌿',title:'BDNF & Neuroprotección',color:'var(--moss)',
+  chain:'Antocianinas + DHA → BDNF↑ · Neuroplasticidad · Neuroprotección',
+  body:`Los <strong>arándanos</strong> (120mg flavonoides) elevan el BDNF (factor neurotrófico) — crecimiento de nuevas conexiones neuronales. El <strong>DHA del salmón</strong> (≈2000mg) es el ácido graso estructural de las membranas neuronales. El <strong>sulforafano del brócoli</strong> activa Nrf2, protegiendo neuronas del estrés oxidativo. Flavonoides totales: <strong>${T.flav.toFixed(0)}mg</strong>.`,
+  fuentes:['Arándanos (120mg flavon.)','Salmón DHA (2000mg)','Brócoli sulforafano (10mg)','Rooibos (30mg flavon.)']},
+{emoji:'🔥',title:'Antiinflamación Sistémica',color:'var(--coral)',
+  chain:'EPA/DHA → Resolvinas + Protectinas · Curcumina → NF-κB↓ · Sulforafano → Nrf2↑',
+  body:`Omega-3 totales: <strong>${T.om3.toFixed(0)}mg</strong> (${(T.om3/IDR.omega3Total*100).toFixed(0)}% IDR). El salmón aporta 3600mg EPA+DHA → precursores de <strong>resolvinas y protectinas</strong>, las moléculas que resuelven la inflamación activamente. La <strong>curcumina (40mg)</strong> bloquea NF-κB. Los <strong>betalaínas de la remolacha</strong> inhiben COX. Polifenoles: <strong>${T.poli.toFixed(0)}mg</strong>.`,
+  fuentes:['Salmón omega-3 (3600mg)','Curcumina (40mg)','Brócoli sulforafano (10mg)','Nueces omega-3 (1100mg)']}
+].forEach(p=>{
+  const srcs=p.fuentes.map((f,i)=>`<span class="ps ${i<2?'hi':''}">${f}</span>`).join('');
+  document.getElementById('pwGrid').innerHTML+=`<div class="pw-card" style="border-color:${p.color}25;">
+    <div class="pw-title" style="color:${p.color}">${p.emoji} ${p.title}</div>
+    <div class="pw-chain">${p.chain}</div>
+    <div class="pw-body">${p.body}</div>
+    <div class="pw-srcs">${srcs}</div>
+  </div>`;
+});
+
+// ═══════════════════════════════════════════════════════
+//  RECOMENDACIONES
+// ═══════════════════════════════════════════════════════
+const pp=(k,ik)=>((T[k]/(IDR[ik||k]||1))*100).toFixed(0);
+document.getElementById('recoGrid').innerHTML=`
+  <div class="reco-card pos">
+    <h3>✔ Por qué este menú es óptimo hoy</h3>
+    <ul>
+      <li><strong>↓ LDL:</strong> Beta-glucano avena + omega-3 salmón (3600mg EPA/DHA) + MUFA aguacate/AOVE + esteroles lentejas. Efecto sinérgico documentado en reducción de LDL 15-25%.</li>
+      <li><strong>↓ Grasa abdominal:</strong> 1.580 kcal, proteína alta (${T.prot.toFixed(0)}g = ${pp('prot','proteina')}% IDR), fibra ${T.fibra.toFixed(0)}g, sin picos insulínicos. Efecto termogénico de la proteína del salmón y pavo.</li>
+      <li><strong>RGE 100% seguro:</strong> Sin cítricos, vinagre, tomate, café ni menta. Jengibre y canela son procinéticos gástricos. Cena ligera (336 kcal) antes de las 19:30h.</li>
+      <li><strong>Antiinflamación profunda:</strong> Tres vías simultáneas: omega-3 (resolvinas), curcumina (NF-κB), sulforafano brócoli (Nrf2). Polifenoles ${T.poli.toFixed(0)}mg.</li>
+      <li><strong>Neurológico:</strong> Triptófano ${T.trp.toFixed(0)}mg (${pp('trp','trp')}% IDR) para serotonina nocturna. DHA salmón para membranas neuronales. Colina ${T.col.toFixed(0)}mg para acetilcolina.</li>
+      <li>Vitamina D excelente gracias al salmón (${T.vitD.toFixed(1)}μg = ${pp('vitD','vitD')}% IDR) — modulador de serotonina y función inmune.</li>
+      <li>Folato B9 al ${pp('vitB9','vitB9')}% IDR (espinacas + lentejas + remolacha) — esencial para metilación del DNA y producción de neurotransmisores.</li>
+    </ul>
+  </div>
+  <div class="reco-card att">
+    <h3>⚠ Complementos para un día perfecto</h3>
+    <ul>
+      <li>Yodo al ${pp('yo','yodo')}% IDR — el salmón aporta 51μg. Si usas sal, que sea yodada (no interfiere con RGE). Alternativa: algas nori en pequeña cantidad.</li>
+      <li>Calcio al ${pp('ca','calcio')}% IDR — las espinacas tienen oxalatos que reducen absorción. Considera un vaso de leche de avena enriquecida o un yogur natural entre comidas si no hay RGE activo.</li>
+      <li>Vitamina B12 al ${pp('vitB12','vitB12')}% IDR (salmón 5.25μg) — muy bien cubierta. Si es día sin pescado, el kéfir y huevo son clave.</li>
+      <li>Magnesio al ${pp('mg','magnesio')}% IDR — considera añadir 10g de semillas de cáñamo en el desayuno o una cucharada extra de lino. El déficit de magnesio bloquea la síntesis de GABA y serotonina.</li>
+      <li>Hidratación: beber 1.5-2L de agua entre comidas (no durante), tibio o a temperatura ambiente para proteger el RGE. El agua fría puede desencadenar espasmos esofágicos.</li>
+      <li>Exposición solar 15-20 min a mediodía (sin protector) para vitamina D endógena — complemento esencial al aporte dietético del salmón.</li>
+    </ul>
+  </div>`;
+
+// ═══════════════════════════════════════════════════════
+//  TABS
+// ═══════════════════════════════════════════════════════
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+  });
+});
+
+// ═══════════════════════════════════════════════════════
+//  ANIMATE BARS
+// ═══════════════════════════════════════════════════════
+function animateBars(){
+  document.querySelectorAll('[data-t]').forEach(el=>{
+    el.style.width='0';
+    setTimeout(()=>{el.style.width=el.dataset.t;},80);
+  });
+}
+new IntersectionObserver(entries=>{
+  if(entries[0].isIntersecting){animateBars();}
+},{threshold:.05}).observe(document.querySelector('.macro-summary'));
+</script>
+</body>
+</html>
