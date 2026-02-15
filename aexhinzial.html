@@ -1,0 +1,1764 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía Nutricional de Bienestar Integral</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1a12;
+    --bg2: #111f16;
+    --bg3: #162b1c;
+    --surface: #1a3322;
+    --surface2: #1f3d28;
+    --border: rgba(106, 168, 79, 0.18);
+    --gold: #c9a84c;
+    --gold2: #e8c878;
+    --green: #6aa84f;
+    --green2: #8dc866;
+    --sage: #a8c5a0;
+    --cream: #f0ead8;
+    --cream2: #d4c9a8;
+    --text: #e8e0d0;
+    --text2: #b8ad98;
+    --text3: #7a7060;
+    --red: #c0392b;
+    --accent-blue: #4a9bb5;
+    --accent-purple: #8e7dbf;
+    --accent-orange: #d4804a;
+    --accent-pink: #c47a8a;
+    --shadow: 0 8px 32px rgba(0,0,0,0.4);
+    --radius: 18px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.7;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ===== BACKGROUND ===== */
+  .bg-layer {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 60% 80% at 15% 20%, rgba(106,168,79,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 60% at 85% 75%, rgba(201,168,76,0.05) 0%, transparent 55%),
+      radial-gradient(ellipse 40% 50% at 50% 50%, rgba(30,60,35,0.6) 0%, transparent 70%);
+  }
+  .bg-grid {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.03;
+    background-image: linear-gradient(var(--green) 1px, transparent 1px),
+      linear-gradient(90deg, var(--green) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  /* ===== LAYOUT ===== */
+  .wrap { position: relative; z-index: 1; }
+  .container { max-width: 1300px; margin: 0 auto; padding: 0 24px; }
+
+  /* ===== HERO ===== */
+  .hero {
+    padding: 90px 24px 60px;
+    text-align: center;
+    position: relative;
+  }
+  .hero-badge {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid rgba(201,168,76,0.3);
+    padding: 6px 16px;
+    border-radius: 50px;
+    margin-bottom: 28px;
+    background: rgba(201,168,76,0.05);
+    animation: fadeIn 1s ease both;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 6vw, 4.2rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--cream);
+    margin-bottom: 20px;
+    animation: fadeIn 1s 0.2s ease both;
+  }
+  .hero h1 span { color: var(--gold); font-style: italic; }
+  .hero-sub {
+    font-size: 1.2rem;
+    color: var(--text2);
+    max-width: 680px;
+    margin: 0 auto 40px;
+    font-weight: 300;
+    animation: fadeIn 1s 0.4s ease both;
+  }
+  .hero-tags {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
+    animation: fadeIn 1s 0.6s ease both;
+  }
+  .hero-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 50px;
+    border: 1px solid;
+  }
+
+  /* ===== SEARCH ===== */
+  .search-wrap {
+    max-width: 560px;
+    margin: 0 auto 48px;
+    position: relative;
+    animation: fadeIn 1s 0.7s ease both;
+  }
+  .search-input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 14px 52px 14px 24px;
+    color: var(--text);
+    font-family: 'Crimson Pro', serif;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .search-input::placeholder { color: var(--text3); }
+  .search-input:focus {
+    border-color: rgba(201,168,76,0.5);
+    box-shadow: 0 0 0 4px rgba(201,168,76,0.08);
+  }
+  .search-icon {
+    position: absolute; right: 18px; top: 50%; transform: translateY(-50%);
+    color: var(--text3); font-size: 18px; pointer-events: none;
+  }
+
+  /* ===== FILTER TABS ===== */
+  .filter-section { margin-bottom: 48px; }
+  .filter-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  .filters {
+    display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+  }
+  .filter-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 9px 18px;
+    border-radius: 50px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.25s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .filter-btn:hover { border-color: rgba(201,168,76,0.4); color: var(--cream); }
+  .filter-btn.active {
+    color: var(--bg);
+    border-color: transparent;
+    font-weight: 600;
+  }
+  .filter-btn .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.7;
+  }
+
+  /* ===== RESULTS COUNT ===== */
+  .results-bar {
+    text-align: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 32px;
+    transition: all 0.3s;
+  }
+
+  /* ===== FOOD GRID ===== */
+  .food-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 22px;
+    margin-bottom: 80px;
+  }
+
+  .food-card {
+    background: linear-gradient(145deg, var(--surface), var(--bg3));
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 26px;
+    cursor: pointer;
+    transition: all 0.35s cubic-bezier(0.34, 1.4, 0.64, 1);
+    position: relative;
+    overflow: hidden;
+    animation: cardIn 0.5s ease both;
+  }
+  .food-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--card-color, var(--green)), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .food-card:hover {
+    transform: translateY(-6px) scale(1.01);
+    border-color: rgba(201,168,76,0.3);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.35), 0 0 30px rgba(106,168,79,0.08);
+  }
+  .food-card:hover::before { opacity: 1; }
+  .food-card.hidden { display: none; }
+
+  .card-top {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .food-emoji {
+    font-size: 2.6rem;
+    line-height: 1;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+    transition: transform 0.3s;
+  }
+  .food-card:hover .food-emoji { transform: scale(1.15) rotate(-5deg); }
+
+  .food-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--cream);
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
+  .food-subtitle {
+    font-size: 0.85rem;
+    color: var(--text3);
+    font-style: italic;
+    font-weight: 300;
+  }
+  .food-desc {
+    font-size: 0.95rem;
+    color: var(--text2);
+    line-height: 1.6;
+    font-weight: 300;
+    margin-bottom: 16px;
+  }
+  .food-tags {
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .food-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 50px;
+    border: 1px solid;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+  }
+  .food-card:hover .food-tag { opacity: 1; }
+
+  .caution-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #e8a04a;
+    border: 1px solid rgba(232,160,74,0.3);
+    border-radius: 50px;
+    padding: 3px 10px;
+    margin-top: 8px;
+    background: rgba(232,160,74,0.05);
+  }
+
+  /* ===== SPECIAL ALERT ===== */
+  .rge-alert {
+    background: linear-gradient(135deg, rgba(192,57,43,0.12), rgba(192,57,43,0.05));
+    border: 1px solid rgba(192,57,43,0.25);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 40px;
+    display: flex; align-items: flex-start; gap: 16px;
+  }
+  .rge-alert-icon { font-size: 1.5rem; flex-shrink: 0; margin-top: 2px; }
+  .rge-alert h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: #e8806a;
+    margin-bottom: 4px;
+  }
+  .rge-alert p { font-size: 0.88rem; color: var(--text2); }
+  .rge-alert strong { color: var(--cream); }
+
+  /* ===== SECTION HEADERS ===== */
+  .section-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-top: 20px;
+  }
+  .section-header .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .section-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    font-weight: 700;
+    color: var(--cream);
+    line-height: 1.2;
+  }
+  .section-header h2 em { color: var(--green2); font-style: italic; }
+
+  /* ===== DAILY PLAN ===== */
+  .daily-plan {
+    background: linear-gradient(145deg, var(--surface), var(--bg3));
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 40px;
+    margin-bottom: 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .daily-plan::before {
+    content: '';
+    position: absolute;
+    top: -50%; right: -20%;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(201,168,76,0.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .plan-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+  }
+  .plan-slot {
+    background: rgba(0,0,0,0.2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    transition: all 0.3s;
+  }
+  .plan-slot:hover {
+    background: rgba(106,168,79,0.06);
+    border-color: rgba(106,168,79,0.3);
+    transform: translateY(-3px);
+  }
+  .plan-time {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .plan-emoji { font-size: 1.8rem; margin-bottom: 8px; }
+  .plan-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--cream);
+    margin-bottom: 8px;
+  }
+  .plan-items {
+    font-size: 0.82rem;
+    color: var(--text2);
+    font-weight: 300;
+    line-height: 1.8;
+  }
+  .plan-items span { display: block; }
+  .plan-items span::before { content: '→ '; color: var(--green); }
+
+  /* ===== AVOIDANCE SECTION ===== */
+  .avoid-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    margin-bottom: 80px;
+  }
+  .avoid-card {
+    background: linear-gradient(145deg, rgba(192,57,43,0.08), rgba(192,57,43,0.03));
+    border: 1px solid rgba(192,57,43,0.2);
+    border-radius: var(--radius);
+    padding: 22px;
+  }
+  .avoid-card h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: #e8806a;
+    margin-bottom: 8px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .avoid-card p {
+    font-size: 0.88rem;
+    color: var(--text2);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  /* ===== NUTRIENT KEY ===== */
+  .nutrient-key {
+    background: var(--bg3);
+    border-top: 1px solid var(--border);
+    padding: 40px 24px;
+    margin-top: 20px;
+  }
+  .key-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    max-width: 1100px; margin: 0 auto;
+  }
+  .key-item {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 0.85rem; color: var(--text2);
+  }
+  .key-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    padding: 30px 24px;
+    text-align: center;
+  }
+  footer p {
+    font-size: 0.82rem;
+    color: var(--text3);
+    font-style: italic;
+  }
+
+  /* ===== MODAL ===== */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 1000;
+    background: rgba(5,10,7,0.85);
+    backdrop-filter: blur(10px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal {
+    background: linear-gradient(145deg, var(--surface2), var(--surface));
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 24px;
+    padding: 40px;
+    max-width: 580px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    transform: translateY(30px) scale(0.96);
+    transition: all 0.4s cubic-bezier(0.34, 1.4, 0.64, 1);
+    position: relative;
+  }
+  .modal-overlay.open .modal { transform: none; }
+  .modal-close {
+    position: absolute; top: 18px; right: 18px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    width: 36px; height: 36px;
+    color: var(--text2); font-size: 18px;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .modal-close:hover { background: rgba(255,255,255,0.12); color: var(--cream); }
+  .modal-emoji { font-size: 3.5rem; margin-bottom: 16px; display: block; }
+  .modal-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; font-weight: 700;
+    color: var(--cream); margin-bottom: 6px;
+  }
+  .modal-subtitle { font-size: 0.95rem; color: var(--text3); font-style: italic; margin-bottom: 20px; }
+  .modal-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 24px; }
+  .modal-section {
+    margin-bottom: 20px;
+    border-left: 2px solid rgba(106,168,79,0.3);
+    padding-left: 16px;
+  }
+  .modal-section h4 {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .modal-section p { font-size: 0.95rem; color: var(--text2); font-weight: 300; }
+  .modal-section ul { list-style: none; }
+  .modal-section ul li {
+    font-size: 0.9rem; color: var(--text2); font-weight: 300;
+    padding: 3px 0;
+  }
+  .modal-section ul li::before { content: '✦ '; color: var(--green); font-size: 0.7rem; }
+  .caution-box {
+    background: rgba(232,160,74,0.08);
+    border: 1px solid rgba(232,160,74,0.25);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-top: 16px;
+    font-size: 0.88rem;
+    color: #e8c080;
+  }
+  .caution-box strong { display: block; margin-bottom: 4px; }
+
+  /* ===== TOP PICKS ===== */
+  .top-picks {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 60px;
+  }
+  .top-pick {
+    background: linear-gradient(135deg, var(--bg3), var(--surface));
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 22px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+  .top-pick::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, var(--pick-color, rgba(106,168,79,0.1)), transparent);
+    pointer-events: none;
+  }
+  .top-pick:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+  .pick-emoji { font-size: 2.2rem; margin-bottom: 8px; display: block; }
+  .pick-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem; font-weight: 600;
+    color: var(--cream); margin-bottom: 6px;
+  }
+  .pick-reason {
+    font-size: 0.78rem;
+    color: var(--text3);
+    font-weight: 300;
+  }
+  .pick-score {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 50px;
+    padding: 2px 10px;
+    margin-top: 10px;
+  }
+
+  /* ===== SCROLL TOP ===== */
+  .scroll-top {
+    position: fixed; bottom: 30px; right: 30px; z-index: 100;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    width: 44px; height: 44px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: var(--text2);
+    font-size: 18px;
+    transition: all 0.3s;
+    opacity: 0; transform: translateY(20px);
+    pointer-events: none;
+  }
+  .scroll-top.show { opacity: 1; transform: none; pointer-events: all; }
+  .scroll-top:hover { background: var(--surface); color: var(--gold); border-color: rgba(201,168,76,0.4); }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  /* ===== COLORS ===== */
+  .c-neuro { color: #8e7dbf; border-color: rgba(142,125,191,0.35); background: rgba(142,125,191,0.08); }
+  .c-ldl { color: #c9a84c; border-color: rgba(201,168,76,0.35); background: rgba(201,168,76,0.08); }
+  .c-circulo { color: #c47a8a; border-color: rgba(196,122,138,0.35); background: rgba(196,122,138,0.08); }
+  .c-inflam { color: #6aa84f; border-color: rgba(106,168,79,0.35); background: rgba(106,168,79,0.08); }
+  .c-esofago { color: #4a9bb5; border-color: rgba(74,155,181,0.35); background: rgba(74,155,181,0.08); }
+  .c-musculos { color: #d4804a; border-color: rgba(212,128,74,0.35); background: rgba(212,128,74,0.08); }
+  .c-huesos { color: #a8c5a0; border-color: rgba(168,197,160,0.35); background: rgba(168,197,160,0.08); }
+  .c-grasa { color: #c9d44a; border-color: rgba(201,212,74,0.35); background: rgba(201,212,74,0.08); }
+  .c-sueno { color: #7da8bf; border-color: rgba(125,168,191,0.35); background: rgba(125,168,191,0.08); }
+
+  .bg-neuro { background: #8e7dbf; }
+  .bg-ldl { background: #c9a84c; }
+  .bg-circulo { background: #c47a8a; }
+  .bg-inflam { background: #6aa84f; }
+  .bg-esofago { background: #4a9bb5; }
+  .bg-musculos { background: #d4804a; }
+  .bg-huesos { background: #a8c5a0; }
+  .bg-grasa { background: #c9d44a; }
+  .bg-sueno { background: #7da8bf; }
+
+  .filter-btn[data-filter="neuro"].active { background: #8e7dbf; color: white; }
+  .filter-btn[data-filter="ldl"].active { background: #c9a84c; color: #0d1a12; }
+  .filter-btn[data-filter="circulo"].active { background: #c47a8a; color: white; }
+  .filter-btn[data-filter="inflam"].active { background: #6aa84f; color: white; }
+  .filter-btn[data-filter="esofago"].active { background: #4a9bb5; color: white; }
+  .filter-btn[data-filter="musculos"].active { background: #d4804a; color: white; }
+  .filter-btn[data-filter="huesos"].active { background: #a8c5a0; color: #0d1a12; }
+  .filter-btn[data-filter="grasa"].active { background: #c9d44a; color: #0d1a12; }
+  .filter-btn[data-filter="sueno"].active { background: #7da8bf; color: white; }
+  .filter-btn[data-filter="all"].active { background: var(--green); color: white; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 680px) {
+    .hero { padding: 60px 16px 40px; }
+    .daily-plan { padding: 24px 20px; }
+    .modal { padding: 28px 22px; }
+    .food-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ===== SCROLLBAR ===== */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--border); }
+</style>
+</head>
+<body>
+
+<div class="bg-layer"></div>
+<div class="bg-grid"></div>
+
+<div class="wrap">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="container">
+    <span class="hero-badge">🌿 Guía de Nutrición Terapéutica</span>
+    <h1>Alimenta tu <span>bienestar</span><br>integral</h1>
+    <p class="hero-sub">Alimentos científicamente respaldados para optimizar tu sistema neurológico, circulatorio, digestivo, músculo-esquelético y bienestar emocional.</p>
+    <div class="hero-tags">
+      <span class="hero-tag c-neuro">🧠 Neurológico</span>
+      <span class="hero-tag c-circulo">❤️ Circulatorio</span>
+      <span class="hero-tag c-inflam">🌿 Antiinflamatorio</span>
+      <span class="hero-tag c-ldl">💛 Colesterol LDL</span>
+      <span class="hero-tag c-esofago">💙 Esófago / RGE</span>
+      <span class="hero-tag c-musculos">💪 Músculos</span>
+      <span class="hero-tag c-huesos">🦴 Huesos & Articulaciones</span>
+      <span class="hero-tag c-grasa">⚡ Grasa Abdominal</span>
+      <span class="hero-tag c-sueno">🌙 Sueño</span>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+
+  <!-- SEARCH -->
+  <div class="search-wrap">
+    <input type="text" class="search-input" placeholder="Buscar alimento o beneficio..." id="searchInput">
+    <span class="search-icon">⌕</span>
+  </div>
+
+  <!-- RGE ALERT -->
+  <div class="rge-alert">
+    <span class="rge-alert-icon">⚠️</span>
+    <div>
+      <h3>Nota importante sobre RGE (Reflujo Gastroesofágico)</h3>
+      <p>Algunos alimentos muy saludables a nivel general (cítricos, tomate, café, menta, chocolate, alcohol, grasa en exceso, picante) <strong>pueden empeorar el reflujo</strong>. Encontrarás avisos específicos en cada tarjeta donde aplica. Prioriza alimentos alcalinos, blandos y de bajo ácido.</p>
+    </div>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="filter-section">
+    <p class="filter-label">Filtrar por objetivo de salud</p>
+    <div class="filters">
+      <button class="filter-btn active" data-filter="all"><span class="dot"></span>Todos los alimentos</button>
+      <button class="filter-btn" data-filter="neuro"><span class="dot" style="background:#8e7dbf"></span>Neurológico & Ánimo</button>
+      <button class="filter-btn" data-filter="circulo"><span class="dot" style="background:#c47a8a"></span>Circulatorio</button>
+      <button class="filter-btn" data-filter="inflam"><span class="dot" style="background:#6aa84f"></span>Antiinflamatorio</button>
+      <button class="filter-btn" data-filter="ldl"><span class="dot" style="background:#c9a84c"></span>Bajar LDL</button>
+      <button class="filter-btn" data-filter="esofago"><span class="dot" style="background:#4a9bb5"></span>Esófago / RGE</button>
+      <button class="filter-btn" data-filter="musculos"><span class="dot" style="background:#d4804a"></span>Músculos</button>
+      <button class="filter-btn" data-filter="huesos"><span class="dot" style="background:#a8c5a0"></span>Huesos & Articulaciones</button>
+      <button class="filter-btn" data-filter="grasa"><span class="dot" style="background:#c9d44a"></span>Grasa Abdominal</button>
+      <button class="filter-btn" data-filter="sueno"><span class="dot" style="background:#7da8bf"></span>Calidad de Sueño</button>
+    </div>
+  </div>
+
+  <!-- RESULTS BAR -->
+  <div class="results-bar" id="resultsBar">Mostrando todos los alimentos</div>
+
+  <!-- TOP PICKS -->
+  <div class="section-header">
+    <p class="eyebrow">Selección destacada</p>
+    <h2>Los <em>más completos</em></h2>
+  </div>
+  <div class="top-picks">
+    <div class="top-pick" style="--pick-color: rgba(106,168,79,0.12)">
+      <span class="pick-emoji">🐟</span>
+      <div class="pick-name">Salmón salvaje</div>
+      <div class="pick-reason">Omega-3, vitamina D, proteína completa. Actúa en 7 sistemas simultáneamente.</div>
+      <span class="pick-score">⭐ 9 beneficios</span>
+    </div>
+    <div class="top-pick" style="--pick-color: rgba(142,125,191,0.1)">
+      <span class="pick-emoji">🥑</span>
+      <div class="pick-name">Aguacate</div>
+      <div class="pick-reason">Monoinsaturados, potasio, folato. Corazón + cerebro + colesterol.</div>
+      <span class="pick-score">⭐ 7 beneficios</span>
+    </div>
+    <div class="top-pick" style="--pick-color: rgba(201,168,76,0.1)">
+      <span class="pick-emoji">🫐</span>
+      <div class="pick-name">Arándanos</div>
+      <div class="pick-reason">Antocianinas. Neuroprotección + antiinflamatorio + circulatorio.</div>
+      <span class="pick-score">⭐ 6 beneficios</span>
+    </div>
+    <div class="top-pick" style="--pick-color: rgba(106,168,79,0.12)">
+      <span class="pick-emoji">🌿</span>
+      <div class="pick-name">Cúrcuma + pimienta</div>
+      <div class="pick-reason">Curcumina biológicamente activa. Antiinflamatorio + neuro + articulaciones.</div>
+      <span class="pick-score">⭐ 6 beneficios</span>
+    </div>
+    <div class="top-pick" style="--pick-color: rgba(196,122,138,0.1)">
+      <span class="pick-emoji">🌰</span>
+      <div class="pick-name">Nueces</div>
+      <div class="pick-reason">Forma de cerebro, actúa en él. ALA, melatonina, polifenoles.</div>
+      <span class="pick-score">⭐ 6 beneficios</span>
+    </div>
+  </div>
+
+  <!-- FOOD SECTION HEADER -->
+  <div class="section-header">
+    <p class="eyebrow">Base de datos</p>
+    <h2>Guía completa de <em>alimentos</em></h2>
+  </div>
+
+  <!-- FOOD GRID -->
+  <div class="food-grid" id="foodGrid"></div>
+
+  <!-- DAILY PLAN -->
+  <div class="section-header">
+    <p class="eyebrow">Protocolo diario</p>
+    <h2>Plan de comidas <em>óptimo</em></h2>
+  </div>
+  <div class="daily-plan">
+    <div class="plan-grid">
+      <div class="plan-slot">
+        <div class="plan-time">🌅 Despertar — en ayunas</div>
+        <div class="plan-emoji">💧</div>
+        <div class="plan-name">Ritual matutino</div>
+        <div class="plan-items">
+          <span>Agua tibia con limón diluido (si RGE leve)</span>
+          <span>O agua pura con 1 cda miel cruda</span>
+          <span>Jengibre en infusión</span>
+        </div>
+      </div>
+      <div class="plan-slot">
+        <div class="plan-time">🌄 Desayuno — 7-9h</div>
+        <div class="plan-emoji">🌾</div>
+        <div class="plan-name">Base energética calma</div>
+        <div class="plan-items">
+          <span>Avena cocida con plátano</span>
+          <span>Arándanos o cerezas</span>
+          <span>Nueces o almendras</span>
+          <span>Té verde o manzanilla</span>
+        </div>
+      </div>
+      <div class="plan-slot">
+        <div class="plan-time">☀️ Media mañana — 11h</div>
+        <div class="plan-emoji">🍌</div>
+        <div class="plan-name">Snack neuro-energético</div>
+        <div class="plan-items">
+          <span>Plátano maduro</span>
+          <span>Puñado de semillas de calabaza</span>
+          <span>Kéfir natural sin azúcar</span>
+        </div>
+      </div>
+      <div class="plan-slot">
+        <div class="plan-time">🌞 Comida — 13-14h</div>
+        <div class="plan-emoji">🐟</div>
+        <div class="plan-name">Bloque antiinflamatorio</div>
+        <div class="plan-items">
+          <span>Salmón o sardinas al horno</span>
+          <span>Espinacas + brócoli salteados</span>
+          <span>Quinoa o lentejas</span>
+          <span>AOVE + cúrcuma + pimienta negra</span>
+        </div>
+      </div>
+      <div class="plan-slot">
+        <div class="plan-time">🌤️ Merienda — 17h</div>
+        <div class="plan-emoji">🍫</div>
+        <div class="plan-name">Placer con función</div>
+        <div class="plan-items">
+          <span>1-2 onzas chocolate >70%</span>
+          <span>Aguacate en tostada de centeno</span>
+          <span>O yogur con miel cruda</span>
+        </div>
+      </div>
+      <div class="plan-slot">
+        <div class="plan-time">🌙 Cena — 19-20h</div>
+        <div class="plan-emoji">🥚</div>
+        <div class="plan-name">Reparación nocturna</div>
+        <div class="plan-items">
+          <span>Huevos o pavo a la plancha</span>
+          <span>Espárragos o calabacín</span>
+          <span>Arroz integral o patata cocida</span>
+          <span>Caldo de huesos</span>
+        </div>
+      </div>
+      <div class="plan-slot">
+        <div class="plan-time">🌛 Antes de dormir — 21h</div>
+        <div class="plan-emoji">🍒</div>
+        <div class="plan-name">Inducción al sueño</div>
+        <div class="plan-items">
+          <span>2 kiwis o cerezas ácidas</span>
+          <span>1 cda miel cruda en leche tibia</span>
+          <span>Infusión manzanilla + valeriana</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AVOID SECTION -->
+  <div class="section-header">
+    <p class="eyebrow">Importante evitar</p>
+    <h2>Alimentos que <em>perjudican</em></h2>
+  </div>
+  <div class="avoid-grid">
+    <div class="avoid-card">
+      <h4>🚫 Azúcar refinada y ultraprocesados</h4>
+      <p>Activan inflamación sistémica, disparan el cortisol, destrozan la microbiota intestinal y empeoran el reflujo. Son el enemigo número uno del bienestar neurológico.</p>
+    </div>
+    <div class="avoid-card">
+      <h4>🚫 Grasas trans y aceites refinados</h4>
+      <p>Elevan el LDL, dañan el endotelio vascular, promueven neuroinflamación. Presentes en bollería industrial, margarina y fritos comerciales.</p>
+    </div>
+    <div class="avoid-card">
+      <h4>🚫 Alcohol</h4>
+      <p>Deteriora la calidad del sueño (fragmenta el sueño REM), inflamación hepática e intestinal, relaja el esfínter esofágico inferior empeorando el RGE significativamente.</p>
+    </div>
+    <div class="avoid-card">
+      <h4>🚫 Cafeína en exceso y tarde</h4>
+      <p>El café después de las 14h interfiere con la producción de melatonina. También puede relajar el esfínter esofágico. Máximo 1-2 cafés en la mañana.</p>
+    </div>
+    <div class="avoid-card">
+      <h4>🚫 Alimentos ácidos (con RGE)</h4>
+      <p>Tomate, cítricos, vinagre, menta, picante y chocolate en exceso empeoran directamente el reflujo. Introduce con moderación y observa tu respuesta individual.</p>
+    </div>
+    <div class="avoid-card">
+      <h4>🚫 Comidas abundantes y tardías</h4>
+      <p>Cenar tarde y en exceso sube el cortisol nocturno, reduce la hormona del crecimiento (reparación muscular y ósea nocturna) y empeora gravemente el reflujo por presión abdominal.</p>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<!-- NUTRIENT KEY -->
+<div class="nutrient-key">
+  <div class="container">
+    <p class="filter-label" style="margin-bottom:20px">Leyenda de colores</p>
+    <div class="key-grid">
+      <div class="key-item"><span class="key-dot bg-neuro"></span> Sistema Neurológico & Ánimo</div>
+      <div class="key-item"><span class="key-dot bg-circulo"></span> Sistema Circulatorio</div>
+      <div class="key-item"><span class="key-dot bg-inflam"></span> Antiinflamatorio</div>
+      <div class="key-item"><span class="key-dot bg-ldl"></span> Reducción de LDL</div>
+      <div class="key-item"><span class="key-dot bg-esofago"></span> Protección Esofágica / RGE</div>
+      <div class="key-item"><span class="key-dot bg-musculos"></span> Músculos</div>
+      <div class="key-item"><span class="key-dot bg-huesos"></span> Huesos & Articulaciones</div>
+      <div class="key-item"><span class="key-dot bg-grasa"></span> Reducción Grasa Abdominal</div>
+      <div class="key-item"><span class="key-dot bg-sueno"></span> Calidad del Sueño</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>Esta guía es de orientación nutricional general. Consulta siempre con tu médico o dietista-nutricionista para adaptar la dieta a tu situación específica.</p>
+</footer>
+
+</div><!-- /wrap -->
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modal">
+    <button class="modal-close" id="modalClose">✕</button>
+    <span class="modal-emoji" id="modalEmoji"></span>
+    <div class="modal-name" id="modalName"></div>
+    <div class="modal-subtitle" id="modalSubtitle"></div>
+    <div class="modal-tags" id="modalTags"></div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<!-- SCROLL TOP -->
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// ===== DATA =====
+const FOODS = [
+  {
+    id: 1,
+    emoji: "🐟",
+    name: "Salmón salvaje",
+    subtitle: "Salmo salar — Pescado azul",
+    desc: "La joya de la nutrición integral. Rico en Omega-3 EPA y DHA, vitamina D3, proteína completa y astaxantina.",
+    tags: ["neuro","circulo","inflam","ldl","musculos","huesos","grasa","sueno"],
+    key: "Omega-3 (EPA/DHA), Vitamina D3, Proteína de alta biodisponibilidad, Astaxantina, Vitamina B12",
+    benefits: [
+      "Reduce triglicéridos y LDL oxidado, sube HDL",
+      "El DHA es el principal componente estructural de las membranas neuronales",
+      "La astaxantina cruza la barrera hematoencefálica como potente antioxidante",
+      "Reduce IL-6 y TNF-α (marcadores clave de inflamación sistémica)",
+      "Vitamina D3 esencial para síntesis de serotonina y regulación del sueño",
+      "Proteína completa con leucina para síntesis muscular óptima",
+      "Calcio biodisponible + vitamina D para densidad ósea"
+    ],
+    how: "2-3 veces por semana. Al horno, al vapor o a baja temperatura. Evitar frito en aceite reutilizado.",
+    caution: null
+  },
+  {
+    id: 2,
+    emoji: "🥑",
+    name: "Aguacate",
+    subtitle: "Persea americana — Fruta grasa",
+    desc: "Grasa monoinsaturada del corazón, potasio que supera al plátano, folato y triptófano para la serotonina.",
+    tags: ["neuro","circulo","inflam","ldl","grasa","esofago"],
+    key: "Ácido oleico, Potasio, Folato (B9), Beta-sitosterol, Luteína, Triptófano",
+    benefits: [
+      "Ácido oleico reduce LDL y sube HDL activamente",
+      "Beta-sitosterol compite con el colesterol en la absorción intestinal",
+      "Potasio regula la presión arterial y ritmo cardíaco",
+      "Folato esencial para síntesis de serotonina y dopamina",
+      "Grasas saludables reducen la grasa visceral abdominal",
+      "pH neutro-alcalino: bien tolerado en RGE"
+    ],
+    how: "Media a un aguacate diario. En tostadas, ensaladas o como guacamole con limón mínimo.",
+    caution: "Con RGE: consumir en cantidad moderada (la grasa en exceso puede relajar el esfínter). Evitar con mucho limón."
+  },
+  {
+    id: 3,
+    emoji: "🫐",
+    name: "Arándanos",
+    subtitle: "Vaccinium myrtillus — Baya antioxidante",
+    desc: "Las antocianinas les dan ese azul profundo y son extraordinariamente neuroprotectoras y antiinflamatorias.",
+    tags: ["neuro","circulo","inflam","grasa","sueno"],
+    key: "Antocianinas, Resveratrol, Vitamina C, Quercetina, Pterostilbeno",
+    benefits: [
+      "Antocianinas mejoran la comunicación neuronal y la memoria",
+      "Reducen el estrés oxidativo cerebral asociado a ansiedad",
+      "Mejoran la función endotelial y reducen la oxidación del LDL",
+      "Reducen la inflamación del tejido adiposo abdominal",
+      "Pterostilbeno tiene propiedades similares al resveratrol",
+      "Mejoran la sensibilidad a la insulina, clave para grasa abdominal"
+    ],
+    how: "150-200g diarios. Frescos en el desayuno, congelados son igualmente válidos.",
+    caution: null
+  },
+  {
+    id: 4,
+    emoji: "🌰",
+    name: "Nueces",
+    subtitle: "Juglans regia — Fruto seco",
+    desc: "Con forma de cerebro y función de cerebro. La única fuente vegetal de ALA con melatonina y serotonina naturales.",
+    tags: ["neuro","circulo","inflam","ldl","sueno","huesos"],
+    key: "ALA (Omega-3 vegetal), Melatonina, Serotonina, Vitamina E, Polifenoles, Magnesio",
+    benefits: [
+      "ALA reduce LDL y es precursora de EPA y DHA en el organismo",
+      "Contiene melatonina en cantidad significativa para el sueño",
+      "Polifenoles reducen la neuroinflamación",
+      "Magnesio activa GABA (relajación y sueño profundo)",
+      "Vitamina E neuroprotectora liposoluble",
+      "Mejoran la función vascular y reducen la presión arterial",
+      "Calcio y magnesio para densidad ósea"
+    ],
+    how: "7-10 nueces diarias (30g). Crudas sin tostar. Por la noche potencian el sueño.",
+    caution: null
+  },
+  {
+    id: 5,
+    emoji: "🌿",
+    name: "Cúrcuma + Pimienta negra",
+    subtitle: "Curcuma longa — Especia neuroprotectora",
+    desc: "La curcumina es el antiinflamatorio natural más estudiado. La piperina de la pimienta aumenta su absorción un 2000%.",
+    tags: ["neuro","inflam","huesos","circulo","grasa","ldl"],
+    key: "Curcumina, Piperina (activadora), Turmerón, Antioxidantes",
+    benefits: [
+      "Cruza la barrera hematoencefálica: reduce neuroinflamación directamente",
+      "Inhibe NF-κB (el maestro regulador de la inflamación)",
+      "Estudios la comparan con fluoxetina (Prozac) en depresión moderada",
+      "Reduce PCR (proteína C reactiva) marcador clave de inflamación sistémica",
+      "Protege condrocitos: regenera el cartílago articular",
+      "Reduce LDL oxidado y mejora perfil lipídico",
+      "Reduce grasa abdominal actuando sobre adiponectina"
+    ],
+    how: "1 cdta diaria con pimienta negra. En guisos, arroces, sopas, batidos o golden latte con leche vegetal.",
+    caution: null
+  },
+  {
+    id: 6,
+    emoji: "🐟",
+    name: "Sardinas en aceite de oliva",
+    subtitle: "Sardina pilchardus — Pescado azul pequeño",
+    desc: "El pescado más sostenible y económico con los mismos beneficios que el salmón. Con espinas: fuente extraordinaria de calcio.",
+    tags: ["neuro","circulo","inflam","ldl","huesos","musculos","sueno"],
+    key: "Omega-3, Calcio (espinas), Vitamina D, B12, Coenzima Q10, Proteína",
+    benefits: [
+      "Con espinas blandas: 400mg calcio por lata (más que un vaso de leche)",
+      "Omega-3 EPA y DHA al mismo nivel que el salmón",
+      "Coenzima Q10 para energía mitocondrial cardíaca",
+      "Vitamina D3 + B12 para sistema nervioso y sueño",
+      "Bajo en mercurio por su tamaño pequeño en la cadena alimentaria"
+    ],
+    how: "2-3 latas por semana. Sardinas en AOVE. Consumir con las espinas para el máximo calcio.",
+    caution: null
+  },
+  {
+    id: 7,
+    emoji: "🍃",
+    name: "Espinacas",
+    subtitle: "Spinacia oleracea — Hoja verde",
+    desc: "El folato de las espinacas es fundamental para la síntesis de serotonina y dopamina. Además, su magnesio activa el GABA.",
+    tags: ["neuro","circulo","inflam","musculos","huesos","grasa"],
+    key: "Folato (B9), Magnesio, Vitamina K2, Nitrates, Luteína, Hierro, Calcio",
+    benefits: [
+      "Folato: su deficiencia se asocia directamente con depresión y ansiedad",
+      "Nitratos naturales mejoran la circulación y oxigenación muscular",
+      "Magnesio activa receptores GABA (tranquilidad y sueño profundo)",
+      "Vitamina K2 para la salud ósea y arterial",
+      "Luteína neuroprotectora",
+      "Fuente de calcio vegetal con alta biodisponibilidad"
+    ],
+    how: "Grandes cantidades: cruda en ensalada, salteada con ajo y AOVE, en batidos verdes. Diaria.",
+    caution: "Con RGE leve: bien tolerada. Oxalatos altos: remojar en agua 30min reduce el 40%."
+  },
+  {
+    id: 8,
+    emoji: "🥦",
+    name: "Brócoli",
+    subtitle: "Brassica oleracea — Crucífera",
+    desc: "El sulforafano del brócoli activa el NRF2, el interruptor maestro de la producción de antioxidantes del propio cuerpo.",
+    tags: ["neuro","inflam","ldl","huesos","grasa","circulo"],
+    key: "Sulforafano, Vitamina C, Vitamina K, Fibra, Calcio, Indole-3-carbinol",
+    benefits: [
+      "Sulforafano activa NRF2: producción endógena de glutatión",
+      "Fibra soluble reduce la absorción de colesterol LDL",
+      "Calcio altamente biodisponible para huesos",
+      "Vitamina K2 para calcificación ósea correcta",
+      "Indol-3-carbinol: detoxificación hepática y equilibrio hormonal",
+      "Reduce la inflamación abdominal visceral"
+    ],
+    how: "Al vapor 5-7 minutos máximo o crudo. Cocido en exceso destruye el sulforafano.",
+    caution: "Con RGE: puede producir gases en personas sensibles. Introducir gradualmente."
+  },
+  {
+    id: 9,
+    emoji: "🌾",
+    name: "Avena integral",
+    subtitle: "Avena sativa — Cereal completo",
+    desc: "Los beta-glucanos de la avena son los reductores de LDL de origen vegetal más eficaces conocidos. Además, regulan el azúcar.",
+    tags: ["neuro","ldl","esofago","grasa","musculos","sueno"],
+    key: "Beta-glucanos, Triptófano, Magnesio, Zinc, Avenantramidas, Fibra soluble",
+    benefits: [
+      "Beta-glucanos reducen LDL entre un 8-10% con consumo regular",
+      "Índice glucémico bajo: control del azúcar, reduce grasa abdominal",
+      "Triptófano abundante para síntesis de serotonina y melatonina",
+      "Textura suave y pH neutro: excelente para esófago irritado",
+      "Avenantramidas: antiinflamatorias únicas de la avena",
+      "Magnesio para relajación muscular y sueño profundo",
+      "Libera glucosa despacio: mantiene energía calma sin picos"
+    ],
+    how: "60-80g en desayuno cocida con agua o leche. Añadir canela (antiinflamatoria) y arándanos.",
+    caution: null
+  },
+  {
+    id: 10,
+    emoji: "🧄",
+    name: "Ajo",
+    subtitle: "Allium sativum — Bulbo",
+    desc: "La alicina del ajo es uno de los compuestos cardiovasculares y antiinflamatorios más potentes de la naturaleza.",
+    tags: ["neuro","circulo","inflam","ldl"],
+    key: "Alicina, S-alilcisteína, Quercetina, Manganeso, Vitamina B6",
+    benefits: [
+      "Alicina reduce LDL y triglicéridos, sube HDL",
+      "Vasodilatador natural: reduce presión arterial sistólica",
+      "Reduce el cortisol plasmático (hormona del estrés)",
+      "S-alilcisteína: neuroprotectora documentada contra Alzheimer",
+      "Anticoagulante natural: previene trombos",
+      "Inmunomodulador: activa células NK (Natural Killer)"
+    ],
+    how: "2-4 dientes diarios. Machacar 10min antes de cocinar activa la alicina. Crudo más potente.",
+    caution: "Con RGE: puede irritar el esófago en personas sensibles. Inicio moderado."
+  },
+  {
+    id: 11,
+    emoji: "🍵",
+    name: "Té verde matcha",
+    subtitle: "Camellia sinensis — Bebida",
+    desc: "La L-teanina produce alfa-ondas cerebrales: una relajación alerta y enfocada, sin ansiedad. Combinada con cafeína suave: equilibrio perfecto.",
+    tags: ["neuro","ldl","inflam","grasa"],
+    key: "L-teanina, EGCG (Epigalocatequina galato), Cafeína (moderada), Vitamina K",
+    benefits: [
+      "L-teanina cruza la barrera hematoencefálica en 30-40 minutos",
+      "Aumenta ondas alfa cerebrales: calma sin somnolencia",
+      "EGCG: polifenol más estudiado para reducir grasa abdominal visceral",
+      "Reduce el LDL oxidado significativamente",
+      "Inhibe la absorción intestinal de grasa",
+      "Sinergia cafeína + L-teanina: energía sin ansiedad ni nerviosismo"
+    ],
+    how: "1-2 tazas por la mañana. Preparar a 70-80°C (no agua hirviendo, amarga y destruye nutrientes).",
+    caution: "Con RGE: el té verde puede aumentar la acidez en personas sensibles. Probar con cautela."
+  },
+  {
+    id: 12,
+    emoji: "🧘",
+    name: "Manzanilla alemana",
+    subtitle: "Matricaria chamomilla — Infusión",
+    desc: "Actúa sobre receptores GABA-A como un ansiolítico suave natural. Su apigenina promueve la calma y la inducción al sueño.",
+    tags: ["neuro","inflam","esofago","sueno"],
+    key: "Apigenina, Bisabolol, Camazuleno, Flavonoides",
+    benefits: [
+      "Apigenina se une a receptores GABA-A (mismo mecanismo que benzodiacepinas, sin adicción)",
+      "Reduce el tiempo de conciliación del sueño",
+      "Bisabolol antiinflamatorio y protector de la mucosa gástrica y esofágica",
+      "Camazuleno (que la hace azul) es antiinflamatorio tópico y sistémico",
+      "Reduce el cortisol post-estrés",
+      "Protege la mucosa esofágica: excelente para RGE"
+    ],
+    how: "1-2 tazas. La última 30-45min antes de dormir. Infusión cubierta 5-7 minutos para preservar volátiles.",
+    caution: null
+  },
+  {
+    id: 13,
+    emoji: "🐄",
+    name: "Kéfir natural",
+    subtitle: "Fermentado de leche — Probiótico",
+    desc: "El eje intestino-cerebro es real. El 90% de la serotonina se produce en el intestino. El kéfir nutre directamente este sistema.",
+    tags: ["neuro","inflam","huesos","esofago","musculos"],
+    key: "Probióticos (>30 cepas), Calcio, Proteína, Vitamina K2, Vitamina D, Triptófano",
+    benefits: [
+      "Cepas probióticas que aumentan la producción intestinal de serotonina",
+      "Lactobacillus rhamnosus reduce la ansiedad por vía vagal",
+      "Lactosa parcialmente predigerida: mejor tolerancia que la leche",
+      "Calcio + Vitamina K2: la combinación ideal para la mineralización ósea",
+      "Reduce la permeabilidad intestinal ('leaky gut') que alimenta la inflamación",
+      "Proteína completa con todos los aminoácidos esenciales para músculo",
+      "pH ácido suave: bien tolerado en la mayoría de casos de RGE"
+    ],
+    how: "200ml diarios. Natural sin azúcar. Por la mañana o merienda. Introducir gradualmente.",
+    caution: "Con intolerancia a la lactosa grave: usar kéfir de agua o kéfir de leche de cabra (menor lactosa)."
+  },
+  {
+    id: 14,
+    emoji: "🥚",
+    name: "Huevos camperos",
+    subtitle: "Gallus gallus — Proteína completa",
+    desc: "La colina del huevo es esencial para la síntesis de acetilcolina (neurotransmisor de la memoria y cognición). Injustamente demonizados.",
+    tags: ["neuro","musculos","huesos","sueno","circulo"],
+    key: "Colina, Triptófano, Vitamina D3, B12, Luteína, Zeaxantina, Proteína completa",
+    benefits: [
+      "Colina: precursora de acetilcolina, esencial para memoria y calidad del sueño REM",
+      "Triptófano para síntesis de serotonina y melatonina",
+      "Vitamina D3 y B12 para sistema nervioso periférico y central",
+      "Proteína de máxima biodisponibilidad (PDCAAS = 1.0): síntesis muscular",
+      "Luteína y Zeaxantina: neuroprotectoras de la retina",
+      "Lecitina: emulsionante natural que no eleva el colesterol sistémico en personas sanas"
+    ],
+    how: "1-2 diarios. Cocidos, pasados por agua, en tortilla. La yema debe quedar líquida o semilíquida.",
+    caution: "Con RGE: los huevos son de los alimentos mejor tolerados. Evitar fritos con mucho aceite."
+  },
+  {
+    id: 15,
+    emoji: "🫚",
+    name: "Aceite de oliva virgen extra",
+    subtitle: "Olea europaea — Grasa monoinsaturada",
+    desc: "El oleocantal del AOVE tiene efecto antiinflamatorio similar al ibuprofeno, pero sin sus efectos secundarios. La base de la dieta mediterránea.",
+    tags: ["neuro","circulo","inflam","ldl","esofago"],
+    key: "Ácido oleico, Oleocantal, Oleuropeína, Vitamina E, Escualeno, Polifenoles",
+    benefits: [
+      "Oleocantal inhibe COX-1 y COX-2 (como AINEs pero de forma natural)",
+      "Ácido oleico reduce LDL y aumenta HDL",
+      "Reduce la oxidación de LDL (el LDL oxidado es el realmente peligroso)",
+      "Oleuropeína neuroprotectora y cardioprotectora",
+      "Protege la mucosa gástrica y esofágica",
+      "Vitamina E: antioxidante liposoluble para membranas celulares"
+    ],
+    how: "3-4 cdas diarias. En crudo sobre ensaladas y platos terminados. Para cocinar, temperatura moderada.",
+    caution: "Con RGE: en exceso puede relajar el esfínter. Máximo 2-3 cdas si el reflujo es activo."
+  },
+  {
+    id: 16,
+    emoji: "🍒",
+    name: "Cerezas ácidas (Tart Cherry)",
+    subtitle: "Prunus cerasus — Baya roja",
+    desc: "La fuente natural de melatonina más potente conocida. También antiinflamatorias musculares: favoritas de los deportistas de élite.",
+    tags: ["neuro","inflam","huesos","sueno","musculos"],
+    key: "Melatonina, Antocianinas, Quercetina, Potasio, Vitamina C",
+    benefits: [
+      "Melatonina en concentración significativa: regula el ciclo circadiano",
+      "Estudios demuestran aumento del 85% de melatonina urinaria tras su consumo",
+      "Mejoran calidad y duración del sueño en adultos mayores",
+      "Antocianinas reducen marcadores de inflamación muscular (CK, IL-6)",
+      "Reducen el dolor articular en gota y artritis",
+      "Quercetina: antihistamínico natural (sueño más profundo)"
+    ],
+    how: "80-100ml zumo concentrado o 200g cerezas frescas. Por la tarde o noche.",
+    caution: "Con RGE: las cerezas ácidas son ligeramente ácidas. Observar tolerancia individual."
+  },
+  {
+    id: 17,
+    emoji: "🥝",
+    name: "Kiwi",
+    subtitle: "Actinidia deliciosa — Fruta tropical",
+    desc: "Estudios de la Universidad de Otago muestran que 2 kiwis antes de dormir mejoran inicio, duración y calidad del sueño en 4 semanas.",
+    tags: ["neuro","circulo","inflam","sueno","huesos"],
+    key: "Serotonina (precursores), Vitamina C, Vitamina K, Actinidina, Folato, Fibra",
+    benefits: [
+      "Contiene serotonina y precursores que mejoran el inicio del sueño",
+      "2 kiwis nocturnos: -35% tiempo en conciliar sueño (estudio Oxford)",
+      "Vitamina C: 150% CDR en 2 unidades, esencial para síntesis de colágeno",
+      "Vitamina K: mineralización ósea y coagulación",
+      "Folato para síntesis de neurotransmisores del bienestar",
+      "Actinidina mejora la digestión de proteínas"
+    ],
+    how: "2 kiwis 30-60 minutos antes de dormir. Consumir con la piel limpia (fibra extra).",
+    caution: "Con RGE activo: son ligeramente ácidos. Probar en pequeña cantidad primero."
+  },
+  {
+    id: 18,
+    emoji: "🍌",
+    name: "Plátano maduro",
+    subtitle: "Musa paradisiaca — Fruta tropical",
+    desc: "El plátano maduro (con manchas) contiene más triptófano biodisponible y eleva la glucosa suavemente, favoreciendo la entrada de triptófano al cerebro.",
+    tags: ["neuro","musculos","huesos","esofago","sueno"],
+    key: "Triptófano, Potasio, Vitamina B6, Magnesio, Dopamina, Serotonina",
+    benefits: [
+      "Triptófano + carbohidratos simples: sube la serotonina rápidamente",
+      "Vitamina B6: cofactor indispensable para convertir triptófano en serotonina",
+      "Potasio: relaja la musculatura, previene calambres y reduce PA",
+      "Dopamina natural en la pulpa (aunque no cruza barrera hematoencefálica directamente)",
+      "pH alcalino: excelente para esófago, neutraliza el ácido",
+      "Magnesio + triptófano: combinación poderosa para conciliar el sueño"
+    ],
+    how: "1 plátano maduro a media mañana o como parte del ritual nocturno.",
+    caution: null
+  },
+  {
+    id: 19,
+    emoji: "🫘",
+    name: "Lentejas y legumbres",
+    subtitle: "Lens culinaris — Leguminosa",
+    desc: "El magnesio, zinc, folato y triptófano de las legumbres las convierten en un pilar neuroquímico y metabólico fundamental.",
+    tags: ["neuro","ldl","grasa","musculos","circulo","huesos"],
+    key: "Proteína vegetal, Fibra soluble, Folato, Magnesio, Zinc, Hierro, Triptófano",
+    benefits: [
+      "Fibra soluble: reduce LDL activamente al unirse a ácidos biliares",
+      "Proteína vegetal completa (con cereal): síntesis muscular eficiente",
+      "Índice glucémico muy bajo: control glucémico óptimo para grasa abdominal",
+      "Folato: síntesis de serotonina y dopamina",
+      "Zinc: cofactor de enzimas de neurotransmisores del bienestar",
+      "Prebiótico natural: nutre Bifidobacterium y Lactobacillus intestinales"
+    ],
+    how: "4-5 veces por semana (200-250g cocidas). Con cereales para proteína completa. Bien cocidas.",
+    caution: "Con RGE: cocinar bien y dejar reposar. Pueden producir gas en personas sensibles."
+  },
+  {
+    id: 20,
+    emoji: "🌱",
+    name: "Semillas de chía",
+    subtitle: "Salvia hispanica — Semilla",
+    desc: "La fuente vegetal más concentrada de Omega-3 (ALA). Forman gel en el intestino, atrapando colesterol y grasas.",
+    tags: ["neuro","ldl","circulo","huesos","grasa","musculos"],
+    key: "ALA (Omega-3), Fibra soluble (gel), Calcio, Fósforo, Proteína, Zinc",
+    benefits: [
+      "Forman gel en el intestino que reduce absorción de colesterol LDL",
+      "Calcio: 3 cdas = mismo calcio que un vaso de leche",
+      "ALA: precursor de EPA y DHA para cerebro y corazón",
+      "Fibra que aumenta la saciedad, reduce grasa abdominal",
+      "Fósforo para mineralización ósea y dental",
+      "Proteína completa con todos los aminoácidos esenciales"
+    ],
+    how: "2-3 cdas diarias. En agua (agua de chía), avena, yogur. Remojar 20-30min antes.",
+    caution: null
+  },
+  {
+    id: 21,
+    emoji: "🥛",
+    name: "Leche y yogur natural",
+    subtitle: "Leche entera/semi — Lácteo",
+    desc: "El triptófano de la leche tibia + el calcio que activa su conversión a serotonina es uno de los remedios más antiguos para el sueño.",
+    tags: ["neuro","huesos","musculos","sueno","esofago"],
+    key: "Triptófano, Calcio, Vitamina D, B12, Proteína, Riboflavina",
+    benefits: [
+      "Triptófano + calcio: el calcio activa la conversión de triptófano en melatonina",
+      "Calcio biodisponible máximo para mineralización ósea",
+      "Vitamina D (enriquecida) para absorción del calcio",
+      "Vitamina B12: esencial para mielina de los nervios",
+      "Proteína con leucina: síntesis proteica muscular",
+      "pH neutro-alcalino: bien tolerado en RGE, neutraliza ácido"
+    ],
+    how: "Leche tibia con 1 cda miel antes de dormir. Yogur natural (sin azúcar) 200g diarios.",
+    caution: "Con RGE: la leche fría puede aumentar la producción de ácido. Preferir tibia. Evitar entera en exceso."
+  },
+  {
+    id: 22,
+    emoji: "🦃",
+    name: "Pavo y pollo",
+    subtitle: "Meleagris gallopavo — Proteína magra",
+    desc: "El pavo es el campeón del triptófano entre las carnes. Su contenido bajo en grasa lo hace ideal para cenas ligeras que favorecen el sueño.",
+    tags: ["neuro","musculos","sueno","esofago"],
+    key: "Triptófano (máxima concentración), Proteína magra, B3, B6, Selenio, Zinc",
+    benefits: [
+      "Mayor concentración de triptófano de todas las carnes",
+      "Proteína magra de alta biodisponibilidad para síntesis muscular",
+      "Vitaminas B3 y B6: cofactores del sistema nervioso y síntesis de serotonina",
+      "Selenio: antioxidante que protege las neuronas",
+      "Bajo en grasa: ideal para cenar sin sobrecargar la digestión antes de dormir",
+      "pH neutro: excelente tolerancia con RGE"
+    ],
+    how: "A la plancha, al horno o al vapor. Cenas de 120-150g ideales para activar la serotonina nocturna.",
+    caution: null
+  },
+  {
+    id: 23,
+    emoji: "🫙",
+    name: "Miso, kimchi, chucrut",
+    subtitle: "Alimentos fermentados — Probióticos",
+    desc: "El eje intestino-cerebro es el segundo cerebro. Los fermentados alimentan directamente las bacterias productoras de GABA y serotonina.",
+    tags: ["neuro","inflam","esofago","grasa"],
+    key: "Lactobacilos, Bifidobacterias, GABA (producido in situ), Enzimas, Vitamina K2",
+    benefits: [
+      "Lactobacillus reuteri y L. rhamnosus: demostrados en reducción de ansiedad y depresión",
+      "Producen GABA directamente en el intestino",
+      "Reducen la permeabilidad intestinal que alimenta la inflamación sistémica",
+      "El miso contiene microorganismos vivos que mejoran la microbiota",
+      "Vitamina K2 en natto/miso: salud cardiovascular y ósea",
+      "Reducen el cortisol al normalizar el eje intestino-suprarrenal"
+    ],
+    how: "Miso: sopa diaria (sin hervir para no matar probióticos). Kimchi/chucrut: 2-3 cdas con la comida.",
+    caution: "Con RGE: el kimchi picante puede irritar. El chucrut suave y el miso son mejor opción."
+  },
+  {
+    id: 24,
+    emoji: "🍫",
+    name: "Chocolate negro >70%",
+    subtitle: "Theobroma cacao — Superfood",
+    desc: "La feniletilamina del cacao activa dopamina. Sus flavonoides mejoran el flujo sanguíneo cerebral un 10-15% en 2 horas tras consumirlo.",
+    tags: ["neuro","circulo","inflam","ldl"],
+    key: "Flavonoides (epicatequina), Magnesio, Feniletilamina, Triptófano, Teobromina",
+    benefits: [
+      "Epicatequina mejora el flujo sanguíneo cerebral y la neuroplasticidad",
+      "Feniletilamina: estimula dopamina y norepinefrina (motivación y placer)",
+      "Magnesio: cofactor de más de 300 enzimas, activa GABA",
+      "Teobromina: vasodilatador más suave y duradero que la cafeína",
+      "Reduce LDL oxidado y sube HDL",
+      "Triptófano: precursor de serotonina"
+    ],
+    how: "20-30g diarios (2-3 onzas). Mínimo 70% cacao, preferiblemente 85%+. Sin leche.",
+    caution: "Con RGE: el chocolate en exceso relaja el esfínter esofágico. Máximo 1-2 onzas y por la mañana."
+  },
+  {
+    id: 25,
+    emoji: "🦴",
+    name: "Caldo de huesos",
+    subtitle: "Colágeno hidrolizado natural — Reparador",
+    desc: "El colágeno, glicina y prolina del caldo de huesos reparan directamente el cartílago, el tejido conjuntivo y... la mucosa del esófago.",
+    tags: ["huesos","inflam","musculos","esofago","sueno"],
+    key: "Colágeno tipo II, Glicina, Prolina, Glucosamina, Condroitina, Gelatina",
+    benefits: [
+      "Colágeno tipo II: componente principal del cartílago articular",
+      "Glucosamina y condroitina: regeneran el cartílago de rodillas, caderas y columna",
+      "Glicina: actúa como neurotransmisor inhibidor, mejora el sueño profundo",
+      "Gelatina cubre y protege la mucosa esofágica y gástrica",
+      "Prolina + lisina: síntesis de nuevo colágeno óseo y articular",
+      "Reduce la inflamación articular en artritis reumatoide y artrosis"
+    ],
+    how: "1-2 tazas diarias. Cocer huesos 12-24h con vinagre de manzana (extrae minerales). Como sopa o bebida.",
+    caution: null
+  },
+  {
+    id: 26,
+    emoji: "🥬",
+    name: "Col rizada (Kale) y col",
+    subtitle: "Brassica oleracea — Crucífera",
+    desc: "El kale tiene más calcio biodisponible que la leche y es una de las fuentes más ricas en Vitamina K2 para la salud ósea.",
+    tags: ["huesos","inflam","circulo","ldl","neuro"],
+    key: "Vitamina K2, Calcio, Vitamina C, Luteína, Glucosinolatos, Fibra",
+    benefits: [
+      "Calcio: 150mg por taza cocinada (más biodisponible que la leche)",
+      "Vitamina K2: dirige el calcio hacia los huesos y aleja de las arterias",
+      "Glucosinolatos: anti-inflamatorios y detoxificantes hepáticos",
+      "Fibra soluble que reduce LDL",
+      "Luteína neuroprotectora",
+      "Vitamina C: síntesis de colágeno óseo y vascular"
+    ],
+    how: "Cruda en ensalada masajeada con AOVE y limón. Salteada. En batidos verdes. 3-4 veces semana.",
+    caution: "Con RGE: bien tolerada en general."
+  },
+  {
+    id: 27,
+    emoji: "🌺",
+    name: "Jengibre fresco",
+    subtitle: "Zingiber officinale — Rizoma",
+    desc: "El gingerol y el shogaol actúan sobre los mismos receptores que los AINEs pero sin sus efectos secundarios gástricos.",
+    tags: ["inflam","circulo","huesos","neuro"],
+    key: "Gingerol, Shogaol, Zingerona, Paradol, Vitamina B6",
+    benefits: [
+      "Inhibe COX-2: reducción de la inflamación articular similar al ibuprofeno",
+      "Reduce el dolor en osteoartritis de rodilla (meta-análisis)",
+      "Mejora la circulación periférica y reduce la presión arterial",
+      "Reduce el cortisol y el estrés oxidativo",
+      "Vasodilatador: mejora el flujo sanguíneo cerebral",
+      "Efectos neuroprotectores documentados"
+    ],
+    how: "2-4g de jengibre fresco rallado diario. En infusiones, guisos, zumos. Con cúrcuma: sinergia potente.",
+    caution: "Con RGE: a dosis altas puede irritar el esófago en personas muy sensibles. Empezar con poca cantidad."
+  },
+  {
+    id: 28,
+    emoji: "💪",
+    name: "Almendras",
+    subtitle: "Prunus dulcis — Fruto seco",
+    desc: "La almendra es el fruto seco con más vitamina E (neuroprotectora), más calcio y más magnesio entre los frutos secos.",
+    tags: ["neuro","ldl","musculos","huesos","circulo"],
+    key: "Vitamina E, Magnesio, Calcio, Ácido oleico, Tirosina, Fósforo",
+    benefits: [
+      "Vitamina E liposoluble: protege membranas neuronales del estrés oxidativo",
+      "Tirosina: precursora de dopamina y norepinefrina (motivación y enfoque)",
+      "Magnesio: relaja el sistema nervioso, activa GABA, mejora el sueño",
+      "Calcio + fósforo: mineralización ósea y densidad",
+      "Ácido oleico reduce LDL y protege el endotelio vascular",
+      "Reduce el LDL en un 6-9% con consumo regular de 30g/día"
+    ],
+    how: "20-25 almendras diarias (30g). Crudas, sin sal. Remojadas en agua son más digestivas.",
+    caution: null
+  },
+  {
+    id: 29,
+    emoji: "🌸",
+    name: "Ashwagandha",
+    subtitle: "Withania somnifera — Adaptógeno",
+    desc: "El adaptógeno más estudiado del mundo. 60 estudios clínicos respaldan su eficacia en la reducción del cortisol y la ansiedad.",
+    tags: ["neuro","inflam","musculos","sueno","huesos"],
+    key: "Withanólidos, Withanoside IV, Alkaloides, GABA (activador)",
+    benefits: [
+      "Reduce el cortisol plasmático un 27-30% en 60 días (meta-análisis 2021)",
+      "Withanólidos actúan sobre receptores GABA con efecto ansiolítico",
+      "Mejora la calidad del sueño profundo (sueño de ondas lentas)",
+      "Aumenta la testosterona y reduce marcadores inflamatorios musculares",
+      "Neuroprotector: reduce el beta-amiloide (relacionado con Alzheimer)",
+      "Aumenta la resistencia y recuperación muscular post-ejercicio"
+    ],
+    how: "300-600mg extracto estandarizado diario. Por la noche con leche tibia. Mínimo 60 días para notar efecto.",
+    caution: "Con RGE: algunos reportes de irritación en vacío. Tomar siempre con alimentos."
+  },
+  {
+    id: 30,
+    emoji: "🌾",
+    name: "Quinoa",
+    subtitle: "Chenopodium quinoa — Pseudocereal",
+    desc: "El único cereal con proteína completa (todos los aminoácidos esenciales). Sin gluten y con magnesio alto para el sistema nervioso.",
+    tags: ["neuro","musculos","huesos","grasa","ldl"],
+    key: "Proteína completa (9 AA esenciales), Magnesio, Hierro, Zinc, Fibra, Quercetina",
+    benefits: [
+      "Proteína completa: síntesis muscular sin combinar con otras fuentes",
+      "Índice glucémico bajo: control del azúcar y reducción de grasa abdominal",
+      "Magnesio alto: activación GABA y relajación del sistema nervioso",
+      "Zinc: cofactor de enzimas que sintetizan neurotransmisores",
+      "Quercetina: antiinflamatoria y con efecto ansiolítico leve",
+      "Calcio y fósforo para la densidad ósea"
+    ],
+    how: "Como sustituto del arroz o la pasta. 3-4 veces por semana. Enjuagar bien antes de cocer.",
+    caution: null
+  },
+  {
+    id: 31,
+    emoji: "🍯",
+    name: "Miel cruda de manuka",
+    subtitle: "Apis mellifera — Endulzante terapéutico",
+    desc: "Una cucharadita de miel cruda antes de dormir carga el glucógeno hepático, evitando que el hígado active el cortisol a las 2-3am.",
+    tags: ["neuro","inflam","esofago","sueno"],
+    key: "Metilglioxal (MGO), Enzimas vivas, Glucosa/Fructosa natural, Polifenoles",
+    benefits: [
+      "Carga glucógeno hepático: previene el despertar nocturno por hipoglucemia leve",
+      "Reduce la liberación de cortisol nocturno",
+      "MGO (Manuka): potente antimicrobiano que protege la mucosa esofágica",
+      "Recubre y alivia la irritación del esófago (efecto barrera natural)",
+      "Polifenoles antiinflamatorios",
+      "Activa orexina que regula el ciclo sueño-vigilia"
+    ],
+    how: "1 cucharadita antes de dormir. En leche tibia o directamente. Miel cruda (no pasteurizada).",
+    caution: "Con RGE: la miel es uno de los pocos dulces que NO empeora el reflujo. Está demostrado que lo alivia."
+  },
+  {
+    id: 32,
+    emoji: "🫚",
+    name: "Semillas de calabaza",
+    subtitle: "Cucurbita pepo — Semilla",
+    desc: "La semilla más rica en zinc del reino vegetal. El zinc es cofactor de más de 100 enzimas neurológicas. Además, alta en triptófano.",
+    tags: ["neuro","musculos","huesos","sueno","inflam"],
+    key: "Zinc, Triptófano, Magnesio, Fósforo, Hierro, Vitamina K",
+    benefits: [
+      "Zinc: cofactor de ZnT3 que regula el glutamato neuronal (calma y equilibrio)",
+      "Triptófano en alta concentración para serotonina y melatonina",
+      "Magnesio: activación del GABA y relajación muscular profunda",
+      "Fósforo + Calcio: mineralización ósea",
+      "Vitamina K: síntesis de osteocalcina para los huesos",
+      "Hierro: transporte de oxígeno a músculos y cerebro"
+    ],
+    how: "2-3 cdas diarias. Crudas o tostadas sin sal. Fantásticas por la noche para inducir el sueño.",
+    caution: null
+  },
+  {
+    id: 33,
+    emoji: "🌿",
+    name: "Espárragos",
+    subtitle: "Asparagus officinalis — Verdura",
+    desc: "Con el nivel más alto de folato (vitamina B9) entre las verduras. El folato es esencial para el estado de ánimo: su déficit causa depresión.",
+    tags: ["neuro","inflam","circulo","grasa","ldl"],
+    key: "Folato (B9), Asparagina, Vitamina K, Inulina (prebiótico), Vitamina C",
+    benefits: [
+      "Folato: cofactor en la síntesis de serotonina, dopamina y norepinefrina",
+      "Déficit de folato está directamente relacionado con depresión y ansiedad",
+      "Asparagina: diurético natural que reduce la presión arterial",
+      "Inulina: prebiótico potente que alimenta Bifidobacterias intestinales",
+      "Bajo en calorías, alto en fibra: ideal para la reducción de grasa abdominal",
+      "Vitamina K para coagulación sana y salud ósea"
+    ],
+    how: "Al vapor, a la plancha o crudos en ensalada. 5-6 espárragos, 3-4 veces por semana.",
+    caution: null
+  },
+  {
+    id: 34,
+    emoji: "💙",
+    name: "Aloe vera puro",
+    subtitle: "Aloe barbadensis — Planta medicinal",
+    desc: "El acemanano del aloe recubre y regenera activamente la mucosa del esófago. Es uno de los más potentes protectores en el RGE.",
+    tags: ["esofago","inflam"],
+    key: "Acemanano, Alantoína, Enzimas (lipasas, amilasas), Vitamina E, Zinc",
+    benefits: [
+      "Acemanano: crea una capa protectora sobre la mucosa esofágica irritada",
+      "Reduce la frecuencia y severidad del reflujo (estudio vs omeprazol 2015)",
+      "Alantoína: regenera el tejido mucoso dañado",
+      "Antiinflamatorio local de la mucosa digestiva",
+      "Mejora el vaciado gástrico: menos tiempo para que el ácido suba",
+      "Enzimas digestivas que reducen la fermentación intestinal"
+    ],
+    how: "30-60ml de gel de aloe vera (sin aloína/látex) 20 minutos antes de las comidas.",
+    caution: "Usar SOLO gel interior (transparente), no el látex amarillo que es laxante y tóxico en exceso."
+  },
+  {
+    id: 35,
+    emoji: "🍈",
+    name: "Melón y papaya",
+    subtitle: "Cucumis melo / Carica papaya — Frutas alcalinas",
+    desc: "De las pocas frutas con pH alcalino: neutralizan el ácido en lugar de estimularlo. La papaína de la papaya es una enzima digestiva antiinflamatoria.",
+    tags: ["esofago","inflam","neuro"],
+    key: "pH alcalino, Papaína (papaya), Beta-caroteno, Vitamina C, Potasio",
+    benefits: [
+      "pH alcalino 6-7: no estimulan la producción de ácido gástrico",
+      "Neutralizan activamente el ácido en el esófago",
+      "Papaína (papaya): enzima proteolítica que mejora la digestión y reduce inflamación",
+      "Beta-caroteno: antioxidante liposoluble neuroprotector",
+      "Potasio: relajación muscular y regulación de la presión arterial",
+      "Alto contenido en agua: rehidratación de la mucosa esofágica"
+    ],
+    how: "Melón y papaya en el desayuno o merienda. Como fruta de digestión o postre tras comidas.",
+    caution: null
+  },
+  {
+    id: 36,
+    emoji: "❤️",
+    name: "Remolacha",
+    subtitle: "Beta vulgaris — Raíz",
+    desc: "Los nitratos de la remolacha se convierten en óxido nítrico: el vasodilatador más potente del sistema circulatorio. Mejora el rendimiento un 3-5%.",
+    tags: ["circulo","neuro","inflam"],
+    key: "Nitratos, Betalaínas (betacianinas), Betaína, Ácido fólico, Manganeso",
+    benefits: [
+      "Nitratos → Óxido Nítrico (NO): vasodilatación, reduce la presión arterial",
+      "Mejora el aporte de oxígeno y glucosa al cerebro",
+      "Betaína: reduce la homocisteína (factor de riesgo cardiovascular)",
+      "Betacianinas (pigmento rojo): potentes antioxidantes que reducen inflamación",
+      "Folato para neurotransmisores y salud cardiovascular",
+      "Reduce la fatiga muscular por mejor oxigenación"
+    ],
+    how: "200ml zumo fresco 2-3h antes de actividad o como parte de la dieta. Cruda en ensalada o asada.",
+    caution: "Con RGE: bien tolerada en general. El zumo puede ser algo ácido; preferir cruda o asada."
+  }
+];
+
+// ===== TAG LABELS =====
+const TAG_LABELS = {
+  neuro: '🧠 Neurológico',
+  circulo: '❤️ Circulatorio',
+  inflam: '🌿 Antiinflamatorio',
+  ldl: '💛 Baja LDL',
+  esofago: '💙 Esófago/RGE',
+  musculos: '💪 Músculos',
+  huesos: '🦴 Huesos & Articulaciones',
+  grasa: '⚡ Grasa Abdominal',
+  sueno: '🌙 Sueño'
+};
+
+// ===== STATE =====
+let activeFilter = 'all';
+let searchQuery = '';
+
+// ===== RENDER =====
+function renderCards() {
+  const grid = document.getElementById('foodGrid');
+  grid.innerHTML = '';
+  let count = 0;
+
+  FOODS.forEach((food, i) => {
+    const matchesFilter = activeFilter === 'all' || food.tags.includes(activeFilter);
+    const matchesSearch = searchQuery === '' ||
+      food.name.toLowerCase().includes(searchQuery) ||
+      food.desc.toLowerCase().includes(searchQuery) ||
+      food.tags.some(t => TAG_LABELS[t].toLowerCase().includes(searchQuery));
+
+    if (!matchesFilter || !matchesSearch) return;
+    count++;
+
+    const card = document.createElement('div');
+    card.className = 'food-card';
+    card.style.animationDelay = `${(count-1) * 0.04}s`;
+
+    const tagsHTML = food.tags.map(t =>
+      `<span class="food-tag c-${t}">${TAG_LABELS[t]}</span>`
+    ).join('');
+
+    card.innerHTML = `
+      <div class="card-top">
+        <div>
+          <div class="food-name">${food.name}</div>
+          <div class="food-subtitle">${food.subtitle}</div>
+        </div>
+        <span class="food-emoji">${food.emoji}</span>
+      </div>
+      <p class="food-desc">${food.desc}</p>
+      <div class="food-tags">${tagsHTML}</div>
+      ${food.caution ? `<div class="caution-badge">⚠️ ${food.caution}</div>` : ''}
+    `;
+
+    card.addEventListener('click', () => openModal(food));
+    grid.appendChild(card);
+  });
+
+  const bar = document.getElementById('resultsBar');
+  if (searchQuery || activeFilter !== 'all') {
+    bar.textContent = `${count} alimento${count !== 1 ? 's' : ''} encontrado${count !== 1 ? 's' : ''}`;
+  } else {
+    bar.textContent = `Mostrando los ${count} alimentos — Haz clic en cada uno para más información`;
+  }
+}
+
+// ===== MODAL =====
+function openModal(food) {
+  document.getElementById('modalEmoji').textContent = food.emoji;
+  document.getElementById('modalName').textContent = food.name;
+  document.getElementById('modalSubtitle').textContent = food.subtitle;
+
+  document.getElementById('modalTags').innerHTML = food.tags.map(t =>
+    `<span class="food-tag c-${t}">${TAG_LABELS[t]}</span>`
+  ).join('');
+
+  let bodyHTML = `
+    <div class="modal-section">
+      <h4>Nutrientes clave</h4>
+      <p>${food.key}</p>
+    </div>
+    <div class="modal-section">
+      <h4>Beneficios documentados</h4>
+      <ul>${food.benefits.map(b => `<li>${b}</li>`).join('')}</ul>
+    </div>
+    <div class="modal-section">
+      <h4>Cómo y cuándo tomarlo</h4>
+      <p>${food.how}</p>
+    </div>
+  `;
+  if (food.caution) {
+    bodyHTML += `<div class="caution-box"><strong>⚠️ Precaución con RGE</strong>${food.caution}</div>`;
+  }
+  document.getElementById('modalBody').innerHTML = bodyHTML;
+
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ===== FILTERS =====
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilter = btn.dataset.filter;
+    renderCards();
+    document.getElementById('foodGrid').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+// ===== SEARCH =====
+document.getElementById('searchInput').addEventListener('input', e => {
+  searchQuery = e.target.value.toLowerCase().trim();
+  renderCards();
+});
+
+// ===== MODAL CLOSE =====
+document.getElementById('modalClose').addEventListener('click', closeModal);
+document.getElementById('modalOverlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// ===== SCROLL TOP =====
+window.addEventListener('scroll', () => {
+  const btn = document.getElementById('scrollTop');
+  if (window.scrollY > 400) btn.classList.add('show');
+  else btn.classList.remove('show');
+});
+
+// ===== INIT =====
+renderCards();
+</script>
+</body>
+</html>
