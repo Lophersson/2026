@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plan de Acción Sostenible — Ártabro Tender · ODS 9</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+
+<style>
+/* ─────────────────────────────────────────
+   TOKENS
+───────────────────────────────────────── */
+:root {
+  --ink:        #0d1117;
+  --paper:      #f5f0e8;
+  --rust:       #c84b2f;
+  --rust-light: #e87a5d;
+  --teal:       #0a7f6e;
+  --teal-light: #2eb89c;
+  --gold:       #d4a228;
+  --gold-light: #f0c852;
+  --slate:      #1e3a4c;
+  --slate-light:#2e5a74;
+  --mist:       rgba(245,240,232,0.12);
+  --ease-smooth: cubic-bezier(0.19,1,0.22,1);
+}
+
+/* ─────────────────────────────────────────
+   RESET & BASE
+───────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { overflow: hidden; height: 100%; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--ink);
+  color: var(--paper);
+  height: 100%;
+  overflow: hidden;
+  cursor: default;
+}
+
+/* ─────────────────────────────────────────
+   STAGE
+───────────────────────────────────────── */
+.stage {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  grid-template-rows: 1fr auto;
+}
+
+/* ─────────────────────────────────────────
+   SLIDE TRACK
+───────────────────────────────────────── */
+.track-wrap {
+  position: relative;
+  overflow: hidden;
+}
+
+.track {
+  display: flex;
+  height: 100%;
+  transition: transform 0.85s var(--ease-smooth);
+  will-change: transform;
+}
+
+/* ─────────────────────────────────────────
+   INDIVIDUAL SLIDE
+───────────────────────────────────────── */
+.slide {
+  flex: 0 0 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+}
+
+/* Background image layer */
+.slide__bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: saturate(0.7) brightness(0.45);
+  transition: transform 1.2s var(--ease-smooth);
+  transform: scale(1.04);
+}
+.slide.active .slide__bg { transform: scale(1); }
+
+/* Color overlay per slide */
+.slide__overlay {
+  position: absolute;
+  inset: 0;
+  opacity: 0.72;
+}
+
+/* Noise texture for depth */
+.slide__noise {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Main content grid */
+.slide__inner {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+/* Left column — text */
+.slide__left {
+  padding: clamp(2.5rem, 5vh, 4.5rem) clamp(2.5rem, 5vw, 5rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.4rem;
+}
+
+/* Right column — visual */
+.slide__right {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  overflow: hidden;
+}
+
+/* ─────────────────────────────────────────
+   TYPOGRAPHY
+───────────────────────────────────────── */
+.slide-label {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(0.75rem, 1.1vw, 0.95rem);
+  letter-spacing: 0.28em;
+  opacity: 0.65;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+.slide-label::before {
+  content: '';
+  display: block;
+  width: 2rem;
+  height: 2px;
+  background: currentColor;
+  opacity: 0.6;
+}
+
+h1, h2 {
+  font-family: 'DM Serif Display', serif;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+h1 {
+  font-size: clamp(2.8rem, 5.5vw, 5rem);
+  font-style: italic;
+}
+
+h2 {
+  font-size: clamp(2rem, 3.8vw, 3.4rem);
+}
+
+.lead {
+  font-size: clamp(0.92rem, 1.4vw, 1.12rem);
+  line-height: 1.75;
+  font-style: italic;
+  opacity: 0.88;
+  max-width: 44ch;
+}
+
+/* List */
+.fact-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.fact-list li {
+  font-size: clamp(0.85rem, 1.2vw, 1rem);
+  line-height: 1.55;
+  padding-left: 1.4rem;
+  position: relative;
+  opacity: 0.92;
+}
+
+.fact-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.58em;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.7;
+}
+
+/* Stat chip */
+.stat-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 0.4rem;
+}
+
+.stat {
+  background: var(--mist);
+  border: 1px solid rgba(255,255,255,0.18);
+  backdrop-filter: blur(6px);
+  border-radius: 6px;
+  padding: 0.45rem 0.9rem;
+  font-size: clamp(0.78rem, 1.1vw, 0.9rem);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.stat strong {
+  font-weight: 700;
+  opacity: 1;
+}
+
+/* References */
+.refs {
+  font-size: clamp(0.72rem, 1vw, 0.82rem);
+  font-style: italic;
+  opacity: 0.6;
+  line-height: 1.55;
+  border-top: 1px solid rgba(255,255,255,0.18);
+  padding-top: 0.9rem;
+}
+
+/* ─────────────────────────────────────────
+   VISUAL CARDS (right side)
+───────────────────────────────────────── */
+.visual-img {
+  width: 88%;
+  max-height: 70vh;
+  object-fit: cover;
+  border-radius: 16px;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.55);
+  transition: transform 1s var(--ease-smooth), opacity 0.6s ease;
+  transform: translateY(18px) scale(0.97);
+  opacity: 0;
+}
+.slide.active .visual-img {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+  transition-delay: 0.35s;
+}
+
+/* ODS 9 badge overlay */
+.ods-badge {
+  position: absolute;
+  top: 1.8rem;
+  right: 1.8rem;
+  width: clamp(72px, 8vw, 100px);
+  filter: drop-shadow(0 6px 18px rgba(0,0,0,0.5));
+  opacity: 0.95;
+  transition: transform 0.4s ease;
+}
+.ods-badge:hover { transform: rotate(-4deg) scale(1.08); }
+
+/* Icon grid for slide 1 */
+.icon-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  width: 88%;
+}
+
+.icon-card {
+  background: var(--mist);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  padding: 1.3rem 1rem;
+  text-align: center;
+  font-size: clamp(0.72rem, 1vw, 0.85rem);
+  line-height: 1.4;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: transform 0.5s var(--ease-smooth), opacity 0.5s ease, background 0.3s;
+}
+.icon-card:hover {
+  background: rgba(255,255,255,0.12);
+}
+
+.slide.active .icon-card {
+  opacity: 1;
+  transform: translateY(0);
+}
+.slide.active .icon-card:nth-child(1) { transition-delay: 0.25s; }
+.slide.active .icon-card:nth-child(2) { transition-delay: 0.35s; }
+.slide.active .icon-card:nth-child(3) { transition-delay: 0.45s; }
+.slide.active .icon-card:nth-child(4) { transition-delay: 0.55s; }
+.slide.active .icon-card:nth-child(5) { transition-delay: 0.65s; }
+
+.icon-card .emoji { font-size: 2rem; display: block; margin-bottom: 0.45rem; }
+
+/* ROI number display */
+.roi-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.4rem;
+  width: 80%;
+}
+
+.roi-big {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(4rem, 10vw, 9rem);
+  line-height: 1;
+  letter-spacing: 0.04em;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: transform 0.7s var(--ease-smooth), opacity 0.5s ease;
+}
+.slide.active .roi-big {
+  opacity: 1;
+  transform: scale(1);
+  transition-delay: 0.3s;
+}
+
+.roi-sub {
+  font-size: clamp(0.9rem, 1.3vw, 1.1rem);
+  text-align: center;
+  opacity: 0.7;
+  letter-spacing: 0.06em;
+  font-weight: 300;
+}
+
+.roi-line {
+  width: 80px;
+  height: 3px;
+  border-radius: 2px;
+  background: currentColor;
+  opacity: 0.4;
+}
+
+/* ─────────────────────────────────────────
+   SLIDE-SPECIFIC COLORS
+───────────────────────────────────────── */
+/* Slide 1 — deep slate */
+.slide-1 .slide__overlay {
+  background: linear-gradient(135deg, #0a3340 0%, #0d2035 55%, #143a30 100%);
+}
+.slide-1 { color: var(--paper); }
+
+/* Slide 2 — teal/green (energía) */
+.slide-2 .slide__overlay {
+  background: linear-gradient(135deg, #062e26 0%, #0a4f40 60%, #0c3028 100%);
+}
+.slide-2 { color: #c8f0e4; }
+.slide-2 .fact-list li::before { background: var(--teal-light); }
+
+/* Slide 3 — slate (ética) */
+.slide-3 .slide__overlay {
+  background: linear-gradient(135deg, #0e1c34 0%, #152845 60%, #0e2238 100%);
+}
+.slide-3 { color: #cce0ff; }
+.slide-3 .fact-list li::before { background: #7eb8ff; }
+
+/* Slide 4 — rust/warm (inclusión) */
+.slide-4 .slide__overlay {
+  background: linear-gradient(135deg, #2a1010 0%, #3d1a14 55%, #2c1508 100%);
+}
+.slide-4 { color: #ffe8d6; }
+.slide-4 .fact-list li::before { background: var(--rust-light); }
+
+/* Slide 5 — gold (soberanía) */
+.slide-5 .slide__overlay {
+  background: linear-gradient(135deg, #1e1600 0%, #2e2000 55%, #1a1800 100%);
+}
+.slide-5 { color: #fff3cc; }
+.slide-5 .fact-list li::before { background: var(--gold-light); }
+
+/* Slide 6 — deep teal (ROI) */
+.slide-6 .slide__overlay {
+  background: linear-gradient(135deg, #061c18 0%, #093022 60%, #071e28 100%);
+}
+.slide-6 { color: #b8f0e0; }
+.slide-6 .roi-big { color: var(--teal-light); }
+
+/* Slide 7 — near-black editorial */
+.slide-7 .slide__overlay {
+  background: linear-gradient(135deg, #100c0c 0%, #181218 55%, #0a1020 100%);
+}
+.slide-7 { color: #f0e8ff; }
+.slide-7 .fact-list li::before { background: #bf9fff; }
+
+/* ─────────────────────────────────────────
+   SLIDE CONTENT ENTRANCE ANIMATIONS
+───────────────────────────────────────── */
+.anim-up {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.65s ease, transform 0.65s var(--ease-smooth);
+}
+.slide.active .anim-up             { opacity: 1; transform: translateY(0); }
+.slide.active .anim-up:nth-child(1){ transition-delay: 0.05s; }
+.slide.active .anim-up:nth-child(2){ transition-delay: 0.18s; }
+.slide.active .anim-up:nth-child(3){ transition-delay: 0.3s; }
+.slide.active .anim-up:nth-child(4){ transition-delay: 0.42s; }
+.slide.active .anim-up:nth-child(5){ transition-delay: 0.52s; }
+.slide.active .anim-up:nth-child(6){ transition-delay: 0.62s; }
+
+/* ─────────────────────────────────────────
+   BOTTOM BAR
+───────────────────────────────────────── */
+.bar {
+  height: 72px;
+  background: rgba(10,8,8,0.92);
+  backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(255,255,255,0.07);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(1.5rem, 4vw, 3.5rem);
+  gap: 1.5rem;
+  z-index: 10;
+  position: relative;
+}
+
+/* Progress dots */
+.dots {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  cursor: pointer;
+  transition: background 0.3s, transform 0.3s, width 0.35s var(--ease-smooth);
+}
+
+.dot.active {
+  background: rgba(255,255,255,0.9);
+  width: 22px;
+  border-radius: 3px;
+}
+
+/* Slide counter */
+.counter {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.05rem;
+  letter-spacing: 0.12em;
+  opacity: 0.45;
+  min-width: 5ch;
+}
+
+/* Nav buttons */
+.nav-btns {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.nav-btn {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.14);
+  color: white;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.05rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.25s, transform 0.2s, border-color 0.25s;
+  backdrop-filter: blur(4px);
+}
+
+.nav-btn:hover {
+  background: rgba(255,255,255,0.18);
+  border-color: rgba(255,255,255,0.4);
+  transform: scale(1.08);
+}
+
+.nav-btn:active { transform: scale(0.95); }
+
+/* Keyboard hint */
+.kb-hint {
+  font-size: 0.72rem;
+  opacity: 0.32;
+  letter-spacing: 0.05em;
+  font-weight: 300;
+}
+
+/* ─────────────────────────────────────────
+   RESPONSIVE
+───────────────────────────────────────── */
+@media (max-width: 860px) {
+  .slide__inner {
+    grid-template-columns: 1fr;
+    overflow-y: auto;
+  }
+  .slide__right { display: none; }
+  .slide__left {
+    padding: 2.5rem 2rem;
+    min-height: 100%;
+  }
+  .kb-hint { display: none; }
+}
+
+@media (max-width: 500px) {
+  h1 { font-size: 2.2rem; }
+  h2 { font-size: 1.8rem; }
+  .bar { height: 60px; }
+}
+</style>
+</head>
+<body>
+
+<div class="stage">
+
+  <!-- ═══════════════════════════ SLIDE TRACK ═══════════════════════════ -->
+  <div class="track-wrap">
+    <div class="track" id="track">
+
+      <!-- ═══ SLIDE 1 — Overview ═══ -->
+      <section class="slide slide-1 active">
+        <div class="slide__bg" style="background-image:url('https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&w=1800&q=80')"></div>
+        <div class="slide__overlay"></div>
+        <div class="slide__noise"></div>
+        <div class="slide__inner">
+
+          <div class="slide__left">
+            <span class="slide-label anim-up">ODS 9 · Ártabro Tender</span>
+            <h1 class="anim-up">Plan de<br>Acción<br>Sostenible</h1>
+            <p class="lead anim-up">Cinco ejes estratégicos para una IA sostenible y responsable en Ártabro Tender.</p>
+            <ul class="fact-list anim-up">
+              <li>Eficiencia energética e infraestructura verde</li>
+              <li>Transparencia y ética algorítmica</li>
+              <li>Inclusión de género y diversidad</li>
+              <li>Soberanía tecnológica y proveedores locales</li>
+              <li>Innovación responsable y transferencia de conocimiento</li>
+            </ul>
+          </div>
+
+          <div class="slide__right">
+            <img class="ods-badge"
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Sustainable_Development_Goal_9.png/320px-Sustainable_Development_Goal_9.png"
+              alt="ODS 9">
+            <div class="icon-grid">
+              <div class="icon-card"><span class="emoji">⚡</span>Green AI</div>
+              <div class="icon-card"><span class="emoji">🔍</span>Ética &amp; XAI</div>
+              <div class="icon-card"><span class="emoji">⚤</span>Diversidad</div>
+              <div class="icon-card"><span class="emoji">🏗️</span>Soberanía</div>
+              <div class="icon-card"><span class="emoji">🚀</span>Innovación</div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ═══ SLIDE 2 — Eficiencia Energética ═══ -->
+      <section class="slide slide-2">
+        <div class="slide__bg" style="background-image:url('https://images.unsplash.com/photo-1466611653911-95081537e5b7?auto=format&fit=crop&w=1800&q=80')"></div>
+        <div class="slide__overlay"></div>
+        <div class="slide__noise"></div>
+        <div class="slide__inner">
+
+          <div class="slide__left">
+            <span class="slide-label anim-up">Eje 5.1 · Energía</span>
+            <h2 class="anim-up">Eficiencia<br>Energética</h2>
+            <p class="lead anim-up">Reducir consumo y costes con infraestructura verde y Green AI.</p>
+            <ul class="fact-list anim-up">
+              <li>Migrar el <strong>70 %</strong> de la infraestructura cloud a energía 100 % renovable.</li>
+              <li>Aplicar técnicas de <strong>Green AI</strong> para reducir un <strong>30 %</strong> el consumo por operación.</li>
+              <li>Monitorización en tiempo real y apagado automático de recursos ociosos.</li>
+            </ul>
+            <div class="stat-row anim-up">
+              <span class="stat"><strong>Inversión inicial</strong> ~18.500 €</span>
+              <span class="stat"><strong>Ahorro anual</strong> ~8.000 €</span>
+            </div>
+          </div>
+
+          <div class="slide__right">
+            <img class="visual-img"
+              src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=900&q=85"
+              alt="Energía renovable — aerogeneradores">
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ═══ SLIDE 3 — Ética Algorítmica ═══ -->
+      <section class="slide slide-3">
+        <div class="slide__bg" style="background-image:url('https://images.unsplash.com/photo-1677442135703-1787eea5ce01?auto=format&fit=crop&w=1800&q=80')"></div>
+        <div class="slide__overlay"></div>
+        <div class="slide__noise"></div>
+        <div class="slide__inner">
+
+          <div class="slide__left">
+            <span class="slide-label anim-up">Eje 5.2 · IA Responsable</span>
+            <h2 class="anim-up">Transparencia<br>&amp; Ética<br>Algorítmica</h2>
+            <p class="lead anim-up">Modelos explicables, auditables y certificados bajo los más altos estándares.</p>
+            <ul class="fact-list anim-up">
+              <li>Integrar <strong>XAI</strong> (SHAP, LIME) y dashboards de explicación para clientes.</li>
+              <li>Auditorías de sesgo <strong>trimestrales</strong> y métricas de equidad claras.</li>
+              <li>Diversificar datos de entrenamiento y obtener <strong>certificación ética ISO/IEC</strong>.</li>
+            </ul>
+            <div class="stat-row anim-up">
+              <span class="stat"><strong>Inversión</strong> ~33.000 €</span>
+              <span class="stat"><strong>Plazo clave</strong> 4 meses</span>
+            </div>
+          </div>
+
+          <div class="slide__right">
+            <img class="visual-img"
+              src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=900&q=85"
+              alt="IA ética y transparencia algorítmica">
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ═══ SLIDE 4 — Inclusión y Diversidad ═══ -->
+      <section class="slide slide-4">
+        <div class="slide__bg" style="background-image:url('https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=1800&q=80')"></div>
+        <div class="slide__overlay"></div>
+        <div class="slide__noise"></div>
+        <div class="slide__inner">
+
+          <div class="slide__left">
+            <span class="slide-label anim-up">Eje 5.3 · Personas</span>
+            <h2 class="anim-up">Inclusión<br>&amp; Diversidad</h2>
+            <p class="lead anim-up">Cerrar la brecha de género y construir una cultura genuinamente inclusiva.</p>
+            <ul class="fact-list anim-up">
+              <li>Objetivo: al menos <strong>40 %</strong> de mujeres en el equipo técnico en 24 meses.</li>
+              <li>Becas, mentorías y formación <strong>100 % financiada</strong> en IA y Big Data.</li>
+              <li>Políticas de flexibilidad, talleres de sesgos y <strong>comité de diversidad</strong>.</li>
+            </ul>
+            <div class="stat-row anim-up">
+              <span class="stat"><strong>Inversión anual</strong> ~36.000 €</span>
+            </div>
+          </div>
+
+          <div class="slide__right">
+            <img class="visual-img"
+              src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=900&q=85"
+              alt="Equipo diverso trabajando en tecnología">
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ═══ SLIDE 5 — Soberanía Tecnológica ═══ -->
+      <section class="slide slide-5">
+        <div class="slide__bg" style="background-image:url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1800&q=80')"></div>
+        <div class="slide__overlay"></div>
+        <div class="slide__noise"></div>
+        <div class="slide__inner">
+
+          <div class="slide__left">
+            <span class="slide-label anim-up">Eje 5.4 · Territorio</span>
+            <h2 class="anim-up">Soberanía<br>Tecnológica</h2>
+            <p class="lead anim-up">Potenciar proveedores locales, capacidades propias e I+D interno.</p>
+            <ul class="fact-list anim-up">
+              <li>Al menos <strong>30 %</strong> de servicios con proveedores españoles o gallegos.</li>
+              <li><strong>I+D interno</strong> (15 % del presupuesto anual) y contribución a open source.</li>
+              <li>Colaboraciones con <strong>CESGA</strong> y Universidade da Coruña, con prácticas y TFG/TFM.</li>
+            </ul>
+          </div>
+
+          <div class="slide__right">
+            <img class="visual-img"
+              src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=900&q=85"
+              alt="Infraestructura tecnológica e innovación">
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ═══ SLIDE 6 — ROI ═══ -->
+      <section class="slide slide-6">
+        <div class="slide__bg" style="background-image:url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1800&q=80')"></div>
+        <div class="slide__overlay"></div>
+        <div class="slide__noise"></div>
+        <div class="slide__inner">
+
+          <div class="slide__left">
+            <span class="slide-label anim-up">Sección 6 · Impacto</span>
+            <h2 class="anim-up">Beneficios<br>&amp; ROI</h2>
+            <p class="lead anim-up">Impacto económico, ambiental y social medible a corto y medio plazo.</p>
+            <ul class="fact-list anim-up">
+              <li>Ahorros y beneficios anuales estimados: <strong>~95.000 €</strong>.</li>
+              <li>Reducción de la huella de carbono en torno al <strong>40 %</strong>.</li>
+              <li>Reputación, confianza del cliente y <strong>liderazgo sectorial</strong> reforzados.</li>
+            </ul>
+            <div class="stat-row anim-up">
+              <span class="stat"><strong>Retorno estimado</strong> 18–24 meses</span>
+              <span class="stat"><strong>Beneficio neto a 3 años</strong> &gt;180.000 €</span>
+            </div>
+          </div>
+
+          <div class="slide__right">
+            <div class="roi-display">
+              <div class="roi-big">180K€</div>
+              <div class="roi-line"></div>
+              <p class="roi-sub">BENEFICIO NETO<br>A 3 AÑOS</p>
+              <div class="roi-line"></div>
+              <p class="roi-sub" style="margin-top:0.4rem; font-size:clamp(0.8rem,1.1vw,0.95rem);">
+                Retorno completo en <strong>18–24 meses</strong><br>
+                Reducción CO₂ <strong>–40 %</strong>
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ═══ SLIDE 7 — Conclusiones ═══ -->
+      <section class="slide slide-7">
+        <div class="slide__bg" style="background-image:url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1800&q=80')"></div>
+        <div class="slide__overlay"></div>
+        <div class="slide__noise"></div>
+        <div class="slide__inner">
+
+          <div class="slide__left">
+            <span class="slide-label anim-up">Secciones 7–8 · Cierre</span>
+            <h2 class="anim-up">Conclusiones<br>&amp; Referencias</h2>
+            <p class="lead anim-up">Ártabro Tender puede convertirse en un caso de éxito en IA ética y sostenible en Galicia.</p>
+            <ul class="fact-list anim-up">
+              <li>Alineación con <strong>ODS 9</strong>, AI Act, Agenda 2030 y marcos éticos de IA.</li>
+              <li>Innovación tecnológica y sostenibilidad como palancas <strong>complementarias</strong>.</li>
+              <li>Implementación progresiva con <strong>comité interno de sostenibilidad</strong>.</li>
+            </ul>
+            <p class="refs anim-up">
+              Referencias clave: Buolamwini &amp; Gebru (2018) · Jobin et al. (2019) · AI Act (2024) ·
+              UNESCO (2021) · Estratexia Galega de IA (Xunta, 2022)
+            </p>
+          </div>
+
+          <div class="slide__right">
+            <img class="visual-img"
+              src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=900&q=85"
+              alt="Conclusión — visión estratégica sostenible">
+          </div>
+
+        </div>
+      </section>
+
+    </div><!-- /track -->
+  </div><!-- /track-wrap -->
+
+  <!-- ═══════════════════════════ BOTTOM BAR ═══════════════════════════ -->
+  <div class="bar">
+    <div class="nav-btns">
+      <button class="nav-btn" id="btnPrev" aria-label="Anterior">&#8592;</button>
+      <button class="nav-btn" id="btnNext" aria-label="Siguiente">&#8594;</button>
+    </div>
+
+    <div class="dots" id="dots"></div>
+
+    <span class="counter" id="counter">01 / 07</span>
+    <span class="kb-hint">← → o clic para navegar</span>
+  </div>
+
+</div><!-- /stage -->
+
+<script>
+  const track   = document.getElementById('track');
+  const slides  = Array.from(track.querySelectorAll('.slide'));
+  const dotsEl  = document.getElementById('dots');
+  const counter = document.getElementById('counter');
+  const total   = slides.length;
+  let cur = 0;
+
+  /* Build dots */
+  slides.forEach((_, i) => {
+    const d = document.createElement('button');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.setAttribute('aria-label', `Ir a diapositiva ${i + 1}`);
+    d.addEventListener('click', () => goTo(i));
+    dotsEl.appendChild(d);
+  });
+
+  function goTo(n) {
+    slides[cur].classList.remove('active');
+    dotsEl.children[cur].classList.remove('active');
+    cur = (n + total) % total;
+    slides[cur].classList.add('active');
+    dotsEl.children[cur].classList.add('active');
+    track.style.transform = `translateX(-${cur * 100}%)`;
+    counter.textContent = String(cur + 1).padStart(2, '0') + ' / ' + String(total).padStart(2, '0');
+  }
+
+  document.getElementById('btnNext').addEventListener('click', () => goTo(cur + 1));
+  document.getElementById('btnPrev').addEventListener('click', () => goTo(cur - 1));
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') goTo(cur + 1);
+    if (e.key === 'ArrowLeft')  goTo(cur - 1);
+  });
+
+  /* Touch / swipe */
+  let tx = 0;
+  track.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+  track.addEventListener('touchend',   e => {
+    const dx = e.changedTouches[0].clientX - tx;
+    if (Math.abs(dx) > 40) goTo(cur + (dx < 0 ? 1 : -1));
+  });
+
+  /* Width: each slide is 100% of the track-wrap, handled by flex */
+  /* Ensure track-wrap takes full viewport height minus bar */
+</script>
+</body>
+</html>
