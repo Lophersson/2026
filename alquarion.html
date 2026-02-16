@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lophersson Investments Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg:        #060913;
+            --bg2:       #0a0f1e;
+            --bg3:       #0e1428;
+            --card:      #111730;
+            --card2:     #161d38;
+            --border:    #1c2540;
+            --accent:    #00e87a;
+            --accent2:   #00b8ff;
+            --red:       #ff3d5a;
+            --gold:      #f5c842;
+            --text:      #dce6f5;
+            --text-mid:  #7a8ab8;
+            --text-dim:  #3d4f78;
+            --glow:      rgba(0, 232, 122, 0.12);
+            --glow-red:  rgba(255, 61, 90, 0.12);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Syne', sans-serif;
+            background: var(--bg);
+            min-height: 100vh;
+            color: var(--text);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Subtle grid pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(0, 232, 122, 0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 232, 122, 0.025) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Scanlines */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg, transparent, transparent 3px,
+                rgba(0, 0, 0, 0.04) 3px, rgba(0, 0, 0, 0.04) 4px
+            );
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(6, 9, 19, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left { display: flex; align-items: center; gap: 14px; }
+
+        .logo-mark {
+            width: 28px; height: 28px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px; font-weight: 800; color: #000;
+        }
+
+        .logo-text { font-weight: 800; font-size: 15px; letter-spacing: -0.3px; }
+        .logo-text span { color: var(--accent); }
+
+        .header-right { display: flex; align-items: center; gap: 16px; }
+
+        .header-time {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--text-mid);
+            letter-spacing: 1px;
+        }
+
+        .live-badge {
+            display: flex; align-items: center; gap: 6px;
+            background: rgba(0,232,122,0.08);
+            border: 1px solid rgba(0,232,122,0.2);
+            border-radius: 20px;
+            padding: 4px 10px;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.8); }
+        }
+
+        .live-dot {
+            width: 5px; height: 5px;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        /* ===== TICKER TAPE ===== */
+        .ticker-wrap {
+            background: var(--bg2);
+            border-bottom: 1px solid var(--border);
+            overflow: hidden;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .ticker-fade-left, .ticker-fade-right {
+            position: absolute;
+            top: 0; bottom: 0;
+            width: 60px;
+            z-index: 2;
+            pointer-events: none;
+        }
+        .ticker-fade-left { left: 0; background: linear-gradient(90deg, var(--bg2), transparent); }
+        .ticker-fade-right { right: 0; background: linear-gradient(-90deg, var(--bg2), transparent); }
+
+        .ticker-inner {
+            display: flex;
+            gap: 0;
+            animation: scrollTicker 40s linear infinite;
+            white-space: nowrap;
+        }
+
+        @keyframes scrollTicker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .ticker-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0 24px;
+            font-size: 11px;
+            border-right: 1px solid var(--border);
+        }
+
+        .ticker-symbol {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            color: var(--text);
+            font-size: 11px;
+        }
+
+        .ticker-val {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+        }
+
+        .ticker-chg {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            padding: 1px 5px;
+            border-radius: 3px;
+        }
+
+        .chg-pos { color: var(--accent); background: rgba(0,232,122,0.08); }
+        .chg-neg { color: var(--red); background: rgba(255,61,90,0.08); }
+
+        /* ===== CONTAINER ===== */
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ===== HERO PORTFOLIO VALUE ===== */
+        .hero {
+            background: linear-gradient(160deg, #0f2240 0%, #0b1a2e 40%, #071220 100%);
+            padding: 28px 20px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -60px; right: -60px;
+            width: 200px; height: 200px;
+            background: radial-gradient(circle, rgba(0,232,122,0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-label {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-mid);
+            margin-bottom: 10px;
+        }
+
+        .hero-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 38px;
+            font-weight: 600;
+            letter-spacing: -1px;
+            color: #fff;
+            line-height: 1;
+            margin-bottom: 12px;
+            transition: color 0.2s;
+        }
+
+        .hero-change {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .hero-profit {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .hero-pct {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            padding: 3px 10px;
+            border-radius: 4px;
+        }
+
+        .pos { color: var(--accent); }
+        .neg { color: var(--red); }
+        .pos-bg { background: rgba(0,232,122,0.1); color: var(--accent); }
+        .neg-bg { background: rgba(255,61,90,0.1); color: var(--red); }
+
+        /* ===== MINI CHART (total portfolio) ===== */
+        .total-chart-wrap {
+            height: 60px;
+            margin-top: 4px;
+        }
+
+        #totalChart {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* ===== STATS GRID ===== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1px;
+            background: var(--border);
+            border-top: 1px solid var(--border);
+        }
+
+        .stat-card {
+            background: var(--bg2);
+            padding: 16px 18px;
+        }
+
+        .stat-label {
+            font-size: 9px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-dim);
+            margin-bottom: 6px;
+        }
+
+        .stat-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .stat-value.highlight { color: var(--accent); }
+        .stat-value.highlight-gold { color: var(--gold); }
+
+        /* ===== SECTION HEADER ===== */
+        .section-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 20px 10px;
+            background: var(--bg);
+        }
+
+        .section-title {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-dim);
+        }
+
+        .section-badge {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--text-mid);
+            background: var(--card);
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+
+        /* ===== POSITIONS ===== */
+        .positions-wrap {
+            background: var(--bg2);
+            padding: 0 16px 16px;
+        }
+
+        .position-card {
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            margin-bottom: 8px;
+            overflow: hidden;
+            transition: border-color 0.15s;
+        }
+
+        .position-card.flash-pos {
+            animation: flashPos 0.5s ease-out;
+        }
+        .position-card.flash-neg {
+            animation: flashNeg 0.5s ease-out;
+        }
+
+        @keyframes flashPos {
+            0% { background: rgba(0, 232, 122, 0.15); border-color: rgba(0, 232, 122, 0.5); }
+            100% { background: transparent; border-color: var(--border); }
+        }
+
+        @keyframes flashNeg {
+            0% { background: rgba(255, 61, 90, 0.12); border-color: rgba(255, 61, 90, 0.4); }
+            100% { background: transparent; border-color: var(--border); }
+        }
+
+        .pos-card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 12px 14px 8px;
+        }
+
+        .pos-info { flex: 1; }
+
+        .pos-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 3px;
+        }
+
+        .pos-meta {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--text-dim);
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .pos-meta-sep { color: var(--border); }
+
+        .pos-type-badge {
+            font-size: 9px;
+            font-weight: 700;
+            padding: 1px 5px;
+            border-radius: 3px;
+            background: var(--card2);
+            color: var(--text-mid);
+            text-transform: uppercase;
+        }
+
+        .pos-right { text-align: right; }
+
+        .pos-current {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 3px;
+            transition: color 0.15s;
+        }
+
+        .pos-tick-change {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        /* Sparkline */
+        .pos-sparkline {
+            padding: 0 14px 4px;
+            height: 30px;
+        }
+
+        .pos-sparkline svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .pos-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 14px 10px;
+            border-top: 1px solid var(--border);
+        }
+
+        .pos-invested {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--text-dim);
+        }
+
+        .pos-profit {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .pos-annual {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--text-dim);
+            margin-top: 2px;
+        }
+
+        /* ===== DETAILS TABLE ===== */
+        .details-wrap {
+            background: var(--bg2);
+            padding: 0 16px 24px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 13px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .detail-row:last-child { border-bottom: none; }
+
+        .detail-label {
+            font-size: 12px;
+            color: var(--text-mid);
+        }
+
+        .detail-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            padding: 20px;
+            text-align: center;
+            font-size: 10px;
+            color: var(--text-dim);
+            letter-spacing: 0.5px;
+            background: var(--bg);
+        }
+
+        /* ===== DAILY GAIN CARD ===== */
+        .perf-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1px;
+            background: var(--border);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .perf-card {
+            background: var(--bg3);
+            padding: 14px 18px;
+        }
+
+        .perf-label {
+            font-size: 9px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-dim);
+            margin-bottom: 6px;
+        }
+
+        .perf-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .perf-sub {
+            font-size: 10px;
+            color: var(--text-dim);
+            margin-top: 3px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div class="header">
+        <div class="header-left">
+            <div class="logo-mark">L</div>
+            <div class="logo-text">Lophersson <span>Investments</span></div>
+        </div>
+        <div class="header-right">
+            <div class="header-time" id="headerTime">--:--:--</div>
+            <div class="live-badge"><div class="live-dot"></div>Live</div>
+        </div>
+    </div>
+
+    <!-- TICKER TAPE -->
+    <div class="ticker-wrap">
+        <div class="ticker-fade-left"></div>
+        <div class="ticker-fade-right"></div>
+        <div class="ticker-inner" id="tickerInner">
+            <!-- generated by JS, duplicated for seamless loop -->
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- HERO -->
+        <div class="hero">
+            <div class="hero-label">Valor Neto de Liquidación</div>
+            <div class="hero-value" id="heroValue">— €</div>
+            <div class="hero-change">
+                <span class="hero-profit" id="heroProfit">+0,00 €</span>
+                <span class="hero-pct" id="heroPct">(+0,00%)</span>
+            </div>
+            <div class="total-chart-wrap">
+                <svg id="totalChart" preserveAspectRatio="none"></svg>
+            </div>
+        </div>
+
+        <!-- STATS -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Inversión Inicial</div>
+                <div class="stat-value" id="statInitial">1.200,00 €</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Días Invertido</div>
+                <div class="stat-value highlight-gold" id="statDays">0</div>
+            </div>
+        </div>
+
+        <!-- PERF ROW -->
+        <div class="perf-row">
+            <div class="perf-card">
+                <div class="perf-label">Ganancia Diaria Prom.</div>
+                <div class="perf-value" id="perfDaily">0,00 €/día</div>
+                <div class="perf-sub">Tiempo real acumulado</div>
+            </div>
+            <div class="perf-card">
+                <div class="perf-label">Rentabilidad Global</div>
+                <div class="perf-value" id="perfAnnual">0,00%</div>
+                <div class="perf-sub">Media ponderada anual</div>
+            </div>
+        </div>
+
+        <!-- POSITIONS SECTION -->
+        <div class="section-head">
+            <div class="section-title">Posiciones Activas</div>
+            <div class="section-badge" id="posCount">12 ETFs</div>
+        </div>
+        <div class="positions-wrap" id="positionsWrap"></div>
+
+        <!-- INVESTMENT DETAILS -->
+        <div class="section-head">
+            <div class="section-title">Detalles de la Inversión</div>
+        </div>
+        <div class="details-wrap">
+            <div class="detail-row">
+                <div class="detail-label">Fecha de inicio</div>
+                <div class="detail-value" id="detStartDate">31/12/2025</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Fecha actual</div>
+                <div class="detail-value" id="detCurrentDate">--/--/----</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Tiempo activo</div>
+                <div class="detail-value" id="detActive">-- días</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Máximo sesión</div>
+                <div class="detail-value highlight" id="detMax">— €</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Mínimo sesión</div>
+                <div class="detail-value" id="detMin" style="color:var(--red)">— €</div>
+            </div>
+        </div>
+
+        <div class="footer">
+            Simulación con fines ilustrativos · Lophersson Investments © 2026
+        </div>
+
+    </div>
+
+    <script>
+    // ===== CARTERA DE ETFs =====
+    const PORTFOLIO = [
+        { name: 'Vanguard S&P 500',       ticker: 'VOO',   region: 'EEUU',      type: 'RV', amount: 180, annualReturn: 24.86 },
+        { name: 'iShares MSCI World',      ticker: 'IWDA',  region: 'Global',    type: 'RV', amount: 150, annualReturn: 21.25 },
+        { name: 'SPDR EURO STOXX 50',      ticker: 'FEZ',   region: 'Europa',    type: 'RV', amount: 120, annualReturn: -0.27 },
+        { name: 'iShares MSCI EM',         ticker: 'EEM',   region: 'Emergentes',type: 'EM', amount: 100, annualReturn: 39.80 },
+        { name: 'iShares BRICS ETF',       ticker: 'BRICS', region: 'BRICS',     type: 'EM', amount:  80, annualReturn: 38.70 },
+        { name: 'Vanguard Total Bond',     ticker: 'BND',   region: 'EEUU',      type: 'RF', amount: 150, annualReturn: -0.15 },
+        { name: 'iShares Euro Govt Bond',  ticker: 'IEAG',  region: 'Europa',    type: 'RF', amount: 100, annualReturn: 31.70 },
+        { name: 'iShares Corp Bond',       ticker: 'LQD',   region: 'EEUU',      type: 'BC', amount:  90, annualReturn: 32.90 },
+        { name: 'iShares Euro Corp Bond',  ticker: 'IEAC',  region: 'Europa',    type: 'BC', amount:  70, annualReturn: -0.70 },
+        { name: 'iShares Treasury Bond',   ticker: 'TLT',   region: 'EEUU',      type: 'BS', amount:  80, annualReturn: 34.80 },
+        { name: 'Vanguard Real Estate',    ticker: 'VNQ',   region: 'EEUU',      type: 'RE', amount:  50, annualReturn: 36.90 },
+        { name: 'iShares Global REIT',     ticker: 'REET',  region: 'Global',    type: 'RE', amount:  30, annualReturn: -1.80 },
+    ];
+
+    const TYPE_LABELS = { RV: 'R.Variable', EM: 'Emergentes', RF: 'R.Fija', BC: 'Bono Corp', BS: 'Bono Sov', RE: 'REIT' };
+
+    const startDate = new Date('2025-12-31T00:00:00');
+    const TOTAL_INITIAL = PORTFOLIO.reduce((s, p) => s + p.amount, 0);
+
+    // ===== NOISE / FLUCTUATION STATE =====
+    // Each ETF has a noise factor (random walk) bounded within ±1.5%
+    // Per second: random delta between -0.05% and +0.10%
+    const noiseFactors = {};
+    PORTFOLIO.forEach(p => { noiseFactors[p.ticker] = 0; });
+
+    // Sparkline history (last 40 values per ETF)
+    const SPARK_LEN = 40;
+    const sparkHistory = {};
+    PORTFOLIO.forEach(p => { sparkHistory[p.ticker] = []; });
+
+    // Total portfolio history (last 80 values for the area chart)
+    const CHART_LEN = 80;
+    const totalHistory = [];
+
+    // Session max/min
+    let sessionMax = null, sessionMin = null;
+
+    // Previous display values for flash detection
+    const prevValues = {};
+    PORTFOLIO.forEach(p => { prevValues[p.ticker] = 0; });
+
+    // ===== UTILITY =====
+    function fmt(v, decimals = 2) {
+        return v.toLocaleString('es-ES', {
+            minimumFractionDigits: decimals,
+            maximumFractionDigits: decimals
+        }) + ' €';
+    }
+
+    function fmtPct(v) {
+        return (v >= 0 ? '+' : '') + v.toFixed(3) + '%';
+    }
+
+    // ===== NOISE UPDATE =====
+    function updateNoise() {
+        PORTFOLIO.forEach(p => {
+            // Random delta between -0.05% and +0.10%
+            const delta = (Math.random() * 0.15 - 0.05) / 100;
+            noiseFactors[p.ticker] += delta;
+            // Bound the noise to ±1.5% so it doesn't drift too far
+            noiseFactors[p.ticker] = Math.max(-0.015, Math.min(0.015, noiseFactors[p.ticker]));
+        });
+    }
+
+    // ===== CALCULATE POSITION =====
+    function calcPosition(pos, daysElapsed) {
+        const yearsElapsed = daysElapsed / 365;
+        const returnDecimal = pos.annualReturn / 100;
+        // Base value from real compound interest formula
+        const baseValue = pos.amount * Math.pow(1 + returnDecimal, yearsElapsed);
+        // Apply visual noise on top
+        const currentValue = baseValue * (1 + noiseFactors[pos.ticker]);
+        const profit = currentValue - pos.amount;
+        const profitPercent = (profit / pos.amount) * 100;
+        const tickChange = noiseFactors[pos.ticker] * 100; // in %
+
+        return { ...pos, currentValue, baseValue, profit, profitPercent, tickChange };
+    }
+
+    // ===== SPARKLINE SVG =====
+    function buildSparkline(history, isPositive) {
+        if (history.length < 2) return '';
+        const w = 100, h = 100;
+        const min = Math.min(...history);
+        const max = Math.max(...history);
+        const range = max - min || 0.0001;
+        const pts = history.map((v, i) => {
+            const x = (i / (history.length - 1)) * w;
+            const y = h - ((v - min) / range) * h;
+            return `${x.toFixed(1)},${y.toFixed(1)}`;
+        });
+        const color = isPositive ? '#00e87a' : '#ff3d5a';
+        const colorFade = isPositive ? 'rgba(0,232,122,0)' : 'rgba(255,61,90,0)';
+        const colorStart = isPositive ? 'rgba(0,232,122,0.18)' : 'rgba(255,61,90,0.12)';
+        const id = `g${Math.random().toString(36).slice(2, 7)}`;
+        const areaPath = `M${pts[0]} L${pts.slice(1).join(' L')} L${w},${h} L0,${h} Z`;
+        const linePath = `M${pts[0]} L${pts.slice(1).join(' L')}`;
+        return `
+        <svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="${colorStart}"/>
+              <stop offset="100%" stop-color="${colorFade}"/>
+            </linearGradient>
+          </defs>
+          <path d="${areaPath}" fill="url(#${id})"/>
+          <path d="${linePath}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+        </svg>`;
+    }
+
+    // ===== TOTAL AREA CHART =====
+    function renderTotalChart(history) {
+        const svg = document.getElementById('totalChart');
+        if (!svg || history.length < 2) return;
+        const W = 440, H = 60;
+        svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+        const min = Math.min(...history) * 0.9998;
+        const max = Math.max(...history) * 1.0002;
+        const range = max - min || 0.0001;
+        const pts = history.map((v, i) => {
+            const x = (i / (history.length - 1)) * W;
+            const y = H - ((v - min) / range) * (H - 4) - 2;
+            return `${x.toFixed(1)},${y.toFixed(1)}`;
+        });
+        const areaPath = `M${pts[0]} L${pts.slice(1).join(' L')} L${W},${H} L0,${H} Z`;
+        const linePath = `M${pts[0]} L${pts.slice(1).join(' L')}`;
+        const last = pts[pts.length - 1].split(',');
+        svg.innerHTML = `
+        <defs>
+          <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="rgba(0,232,122,0.22)"/>
+            <stop offset="100%" stop-color="rgba(0,232,122,0)"/>
+          </linearGradient>
+        </defs>
+        <path d="${areaPath}" fill="url(#areaGrad)"/>
+        <path d="${linePath}" fill="none" stroke="#00e87a" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+        <circle cx="${last[0]}" cy="${last[1]}" r="3" fill="#00e87a" opacity="0.9"/>
+        `;
+    }
+
+    // ===== TICKER TAPE =====
+    let tickerBuilt = false;
+    function buildTicker(positions) {
+        const inner = document.getElementById('tickerInner');
+        // Build content (doubled for seamless loop)
+        let html = '';
+        for (let pass = 0; pass < 2; pass++) {
+            positions.forEach(pos => {
+                const isPos = pos.tickChange >= 0;
+                const chgClass = isPos ? 'chg-pos' : 'chg-neg';
+                const arrow = isPos ? '▲' : '▼';
+                html += `
+                <div class="ticker-item">
+                    <span class="ticker-symbol">${pos.ticker}</span>
+                    <span class="ticker-val">${fmt(pos.currentValue, 2)}</span>
+                    <span class="ticker-chg ${chgClass}">${arrow} ${Math.abs(pos.tickChange).toFixed(3)}%</span>
+                </div>`;
+            });
+        }
+        inner.innerHTML = html;
+    }
+
+    // ===== RENDER POSITIONS =====
+    function renderPositions(positions) {
+        const wrap = document.getElementById('positionsWrap');
+
+        positions.forEach(pos => {
+            const isPos = pos.profit >= 0;
+            const isTickPos = pos.tickChange >= 0;
+            const cardId = `card-${pos.ticker}`;
+            let card = document.getElementById(cardId);
+
+            // Build sparkline data
+            const hist = sparkHistory[pos.ticker];
+            hist.push(pos.currentValue);
+            if (hist.length > SPARK_LEN) hist.shift();
+            const sparkSVG = buildSparkline(hist, isPos);
+
+            const profitClass = isPos ? 'pos' : 'neg';
+            const tickClass = isTickPos ? 'pos' : 'neg';
+            const arrow = isPos ? '▲' : '▼';
+            const tickArrow = isTickPos ? '▲' : '▼';
+            const typeName = TYPE_LABELS[pos.type] || pos.type;
+
+            const html = `
+                <div class="pos-card-top">
+                    <div class="pos-info">
+                        <div class="pos-name">${pos.name}</div>
+                        <div class="pos-meta">
+                            <span>${pos.ticker}</span>
+                            <span class="pos-meta-sep">·</span>
+                            <span>${pos.region}</span>
+                            <span class="pos-meta-sep">·</span>
+                            <span class="pos-type-badge">${typeName}</span>
+                        </div>
+                    </div>
+                    <div class="pos-right">
+                        <div class="pos-current ${profitClass}">${fmt(pos.currentValue, 4)}</div>
+                        <div class="pos-tick-change ${tickClass}">${tickArrow} ${Math.abs(pos.tickChange).toFixed(3)}%</div>
+                    </div>
+                </div>
+                <div class="pos-sparkline">${sparkSVG}</div>
+                <div class="pos-bottom">
+                    <div>
+                        <div class="pos-invested">Invertido: ${fmt(pos.amount, 2)}</div>
+                        <div class="pos-annual">${pos.annualReturn >= 0 ? '+' : ''}${pos.annualReturn.toFixed(2)}% anual base</div>
+                    </div>
+                    <div class="pos-profit ${profitClass}">
+                        ${arrow} ${fmt(Math.abs(pos.profit), 4)}
+                        <span style="font-size:10px;opacity:0.7">(${pos.profitPercent >= 0 ? '+' : ''}${pos.profitPercent.toFixed(3)}%)</span>
+                    </div>
+                </div>
+            `;
+
+            if (!card) {
+                card = document.createElement('div');
+                card.className = 'position-card';
+                card.id = cardId;
+                wrap.appendChild(card);
+            }
+
+            // Flash on significant change
+            const prev = prevValues[pos.ticker];
+            if (prev !== 0) {
+                const diff = pos.currentValue - prev;
+                if (Math.abs(diff) > 0.0001) {
+                    card.classList.remove('flash-pos', 'flash-neg');
+                    void card.offsetWidth; // reflow
+                    card.classList.add(diff > 0 ? 'flash-pos' : 'flash-neg');
+                }
+            }
+            prevValues[pos.ticker] = pos.currentValue;
+
+            card.innerHTML = html;
+        });
+    }
+
+    // ===== MAIN UPDATE =====
+    function update() {
+        const now = new Date();
+
+        // Clock
+        document.getElementById('headerTime').textContent =
+            [now.getHours(), now.getMinutes(), now.getSeconds()]
+            .map(n => String(n).padStart(2, '0')).join(':');
+
+        // Date
+        const dd = String(now.getDate()).padStart(2, '0');
+        const mm = String(now.getMonth() + 1).padStart(2, '0');
+        const yyyy = now.getFullYear();
+        const dateStr = `${dd}/${mm}/${yyyy}`;
+        document.getElementById('detCurrentDate').textContent = dateStr;
+
+        // Days elapsed
+        const msElapsed = now - startDate;
+        const daysElapsed = msElapsed / (1000 * 60 * 60 * 24);
+        const daysInt = Math.floor(daysElapsed);
+        document.getElementById('statDays').textContent = daysInt.toLocaleString('es-ES');
+        document.getElementById('detActive').textContent = `${daysInt.toLocaleString('es-ES')} días`;
+
+        // Update noise factors for this tick
+        updateNoise();
+
+        // Calculate positions
+        const positions = PORTFOLIO.map(p => calcPosition(p, daysElapsed));
+
+        // Totals
+        const totalCurrent = positions.reduce((s, p) => s + p.currentValue, 0);
+        const totalProfit = totalCurrent - TOTAL_INITIAL;
+        const totalProfitPct = (totalProfit / TOTAL_INITIAL) * 100;
+        const profitPerDay = daysElapsed > 0 ? totalProfit / daysElapsed : 0;
+
+        // Weighted annual return
+        const globalReturn = positions.reduce((s, p) => {
+            return s + (p.annualReturn * (p.amount / TOTAL_INITIAL));
+        }, 0);
+
+        // Session max/min
+        if (sessionMax === null || totalCurrent > sessionMax) sessionMax = totalCurrent;
+        if (sessionMin === null || totalCurrent < sessionMin) sessionMin = totalCurrent;
+
+        // Total history for chart
+        totalHistory.push(totalCurrent);
+        if (totalHistory.length > CHART_LEN) totalHistory.shift();
+
+        // ===== UPDATE DOM =====
+
+        // Hero
+        document.getElementById('heroValue').textContent = fmt(totalCurrent, 2);
+        const heroProfit = document.getElementById('heroProfit');
+        const heroPct = document.getElementById('heroPct');
+        heroProfit.textContent = (totalProfit >= 0 ? '+' : '') + fmt(Math.abs(totalProfit), 2);
+        heroProfit.className = `hero-profit ${totalProfit >= 0 ? 'pos' : 'neg'}`;
+        heroPct.textContent = `(${fmtPct(totalProfitPct)})`;
+        heroPct.className = `hero-pct ${totalProfit >= 0 ? 'pos-bg' : 'neg-bg'}`;
+
+        // Stats
+        document.getElementById('statInitial').textContent = fmt(TOTAL_INITIAL, 2);
+
+        // Perf
+        document.getElementById('perfDaily').textContent = (profitPerDay >= 0 ? '+' : '') + fmt(profitPerDay, 4) + '/día';
+        document.getElementById('perfAnnual').textContent = (globalReturn >= 0 ? '+' : '') + globalReturn.toFixed(2) + '%';
+
+        // Details
+        document.getElementById('detMax').textContent = sessionMax !== null ? fmt(sessionMax, 4) : '—';
+        document.getElementById('detMin').textContent = sessionMin !== null ? fmt(sessionMin, 4) : '—';
+
+        // Ticker tape
+        buildTicker(positions);
+
+        // Positions
+        renderPositions(positions);
+
+        // Total chart
+        renderTotalChart(totalHistory);
+    }
+
+    // ===== INIT =====
+    update();
+    setInterval(update, 1000);
+    </script>
+</body>
+</html>
