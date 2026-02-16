@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Lophersson 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cols: 4;
+    --icon-size: 64px;
+    --gap: 28px;
+  }
+
+  body {
+    font-family: 'Nunito', -apple-system, sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background: #0a0e1a;
+    color: white;
+    user-select: none;
+  }
+
+  /* WALLPAPER */
+  .wallpaper {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(62, 84, 172, 0.55) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 80% 30%, rgba(120, 60, 160, 0.45) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 70% at 50% 90%, rgba(20, 90, 130, 0.5) 0%, transparent 60%),
+      linear-gradient(160deg, #06090f 0%, #0d1525 40%, #0a1020 100%);
+  }
+
+  /* Starfield dots */
+  .wallpaper::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 15% 25%, rgba(255,255,255,0.35) 0%, transparent 100%),
+      radial-gradient(1px 1px at 72% 18%, rgba(255,255,255,0.25) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 88% 42%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 38% 8%, rgba(255,255,255,0.2) 0%, transparent 100%),
+      radial-gradient(1px 1px at 55% 65%, rgba(255,255,255,0.15) 0%, transparent 100%),
+      radial-gradient(1px 1px at 5% 75%, rgba(255,255,255,0.2) 0%, transparent 100%),
+      radial-gradient(1px 1px at 92% 80%, rgba(255,255,255,0.18) 0%, transparent 100%),
+      radial-gradient(1px 1px at 28% 90%, rgba(255,255,255,0.12) 0%, transparent 100%);
+  }
+
+  /* SCREEN WRAPPER */
+  .screen {
+    position: relative;
+    z-index: 1;
+    max-width: 430px;
+    margin: 0 auto;
+    min-height: 100vh;
+    padding: 0 0 40px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* STATUS BAR */
+  .status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 22px 8px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+
+  .status-time { font-size: 16px; font-weight: 700; }
+  .status-icons { display: flex; gap: 6px; align-items: center; font-size: 13px; }
+
+  /* DATE HEADER */
+  .date-header {
+    text-align: center;
+    padding: 4px 20px 24px;
+  }
+
+  .date-header .day {
+    font-size: 74px;
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -3px;
+    color: rgba(255,255,255,0.9);
+  }
+
+  .date-header .weekday {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-top: 2px;
+  }
+
+  /* APP GRID */
+  .apps-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--cols), 1fr);
+    gap: var(--gap) 0;
+    padding: 0 10px;
+    flex: 1;
+  }
+
+  /* SECTION LABEL */
+  .section-label {
+    grid-column: 1 / -1;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    padding: 6px 14px 2px;
+  }
+
+  /* APP ICON */
+  .app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+    animation: popIn 0.4s both;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  @keyframes popIn {
+    from { opacity: 0; transform: scale(0.7); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  .app-icon {
+    width: var(--icon-size);
+    height: var(--icon-size);
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.12s;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.35);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Shine overlay */
+  .app-icon::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(145deg, rgba(255,255,255,0.22) 0%, transparent 55%);
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  .app:hover .app-icon,
+  .app:active .app-icon {
+    transform: scale(1.12);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+  }
+
+  .app:active .app-icon {
+    transform: scale(0.93);
+  }
+
+  .app-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-align: center;
+    color: rgba(255,255,255,0.9);
+    text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+    max-width: 72px;
+    line-height: 1.2;
+    word-break: break-word;
+  }
+
+  /* GRADIENT PALETTE */
+  .g-blue     { background: linear-gradient(145deg, #4a90d9, #1e5fa8); }
+  .g-green    { background: linear-gradient(145deg, #4cd964, #1fa83c); }
+  .g-teal     { background: linear-gradient(145deg, #5ac8fa, #1a7bbf); }
+  .g-purple   { background: linear-gradient(145deg, #af52de, #7a1fa2); }
+  .g-orange   { background: linear-gradient(145deg, #ff9f0a, #d4600a); }
+  .g-red      { background: linear-gradient(145deg, #ff3b30, #c0170f); }
+  .g-pink     { background: linear-gradient(145deg, #ff6b9d, #c9185a); }
+  .g-indigo   { background: linear-gradient(145deg, #5e5ce6, #3634a3); }
+  .g-mint     { background: linear-gradient(145deg, #00c7be, #007f7a); }
+  .g-amber    { background: linear-gradient(145deg, #ffd60a, #c9960a); }
+  .g-rose     { background: linear-gradient(145deg, #ff6060, #c0303a); }
+  .g-cyan     { background: linear-gradient(145deg, #32ade6, #0a76b2); }
+  .g-lime     { background: linear-gradient(145deg, #a1db48, #5c8c1a); }
+  .g-brown    { background: linear-gradient(145deg, #a2845e, #6d4f2e); }
+  .g-gray     { background: linear-gradient(145deg, #8e8e93, #5a5a60); }
+  .g-navy     { background: linear-gradient(145deg, #3a5898, #1c2f5e); }
+  .g-coral    { background: linear-gradient(145deg, #ff6e54, #c03420); }
+  .g-violet   { background: linear-gradient(145deg, #9b59b6, #6a1d8a); }
+  .g-warm     { background: linear-gradient(145deg, #ff9f68, #c05c20); }
+  .g-forest   { background: linear-gradient(145deg, #2ecc71, #0e7a42); }
+  .g-sky      { background: linear-gradient(145deg, #74b9ff, #2980b9); }
+
+  /* NO RESULTS */
+  .no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px 20px;
+    color: rgba(255,255,255,0.35);
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  /* OPEN ALL */
+  .open-all-wrap {
+    display: flex;
+    justify-content: center;
+    padding: 16px 20px 0;
+  }
+
+  .open-all-btn {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.18);
+    color: rgba(255,255,255,0.7);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 8px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.2s;
+    backdrop-filter: blur(10px);
+  }
+
+  .open-all-btn:hover { background: rgba(255,255,255,0.2); }
+
+  @media (max-width: 380px) {
+    :root { --icon-size: 56px; --gap: 22px; }
+    .date-header .day { font-size: 58px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wallpaper"></div>
+
+<div class="screen">
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <div class="status-time" id="clock">--:--</div>
+    <div class="status-icons">
+      <!--<span>●●●</span>-->
+      <span>@Lophersson</span>
+      <!--<span>🔋</span>-->
+    </div>
+  </div>
+
+  <!-- DATE -->
+  <div class="date-header">
+    <div class="day" id="dayNum">--</div>
+    <div class="weekday" id="weekDay">---</div>
+  </div>
+
+  <!-- OPEN ALL -->
+  <div class="open-all-wrap">
+    <button class="open-all-btn" onclick="openAll()">⬡ Abrir todas las apps</button>
+  </div>
+  <br>
+
+  <!-- APP GRID -->
+  <div class="apps-grid" id="appsGrid"></div>
+
+</div>
+
+<script>
+const baseURL = "https://lophersson.github.io/2026/";
+
+// Full app catalog with icons, gradient, display name
+const apps = [
+  { file: "finansso.html",         emoji: "💰", grad: "g-green",  name: "Financiación" },
+  { file: "alquarion.html",        emoji: "📈", grad: "g-teal",   name: "Inversiones" },
+  { file: "hipoteca.html",         emoji: "🏦", grad: "g-navy",   name: "Hipoteca" },
+  { file: "lacenaideal.html",      emoji: "🍽️", grad: "g-warm",   name: "La Cena Ideal" },
+  { file: "nutrirecon.html",       emoji: "🥦", grad: "g-forest", name: "Guía de Nutrición" },
+  { file: "nutriresearch.html",    emoji: "🔬", grad: "g-purple", name: "Menú Óptimo" },
+  { file: "alimentoshumberto.html",emoji: "🥗", grad: "g-lime",   name: "Alimentos" },
+  { file: "rgeldl.html",           emoji: "💊", grad: "g-rose",   name: "RGE · LDL" },
+  { file: "zenytrax.html",         emoji: "🧘", grad: "g-mint",   name: "Comer Bien" },
+  { file: "itsgf.html",            emoji: "💝", grad: "g-pink",   name: "Impuesto Fortuna" },
+  { file: "depayser.html",         emoji: "📋", grad: "g-brown",  name: "Delicatessen" },
+  { file: "aexhinzial.html",       emoji: "🌟", grad: "g-coral",  name: "Nutrición Terapéutica" },
+  { file: "metabolico.html",       emoji: "🧠", grad: "g-violet",  name: "Metabolismo" },
+  ];
+
+// Dock: 4 most-used apps (removed)
+
+function buildAppEl(app, index, inDock = false) {
+  const a = document.createElement("a");
+  a.className = "app";
+  a.href = baseURL + app.file;
+  a.target = "_blank";
+  a.dataset.name = app.name.toLowerCase();
+  a.dataset.file = app.file.toLowerCase();
+  if (!inDock) a.style.animationDelay = (index * 0.03) + "s";
+
+  a.innerHTML = `
+    <div class="app-icon ${app.grad}">${app.emoji}</div>
+    <span class="app-label">${app.name}</span>
+  `;
+  return a;
+}
+
+function renderApps(filter = "") {
+  const grid = document.getElementById("appsGrid");
+  grid.innerHTML = "";
+
+  const filtered = apps.filter(app =>
+    app.name.toLowerCase().includes(filter.toLowerCase()) ||
+    app.file.toLowerCase().includes(filter.toLowerCase())
+  );
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `<div class="no-results">Sin resultados para «${filter}»</div>`;
+    return;
+  }
+
+  filtered.forEach((app, i) => {
+    grid.appendChild(buildAppEl(app, i));
+  });
+}
+
+// Open all
+function openAll() {
+  apps.forEach(app => window.open(baseURL + app.file, "_blank"));
+}
+
+// Clock & date
+function updateClock() {
+  const now = new Date();
+  const h = String(now.getHours()).padStart(2, "0");
+  const m = String(now.getMinutes()).padStart(2, "0");
+  document.getElementById("clock").textContent = `${h}:${m}`;
+  document.getElementById("dayNum").textContent = now.getDate();
+  const days = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
+  const months = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+  document.getElementById("weekDay").textContent = `${days[now.getDay()]} · ${months[now.getMonth()]}`;
+}
+
+// Init
+updateClock();
+setInterval(updateClock, 15000);
+renderApps();
+</script>
+</body>
+</html>
