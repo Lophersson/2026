@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía de Cena</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f5f0;
+    --card: #ffffff;
+    --text: #2c2b28;
+    --muted: #8a8679;
+    --line: #e8e4dc;
+    --green: #4a7c59;
+    --green-light: #e8f0eb;
+    --amber: #b07d3a;
+    --amber-light: #f5ead8;
+    --blue: #3a5a7c;
+    --blue-light: #e0e8f0;
+    --tag-bg: #f0ece4;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--text);
+    color: #f7f5f0;
+    padding: 52px 40px 44px;
+    text-align: center;
+  }
+
+  header .label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #a09a8e;
+    margin-bottom: 16px;
+  }
+
+  header h1 {
+    font-family: 'Lora', serif;
+    font-size: 38px;
+    font-weight: 400;
+    letter-spacing: -0.5px;
+    margin-bottom: 10px;
+  }
+
+  header p {
+    color: #a09a8e;
+    font-size: 15px;
+    max-width: 480px;
+    margin: 0 auto 32px;
+  }
+
+  .criteria {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .criterion {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 12.5px;
+    color: #d4cfc7;
+    font-weight: 300;
+  }
+
+  /* MAIN */
+  main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 48px 24px;
+  }
+
+  /* SECTION TITLES */
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1.5px solid var(--line);
+  }
+
+  .section-header h2 {
+    font-family: 'Lora', serif;
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .section-header span {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 400;
+    letter-spacing: 0.04em;
+  }
+
+  /* FOOD TABLES */
+  .food-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 48px;
+  }
+
+  .food-table thead th {
+    text-align: left;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0 12px 10px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .food-table thead th:not(:first-child) {
+    text-align: center;
+  }
+
+  .food-table tbody tr {
+    border-bottom: 1px solid var(--line);
+    transition: background 0.15s;
+  }
+
+  .food-table tbody tr:last-child {
+    border-bottom: none;
+  }
+
+  .food-table tbody tr:hover {
+    background: rgba(74, 124, 89, 0.04);
+  }
+
+  .food-table td {
+    padding: 14px 12px;
+    vertical-align: middle;
+  }
+
+  .food-name {
+    font-size: 14.5px;
+    font-weight: 500;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .food-emoji {
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .food-note {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+    font-style: italic;
+    font-family: 'Lora', serif;
+  }
+
+  .macro {
+    text-align: center;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .macro small {
+    display: block;
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  .portion {
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .badge {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    padding: 3px 9px;
+    border-radius: 12px;
+    white-space: nowrap;
+  }
+
+  .badge-green { background: var(--green-light); color: var(--green); }
+  .badge-amber { background: var(--amber-light); color: var(--amber); }
+  .badge-blue { background: var(--blue-light); color: var(--blue); }
+
+  /* 7-DAY ROTATION */
+  .rotation-section {
+    margin-bottom: 48px;
+  }
+
+  .rotation-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+  }
+
+  .day-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 10px;
+    text-align: center;
+  }
+
+  .day-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .day-items {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 10px;
+  }
+
+  .day-item {
+    font-size: 11.5px;
+    color: var(--text);
+    font-weight: 400;
+  }
+
+  .day-kcal {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--green);
+    border-top: 1px solid var(--line);
+    padding-top: 8px;
+    margin-top: 4px;
+  }
+
+  /* RITUAL */
+  .ritual-section {
+    margin-bottom: 48px;
+  }
+
+  .ritual-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .ritual-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px;
+  }
+
+  .ritual-time {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .ritual-emoji {
+    font-size: 26px;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .ritual-name {
+    font-family: 'Lora', serif;
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .ritual-desc {
+    font-size: 12.5px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* TIPS */
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 48px;
+  }
+
+  .tip-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 18px 20px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+
+  .tip-icon {
+    font-size: 22px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .tip-title {
+    font-weight: 600;
+    font-size: 13.5px;
+    margin-bottom: 4px;
+  }
+
+  .tip-text {
+    font-size: 12.5px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: var(--line);
+    margin: 8px 0 40px;
+  }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 32px 24px;
+    font-size: 12px;
+    color: var(--muted);
+    border-top: 1px solid var(--line);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 680px) {
+    header { padding: 36px 20px 32px; }
+    header h1 { font-size: 28px; }
+    main { padding: 32px 16px; }
+
+    .food-table thead .col-portion,
+    .food-table td.portion { display: none; }
+
+    .rotation-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .ritual-grid { grid-template-columns: 1fr; }
+    .tips-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 480px) {
+    .rotation-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="label">Guía Nutricional</div>
+  <h1>La Cena Ideal</h1>
+  <p>Alimentos ligeros, proteína magra y carbohidrato pequeño para recuperar cuerpo y mente.</p>
+  <div class="criteria">
+    <span class="criterion">↓ Grasa baja</span>
+    <span class="criterion">⊙ Volumen moderado</span>
+    <span class="criterion">↓ Fibra baja</span>
+    <span class="criterion">◎ Proteína magra</span>
+    <span class="criterion">↓ Carbohidrato pequeño</span>
+  </div>
+</header>
+
+<main>
+
+  <!-- PROTEÍNA -->
+  <div class="section-header">
+    <h2>Proteína Magra</h2>
+    <span>Elige una por noche · 130–180 g</span>
+  </div>
+
+  <table class="food-table">
+    <thead>
+      <tr>
+        <th>Alimento</th>
+        <th class="col-portion">Ración</th>
+        <th>Proteína</th>
+        <th>Grasa</th>
+        <th>Beneficio</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <div class="food-name"><span class="food-emoji">🦃</span> Pavo a la plancha</div>
+          <div class="food-note">Mayor triptófano → serotonina → melatonina</div>
+        </td>
+        <td class="portion">130–150 g</td>
+        <td class="macro">32 g<small>proteína</small></td>
+        <td class="macro">1 g<small>grasa</small></td>
+        <td><span class="badge badge-green">Sueño ⭐</span></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="food-name"><span class="food-emoji">🐟</span> Merluza al vapor</div>
+          <div class="food-note">Digiere en 90 min · fósforo + magnesio</div>
+        </td>
+        <td class="portion">150–180 g</td>
+        <td class="macro">30 g<small>proteína</small></td>
+        <td class="macro">1 g<small>grasa</small></td>
+        <td><span class="badge badge-green">RGE ✓</span></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="food-name"><span class="food-emoji">🐟</span> Bacalao al vapor</div>
+          <div class="food-note">Pescado más magro · B12 para ritmo circadiano</div>
+        </td>
+        <td class="portion">150 g</td>
+        <td class="macro">30 g<small>proteína</small></td>
+        <td class="macro">0.5 g<small>grasa</small></td>
+        <td><span class="badge badge-green">RGE ✓</span></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="food-name"><span class="food-emoji">🍗</span> Pechuga de pollo</div>
+          <div class="food-note">Leucina para síntesis muscular nocturna</div>
+        </td>
+        <td class="portion">130 g</td>
+        <td class="macro">30 g<small>proteína</small></td>
+        <td class="macro">2 g<small>grasa</small></td>
+        <td><span class="badge badge-amber">Músculo</span></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="food-name"><span class="food-emoji">🦐</span> Gambas / Langostinos</div>
+          <div class="food-note">Zinc (colágeno) · selenio (antioxidante neuronal)</div>
+        </td>
+        <td class="portion">150 g</td>
+        <td class="macro">28 g<small>proteína</small></td>
+        <td class="macro">1.5 g<small>grasa</small></td>
+        <td><span class="badge badge-blue">Piel</span></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="food-name"><span class="food-emoji">🐟</span> Atún al natural</div>
+          <div class="food-note">Sin cocinar · alto en niacina (B3)</div>
+        </td>
+        <td class="portion">100 g</td>
+        <td class="macro">26 g<small>proteína</small></td>
+        <td class="macro">1 g<small>grasa</small></td>
+        <td><span class="badge badge-amber">Rápido</span></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="food-name"><span class="food-emoji">🐟</span> Lenguado / Dorada al horno</div>
+          <div class="food-note">Sabor neutro · digestión &lt;2 horas</div>
+        </td>
+        <td class="portion">150 g</td>
+        <td class="macro">27 g<small>proteína</small></td>
+        <td class="macro">2 g<small>grasa</small></td>
+        <td><span class="badge badge-green">RGE ✓</span></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="food-name"><span class="food-emoji">🥚</span> 2 Huevos pochados</div>
+          <div class="food-note">Colina → acetilcolina para sueño REM</div>
+        </td>
+        <td class="portion">2 uds</td>
+        <td class="macro">13 g<small>proteína</small></td>
+        <td class="macro">10 g<small>grasa</small></td>
+        <td><span class="badge badge-blue">REM</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- CARBOHIDRATO -->
+  <div class="section-header">
+    <h2>Carbohidrato Pequeño</h2>
+    <span>Elige uno · porciones moderadas</span>
+  </div>
+
+  <table class="food-table">
+    <thead>
+      <tr>
+        <th>Alimento</th>
+        <th class="col-portion">Ración</th>
+        <th>Carbos</th>
+        <th>Grasa</th>
+        <th>Beneficio</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <div class="food-name"><span class="food-emoji">🍚</span> Arroz blanco cocido</div>
+          <div class="food-note">Mínima fibra · facilita entrada del triptófano al cerebro</div>
+        </td>
+        <td class="portion">80–100 g</td>
+        <td class="macro">18 g<small>carbos</small></td>
+        <td class="macro">—</td>
+        <td><span class="badge badge-green">Sueño ⭐</span></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="food-name"><span class="food-emoji">🥔</span> Patata cocida sin piel</div>
+          <div class="food-note">Potasio relaja músculos · almidón resistente si se enfría</div>
+        </td>
+        <td class="portion">100 g</td>
+        <td class="macro">17 g<small>carbos</small></td>
+        <td class="macro">—</td>
+        <td><span class="badge badge-green">RGE ✓</span></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="food-name"><span class="food-emoji">🍠</span> Boniato cocido</div>
+          <div class="food-note">Beta-caroteno para renovación celular nocturna</div>
+        </td>
+        <td class="portion">80–100 g</td>
+        <td class="macro">20 g<small>carbos</small></td>
+        <td class="macro">—</td>
+        <td><span class="badge badge-amber">Piel</span></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="food-name"><span class="food-emoji">🫓</span> 2 Tortitas de arroz / maíz</div>
+          <div class="food-note">IG alto activa entrada de triptófano rápido</div>
+        </td>
+        <td class="portion">2 uds</td>
+        <td class="macro">14 g<small>carbos</small></td>
+        <td class="macro">—</td>
+        <td><span class="badge badge-amber">Rápido</span></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="food-name"><span class="food-emoji">🍜</span> Cuscús / Sémola</div>
+          <div class="food-note">5 min de preparación · hierro + magnesio</div>
+        </td>
+        <td class="portion">50 g en seco</td>
+        <td class="macro">25 g<small>carbos</small></td>
+        <td class="macro">—</td>
+        <td><span class="badge badge-amber">Fácil</span></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="food-name"><span class="food-emoji">🧡</span> Crema de calabaza</div>
+          <div class="food-note">Triturado = fibra mínima · activa nervio vago · alcalina</div>
+        </td>
+        <td class="portion">200 ml</td>
+        <td class="macro">15 g<small>carbos</small></td>
+        <td class="macro">—</td>
+        <td><span class="badge badge-green">RGE ✓</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- VERDURA -->
+  <div class="section-header">
+    <h2>Verdura Digestiva</h2>
+    <span>Elige una · siempre cocinada · +AOVE en crudo</span>
+  </div>
+
+  <table class="food-table">
+    <thead>
+      <tr>
+        <th>Alimento</th>
+        <th class="col-portion">Ración</th>
+        <th>Cocción</th>
+        <th>Fibra</th>
+        <th>Beneficio</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <div class="food-name"><span class="food-emoji">🥒</span> Calabacín al vapor</div>
+          <div class="food-note">La más suave · pH neutro · 95% agua · sin gas</div>
+        </td>
+        <td class="portion">200 g</td>
+        <td class="macro">Vapor<small>10–12 min</small></td>
+        <td class="macro">Muy baja<small>⭐</small></td>
+        <td><span class="badge badge-green">RGE ✓</span></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="food-name"><span class="food-emoji">🥕</span> Zanahoria cocida</div>
+          <div class="food-note">Beta-caroteno · pierde fibra con cocción · sabor dulce</div>
+        </td>
+        <td class="portion">100–150 g</td>
+        <td class="macro">Hervida<small>15 min</small></td>
+        <td class="macro">Baja</td>
+        <td><span class="badge badge-green">RGE ✓</span></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="food-name"><span class="food-emoji">🥬</span> Acelgas cocidas</div>
+          <div class="food-note">Magnesio activa receptores GABA para sueño profundo</div>
+        </td>
+        <td class="portion">100–150 g</td>
+        <td class="macro">Hervida<small>8–10 min</small></td>
+        <td class="macro">Baja</td>
+        <td><span class="badge badge-blue">Sueño</span></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="food-name"><span class="food-emoji">🌿</span> Espárragos al vapor</div>
+          <div class="food-note">Folato (cofactor serotonina) · diurético nocturno</div>
+        </td>
+        <td class="portion">4–6 uds (80–100 g)</td>
+        <td class="macro">Vapor<small>8 min</small></td>
+        <td class="macro">Baja</td>
+        <td><span class="badge badge-amber">Circulación</span></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="food-name"><span class="food-emoji">🫛</span> Judías verdes cocidas</div>
+          <div class="food-note">Vitamina K para mineralización ósea nocturna</div>
+        </td>
+        <td class="portion">150 g</td>
+        <td class="macro">Hervida<small>15 min</small></td>
+        <td class="macro">Baja</td>
+        <td><span class="badge badge-blue">Huesos</span></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="food-name"><span class="food-emoji">🫑</span> Pimiento rojo asado</div>
+          <div class="food-note">Vitamina C activa síntesis de colágeno durante el sueño</div>
+        </td>
+        <td class="portion">100 g (pelado)</td>
+        <td class="macro">Horno<small>30–40 min</small></td>
+        <td class="macro">Baja</td>
+        <td><span class="badge badge-amber">Piel</span></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="food-name"><span class="food-emoji">🥗</span> Lechuga + pepino</div>
+          <div class="food-note">Sin gas · casi todo agua · vestir solo con AOVE + sal</div>
+        </td>
+        <td class="portion">150–200 g</td>
+        <td class="macro">Cruda</td>
+        <td class="macro">Muy baja</td>
+        <td><span class="badge badge-green">Ligero</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- 7-DAY ROTATION -->
+  <div class="rotation-section">
+    <div class="section-header">
+      <h2>Rotación Semanal</h2>
+      <span>Varía cada día · ~330 kcal · 26–32 g proteína</span>
+    </div>
+
+    <div class="rotation-grid">
+      <div class="day-card">
+        <div class="day-label">Lun</div>
+        <div class="day-items">
+          <span class="day-item">🦃 Pavo 130 g</span>
+          <span class="day-item">🍚 Arroz 80 g</span>
+          <span class="day-item">🥒 Calabacín 200 g</span>
+        </div>
+        <div class="day-kcal">~340 kcal</div>
+      </div>
+      <div class="day-card">
+        <div class="day-label">Mar</div>
+        <div class="day-items">
+          <span class="day-item">🐟 Merluza 160 g</span>
+          <span class="day-item">🥔 Patata 100 g</span>
+          <span class="day-item">🥕 Zanahoria 150 g</span>
+        </div>
+        <div class="day-kcal">~330 kcal</div>
+      </div>
+      <div class="day-card">
+        <div class="day-label">Mié</div>
+        <div class="day-items">
+          <span class="day-item">🦐 Gambas 150 g</span>
+          <span class="day-item">🍠 Boniato 90 g</span>
+          <span class="day-item">🌿 Espárragos 6 uds</span>
+        </div>
+        <div class="day-kcal">~320 kcal</div>
+      </div>
+      <div class="day-card">
+        <div class="day-label">Jue</div>
+        <div class="day-items">
+          <span class="day-item">🥚 2 Huevos</span>
+          <span class="day-item">🍜 Cuscús 50 g</span>
+          <span class="day-item">🥬 Acelgas 130 g</span>
+        </div>
+        <div class="day-kcal">~360 kcal</div>
+      </div>
+      <div class="day-card">
+        <div class="day-label">Vie</div>
+        <div class="day-items">
+          <span class="day-item">🐟 Bacalao 150 g</span>
+          <span class="day-item">🍚 Arroz 80 g</span>
+          <span class="day-item">🫛 Judías 150 g</span>
+        </div>
+        <div class="day-kcal">~310 kcal</div>
+      </div>
+      <div class="day-card">
+        <div class="day-label">Sáb</div>
+        <div class="day-items">
+          <span class="day-item">🍗 Pollo 130 g</span>
+          <span class="day-item">🥔 Patata 100 g</span>
+          <span class="day-item">🫑 Pimiento 100 g</span>
+        </div>
+        <div class="day-kcal">~335 kcal</div>
+      </div>
+      <div class="day-card">
+        <div class="day-label">Dom</div>
+        <div class="day-items">
+          <span class="day-item">🐟 Atún 100 g</span>
+          <span class="day-item">🧡 Crema calabaza</span>
+          <span class="day-item">🥗 Lechuga</span>
+        </div>
+        <div class="day-kcal">~280 kcal</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RITUAL NOCTURNO -->
+  <div class="ritual-section">
+    <div class="section-header">
+      <h2>Ritual Nocturno</h2>
+      <span>21:00 – 22:00 h · antes de dormir</span>
+    </div>
+
+    <div class="ritual-grid">
+      <div class="ritual-card">
+        <div class="ritual-time">30 min antes de dormir</div>
+        <span class="ritual-emoji">🍒</span>
+        <div class="ritual-name">Cerezas ácidas o 2 kiwis</div>
+        <div class="ritual-desc">Melatonina natural + precursores de serotonina. Reducen el tiempo de conciliación un 35%. El kiwi es más suave para el RGE.</div>
+      </div>
+      <div class="ritual-card">
+        <div class="ritual-time">45 min antes de dormir</div>
+        <span class="ritual-emoji">🥛</span>
+        <div class="ritual-name">Leche tibia + 1 cdta miel</div>
+        <div class="ritual-desc">El calcio activa la conversión de triptófano a melatonina. La miel carga glucógeno hepático y previene el despertar a las 2–3 h. Máx. 40°C.</div>
+      </div>
+      <div class="ritual-card">
+        <div class="ritual-time">Al acostarse</div>
+        <span class="ritual-emoji">🌿</span>
+        <div class="ritual-name">Manzanilla + valeriana</div>
+        <div class="ritual-desc">La apigenina actúa sobre receptores GABA-A. La valeriana inhibe la degradación del GABA. Infusión tapada, 7 minutos.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLAVES -->
+  <div class="section-header">
+    <h2>6 Claves para la Cena</h2>
+    <span>Hábitos que multiplican los resultados</span>
+  </div>
+
+  <div class="tips-grid">
+    <div class="tip-card">
+      <span class="tip-icon">⏰</span>
+      <div>
+        <div class="tip-title">Cenar antes de las 20:30 h</div>
+        <div class="tip-text">Cenar tarde eleva el cortisol nocturno y reduce la hormona de crecimiento. Mínimo 2,5–3 horas antes de acostarte.</div>
+      </div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-icon">🔥</span>
+      <div>
+        <div class="tip-title">Siempre cocción suave</div>
+        <div class="tip-text">Vapor, plancha, horno, hervido. Nunca frito. El AOVE siempre en crudo sobre el plato terminado.</div>
+      </div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-icon">🥄</span>
+      <div>
+        <div class="tip-title">El orden importa</div>
+        <div class="tip-text">Empieza por la verdura, luego la proteína, el carbohidrato al final. Este orden reduce el pico de glucosa post-cena un 30%.</div>
+      </div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-icon">💧</span>
+      <div>
+        <div class="tip-title">No beber durante la cena</div>
+        <div class="tip-text">Los líquidos diluyen los jugos gástricos y ralentizan la digestión. Hidratarse hasta 30 min antes. Después: solo infusión.</div>
+      </div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-icon">🧂</span>
+      <div>
+        <div class="tip-title">Sal marina y hierbas, sin salsas</div>
+        <div class="tip-text">Las salsas comerciales esconden azúcar, acidificantes y grasa. Sazonar con sal marina, romero, eneldo, tomillo, perejil.</div>
+      </div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-icon">💙</span>
+      <div>
+        <div class="tip-title">Protocolo RGE nocturno</div>
+        <div class="tip-text">30 min antes de cenar: 30 ml aloe vera. Cabecero de la cama elevado 15–20 cm. No tumbarse hasta 2,5–3 h después de cenar.</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Guía orientativa · No sustituye asesoramiento médico o nutricional profesional.<br>
+  Consulta siempre con tu médico o dietista ante cualquier condición de salud.
+</footer>
+
+</body>
+</html>
