@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tu Cena · Análisis Nutricional</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f0a;
+    --bg2: #131508;
+    --gold: #c8a84b;
+    --gold2: #e8c878;
+    --green: #4a7c59;
+    --green2: #6aaa79;
+    --cream: #f0e8d0;
+    --muted: #7a7860;
+    --card: #181a10;
+    --border: rgba(200,168,75,0.18);
+    --accent: #a85c2c;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--cream);
+    font-family: 'DM Mono', monospace;
+    font-weight: 300;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grain texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.5;
+  }
+
+  .hero {
+    padding: 80px 40px 60px;
+    max-width: 1100px;
+    margin: 0 auto;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-label {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 6vw, 4.5rem);
+    line-height: 1.08;
+    font-weight: 700;
+    color: var(--cream);
+    opacity: 0;
+    animation: fadeUp 0.7s 0.1s ease forwards;
+  }
+
+  .hero h1 em {
+    color: var(--gold2);
+    font-style: italic;
+  }
+
+  .hero-sub {
+    margin-top: 24px;
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    max-width: 500px;
+    line-height: 1.9;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.2s ease forwards;
+  }
+
+  .score-bar {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 40px;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.3s ease forwards;
+  }
+
+  .score-circle {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    border: 2px solid var(--gold);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+    background: radial-gradient(circle, rgba(200,168,75,0.08) 0%, transparent 70%);
+  }
+
+  .score-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--gold2);
+    line-height: 1;
+  }
+
+  .score-label { font-size: 8px; color: var(--muted); letter-spacing: 0.15em; margin-top: 3px; }
+
+  .score-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 2;
+  }
+
+  .score-desc strong { color: var(--gold2); font-weight: 400; }
+
+  /* Macros strip */
+  .macros {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    max-width: 1100px;
+    margin: 0 auto;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.4s ease forwards;
+  }
+
+  .macro-item {
+    padding: 30px 36px;
+    border-right: 1px solid var(--border);
+    transition: background 0.3s;
+  }
+  .macro-item:last-child { border-right: none; }
+  .macro-item:hover { background: rgba(200,168,75,0.04); }
+
+  .macro-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    color: var(--gold2);
+    line-height: 1;
+  }
+
+  .macro-unit { font-size: 11px; color: var(--muted); }
+  .macro-name { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-top: 8px; }
+
+  /* Progress bar for macros */
+  .macro-bar { height: 2px; background: var(--border); margin-top: 14px; border-radius: 1px; overflow: hidden; }
+  .macro-bar-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold2)); border-radius: 1px; width: 0; transition: width 1.4s cubic-bezier(0.16, 1, 0.3, 1); }
+
+  /* Ingredients grid */
+  .section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 40px;
+  }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .ingredients-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2px;
+  }
+
+  .ingredient-card {
+    background: var(--card);
+    padding: 32px 30px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .ingredient-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.3s, background 0.3s;
+  }
+
+  .ingredient-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--card-accent, var(--green)), transparent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+
+  .ingredient-card:hover::before { transform: scaleX(1); }
+  .ingredient-card:hover { border-color: rgba(200,168,75,0.4); background: #1c1e12; transform: translateY(-2px); }
+
+  .card-icon { font-size: 2rem; margin-bottom: 14px; line-height: 1; }
+  .card-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    color: var(--cream);
+    margin-bottom: 6px;
+  }
+  .card-category {
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .card-benefits {
+    display: none;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .ingredient-card.open .card-benefits { display: block; }
+
+  .card-benefits-text {
+    font-size: 11.5px;
+    line-height: 2;
+    color: rgba(240,232,208,0.75);
+    margin-bottom: 14px;
+  }
+
+  .nutrient-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+
+  .tag {
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 2px;
+    border: 1px solid;
+  }
+
+  .tag-green { border-color: var(--green2); color: var(--green2); }
+  .tag-gold { border-color: var(--gold); color: var(--gold); }
+  .tag-accent { border-color: var(--accent); color: #d4845c; }
+
+  .body-systems {
+    margin-top: 10px;
+  }
+
+  .system-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 11px;
+    color: var(--muted);
+    padding: 4px 0;
+  }
+
+  .system-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--gold);
+    flex-shrink: 0;
+  }
+
+  .open-hint {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 12px;
+    transition: color 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .open-hint::after {
+    content: '↓';
+    font-size: 11px;
+    transition: transform 0.3s;
+  }
+
+  .ingredient-card.open .open-hint::after { transform: rotate(180deg); }
+  .ingredient-card:hover .open-hint { color: var(--gold); }
+
+  /* Benefits summary */
+  .benefits-summary {
+    background: linear-gradient(135deg, #131a0d 0%, #0d1208 100%);
+    border: 1px solid var(--border);
+    padding: 50px;
+    margin-top: 2px;
+  }
+
+  .benefits-summary h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: var(--gold2);
+    margin-bottom: 8px;
+  }
+
+  .benefits-list {
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+  }
+
+  .benefit-block {
+    padding: 20px;
+    border-left: 2px solid var(--green);
+    background: rgba(74,124,89,0.06);
+  }
+
+  .benefit-block-title {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--green2);
+    margin-bottom: 8px;
+  }
+
+  .benefit-block-text {
+    font-size: 11.5px;
+    line-height: 1.9;
+    color: rgba(240,232,208,0.7);
+  }
+
+  /* Synergies section */
+  .synergy-box {
+    border: 1px solid rgba(168,92,44,0.35);
+    background: rgba(168,92,44,0.05);
+    padding: 30px 36px;
+    margin-top: 40px;
+  }
+
+  .synergy-title {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #d4845c;
+    margin-bottom: 14px;
+  }
+
+  .synergy-text {
+    font-size: 12px;
+    line-height: 2;
+    color: rgba(240,232,208,0.7);
+  }
+
+  .synergy-text strong { color: var(--gold2); font-weight: 400; }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 30px 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 700px) {
+    .macros { grid-template-columns: repeat(2, 1fr); }
+    .hero, .section, footer { padding-left: 22px; padding-right: 22px; }
+    .benefits-summary { padding: 30px 22px; }
+    .macro-item { padding: 22px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-label">Análisis Nutricional · Tu Cena</div>
+  <h1>Una cena de <em>alta densidad</em><br>nutricional</h1>
+  <div class="hero-sub">
+    Quinoa · Sardinas en aceite · Aceite de oliva · Ajo · Cúrcuma · Pimienta negra · Semillas de lino · Eneldo
+  </div>
+  <div class="score-bar">
+    <div class="score-circle">
+      <div class="score-num">9<span style="font-size:1.1rem">.2</span></div>
+      <div class="score-label">Puntuación</div>
+    </div>
+    <div class="score-desc">
+      <strong>Excepcional perfil nutricional.</strong> Esta cena combina proteína completa,<br>
+      grasas omega-3, antiinflamatorios potentes y fibra de alta calidad.
+    </div>
+  </div>
+</section>
+
+<!-- MACROS -->
+<div class="macros">
+  <div class="macro-item">
+    <div class="macro-val">~42<span class="macro-unit">g</span></div>
+    <div class="macro-name">Proteína</div>
+    <div class="macro-bar"><div class="macro-bar-fill" data-width="78"></div></div>
+  </div>
+  <div class="macro-item">
+    <div class="macro-val">~38<span class="macro-unit">g</span></div>
+    <div class="macro-name">Carbohidratos</div>
+    <div class="macro-bar"><div class="macro-bar-fill" data-width="45"></div></div>
+  </div>
+  <div class="macro-item">
+    <div class="macro-val">~22<span class="macro-unit">g</span></div>
+    <div class="macro-name">Grasas saludables</div>
+    <div class="macro-bar"><div class="macro-bar-fill" data-width="60"></div></div>
+  </div>
+  <div class="macro-item">
+    <div class="macro-val">~520<span class="macro-unit">kcal</span></div>
+    <div class="macro-name">Calorías est.</div>
+    <div class="macro-bar"><div class="macro-bar-fill" data-width="35"></div></div>
+  </div>
+</div>
+
+<!-- INGREDIENTS SECTION -->
+<section class="section">
+  <div class="section-label">Ingredientes y sus propiedades</div>
+  <div class="ingredients-grid" id="grid"></div>
+
+  <!-- SUMMARY -->
+  <div class="benefits-summary" id="summary">
+    <div class="hero-label" style="animation:none;opacity:1;">Resumen · Beneficios Globales</div>
+    <h2>¿Para qué es buena esta cena?</h2>
+    <div class="benefits-list">
+      <div class="benefit-block">
+        <div class="benefit-block-title">🧠 Cerebro y sistema nervioso</div>
+        <div class="benefit-block-text">Los omega-3 de las sardinas y el lino apoyan la función cognitiva, la memoria y el estado de ánimo. La quinoa aporta triptófano, precursor de serotonina.</div>
+      </div>
+      <div class="benefit-block">
+        <div class="benefit-block-title">❤️ Salud cardiovascular</div>
+        <div class="benefit-block-text">EPA y DHA de las sardinas, aceite de oliva monoinsaturado y omega-3 del lino reducen triglicéridos, presión arterial y riesgo cardiovascular.</div>
+      </div>
+      <div class="benefit-block">
+        <div class="benefit-block-title">🔥 Antiinflamación sistémica</div>
+        <div class="benefit-block-text">La cúrcuma con pimienta negra (piperina +2000% biodisponibilidad), el ajo y los omega-3 actúan juntos como potentes agentes antiinflamatorios.</div>
+      </div>
+      <div class="benefit-block">
+        <div class="benefit-block-title">🦴 Huesos y articulaciones</div>
+        <div class="benefit-block-text">Las sardinas aportan vitamina D y calcio (especialmente con espinas). La cúrcuma ayuda a reducir la inflamación articular.</div>
+      </div>
+      <div class="benefit-block">
+        <div class="benefit-block-title">💪 Músculo y recuperación</div>
+        <div class="benefit-block-text">Proteína completa de sardinas y quinoa (todos los aminoácidos esenciales) ideal para mantenimiento muscular y recuperación nocturna.</div>
+      </div>
+      <div class="benefit-block">
+        <div class="benefit-block-title">🌿 Microbioma intestinal</div>
+        <div class="benefit-block-text">La fibra soluble del lino alimenta las bacterias beneficiosas. El ajo actúa como prebiótico natural. La quinoa aporta fibra adicional.</div>
+      </div>
+      <div class="benefit-block">
+        <div class="benefit-block-title">🛡️ Sistema inmune</div>
+        <div class="benefit-block-text">Allicina del ajo, vitaminas del grupo B de sardinas y quinoa, selenio, zinc y antioxidantes del eneldo refuerzan las defensas del organismo.</div>
+      </div>
+      <div class="benefit-block">
+        <div class="benefit-block-title">⚖️ Control glucémico</div>
+        <div class="benefit-block-text">La quinoa tiene índice glucémico bajo-medio. El lino enlentece la absorción de carbohidratos. Ideal para mantener la glucemia estable durante la noche.</div>
+      </div>
+    </div>
+
+    <div class="synergy-box">
+      <div class="synergy-title">⚗️ Sinergias nutricionales destacadas</div>
+      <div class="synergy-text">
+        <strong>Cúrcuma + Pimienta negra:</strong> la piperina aumenta la absorción de curcumina hasta un 2000%. Esta combinación es farmacológicamente relevante para la inflamación.<br><br>
+        <strong>Vitamina D (sardinas) + Grasas saludables (aceite de oliva, lino):</strong> la vitamina D es liposoluble — las grasas de la cena maximizan su absorción.<br><br>
+        <strong>Sardinas + Quinoa:</strong> proteína completa de origen animal + vegetal con todos los aminoácidos esenciales — sinergia perfecta para la síntesis proteica nocturna.<br><br>
+        <strong>Lino + Omega-3 (sardinas):</strong> doble fuente de omega-3 (ALA vegetal + EPA/DHA animal) con efecto antiinflamatorio acumulativo y cardioprotector superior.
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>Análisis nutricional estimado · No sustituye consejo médico</span>
+  <span>⬆ Haz clic en cada ingrediente para ver sus propiedades</span>
+</footer>
+
+<script>
+const ingredients = [
+  {
+    icon: '🌾',
+    name: 'Quinoa',
+    category: 'Pseudocereal · Proteína completa',
+    accent: '#c8a84b',
+    tags: [
+      { label: 'Proteína completa', cls: 'tag-gold' },
+      { label: 'Fibra', cls: 'tag-green' },
+      { label: 'Sin gluten', cls: 'tag-accent' },
+    ],
+    benefits: 'La quinoa es uno de los pocos vegetales con los 9 aminoácidos esenciales, siendo especialmente rica en lisina y metionina. Su índice glucémico moderado-bajo (53) proporciona energía sostenida sin picos de insulina. Rica en magnesio, hierro, zinc, fósforo y vitaminas del grupo B.',
+    systems: [
+      'Músculo y síntesis proteica',
+      'Control glucémico y energía',
+      'Sistema nervioso (magnesio)',
+      'Salud digestiva (fibra)',
+      'Huesos y dientes (calcio, fósforo)',
+    ]
+  },
+  {
+    icon: '🐟',
+    name: 'Sardinas en aceite',
+    category: 'Pescado azul · Omega-3',
+    accent: '#4a7c9c',
+    tags: [
+      { label: 'EPA/DHA', cls: 'tag-green' },
+      { label: 'Vitamina D', cls: 'tag-gold' },
+      { label: 'Calcio', cls: 'tag-accent' },
+    ],
+    benefits: 'Las sardinas son uno de los superalimentos más completos: fuente excepcional de omega-3 de cadena larga (EPA y DHA), vitamina D, vitamina B12, selenio, calcio (especialmente con espinas) y proteína de alto valor biológico. Son también una fuente rara y asequible de vitamina D biodisponible.',
+    systems: [
+      'Cardiovascular (reduce triglicéridos)',
+      'Cerebro y estado de ánimo (DHA)',
+      'Huesos y articulaciones (vit. D, calcio)',
+      'Sistema inmune (selenio, zinc)',
+      'Antiinflamación sistémica (omega-3)',
+    ]
+  },
+  {
+    icon: '🫒',
+    name: 'Aceite de oliva',
+    category: 'Grasa monoinsaturada · Polifenoles',
+    accent: '#7a9c40',
+    tags: [
+      { label: 'Oleocantal', cls: 'tag-green' },
+      { label: 'Vitamina E', cls: 'tag-gold' },
+      { label: 'Cardioprotector', cls: 'tag-accent' },
+    ],
+    benefits: 'El aceite de oliva es el pilar de la dieta mediterránea. Su ácido oleico (omega-9) protege el perfil lipídico. El oleocantal actúa de forma similar al ibuprofeno como antiinflamatorio natural. Sus polifenoles protegen del estrés oxidativo y del daño celular. Favorece la absorción de vitaminas liposolubles (A, D, E, K).',
+    systems: [
+      'Cardiovascular (perfil lipídico)',
+      'Antiinflamación (oleocantal)',
+      'Absorción vitaminas liposolubles',
+      'Protección celular antioxidante',
+      'Control del colesterol LDL',
+    ]
+  },
+  {
+    icon: '🧄',
+    name: 'Ajo',
+    category: 'Allium · Prebiótico · Antimicrobiano',
+    accent: '#c8a84b',
+    tags: [
+      { label: 'Allicina', cls: 'tag-green' },
+      { label: 'Prebiótico', cls: 'tag-gold' },
+      { label: 'Antimicrobiano', cls: 'tag-accent' },
+    ],
+    benefits: 'El ajo es uno de los alimentos medicinales más estudiados. Su compuesto activo, la allicina (generada al triturar o picar), tiene potentes propiedades antimicrobianas, antifúngicas y antivíricas. Actúa como prebiótico para la microbiota intestinal, regula la presión arterial y reduce el colesterol LDL. También tiene efectos inmunomoduladores.',
+    systems: [
+      'Sistema inmune (allicina)',
+      'Cardiovascular (presión arterial)',
+      'Microbioma intestinal (prebiótico)',
+      'Antimicrobiano y antifúngico',
+      'Detoxificación hepática',
+    ]
+  },
+  {
+    icon: '🟡',
+    name: 'Cúrcuma',
+    category: 'Especia · Curcumina · Antiinflamatorio',
+    accent: '#d4a820',
+    tags: [
+      { label: 'Curcumina', cls: 'tag-gold' },
+      { label: 'Antioxidante', cls: 'tag-green' },
+      { label: 'Neuroprotector', cls: 'tag-accent' },
+    ],
+    benefits: 'La cúrcuma contiene curcumina, uno de los antiinflamatorios naturales más potentes conocidos. Inhibe el factor NF-κB, una molécula clave en la cascada inflamatoria. Tiene propiedades antioxidantes, neuroprotectoras (BDNF), anticancerígenas y hepatoprotectoras. Su biodisponibilidad se multiplica ×20 con la piperina de la pimienta negra.',
+    systems: [
+      'Antiinflamación crónica sistémica',
+      'Cerebro y neuroprotección (BDNF)',
+      'Hígado y detoxificación',
+      'Articulaciones y dolor',
+      'Prevención daño oxidativo',
+    ]
+  },
+  {
+    icon: '⚫',
+    name: 'Pimienta negra',
+    category: 'Especia · Piperina · Biodisponibilidad',
+    accent: '#8a7060',
+    tags: [
+      { label: 'Piperina', cls: 'tag-green' },
+      { label: 'Digestivo', cls: 'tag-gold' },
+      { label: 'Sinergia +2000%', cls: 'tag-accent' },
+    ],
+    benefits: 'La pimienta negra contiene piperina, un alcaloide que inhibe la glucuronidación hepática, potenciando la absorción de la curcumina hasta un 2000%. También mejora la absorción de selenio, vitamina B12 y betacarotenos. Estimula la secreción de jugos gástricos y enzimas digestivas, mejorando la digestión general.',
+    systems: [
+      'Biodisponibilidad de nutrientes',
+      'Digestión y enzimas gástricas',
+      'Termogénesis leve (metabolismo)',
+      'Sinergia curcumina-piperina',
+      'Absorción mineral mejorada',
+    ]
+  },
+  {
+    icon: '🌰',
+    name: 'Semillas de lino',
+    category: 'Semilla · Omega-3 ALA · Fibra',
+    accent: '#8a6040',
+    tags: [
+      { label: 'ALA Omega-3', cls: 'tag-green' },
+      { label: 'Lignanos', cls: 'tag-gold' },
+      { label: 'Fibra soluble', cls: 'tag-accent' },
+    ],
+    benefits: 'Las semillas de lino son la fuente vegetal más rica en ácido alfa-linolénico (ALA, omega-3 vegetal) y en lignanos, fitoestrógenos con propiedades anticancerígenas y cardioprotectoras. Su mucílago (fibra soluble) forma un gel en el intestino que regula el tránsito, reduce el colesterol y enlentece la absorción de glucosa. Mejor molidas para maximizar la absorción.',
+    systems: [
+      'Cardiovascular (colesterol, triglicéridos)',
+      'Microbioma intestinal (prebiótico)',
+      'Equilibrio hormonal (lignanos)',
+      'Control glucémico (fibra soluble)',
+      'Antiinflamación (ALA omega-3)',
+    ]
+  },
+  {
+    icon: '🌿',
+    name: 'Eneldo',
+    category: 'Hierba aromática · Antioxidante',
+    accent: '#4a9c59',
+    tags: [
+      { label: 'Flavonoides', cls: 'tag-green' },
+      { label: 'Antiespasmódico', cls: 'tag-gold' },
+      { label: 'Vitamina C', cls: 'tag-accent' },
+    ],
+    benefits: 'El eneldo es rico en flavonoides (kaempferol, vicenin-2) con potente actividad antioxidante. Sus aceites esenciales (carvona, limoneno) tienen propiedades antiespasmódicas y digestivas: reduce los gases, calambres intestinales y favorece la digestión. Aporta vitamina C, manganeso y calcio. También tiene propiedades antimicrobianas y leve efecto ansiolítico.',
+    systems: [
+      'Digestivo y antiflatulento',
+      'Sistema inmune (vitamina C)',
+      'Antioxidante (flavonoides)',
+      'Antimicrobiano leve',
+      'Sistema nervioso (ansiolítico suave)',
+    ]
+  },
+];
+
+const grid = document.getElementById('grid');
+
+ingredients.forEach((ing, i) => {
+  const card = document.createElement('div');
+  card.className = 'ingredient-card';
+  card.style.setProperty('--card-accent', ing.accent);
+
+  const tags = ing.tags.map(t => `<span class="tag ${t.cls}">${t.label}</span>`).join('');
+  const systems = ing.systems.map(s => `<div class="system-item"><div class="system-dot"></div>${s}</div>`).join('');
+
+  card.innerHTML = `
+    <div class="card-icon">${ing.icon}</div>
+    <div class="card-name">${ing.name}</div>
+    <div class="card-category">${ing.category}</div>
+    <div class="open-hint">Ver propiedades</div>
+    <div class="card-benefits">
+      <div class="nutrient-tags">${tags}</div>
+      <div class="card-benefits-text">${ing.benefits}</div>
+      <div class="body-systems">${systems}</div>
+    </div>
+  `;
+
+  card.addEventListener('click', () => {
+    const wasOpen = card.classList.contains('open');
+    document.querySelectorAll('.ingredient-card.open').forEach(c => c.classList.remove('open'));
+    if (!wasOpen) card.classList.add('open');
+  });
+
+  grid.appendChild(card);
+});
+
+// Intersection observer for card reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, idx) => {
+    if (entry.isIntersecting) {
+      const delay = Array.from(grid.children).indexOf(entry.target) * 70;
+      setTimeout(() => entry.target.classList.add('visible'), delay);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.ingredient-card').forEach(c => observer.observe(c));
+
+// Animate macro bars
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.querySelectorAll('.macro-bar-fill').forEach(bar => {
+      bar.style.width = bar.dataset.width + '%';
+    });
+  }, 600);
+});
+</script>
+</body>
+</html>
