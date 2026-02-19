@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NutriCore · Biotech Nutrition Intelligence</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #020408;
+  --bg2: #030912;
+  --surface: rgba(0,20,40,0.7);
+  --border: rgba(0,200,255,0.15);
+  --text: #c8e8ff;
+  --muted: rgba(150,200,230,0.5);
+  --cyan: #00f0ff;
+  --green: #00ff88;
+  --pink: #ff0080;
+  --yellow: #ffee00;
+  --purple: #bf00ff;
+  --orange: #ff6600;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 15px;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ═══════════════════════════════════════════
+   CANVAS BACKGROUND
+══════════════════════════════════════════════ */
+#bgCanvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════
+   SCANLINES OVERLAY
+══════════════════════════════════════════════ */
+.scanlines {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 2px,
+    rgba(0,0,0,0.07) 2px,
+    rgba(0,0,0,0.07) 4px
+  );
+}
+
+/* ═══════════════════════════════════════════
+   WRAPPER
+══════════════════════════════════════════════ */
+.wrapper {
+  position: relative;
+  z-index: 2;
+}
+
+/* ═══════════════════════════════════════════
+   HEADER / HERO
+══════════════════════════════════════════════ */
+.hero {
+  padding: 70px 24px 50px;
+  text-align: center;
+  position: relative;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(0,240,255,0.4);
+  border-radius: 2px;
+  padding: 4px 16px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--cyan);
+  letter-spacing: .2em;
+  margin-bottom: 28px;
+  text-transform: uppercase;
+  animation: badgePulse 3s ease-in-out infinite;
+}
+@keyframes badgePulse {
+  0%,100% { border-color: rgba(0,240,255,0.4); box-shadow: 0 0 8px rgba(0,240,255,0.2); }
+  50% { border-color: rgba(0,240,255,0.9); box-shadow: 0 0 20px rgba(0,240,255,0.5); }
+}
+.badge-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 8px var(--cyan);
+  animation: dotBlink 1.2s step-end infinite;
+}
+@keyframes dotBlink { 0%,100%{opacity:1} 50%{opacity:0.1} }
+
+.hero h1 {
+  font-family: 'Orbitron', monospace;
+  font-weight: 900;
+  font-size: clamp(2.2rem, 6vw, 4.5rem);
+  letter-spacing: -0.01em;
+  line-height: 1;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+.hero h1 .t1 {
+  color: #fff;
+  text-shadow:
+    0 0 20px rgba(0,240,255,0.8),
+    0 0 60px rgba(0,240,255,0.3);
+}
+.hero h1 .t2 {
+  color: var(--cyan);
+  text-shadow:
+    0 0 20px var(--cyan),
+    0 0 60px rgba(0,240,255,0.5),
+    0 0 120px rgba(0,240,255,0.2);
+  animation: titleFlicker 8s ease-in-out infinite;
+}
+@keyframes titleFlicker {
+  0%,95%,100% { opacity:1 }
+  96% { opacity:0.85 }
+  97% { opacity:1 }
+  98% { opacity:0.7 }
+  99% { opacity:1 }
+}
+
+.hero-sub {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--muted);
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  margin-bottom: 40px;
+}
+
+/* ═══════════════════════════════════════════
+   STATS BAR
+══════════════════════════════════════════════ */
+.stats-bar {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  max-width: 700px;
+  margin: 0 auto 40px;
+  border: 1px solid rgba(0,240,255,0.2);
+  border-radius: 4px;
+  overflow: hidden;
+  background: rgba(0,10,20,0.8);
+}
+.stat-item {
+  flex: 1;
+  padding: 14px 20px;
+  text-align: center;
+  border-right: 1px solid rgba(0,240,255,0.15);
+  position: relative;
+}
+.stat-item:last-child { border-right: none; }
+.stat-n {
+  font-family: 'Orbitron', monospace;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--cyan);
+  text-shadow: 0 0 16px var(--cyan);
+  display: block;
+}
+.stat-l {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--muted);
+  letter-spacing: .15em;
+  text-transform: uppercase;
+}
+
+/* ═══════════════════════════════════════════
+   SEARCH + CONTROLS
+══════════════════════════════════════════════ */
+.controls {
+  max-width: 800px;
+  margin: 0 auto 30px;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.search-wrap {
+  position: relative;
+}
+.search-wrap input {
+  width: 100%;
+  padding: 13px 48px 13px 44px;
+  background: rgba(0,15,30,0.9);
+  border: 1px solid rgba(0,240,255,0.3);
+  border-radius: 3px;
+  color: var(--text);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.85rem;
+  outline: none;
+  letter-spacing: .05em;
+  transition: border-color .2s, box-shadow .2s;
+}
+.search-wrap input:focus {
+  border-color: var(--cyan);
+  box-shadow: 0 0 20px rgba(0,240,255,0.2), inset 0 0 20px rgba(0,240,255,0.03);
+}
+.search-wrap input::placeholder { color: rgba(0,240,255,0.3); }
+.search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--cyan);
+  font-size: 0.9rem;
+  opacity: .7;
+}
+.search-count {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--cyan);
+  opacity: .6;
+}
+
+.btn-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.ctrl-btn {
+  padding: 7px 18px;
+  border-radius: 2px;
+  border: 1px solid rgba(0,240,255,0.3);
+  background: transparent;
+  color: rgba(0,240,255,0.7);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: .1em;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all .2s;
+  white-space: nowrap;
+}
+.ctrl-btn:hover, .ctrl-btn.active {
+  background: rgba(0,240,255,0.1);
+  border-color: var(--cyan);
+  color: var(--cyan);
+  box-shadow: 0 0 12px rgba(0,240,255,0.3);
+}
+
+/* CATEGORY FILTER PILLS */
+.cat-filters {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding: 0 24px;
+  max-width: 1400px;
+  margin: 0 auto 30px;
+}
+.cat-pill {
+  padding: 5px 14px;
+  border-radius: 2px;
+  border: 1px solid transparent;
+  background: rgba(0,10,20,0.6);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: .08em;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all .2s;
+  white-space: nowrap;
+}
+.cat-pill:hover { opacity: 1; filter: brightness(1.3); }
+.cat-pill.active { font-weight: 600; }
+
+/* ═══════════════════════════════════════════
+   GRID
+══════════════════════════════════════════════ */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 18px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px 100px;
+}
+
+/* ═══════════════════════════════════════════
+   CARD
+══════════════════════════════════════════════ */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+  backdrop-filter: blur(12px);
+  transition: transform .3s, box-shadow .3s;
+  animation: cardIn .6s ease both;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--cat-color), transparent);
+  opacity: .7;
+}
+.card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 4px;
+  background: radial-gradient(ellipse 120% 60% at 50% -20%, color-mix(in srgb, var(--cat-color) 6%, transparent), transparent 70%);
+  pointer-events: none;
+}
+.card:hover {
+  transform: translateY(-4px) scale(1.002);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--cat-color) 50%, transparent),
+    0 20px 60px -10px color-mix(in srgb, var(--cat-color) 20%, transparent),
+    0 0 30px -5px color-mix(in srgb, var(--cat-color) 15%, transparent);
+}
+.card.hidden { display: none; }
+
+@keyframes cardIn {
+  from { opacity:0; transform: translateY(24px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+
+/* ─── CARD HEADER ─── */
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 18px 14px;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  z-index: 1;
+}
+
+.icon-hex {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+}
+.icon-hex::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--cat-color) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cat-color) 40%, transparent);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--cat-color) 30%, transparent);
+}
+
+.header-text { flex: 1; min-width: 0; }
+.cat-id {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--cat-color);
+  letter-spacing: .2em;
+  opacity: .7;
+}
+.card-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  line-height: 1.3;
+  color: #fff;
+}
+
+.card-meta {
+  text-align: right;
+  flex-shrink: 0;
+}
+.food-count {
+  font-family: 'Orbitron', monospace;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--cat-color);
+  text-shadow: 0 0 10px var(--cat-color);
+  display: block;
+  line-height: 1;
+  animation: countGlow 3s ease-in-out infinite;
+}
+@keyframes countGlow {
+  0%,100% { text-shadow: 0 0 8px var(--cat-color); }
+  50% { text-shadow: 0 0 20px var(--cat-color), 0 0 40px color-mix(in srgb,var(--cat-color) 50%,transparent); }
+}
+.count-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.55rem;
+  color: var(--muted);
+  letter-spacing: .15em;
+  text-transform: uppercase;
+}
+
+/* ─── NEON DIVIDER ─── */
+.neon-divider {
+  height: 1px;
+  margin: 0 18px;
+  background: linear-gradient(90deg, transparent, var(--cat-color), transparent);
+  opacity: .3;
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── FOOD LIST ─── */
+.food-list {
+  display: none;
+  flex-direction: column;
+  padding: 12px 18px 16px;
+  gap: 4px;
+  position: relative;
+  z-index: 1;
+}
+.food-list.open { display: flex; }
+
+.food-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: 2px;
+  border: 1px solid transparent;
+  transition: all .15s;
+  cursor: default;
+}
+.food-item:hover {
+  background: color-mix(in srgb, var(--cat-color) 7%, transparent);
+  border-color: color-mix(in srgb, var(--cat-color) 20%, transparent);
+}
+
+.food-item .led {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--cat-color);
+  box-shadow: 0 0 6px var(--cat-color);
+  flex-shrink: 0;
+  animation: ledPulse var(--led-delay, 3s) ease-in-out infinite;
+}
+@keyframes ledPulse {
+  0%,100% { opacity:.7; box-shadow: 0 0 4px var(--cat-color); }
+  50% { opacity:1; box-shadow: 0 0 10px var(--cat-color), 0 0 20px color-mix(in srgb,var(--cat-color) 40%,transparent); }
+}
+
+.food-name {
+  flex: 1;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 500;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.food-name mark {
+  background: color-mix(in srgb, var(--cat-color) 30%, transparent);
+  color: #fff;
+  border-radius: 2px;
+  padding: 0 2px;
+}
+.food-tag {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  color: var(--cat-color);
+  opacity: .65;
+  white-space: nowrap;
+}
+
+/* ─── TOGGLE ROW ─── */
+.toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  cursor: pointer;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--cat-color);
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  opacity: .6;
+  transition: opacity .2s;
+  position: relative;
+  z-index: 1;
+}
+.toggle-btn:hover { opacity: 1; }
+.toggle-arrow { transition: transform .3s; display: inline-block; }
+.toggle-arrow.open { transform: rotate(180deg); }
+
+/* ─── SPECIAL BADGE ─── */
+.special-badge {
+  position: absolute;
+  top: 12px;
+  right: 52px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: .15em;
+  padding: 2px 8px;
+  border-radius: 2px;
+  text-transform: uppercase;
+  z-index: 2;
+}
+
+/* ═══════════════════════════════════════════
+   NEON CORNER DECORATION
+══════════════════════════════════════════════ */
+.corner {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  z-index: 3;
+  pointer-events: none;
+}
+.corner.tl { top: 4px; left: 4px; border-top: 1px solid; border-left: 1px solid; border-color: var(--cat-color); }
+.corner.tr { top: 4px; right: 4px; border-top: 1px solid; border-right: 1px solid; border-color: var(--cat-color); }
+.corner.bl { bottom: 4px; left: 4px; border-bottom: 1px solid; border-left: 1px solid; border-color: var(--cat-color); }
+.corner.br { bottom: 4px; right: 4px; border-bottom: 1px solid; border-right: 1px solid; border-color: var(--cat-color); }
+
+/* ═══════════════════════════════════════════
+   NO RESULTS
+══════════════════════════════════════════════ */
+.no-results {
+  grid-column: 1/-1;
+  text-align: center;
+  padding: 80px 24px;
+  font-family: 'Share Tech Mono', monospace;
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: .1em;
+  display: none;
+}
+
+/* ═══════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════════ */
+.footer {
+  text-align: center;
+  padding: 20px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  color: rgba(0,240,255,0.2);
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  border-top: 1px solid rgba(0,240,255,0.05);
+}
+
+/* ═══════════════════════════════════════════
+   SCROLLBAR
+══════════════════════════════════════════════ */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: rgba(0,240,255,0.3); border-radius: 2px; }
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════════ */
+@media (max-width: 600px) {
+  .grid { grid-template-columns: 1fr; padding: 0 12px 80px; }
+  .hero h1 { font-size: 1.8rem; }
+  .stats-bar { flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="bgCanvas"></canvas>
+<div class="scanlines"></div>
+
+<div class="wrapper">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      NutriCore · Biotech Nutrition Intelligence · v2.4
+    </div>
+    <h1>
+      <span class="t1">NUTRI</span><span class="t2">CORE</span>
+    </h1>
+    <p class="hero-sub">Advanced nutritional targeting system · 16 biomarker categories</p>
+
+    <div class="stats-bar">
+      <div class="stat-item">
+        <span class="stat-n" id="statCats">16</span>
+        <span class="stat-l">Categorías</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-n" id="statFoods">0</span>
+        <span class="stat-l">Alimentos</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-n" id="statCompounds">50+</span>
+        <span class="stat-l">Compuestos</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-n statOnline">LIVE</span>
+        <span class="stat-l">Database</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="controls">
+    <div class="search-wrap">
+      <span class="search-icon">⌖</span>
+      <input type="text" id="searchInput" placeholder="BUSCAR ALIMENTO, COMPUESTO O CATEGORÍA...">
+      <span class="search-count" id="searchCount"></span>
+    </div>
+    <div class="btn-row">
+      <button class="ctrl-btn active" id="btnAll">▸ Todas</button>
+      <button class="ctrl-btn" id="btnOpen">▾ Abrir todas</button>
+      <button class="ctrl-btn" id="btnClose">▴ Cerrar todas</button>
+      <button class="ctrl-btn" id="btnSpecial">◈ Solo especiales</button>
+    </div>
+  </div>
+
+  <!-- GRID -->
+  <div class="grid" id="grid"></div>
+
+  <div class="footer">NutriCore Biotech Intelligence · Datos con fines informativos · Consulte a su especialista</div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════
+   BACKGROUND CANVAS — particles + beams
+══════════════════════════════════════════ */
+(function() {
+  const canvas = document.getElementById('bgCanvas');
+  const ctx = canvas.getContext('2d');
+  let W, H;
+  const resize = () => { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; };
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Particles
+  const PARTS = 80;
+  const particles = Array.from({length: PARTS}, () => ({
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    r: Math.random() * 1.5 + 0.3,
+    vx: (Math.random() - .5) * .25,
+    vy: (Math.random() - .5) * .25,
+    alpha: Math.random() * .5 + .1,
+    color: ['#00f0ff','#00ff88','#ff0080','#bf00ff'][Math.floor(Math.random()*4)]
+  }));
+
+  // Beams
+  const BEAMS = 5;
+  const beams = Array.from({length: BEAMS}, () => ({
+    x: Math.random() * window.innerWidth,
+    y: -100,
+    angle: Math.PI/2 + (Math.random()-.5) * .4,
+    speed: .3 + Math.random() * .4,
+    width: 1 + Math.random() * 2,
+    color: ['rgba(0,240,255,', 'rgba(0,255,136,', 'rgba(191,0,255,'][Math.floor(Math.random()*3)],
+    alpha: .03 + Math.random() * .05,
+    length: 300 + Math.random() * 400
+  }));
+
+  // Moving orbs
+  const ORBS = 3;
+  const orbs = Array.from({length: ORBS}, () => ({
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    r: 150 + Math.random() * 200,
+    vx: (Math.random()-.5) * .5,
+    vy: (Math.random()-.5) * .5,
+    color: ['0,240,255','0,255,136','191,0,255','255,0,128'][Math.floor(Math.random()*4)],
+    alpha: 0.04
+  }));
+
+  function draw() {
+    ctx.clearRect(0,0,W,H);
+
+    // Orbs
+    orbs.forEach(o => {
+      o.x += o.vx; o.y += o.vy;
+      if (o.x < -o.r) o.x = W+o.r;
+      if (o.x > W+o.r) o.x = -o.r;
+      if (o.y < -o.r) o.y = H+o.r;
+      if (o.y > H+o.r) o.y = -o.r;
+      const g = ctx.createRadialGradient(o.x,o.y,0,o.x,o.y,o.r);
+      g.addColorStop(0, `rgba(${o.color},${o.alpha})`);
+      g.addColorStop(1, `rgba(${o.color},0)`);
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(o.x,o.y,o.r,0,Math.PI*2);
+      ctx.fill();
+    });
+
+    // Grid lines (static)
+    ctx.strokeStyle = 'rgba(0,240,255,0.03)';
+    ctx.lineWidth = 1;
+    for(let x=0; x<W; x+=80) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+    for(let y=0; y<H; y+=80) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+
+    // Beams
+    beams.forEach(b => {
+      b.y += b.speed;
+      if (b.y > H + b.length) { b.y = -b.length; b.x = Math.random()*W; }
+      const x2 = b.x + Math.cos(b.angle) * b.length;
+      const y2 = b.y + Math.sin(b.angle) * b.length;
+      const g = ctx.createLinearGradient(b.x, b.y, x2, y2);
+      g.addColorStop(0, b.color + '0)');
+      g.addColorStop(.5, b.color + b.alpha + ')');
+      g.addColorStop(1, b.color + '0)');
+      ctx.strokeStyle = g;
+      ctx.lineWidth = b.width;
+      ctx.beginPath();
+      ctx.moveTo(b.x, b.y);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+    });
+
+    // Particles
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x<0) p.x=W; if (p.x>W) p.x=0;
+      if (p.y<0) p.y=H; if (p.y>H) p.y=0;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = p.alpha;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    });
+
+    // Connect nearby particles
+    for(let i=0;i<particles.length;i++) {
+      for(let j=i+1;j<particles.length;j++) {
+        const dx = particles[i].x-particles[j].x;
+        const dy = particles[i].y-particles[j].y;
+        const dist = Math.sqrt(dx*dx+dy*dy);
+        if (dist < 90) {
+          ctx.strokeStyle = `rgba(0,240,255,${(1-dist/90)*.06})`;
+          ctx.lineWidth = .5;
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ══════════════════════════════════════════
+   DATA
+══════════════════════════════════════════ */
+const categories = [
+  {
+    id:"01", icon:"🔥", color:"#ff3d3d", special:false,
+    title:"Grasa abdominal e inflamación",
+    foods:[
+      {n:"Aguacate",t:"grasa saludable"},{n:"Salmón salvaje",t:"omega-3"},{n:"Sardinas",t:"omega-3"},
+      {n:"Aceite de oliva virgen extra",t:"oleocantal"},{n:"Jengibre",t:"gingeroles"},
+      {n:"Cúrcuma + pimienta negra",t:"curcumina"},{n:"Arándanos",t:"antocianinas"},
+      {n:"Cerezas",t:"antocianinas"},{n:"Brócoli",t:"sulforafano"},{n:"Kale",t:"fibra + vitaminas"},
+      {n:"Espinacas",t:"magnesio"},{n:"Nueces",t:"omega-3 ALA"},{n:"Semillas de chía",t:"fibra + omega-3"},
+      {n:"Té verde / Matcha",t:"EGCG"},{n:"Canela de Ceilán",t:"regula glucosa"},
+      {n:"Ajo",t:"alicina"},{n:"Cebolla morada",t:"quercetina"},{n:"Pimientos rojos",t:"vitamina C"},
+      {n:"Quinoa",t:"proteína completa"},{n:"Lentejas",t:"fibra + proteína"},
+      {n:"Kimchi / Chucrut",t:"probióticos"},{n:"Vinagre de manzana",t:"ácido acético"},
+      {n:"Agua (2L+)",t:"hidratación"}
+    ]
+  },
+  {
+    id:"02", icon:"❤️", color:"#ff6e96", special:false,
+    title:"LDL, cardiovascular, tensión y sangre",
+    foods:[
+      {n:"Avena (beta-glucano)",t:"baja LDL"},{n:"Cebada",t:"beta-glucano"},
+      {n:"Salmón / Caballa",t:"omega-3"},{n:"Semillas de lino molidas",t:"omega-3 + lignanos"},
+      {n:"Nueces",t:"arginina"},{n:"Almendras",t:"baja LDL"},
+      {n:"Aceite de oliva virgen",t:"oleocantal"},{n:"Legumbres",t:"fibra soluble"},
+      {n:"Berenjena",t:"fibra soluble"},{n:"Espárragos",t:"folatos"},
+      {n:"Remolacha",t:"nitratos"},{n:"Granada",t:"punicalagin"},
+      {n:"Uvas negras",t:"resveratrol"},{n:"Arándanos",t:"antocianinas"},
+      {n:"Fresas",t:"vitamina C"},{n:"Ajo",t:"alicina"},
+      {n:"Tomates cocidos",t:"licopeno"},{n:"Chocolate negro +85%",t:"flavonoides"},
+      {n:"Espinacas",t:"K2 + folatos"},{n:"Brócoli",t:"sulforafano"},
+      {n:"Té verde",t:"catequinas"},{n:"Soja / Edamame",t:"isoflavonas"},
+      {n:"Psyllium",t:"fibra LDL"}
+    ]
+  },
+  {
+    id:"03", icon:"🫁", color:"#4fc3f7", special:false,
+    title:"RGE · Reflujo gastroesofágico",
+    foods:[
+      {n:"Plátano maduro",t:"alcalinizante"},{n:"Melón",t:"bajo en ácido"},
+      {n:"Papaya",t:"papaína digestiva"},{n:"Avena",t:"absorbente de ácido"},
+      {n:"Arroz blanco cocido",t:"suave"},{n:"Pollo a la plancha",t:"proteína magra"},
+      {n:"Pescado al vapor",t:"sin grasa"},{n:"Claras de huevo",t:"sin grasa"},
+      {n:"Brócoli cocido",t:"antiácido"},{n:"Judías verdes",t:"fibra suave"},
+      {n:"Patata cocida",t:"alcalino"},{n:"Zanahoria cocida",t:"suave"},
+      {n:"Jengibre (poca cantidad)",t:"antiinflamatorio"},{n:"Aloe vera",t:"protege mucosa"},
+      {n:"Regaliz DGL",t:"protege mucosa"},{n:"Leche de avena",t:"tampón ácido"},
+      {n:"Agua mineral / alcalina",t:"hidratación"},{n:"Manzana madura",t:"fibra soluble"},
+      {n:"Pera madura",t:"suave"}
+    ]
+  },
+  {
+    id:"04", icon:"🌿", color:"#00e676", special:false,
+    title:"Intestino y sistema digestivo",
+    foods:[
+      {n:"Kéfir",t:"probióticos"},{n:"Yogur natural",t:"Lactobacillus"},
+      {n:"Kimchi",t:"fermentado"},{n:"Chucrut",t:"fermentado"},
+      {n:"Miso",t:"fermentado"},{n:"Tempeh",t:"fermentado soja"},
+      {n:"Kombucha",t:"fermentado"},{n:"Avena",t:"betaglucano"},
+      {n:"Alcachofa",t:"inulina prebiótica"},{n:"Ajo y cebolla",t:"FOS"},
+      {n:"Puerro",t:"prebiótico"},{n:"Espárragos",t:"inulina"},
+      {n:"Plátano macho verde",t:"almidón resistente"},{n:"Patata fría",t:"almidón resistente"},
+      {n:"Legumbres",t:"fibra + proteína"},{n:"Semillas de chía",t:"fibra gel"},
+      {n:"Psyllium",t:"fibra soluble"},{n:"Papaya",t:"papaína"},
+      {n:"Piña",t:"bromelina"},{n:"Jengibre",t:"procinético"},
+      {n:"Hinojo",t:"carminativo"},{n:"Menta (infusión)",t:"espasmolítico"},
+      {n:"Calabaza",t:"suave y digestiva"}
+    ]
+  },
+  {
+    id:"05", icon:"🟤", color:"#d4a017", special:false,
+    title:"Hígado y resistencia a la insulina",
+    foods:[
+      {n:"Café negro sin azúcar",t:"hepatoprotector"},{n:"Té verde",t:"EGCG"},
+      {n:"Cardo mariano",t:"silimarina"},{n:"Alcachofa",t:"cinarina"},
+      {n:"Remolacha",t:"betaína"},{n:"Ajo",t:"sulfuros + detox"},
+      {n:"Brócoli / Col de Bruselas",t:"crucíferas"},{n:"Limón en ayunas",t:"estimula bilis"},
+      {n:"Cúrcuma",t:"curcumina"},{n:"Vinagre de manzana",t:"mejora insulina"},
+      {n:"Canela de Ceilán",t:"sensibilidad insulina"},{n:"Aguacate",t:"glutatión"},
+      {n:"Nueces",t:"ácidos grasos"},{n:"Semillas de lino",t:"lignanos"},
+      {n:"Berberina",t:"regula glucosa"},{n:"Avena",t:"betaglucano glucosa"},
+      {n:"Legumbres",t:"IG bajo"},{n:"Salmón",t:"omega-3 hígado"},
+      {n:"Espárragos",t:"glutatión"},{n:"Aceite de oliva virgen",t:"antiinflamatorio"}
+    ]
+  },
+  {
+    id:"06", icon:"🧠", color:"#ce93d8", special:false,
+    title:"Cerebro y sistema nervioso",
+    foods:[
+      {n:"Salmón / Sardinas",t:"DHA + EPA"},{n:"Nueces",t:"omega-3 ALA"},
+      {n:"Arándanos",t:"antocianinas"},{n:"Chocolate negro +85%",t:"flavanoles"},
+      {n:"Café",t:"cafeína + antioxidantes"},{n:"Té verde / Matcha",t:"L-teanina"},
+      {n:"Huevos",t:"colina"},{n:"Hígado de pollo",t:"colina + B12"},
+      {n:"Semillas de calabaza",t:"zinc + magnesio"},{n:"Brócoli",t:"vitamina K + sulforafano"},
+      {n:"Cúrcuma",t:"BDNF"},{n:"Aguacate",t:"grasa + folatos"},
+      {n:"Remolacha",t:"flujo cerebral"},{n:"Espinacas",t:"luteína + B9"},
+      {n:"Aceite de coco (moderado)",t:"cetonas"},{n:"Aceite de oliva virgen",t:"oleocantal"},
+      {n:"Naranjas / Kiwi",t:"vitamina C neuronal"},{n:"Ostras / Mejillones",t:"zinc + B12"},
+      {n:"Lion's Mane (seta)",t:"NGF"},{n:"Romero",t:"memoria"}
+    ]
+  },
+  {
+    id:"07", icon:"🌙", color:"#5c9dff", special:false,
+    title:"Sueño, cortisol, estrés y ansiedad",
+    foods:[
+      {n:"Cerezas ácidas",t:"melatonina natural"},{n:"Kiwi",t:"serotonina + melatonina"},
+      {n:"Plátano",t:"triptófano + B6"},{n:"Avena",t:"triptófano"},
+      {n:"Leche templada",t:"triptófano + GABA"},{n:"Semillas de calabaza",t:"magnesio + triptófano"},
+      {n:"Almendras",t:"magnesio"},{n:"Espinacas",t:"magnesio + folatos"},
+      {n:"Chocolate negro",t:"magnesio"},{n:"Manzanilla (infusión)",t:"apigenina GABA"},
+      {n:"Ashwagandha",t:"adaptógeno cortisol"},{n:"Melisa / Toronjil",t:"GABA"},
+      {n:"Valeriana",t:"sueño"},{n:"Lavanda (infusión)",t:"ansiolítico"},
+      {n:"L-teanina (té verde)",t:"relajación"},{n:"Pavo",t:"triptófano"},
+      {n:"Salmón",t:"omega-3 + D3"},{n:"Kéfir / Yogur",t:"eje intestino-cerebro"},
+      {n:"Agua (hidratación óptima)",t:"regula cortisol"}
+    ]
+  },
+  {
+    id:"08", icon:"💪", color:"#ff7043", special:false,
+    title:"Músculos, huesos y articulaciones",
+    foods:[
+      {n:"Pollo / Pavo (pecho)",t:"proteína magra"},{n:"Huevos enteros",t:"proteína completa"},
+      {n:"Salmón",t:"omega-3 + D3"},{n:"Atún en agua",t:"proteína + B3"},
+      {n:"Legumbres",t:"proteína vegetal"},{n:"Tofu / Tempeh",t:"calcio + proteína"},
+      {n:"Leche / Kéfir",t:"calcio + K2"},{n:"Queso curado (moderado)",t:"calcio + K2"},
+      {n:"Sardinas con espinas",t:"calcio + omega-3"},{n:"Brócoli",t:"calcio biodisponible"},
+      {n:"Sésamo / Tahini",t:"calcio"},{n:"Semillas de chía",t:"calcio + omega-3"},
+      {n:"Nueces",t:"omega-3"},{n:"Caldo de huesos",t:"colágeno + glicina"},
+      {n:"Gelatina pura",t:"colágeno"},{n:"Jengibre + Cúrcuma",t:"antiinflamatorio"},
+      {n:"Fresas / Kiwi",t:"vitamina C colágeno"},{n:"Carne roja magra",t:"hierro + creatina"},
+      {n:"Remolacha",t:"nitratos rendimiento"}
+    ]
+  },
+  {
+    id:"09", icon:"✨", color:"#ffb74d", special:false,
+    title:"Piel, cabello, uñas y vista",
+    foods:[
+      {n:"Salmón / Caballa",t:"omega-3 piel"},{n:"Aguacate",t:"vitamina E + biotina"},
+      {n:"Huevos",t:"biotina + luteína"},{n:"Zanahoria",t:"beta-caroteno"},
+      {n:"Boniato",t:"beta-caroteno"},{n:"Pimientos rojos",t:"vitamina C"},
+      {n:"Kiwi",t:"vitamina C"},{n:"Fresas",t:"elágico + C"},
+      {n:"Tomates",t:"licopeno fotoprotección"},{n:"Espinacas",t:"luteína + zeaxantina"},
+      {n:"Kale",t:"luteína mácula"},{n:"Arándanos",t:"antocianinas vista"},
+      {n:"Brócoli",t:"sulforafano + C"},{n:"Nueces",t:"biotina + selenio"},
+      {n:"Almendras",t:"vitamina E"},{n:"Semillas de girasol",t:"vitamina E + selenio"},
+      {n:"Ostras / Mariscos",t:"zinc uñas"},{n:"Chocolate negro",t:"flavanoles piel"},
+      {n:"Té verde",t:"EGCG piel"},{n:"Aceite de oliva virgen",t:"vitamina E"},
+      {n:"Colágeno hidrolizado",t:"piel + uñas"}
+    ]
+  },
+  {
+    id:"10", icon:"🔬", color:"#69f0ae", special:false,
+    title:"Fertilidad masculina, esperma y libido",
+    foods:[
+      {n:"Ostras",t:"zinc testosterona"},{n:"Semillas de calabaza",t:"zinc + magnesio"},
+      {n:"Carne roja magra",t:"zinc + hierro"},{n:"Huevos",t:"colesterol + D3"},
+      {n:"Salmón / Sardinas",t:"DHA esperma"},{n:"Nueces",t:"omega-3 motilidad"},
+      {n:"Tomates cocidos",t:"licopeno ADN"},{n:"Sandía",t:"L-citrulina"},
+      {n:"Ajo",t:"alicina + allicina"},{n:"Granada",t:"antioxidante esperma"},
+      {n:"Frutos rojos",t:"antioxidantes"},{n:"Brócoli / Espinacas",t:"folatos"},
+      {n:"Aguacate",t:"vitamina E + B9"},{n:"Ashwagandha",t:"testosterona + esperma"},
+      {n:"Maca andina",t:"libido + esperma"},{n:"Jengibre",t:"antioxidante esperma"},
+      {n:"Chocolate negro",t:"L-arginina"},{n:"Café (moderado)",t:"motilidad"},
+      {n:"Vitamina D (sol + salmón)",t:"testosterona"}
+    ]
+  },
+  {
+    id:"11", icon:"🫧", color:"#80deea", special:false,
+    title:"Sistema respiratorio",
+    foods:[
+      {n:"Cebolla",t:"quercetina + azufre"},{n:"Ajo",t:"alicina antibacteriana"},
+      {n:"Jengibre",t:"antiinflamatorio"},{n:"Cúrcuma",t:"curcumina pulmones"},
+      {n:"Miel de calidad",t:"antibacteriana"},{n:"Limón",t:"vitamina C + expectorante"},
+      {n:"Naranja / Kiwi",t:"vitamina C"},{n:"Pimientos rojos",t:"vitamina C x2"},
+      {n:"Brócoli",t:"sulforafano + C"},{n:"Espinacas",t:"magnesio bronquial"},
+      {n:"Manzana",t:"quercetina"},{n:"Té verde",t:"EGCG"},
+      {n:"Salmón / Sardinas",t:"omega-3"},{n:"Semillas de lino",t:"omega-3 + lignanos"},
+      {n:"Nueces",t:"omega-3 vegetal"},{n:"Puerro / Cebollino",t:"expectorante"},
+      {n:"Uvas negras",t:"resveratrol"},{n:"Remolacha",t:"nitratos oxigenación"},
+      {n:"Agua tibia",t:"mucosa"}
+    ]
+  },
+  {
+    id:"12", icon:"🛡️", color:"#ffd54f", special:false,
+    title:"Sistema inmunitario",
+    foods:[
+      {n:"Ajo",t:"inmunomodulador"},{n:"Jengibre",t:"antiinflamatorio"},
+      {n:"Cúrcuma + pimienta negra",t:"curcumina"},{n:"Cítricos",t:"vitamina C"},
+      {n:"Kiwi",t:"vitamina C alta"},{n:"Pimientos rojos",t:"vitamina C x2"},
+      {n:"Brócoli",t:"C + E + sulforafano"},{n:"Espinacas",t:"C + E + folatos"},
+      {n:"Semillas de girasol",t:"vitamina E + selenio"},{n:"Almendras",t:"vitamina E"},
+      {n:"Salmón / Sardinas",t:"vitamina D + omega-3"},{n:"Huevos (yema)",t:"vitamina D"},
+      {n:"Ostras / Mariscos",t:"zinc"},{n:"Semillas de calabaza",t:"zinc"},
+      {n:"Setas Shiitake / Maitake",t:"beta-glucanos"},{n:"Kéfir / Yogur",t:"probióticos"},
+      {n:"Arándanos",t:"antocianinas"},{n:"Saúco negro (elderberry)",t:"antiviral"},
+      {n:"Té verde",t:"EGCG"},{n:"Miel de Manuka",t:"antibacteriana"},
+      {n:"Regaliz DGL",t:"antiviral mucosa"}
+    ]
+  },
+  // ══ 4 SPECIAL CATEGORIES ══
+  {
+    id:"S1", icon:"⚗️", color:"#00ffcc", special:true,
+    title:"Déficits nutricionales frecuentes",
+    subtitle:"Hierro · Magnesio · Zinc · Vit D · B12 · Yodo",
+    foods:[
+      {n:"Hígado de ternera / pollo",t:"hierro hemo + B12"},{n:"Carne roja magra",t:"hierro hemo"},
+      {n:"Mejillones / Almejas",t:"hierro + zinc + B12"},{n:"Sardinas con espinas",t:"D3 + calcio + B12"},
+      {n:"Salmón",t:"vitamina D3 + B12"},{n:"Huevos (yema)",t:"D3 + colina + B12"},
+      {n:"Leche entera / Kéfir",t:"calcio + B12 + yodo"},{n:"Algas (nori, wakame, dulse)",t:"yodo biodisponible"},
+      {n:"Mejillones / Gambas",t:"yodo + zinc"},{n:"Ostras",t:"zinc máximo"},
+      {n:"Semillas de calabaza",t:"zinc + magnesio"},{n:"Almendras",t:"magnesio + E"},
+      {n:"Espinacas cocidas",t:"hierro no hemo + magnesio"},{n:"Acelgas",t:"hierro + magnesio"},
+      {n:"Lentejas",t:"hierro no hemo + folatos"},{n:"Garbanzos",t:"hierro + zinc vegetal"},
+      {n:"Tofu firme",t:"hierro + calcio"},{n:"Sésamo / Tahini",t:"calcio + zinc + hierro"},
+      {n:"Nueces de Brasil (2/día)",t:"selenio máximo"},{n:"Piñones",t:"zinc + magnesio"},
+      {n:"Chocolate negro 85%",t:"magnesio + hierro"},{n:"Levadura nutricional",t:"B12 + zinc (si enriquecida)"},
+      {n:"Vitamina C junto a hierro vegetal",t:"absorción x3"}
+    ]
+  },
+  {
+    id:"S2", icon:"🧬", color:"#ff00cc", special:true,
+    title:"Fitoquímicos y compuestos bioactivos",
+    subtitle:"Sulforafano · Quercetina · Licopeno · Curcumina · Resveratrol · EGCG",
+    foods:[
+      {n:"Brócoli / Col de Bruselas germinados",t:"sulforafano máximo"},{n:"Coliflor / Kale",t:"sulforafano + indol-3"},
+      {n:"Cebolla amarilla / morada",t:"quercetina"},{n:"Alcaparras (crudas)",t:"quercetina alta"},
+      {n:"Manzana (con piel)",t:"quercetina + rutina"},{n:"Tomates maduros cocidos",t:"licopeno biodisponible"},
+      {n:"Sandía",t:"licopeno + citrulina"},{n:"Pimientos rojos cocidos",t:"licopeno"},
+      {n:"Cúrcuma + pimienta negra + grasa",t:"curcumina"},{n:"Uvas negras (con semillas)",t:"resveratrol + OPC"},
+      {n:"Vino tinto (moderado)",t:"resveratrol"},{n:"Moras / Arándanos",t:"resveratrol vegetal"},
+      {n:"Té verde / Matcha",t:"EGCG catequinas"},{n:"Té blanco",t:"EGCG catequinas"},
+      {n:"Granada",t:"punicalagin + elágico"},{n:"Nueces",t:"ellagitaninos"},
+      {n:"Fresas / Frambuesas",t:"ácido elágico"},{n:"Aceite de oliva virgen",t:"oleocantal + oleuropeína"},
+      {n:"Ajo maduro / negro",t:"S-alilcisteína"},{n:"Cebollino / Puerro",t:"sulfuros orgánicos"},
+      {n:"Remolacha",t:"betacianinas + nitratos"},{n:"Espárragos",t:"saponinas + glutatión"},
+      {n:"Soja / Miso / Tempeh",t:"genisteína isoflavonas"},{n:"Lino molido",t:"lignanos"}
+    ]
+  },
+  {
+    id:"S3", icon:"🌸", color:"#ff80ab", special:true,
+    title:"Salud hormonal femenina",
+    subtitle:"Ciclo · Tiroides · SOP · Menopausia · Fertilidad",
+    foods:[
+      {n:"Semillas de lino molidas",t:"lignanos estrógenos"},{n:"Semillas de sésamo",t:"fitoestrógenos"},
+      {n:"Soja fermentada (miso, tempeh)",t:"isoflavonas menopausia"},{n:"Tofu",t:"fitoestrógenos"},
+      {n:"Semillas de girasol",t:"progesterona (fase lútea)"},{n:"Semillas de calabaza",t:"zinc estrógenos"},
+      {n:"Algas (nori, kelp)",t:"yodo tiroides"},{n:"Nueces de Brasil (2/día)",t:"selenio tiroides"},
+      {n:"Huevos",t:"yodo + tirosina tiroides"},{n:"Bacalao / Atún",t:"yodo + selenio"},
+      {n:"Espirulina",t:"proteína + hierro + B12"},{n:"Espinacas / Acelgas",t:"hierro + folatos"},
+      {n:"Lentejas",t:"hierro + B9 ciclo"},{n:"Hígado de pollo",t:"hierro hemo + B12"},
+      {n:"Canela de Ceilán",t:"SOP glucosa"},{n:"Maca andina",t:"equilibrio hormonal"},
+      {n:"Ashwagandha",t:"cortisol + tiroides"},{n:"Aceite de onagra",t:"SPM (gamma-linolénico)"},
+      {n:"Salmón / Sardinas",t:"omega-3 prostaglandinas"},{n:"Chocolate negro",t:"magnesio SPM"},
+      {n:"Cúrcuma",t:"dolores menstruales"},{n:"Jengibre",t:"náuseas + dolor ciclo"},
+      {n:"Frutos rojos",t:"antioxidantes estrés oxidativo"}
+    ]
+  },
+  {
+    id:"S4", icon:"⚡", color:"#ffff00", special:true,
+    title:"Energía, fatiga crónica y rendimiento",
+    subtitle:"Mitocondrias · CoQ10 · Adaptógenos · Vitaminas B",
+    foods:[
+      {n:"Hígado de ternera",t:"B12 + CoQ10 + hierro"},{n:"Carne roja magra",t:"hierro + creatina + B12"},
+      {n:"Salmón / Sardinas",t:"CoQ10 + omega-3 + D3"},{n:"Caballa",t:"CoQ10 alto"},
+      {n:"Huevos",t:"colina + B2 + B12"},{n:"Levadura nutricional",t:"complejo B energético"},
+      {n:"Avena",t:"B1 + fibra + energía sostenida"},{n:"Quinoa",t:"proteína completa + hierro"},
+      {n:"Lentejas",t:"hierro + B9 + proteína"},{n:"Espinacas",t:"hierro + magnesio + B9"},
+      {n:"Remolacha",t:"nitratos VO2max"},{n:"Aguacate",t:"riboflavina + potasio"},
+      {n:"Aguacate + plátano",t:"electrolitos"},{n:"Nueces de Brasil",t:"selenio mitocondrias"},
+      {n:"Semillas de calabaza",t:"magnesio mitocondrias"},{n:"Té verde (L-teanina + cafeína)",t:"energía limpia"},
+      {n:"Café (moderado)",t:"cafeína + antioxidantes"},{n:"Ashwagandha",t:"cortisol + resistencia"},
+      {n:"Rhodiola rosea",t:"fatiga mental + física"},{n:"Ginseng",t:"adaptógeno energético"},
+      {n:"Maca andina",t:"resistencia + energía"},{n:"Cúrcuma",t:"mitocondrias inflamación"},
+      {n:"Chocolate negro",t:"magnesio + teobromina"}
+    ]
+  }
+];
+
+/* ══════════════════════════════════════════
+   BUILD CARDS
+══════════════════════════════════════════ */
+const grid = document.getElementById('grid');
+let totalFoods = 0;
+categories.forEach(c => totalFoods += c.foods.length);
+document.getElementById('statFoods').textContent = totalFoods;
+
+categories.forEach((cat, i) => {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.style.setProperty('--cat-color', cat.color);
+  card.style.animationDelay = `${i * 0.04}s`;
+  card.dataset.cat = cat.id;
+  card.dataset.title = cat.title.toLowerCase() + ' ' + (cat.subtitle||'').toLowerCase();
+  card.dataset.foods = cat.foods.map(f => f.n.toLowerCase() + ' ' + f.t.toLowerCase()).join(' ');
+  card.dataset.special = cat.special;
+
+  const foodsHTML = cat.foods.map((f, fi) => `
+    <div class="food-item">
+      <div class="led" style="--led-delay:${2+fi*0.3}s"></div>
+      <span class="food-name">${f.n}</span>
+      <span class="food-tag">${f.t}</span>
+    </div>
+  `).join('');
+
+  const specialBadge = cat.special
+    ? `<div class="special-badge" style="color:${cat.color};border:1px solid ${cat.color}33;background:${cat.color}11;">◈ NUEVO</div>`
+    : '';
+
+  card.innerHTML = `
+    <div class="corner tl"></div>
+    <div class="corner tr"></div>
+    <div class="corner bl"></div>
+    <div class="corner br"></div>
+    ${specialBadge}
+    <div class="card-header" id="hdr-${cat.id}">
+      <div class="icon-hex">${cat.icon}</div>
+      <div class="header-text">
+        <div class="cat-id">CAT-${cat.id} ·  ${cat.foods.length} ALIMENTOS</div>
+        <div class="card-title">${cat.title}</div>
+        ${cat.subtitle ? `<div style="font-family:'Share Tech Mono',monospace;font-size:.58rem;color:${cat.color};opacity:.55;margin-top:2px;letter-spacing:.05em">${cat.subtitle}</div>` : ''}
+      </div>
+      <div class="card-meta">
+        <span class="food-count" style="--cat-color:${cat.color}">${cat.foods.length}</span>
+        <span class="count-label">items</span>
+      </div>
+    </div>
+    <div class="neon-divider"></div>
+    <div class="food-list" id="list-${cat.id}">${foodsHTML}</div>
+    <div class="toggle-btn" id="tbtn-${cat.id}">
+      <span id="tlbl-${cat.id}">EXPANDIR</span>
+      <span class="toggle-arrow" id="tarr-${cat.id}">▼</span>
+    </div>
+  `;
+
+  card.querySelector(`#hdr-${cat.id}`).addEventListener('click', () => toggleCard(cat.id));
+  card.querySelector(`#tbtn-${cat.id}`).addEventListener('click', () => toggleCard(cat.id));
+  grid.appendChild(card);
+});
+
+function toggleCard(id) {
+  const list = document.getElementById(`list-${id}`);
+  const arrow = document.getElementById(`tarr-${id}`);
+  const lbl = document.getElementById(`tlbl-${id}`);
+  const isOpen = list.classList.contains('open');
+  list.classList.toggle('open', !isOpen);
+  arrow.classList.toggle('open', !isOpen);
+  lbl.textContent = isOpen ? 'EXPANDIR' : 'COLAPSAR';
+}
+
+function setAll(open) {
+  categories.forEach(cat => {
+    const list = document.getElementById(`list-${cat.id}`);
+    const arrow = document.getElementById(`tarr-${cat.id}`);
+    const lbl = document.getElementById(`tlbl-${cat.id}`);
+    if (!list) return;
+    list.classList.toggle('open', open);
+    arrow.classList.toggle('open', open);
+    lbl.textContent = open ? 'COLAPSAR' : 'EXPANDIR';
+  });
+}
+
+/* ══════════════════════════════════════════
+   CONTROLS
+══════════════════════════════════════════ */
+document.getElementById('btnAll').addEventListener('click', () => {
+  resetFilter(); resetActive('btnAll');
+});
+document.getElementById('btnOpen').addEventListener('click', () => { setAll(true); resetActive('btnOpen'); });
+document.getElementById('btnClose').addEventListener('click', () => { setAll(false); resetActive('btnClose'); });
+document.getElementById('btnSpecial').addEventListener('click', () => {
+  resetActive('btnSpecial');
+  document.querySelectorAll('.card').forEach(c => {
+    c.classList.toggle('hidden', c.dataset.special !== 'true');
+  });
+  updateNoResults();
+});
+
+function resetActive(id) {
+  document.querySelectorAll('.ctrl-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+function resetFilter() {
+  document.querySelectorAll('.card').forEach(c => c.classList.remove('hidden'));
+  document.getElementById('searchInput').value = '';
+  document.getElementById('searchCount').textContent = '';
+  updateNoResults();
+}
+
+/* ══════════════════════════════════════════
+   SEARCH
+══════════════════════════════════════════ */
+document.getElementById('searchInput').addEventListener('input', function() {
+  const q = this.value.toLowerCase().trim();
+  let count = 0;
+  document.querySelectorAll('.card').forEach(card => {
+    const match = !q || card.dataset.title.includes(q) || card.dataset.foods.includes(q);
+    card.classList.toggle('hidden', !match);
+    if (match) {
+      count++;
+      if (q) {
+        // Highlight matching food names
+        card.querySelectorAll('.food-name').forEach(el => {
+          const original = el.textContent;
+          const lower = original.toLowerCase();
+          if (lower.includes(q)) {
+            const idx = lower.indexOf(q);
+            el.innerHTML = original.slice(0, idx) + `<mark>${original.slice(idx, idx+q.length)}</mark>` + original.slice(idx+q.length);
+          } else {
+            el.innerHTML = original;
+          }
+        });
+        const list = document.getElementById(`list-${card.dataset.cat}`);
+        const arrow = document.getElementById(`tarr-${card.dataset.cat}`);
+        const lbl = document.getElementById(`tlbl-${card.dataset.cat}`);
+        list.classList.add('open');
+        arrow.classList.add('open');
+        lbl.textContent = 'COLAPSAR';
+      } else {
+        card.querySelectorAll('.food-name mark').forEach(m => m.outerHTML = m.textContent);
+      }
+    }
+  });
+  document.getElementById('searchCount').textContent = q ? `${count} resultados` : '';
+  updateNoResults();
+});
+
+function updateNoResults() {
+  const visible = document.querySelectorAll('.card:not(.hidden)').length;
+  let nr = document.getElementById('no-results-el');
+  if (!visible) {
+    if (!nr) {
+      nr = document.createElement('div');
+      nr.id = 'no-results-el';
+      nr.className = 'no-results';
+      nr.innerHTML = '[ NO_RESULTS_FOUND ] — intenta otro término de búsqueda';
+      nr.style.display = 'block';
+      grid.appendChild(nr);
+    } else nr.style.display = 'block';
+  } else if (nr) nr.style.display = 'none';
+}
+
+/* ══════════════════════════════════════════
+   NEON FLICKER on special cards
+══════════════════════════════════════════ */
+setInterval(() => {
+  document.querySelectorAll('.card[data-special="true"]').forEach(card => {
+    const color = getComputedStyle(card).getPropertyValue('--cat-color').trim();
+    if (Math.random() > 0.7) {
+      card.style.boxShadow = `0 0 20px ${color}44, 0 0 60px ${color}22`;
+      setTimeout(() => { card.style.boxShadow = ''; }, 100 + Math.random()*200);
+    }
+  });
+}, 1500);
+</script>
+</body>
+</html>
