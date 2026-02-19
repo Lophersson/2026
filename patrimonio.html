@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora Patrimonial</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Mono:wght@300;400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0d0e10;
+      --surface: #13151a;
+      --surface2: #1b1e26;
+      --border: rgba(180, 145, 70, 0.18);
+      --gold: #c9a84c;
+      --gold-light: #e8c97a;
+      --gold-dim: rgba(201, 168, 76, 0.12);
+      --text: #e8e4da;
+      --muted: #7a7870;
+      --red: #c95a5a;
+      --green: #6aab84;
+      --blue: #6a8eab;
+      --white: #f5f2eb;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 3rem 1.5rem 5rem;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Atmospheric background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -200px; left: 50%;
+      transform: translateX(-50%);
+      width: 700px; height: 700px;
+      background: radial-gradient(ellipse, rgba(180,145,70,0.06) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    body::after {
+      content: '';
+      position: fixed;
+      bottom: -100px; left: 10%;
+      width: 400px; height: 400px;
+      background: radial-gradient(ellipse, rgba(106,138,171,0.05) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 860px;
+    }
+
+    /* ── HEADER ── */
+    header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.4rem, 5vw, 3.5rem);
+      font-weight: 300;
+      color: var(--white);
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+    }
+
+    h1 span {
+      color: var(--gold);
+      font-style: italic;
+    }
+
+    .subtitle {
+      margin-top: 0.8rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-weight: 300;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── INPUT SECTION ── */
+    .input-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2.5rem;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .input-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    .input-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 0.75rem;
+    }
+
+    .input-row {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      background: var(--bg);
+      transition: border-color 0.3s;
+    }
+
+    .input-row:focus-within {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 1px rgba(201,168,76,0.15);
+    }
+
+    .currency-symbol {
+      padding: 0 1rem;
+      color: var(--gold);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 300;
+      border-right: 1px solid var(--border);
+      line-height: 1;
+      select-none: all;
+    }
+
+    #amount {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-family: 'DM Mono', monospace;
+      font-size: 1.5rem;
+      color: var(--white);
+      padding: 1rem 1.25rem;
+      letter-spacing: 0.02em;
+    }
+
+    #amount::placeholder { color: rgba(255,255,255,0.1); }
+
+    /* ── RESULTS GRID ── */
+    .results-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    @media (max-width: 640px) { .results-grid { grid-template-columns: 1fr; } }
+
+    .result-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.6rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .result-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(180,145,70,0.35);
+    }
+
+    .result-card.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .result-card.highlight {
+      background: linear-gradient(135deg, #141820, #1a1e2a);
+      border-color: rgba(106,171,132,0.3);
+    }
+
+    .result-card.highlight::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--green), transparent);
+    }
+
+    .result-card.danger::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--red), transparent);
+    }
+
+    .card-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.57rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card-tag .dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    .dot-gold { background: var(--gold); }
+    .dot-red  { background: var(--red);  }
+    .dot-green{ background: var(--green);}
+    .dot-blue { background: var(--blue); }
+
+    .card-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-weight: 300;
+      line-height: 1.4;
+      margin-bottom: 0.6rem;
+    }
+
+    .card-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 400;
+      color: var(--white);
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+      transition: color 0.3s;
+    }
+
+    .card-value.val-gold  { color: var(--gold-light); }
+    .card-value.val-red   { color: #d97070; }
+    .card-value.val-green { color: #7fc99a; }
+    .card-value.val-blue  { color: #87b2d4; }
+
+    .card-sub {
+      margin-top: 0.4rem;
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+    }
+
+    /* ── BREAKDOWN ── */
+    .breakdown {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.6rem;
+      margin-top: 1rem;
+    }
+
+    .breakdown h3 {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.2rem;
+    }
+
+    .breakdown-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      gap: 1rem;
+    }
+
+    .breakdown-row:last-child { border-bottom: none; }
+
+    .breakdown-name {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .breakdown-val {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    .breakdown-val.neg { color: var(--red); }
+    .breakdown-val.pos { color: var(--green); }
+    .breakdown-val.emp { color: var(--gold-light); }
+
+    /* ── ZERO STATE ── */
+    .zero-state {
+      text-align: center;
+      padding: 3rem 0;
+      color: var(--muted);
+      font-size: 0.85rem;
+      letter-spacing: 0.02em;
+    }
+
+    .zero-state .icon {
+      font-size: 2rem;
+      margin-bottom: 0.75rem;
+      opacity: 0.3;
+    }
+
+    /* ── FOOTER NOTE ── */
+    .footer-note {
+      margin-top: 2rem;
+      font-size: 0.68rem;
+      color: rgba(122,120,112,0.5);
+      text-align: center;
+      line-height: 1.7;
+      letter-spacing: 0.01em;
+    }
+
+    /* Animated counter */
+    .card-value { transition: opacity 0.15s; }
+
+    /* Scroll reveal */
+    .results-section {
+      animation: fadeUp 0.5s ease both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+
+    <!-- Header -->
+    <header>
+      <p class="eyebrow">Análisis Patrimonial · España</p>
+      <h1>Calculadora de<br /><span>Rendimiento Neto</span></h1>
+      <p class="subtitle">Imp. Patrimonio · ITSGF · Rentabilidad inversiones · Renta mensual</p>
+    </header>
+
+    <!-- Input -->
+    <div class="input-card">
+      <label class="input-label" for="amount">Introduce tu patrimonio total (€)</label>
+      <div class="input-row">
+        <span class="currency-symbol">€</span>
+        <input type="number" id="amount" placeholder="0" min="0" step="1000" />
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div id="results-section" class="results-section">
+
+      <div id="zero-state" class="zero-state">
+        <div class="icon">◈</div>
+        <p>Introduce una cantidad para ver el análisis completo</p>
+      </div>
+
+      <div id="results-content" style="display:none;">
+
+        <div class="results-grid">
+
+          <!-- Capital -->
+          <div class="result-card">
+            <div class="card-tag"><span class="dot dot-gold"></span><span style="color:var(--gold)">Capital de trabajo</span></div>
+            <div class="card-label">80% del patrimonio declarado</div>
+            <div class="card-value val-gold" id="val-capital">—</div>
+            <div class="card-sub" id="sub-capital"></div>
+          </div>
+
+          <!-- Impuestos -->
+          <div class="result-card danger">
+            <div class="card-tag"><span class="dot dot-red"></span><span style="color:var(--red)">Impuestos totales</span></div>
+            <div class="card-label">Patrimonio + ITSGF (carga fiscal conjunta)</div>
+            <div class="card-value val-red" id="val-impuestos">—</div>
+            <div class="card-sub" id="sub-impuestos"></div>
+          </div>
+
+          <!-- Rentabilidad -->
+          <div class="result-card">
+            <div class="card-tag"><span class="dot dot-blue"></span><span style="color:var(--blue)">Rentabilidad neta inversiones</span></div>
+            <div class="card-label">70% del 6% del capital (4,2% neto)</div>
+            <div class="card-value val-blue" id="val-rentabilidad">—</div>
+            <div class="card-sub" id="sub-rentabilidad"></div>
+          </div>
+
+          <!-- Resultado anual -->
+          <div class="result-card highlight">
+            <div class="card-tag"><span class="dot dot-green"></span><span style="color:var(--green)">Resultado anual neto</span></div>
+            <div class="card-label">Rentabilidad menos impuestos</div>
+            <div class="card-value val-green" id="val-resultado">—</div>
+            <div class="card-sub" id="sub-resultado"></div>
+          </div>
+
+          <!-- Mensualidad -->
+          <div class="result-card full-width highlight">
+            <div class="card-tag"><span class="dot dot-green"></span><span style="color:var(--green)">Mensualidad (14 pagas / año)</span></div>
+            <div class="card-label">Ingreso mensual equivalente sobre 14 pagas anuales</div>
+            <div class="card-value val-green" id="val-mensual" style="font-size:2.6rem;">—</div>
+            <div class="card-sub" id="sub-mensual"></div>
+          </div>
+
+        </div>
+
+        <!-- Breakdown detallado -->
+        <div class="breakdown">
+          <h3>Desglose fiscal detallado</h3>
+          <div class="breakdown-row">
+            <span class="breakdown-name">Patrimonio bruto introducido</span>
+            <span class="breakdown-val emp" id="b-bruto">—</span>
+          </div>
+          <div class="breakdown-row">
+            <span class="breakdown-name">Capital de trabajo (80%)</span>
+            <span class="breakdown-val emp" id="b-capital">—</span>
+          </div>
+          <div class="breakdown-row">
+            <span class="breakdown-name">Base imp. Patrimonio (capital − 700.000 € exento)</span>
+            <span class="breakdown-val" id="b-base-pat">—</span>
+          </div>
+          <div class="breakdown-row">
+            <span class="breakdown-name">Cuota Imp. Patrimonio</span>
+            <span class="breakdown-val neg" id="b-pat">—</span>
+          </div>
+          <div class="breakdown-row">
+            <span class="breakdown-name">Base ITSGF (capital − 3.000.000 € mínimo exento)</span>
+            <span class="breakdown-val" id="b-base-itsgf">—</span>
+          </div>
+          <div class="breakdown-row">
+            <span class="breakdown-name">ITSGF calculado (antes deducción Patrimonio)</span>
+            <span class="breakdown-val neg" id="b-itsgf-bruto">—</span>
+          </div>
+          <div class="breakdown-row">
+            <span class="breakdown-name">ITSGF a pagar (deducido Patrimonio)</span>
+            <span class="breakdown-val neg" id="b-itsgf-neto">—</span>
+          </div>
+          <div class="breakdown-row">
+            <span class="breakdown-name">Total impuestos (Patrimonio + ITSGF)</span>
+            <span class="breakdown-val neg" id="b-total-imp">—</span>
+          </div>
+          <div class="breakdown-row">
+            <span class="breakdown-name">Rentabilidad bruta (6% del capital)</span>
+            <span class="breakdown-val pos" id="b-rent-bruta">—</span>
+          </div>
+          <div class="breakdown-row">
+            <span class="breakdown-name">Rentabilidad neta (70% de la bruta)</span>
+            <span class="breakdown-val pos" id="b-rent-neta">—</span>
+          </div>
+          <div class="breakdown-row">
+            <span class="breakdown-name">Resultado anual (renta neta − impuestos)</span>
+            <span class="breakdown-val pos" id="b-resultado">—</span>
+          </div>
+          <div class="breakdown-row">
+            <span class="breakdown-name">Mensualidad (resultado ÷ 14 pagas)</span>
+            <span class="breakdown-val pos" id="b-mensual">—</span>
+          </div>
+        </div>
+
+      </div><!-- /results-content -->
+    </div><!-- /results-section -->
+
+    <p class="footer-note">
+      Cálculos orientativos basados en la escala estatal del Impuesto sobre el Patrimonio (mínimo exento 700.000 €)<br />
+      y el ITSGF (Ley 38/2022, mínimo exento 3.000.000 €). Algunas CCAA aplican bonificaciones propias.<br />
+      Esta herramienta no constituye asesoramiento fiscal. Consulte a un profesional.
+    </p>
+
+  </div><!-- /wrapper -->
+
+  <script>
+    // ─── Utilidades ─────────────────────────────────────────────────────────────
+    const fmt = (n, dec = 2) =>
+      n.toLocaleString('es-ES', { minimumFractionDigits: dec, maximumFractionDigits: dec }) + ' €';
+
+    const pct = (n, dec = 2) =>
+      n.toLocaleString('es-ES', { minimumFractionDigits: dec, maximumFractionDigits: dec }) + '%';
+
+    // ─── Impuesto sobre el Patrimonio ────────────────────────────────────────────
+    // Escala estatal. Mínimo exento general: 700.000 €
+    // Tramos aplicados sobre la base (patrimonio - exento)
+    const PATRIMONIO_EXENTO = 700_000;
+    const PATRIMONIO_TRAMOS = [
+      { limite: 167_129.45,   tipo: 0.002 },
+      { limite: 167_123.43,   tipo: 0.003 },
+      { limite: 334_246.87,   tipo: 0.005 },
+      { limite: 668_499.76,   tipo: 0.009 },
+      { limite: 1_336_999.50, tipo: 0.013 },
+      { limite: 2_673_999.02, tipo: 0.017 },
+      { limite: 5_347_998.03, tipo: 0.021 },
+      { limite: Infinity,      tipo: 0.025 },
+    ];
+
+    function calcPatrimonio(capital) {
+      if (capital <= PATRIMONIO_EXENTO) return 0;
+      let base = capital - PATRIMONIO_EXENTO;
+      let cuota = 0;
+      for (const tramo of PATRIMONIO_TRAMOS) {
+        if (base <= 0) break;
+        const gravable = Math.min(base, tramo.limite);
+        cuota += gravable * tramo.tipo;
+        base -= gravable;
+      }
+      return cuota;
+    }
+
+    // ─── ITSGF (Impuesto Temporal de Solidaridad de las Grandes Fortunas) ────────
+    // Mínimo exento: 3.000.000 €. Escala progresiva sobre base > 3M.
+    // La cuota de Patrimonio pagada se deduce de la cuota ITSGF.
+    const ITSGF_EXENTO = 3_000_000;
+    const ITSGF_TRAMOS = [
+      { limite: 2_347_998.03, tipo: 0.017 }, // 3.000.000 → 5.347.998,03
+      { limite: 5_347_998.03, tipo: 0.021 }, // 5.347.998,03 → 10.695.996,06
+      { limite: Infinity,      tipo: 0.035 }, // > 10.695.996,06
+    ];
+
+    function calcITSGF_bruto(capital) {
+      if (capital <= ITSGF_EXENTO) return 0;
+      let base = capital - ITSGF_EXENTO;
+      let cuota = 0;
+      for (const tramo of ITSGF_TRAMOS) {
+        if (base <= 0) break;
+        const gravable = Math.min(base, tramo.limite);
+        cuota += gravable * tramo.tipo;
+        base -= gravable;
+      }
+      return cuota;
+    }
+
+    // ─── Motor de cálculo ────────────────────────────────────────────────────────
+    function calcular(patrimonioBruto) {
+      const capital        = patrimonioBruto * 0.80;
+      const cuotaPatrimonio = calcPatrimonio(capital);
+      const itsgfBruto     = calcITSGF_bruto(capital);
+      const itsgfNeto      = Math.max(0, itsgfBruto - cuotaPatrimonio);
+      const totalImpuestos = cuotaPatrimonio + itsgfNeto;
+
+      const rentaBruta     = capital * 0.06;
+      const rentaNeta      = rentaBruta * 0.70;          // 70% de la bruta → 4,2% del capital
+
+      const resultadoAnual = rentaNeta - totalImpuestos;
+      const mensualidad    = resultadoAnual / 14;
+
+      return {
+        patrimonioBruto,
+        capital,
+        basePatrimonio: Math.max(0, capital - PATRIMONIO_EXENTO),
+        cuotaPatrimonio,
+        baseITSGF: Math.max(0, capital - ITSGF_EXENTO),
+        itsgfBruto,
+        itsgfNeto,
+        totalImpuestos,
+        rentaBruta,
+        rentaNeta,
+        resultadoAnual,
+        mensualidad,
+      };
+    }
+
+    // ─── Render ──────────────────────────────────────────────────────────────────
+    function render(v) {
+      const {
+        patrimonioBruto, capital, basePatrimonio, cuotaPatrimonio,
+        baseITSGF, itsgfBruto, itsgfNeto, totalImpuestos,
+        rentaBruta, rentaNeta, resultadoAnual, mensualidad,
+      } = v;
+
+      // Tarjetas principales
+      $('val-capital').textContent     = fmt(capital);
+      $('sub-capital').textContent     = `${pct(80, 0)} de ${fmt(patrimonioBruto)}`;
+
+      $('val-impuestos').textContent   = fmt(totalImpuestos);
+      const tipEfec = capital > 0 ? (totalImpuestos / capital * 100) : 0;
+      $('sub-impuestos').textContent   = `Tipo efectivo sobre capital: ${pct(tipEfec)}`;
+
+      $('val-rentabilidad').textContent = fmt(rentaNeta);
+      $('sub-rentabilidad').textContent = `4,20% neto del capital (6% bruto × 70%)`;
+
+      const resultColor = resultadoAnual >= 0 ? 'val-green' : 'val-red';
+      const resEl = $('val-resultado');
+      resEl.className = 'card-value ' + resultColor;
+      resEl.textContent = fmt(resultadoAnual);
+      $('sub-resultado').textContent = resultadoAnual >= 0
+        ? 'El rendimiento supera la carga fiscal ✓'
+        : 'La carga fiscal supera el rendimiento ✗';
+
+      const menEl = $('val-mensual');
+      menEl.className = 'card-value ' + resultColor;
+      menEl.style.fontSize = '2.6rem';
+      menEl.textContent = fmt(mensualidad);
+      $('sub-mensual').textContent = `Sobre 14 pagas anuales · ${fmt(resultadoAnual)} ÷ 14`;
+
+      // Desglose
+      $('b-bruto').textContent       = fmt(patrimonioBruto);
+      $('b-capital').textContent     = fmt(capital);
+      $('b-base-pat').textContent    = basePatrimonio > 0 ? fmt(basePatrimonio) : 'Exento (≤ 700.000 €)';
+      $('b-pat').textContent         = fmt(cuotaPatrimonio);
+      $('b-base-itsgf').textContent  = baseITSGF > 0 ? fmt(baseITSGF) : 'No aplica (≤ 3.000.000 €)';
+      $('b-itsgf-bruto').textContent = fmt(itsgfBruto);
+      $('b-itsgf-neto').textContent  = fmt(itsgfNeto);
+      $('b-total-imp').textContent   = fmt(totalImpuestos);
+      $('b-rent-bruta').textContent  = fmt(rentaBruta);
+      $('b-rent-neta').textContent   = fmt(rentaNeta);
+      const bRes = $('b-resultado');
+      bRes.textContent               = fmt(resultadoAnual);
+      bRes.className                 = 'breakdown-val ' + (resultadoAnual >= 0 ? 'pos' : 'neg');
+      const bMen = $('b-mensual');
+      bMen.textContent               = fmt(mensualidad);
+      bMen.className                 = 'breakdown-val ' + (mensualidad >= 0 ? 'pos' : 'neg');
+    }
+
+    const $ = id => document.getElementById(id);
+
+    $('amount').addEventListener('input', () => {
+      const raw = parseFloat($('amount').value);
+
+      if (!raw || raw <= 0) {
+        $('zero-state').style.display     = '';
+        $('results-content').style.display = 'none';
+        return;
+      }
+
+      $('zero-state').style.display     = 'none';
+      $('results-content').style.display = '';
+      render(calcular(raw));
+    });
+  </script>
+</body>
+</html>
