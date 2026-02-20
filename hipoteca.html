@@ -3,531 +3,684 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Calculadora Hipoteca Dual</title>
+<title>Calculadora Hipotecaria</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Mono:wght@300;400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&display=swap');
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+:root {
+  --bg:        #0a0c10;
+  --surface:   #111318;
+  --surface2:  #181b22;
+  --surface3:  #1e222c;
+  --border:    rgba(255,255,255,0.07);
+  --border2:   rgba(255,255,255,0.04);
+
+  --cyan:      #22d3ee;
+  --cyan-dim:  rgba(34,211,238,0.12);
+  --cyan-glow: rgba(34,211,238,0.25);
+  --violet:    #a78bfa;
+  --violet-dim:rgba(167,139,250,0.12);
+  --emerald:   #34d399;
+  --emerald-dim:rgba(52,211,153,0.12);
+  --amber:     #fbbf24;
+  --amber-dim: rgba(251,191,36,0.12);
+
+  --text:      #e8eaf0;
+  --text2:     #8b8fa8;
+  --text3:     #555a70;
+
+  --radius:    16px;
 }
 
 body {
-  font-family: 'Montserrat', Arial, sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 300;
-  background: linear-gradient(135deg, #2a2a2a 0%, #2a2a2a 100%);
-  color: #888888;
-  margin: 0;
-  padding: 12px;
-  line-height: 1.4;
+  background: var(--bg);
+  color: var(--text2);
+  padding: 40px 16px 64px;
   min-height: 100vh;
+  line-height: 1.5;
 }
 
+/* Radial glow background */
+body::after {
+  content: '';
+  position: fixed;
+  top: -20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 900px;
+  height: 600px;
+  background: radial-gradient(ellipse, rgba(34,211,238,0.04) 0%, transparent 65%),
+              radial-gradient(ellipse at 30% 80%, rgba(167,139,250,0.04) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Noise */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+.page {
+  position: relative;
+  z-index: 1;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* ── Header ── */
 header {
-  background: linear-gradient(135deg, #4a4a4a, #3a3a3a);
-  color: #888888;
   text-align: center;
-  padding: 20px 10px;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  margin-bottom: 40px;
+  animation: fadeUp 0.6s ease both;
 }
 
-header h1 {
-  font-size: 1.4em;
-  letter-spacing: 0.5px;
-  font-weight: 400;
-  color: #888888;
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  margin-bottom: 14px;
+}
+
+.eyebrow::before, .eyebrow::after {
+  content: '';
+  width: 32px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--cyan));
+  opacity: 0.5;
+}
+
+.eyebrow::after { background: linear-gradient(90deg, var(--cyan), transparent); }
+
+h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: 2.8em;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+h1 em {
+  font-style: normal;
+  background: linear-gradient(135deg, var(--cyan), var(--violet));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 header p {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--text3);
   font-weight: 300;
-  margin-top: 4px;
-  font-size: 0.9em;
-  opacity: 0.8;
 }
 
-main {
-  max-width: 750px;
-  margin: auto;
-  background: #333333;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  border: 1px solid #404040;
+/* ── Card ── */
+.card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.02),
+              0 24px 64px rgba(0,0,0,0.5);
+  animation: fadeUp 0.6s ease 0.1s both;
 }
 
+/* ── Mode Toggle ── */
 .mode-toggle {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 20px;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
 }
 
 .mode-toggle button {
-  flex: 1;
-  max-width: 200px;
-  padding: 10px 16px;
-  border: 1px solid #4a4a4a;
-  border-radius: 8px;
-  font-size: 0.9em;
-  font-weight: 400;
+  padding: 18px 20px;
+  border: none;
+  background: transparent;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text3);
   cursor: pointer;
-  transition: all 0.2s;
-  font-family: 'Montserrat', Arial, sans-serif;
-  background: #2e2e2e;
-  color: #888888;
+  transition: all 0.25s;
+  position: relative;
+}
+
+.mode-toggle button::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--cyan), var(--violet));
+  transform: scaleX(0);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .mode-toggle button.active {
-  background: #4a4a4a;
-  color: #aaaaaa;
-  border-color: #555555;
+  color: var(--text);
+  background: var(--surface);
 }
 
-.mode-toggle button:hover:not(.active) {
-  background: #3a3a3a;
-  border-color: #555555;
-}
+.mode-toggle button.active::after { transform: scaleX(1); }
+.mode-toggle button:not(.active):hover { background: rgba(255,255,255,0.02); color: var(--text2); }
 
+/* ── Body ── */
+.mode-body { padding: 36px 32px 32px; }
+
+/* ── Section title ── */
 h2 {
-  text-align: center;
-  color: #888888;
+  font-family: 'Syne', sans-serif;
   font-size: 1.1em;
-  font-weight: 400;
-  margin: 20px 0 16px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+h2 .h2-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--cyan), var(--violet));
+  flex-shrink: 0;
+  box-shadow: 0 0 8px var(--cyan-glow);
 }
 
 h2::after {
-  content: "";
-  display: block;
-  width: 40px;
-  height: 2px;
-  background: #555555;
-  margin: 6px auto 0;
-  border-radius: 2px;
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
 }
 
+/* ── Input grid ── */
 .input-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  margin-bottom: 16px;
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
-.input-group {
-  display: flex;
-  flex-direction: column;
-}
-
-.input-group.full {
-  grid-column: 1 / -1;
-}
+.input-group { display: flex; flex-direction: column; gap: 7px; }
+.input-group.full { grid-column: 1 / -1; }
 
 label {
-  color: #888888;
-  font-size: 0.85em;
-  margin-bottom: 6px;
-  font-weight: 400;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text3);
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 label small {
-  display: block;
-  font-size: 0.9em;
-  opacity: 0.8;
-  margin-top: 2px;
+  background: var(--cyan-dim);
+  color: var(--cyan);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 9px;
+  letter-spacing: 0.08em;
 }
 
 input[type="number"] {
   width: 100%;
-  padding: 8px 12px;
-  font-size: 0.9em;
-  border: 1px solid #4a4a4a;
-  border-radius: 8px;
-  text-align: center;
-  transition: 0.3s all ease;
-  background: #2e2e2e;
-  color: #888888;
-  font-family: 'Montserrat', Arial, sans-serif;
+  padding: 12px 16px;
+  font-family: 'DM Mono', monospace;
+  font-size: 15px;
+  font-weight: 400;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface2);
+  color: var(--text);
+  text-align: right;
+  transition: all 0.2s;
+  appearance: textfield;
+  -moz-appearance: textfield;
 }
 
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
+
 input[type="number"]:focus {
-  border-color: #555555;
-  box-shadow: 0 0 4px rgba(85, 85, 85, 0.4);
   outline: none;
+  border-color: rgba(34,211,238,0.4);
+  background: var(--surface3);
+  box-shadow: 0 0 0 3px var(--cyan-dim);
 }
 
 input[readonly] {
-  background: #282828;
-  color: #666666;
+  background: rgba(255,255,255,0.02);
+  color: var(--text3);
   cursor: not-allowed;
+  border-style: dashed;
+  border-color: rgba(255,255,255,0.05);
 }
 
-.button-group {
-  display: flex;
-  gap: 12px;
-  margin-top: 16px;
-}
-
-button {
-  flex: 1;
-  padding: 10px 16px;
-  border: none;
-  border-radius: 8px;
-  font-size: 0.9em;
-  font-weight: 400;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-family: 'Montserrat', Arial, sans-serif;
-}
+/* ── Buttons ── */
+.button-group { display: flex; gap: 10px; margin-bottom: 28px; }
 
 button.primary {
-  background: #4a4a4a;
-  color: #aaaaaa;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  flex: 1;
+  padding: 14px 20px;
+  background: linear-gradient(135deg, var(--cyan) 0%, var(--violet) 100%);
+  color: #0a0c10;
+  border: none;
+  border-radius: 10px;
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 20px var(--cyan-glow);
 }
 
 button.primary:hover {
-  background: #555555;
   transform: translateY(-1px);
+  box-shadow: 0 8px 30px var(--cyan-glow);
+  filter: brightness(1.08);
 }
 
+button.primary:active { transform: translateY(0); }
+
 button.secondary {
-  background: #2e2e2e;
-  color: #888888;
-  border: 1px solid #4a4a4a;
+  padding: 14px 20px;
+  background: transparent;
+  color: var(--text3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
 button.secondary:hover {
-  background: #3a3a3a;
-  border-color: #555555;
+  background: var(--surface2);
+  color: var(--text2);
+  border-color: rgba(255,255,255,0.1);
 }
 
-.resultado {
-  background: #2e2e2e;
-  border: 1px solid #404040;
-  border-radius: 8px;
-  padding: 16px;
-  margin-top: 16px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-}
-
+/* ── Result hero ── */
 .resultado-destacado {
-  background: #3a3a3a;
-  border: 1px solid #4a4a4a;
-  padding: 20px;
-  border-radius: 8px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px 24px;
   text-align: center;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.resultado-destacado::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 10%; right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--cyan), var(--violet), transparent);
+  opacity: 0.6;
+}
+
+.resultado-destacado::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%; transform: translateX(-50%);
+  width: 200px; height: 100px;
+  background: radial-gradient(ellipse, rgba(34,211,238,0.06) 0%, transparent 70%);
+  pointer-events: none;
 }
 
 .resultado-destacado .amount {
-  font-size: 2.2em;
-  font-weight: 500;
-  color: #aaaaaa;
-  margin-bottom: 6px;
+  font-family: 'Syne', sans-serif;
+  font-size: 3.2em;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  background: linear-gradient(135deg, var(--cyan), var(--violet));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+  margin-bottom: 10px;
 }
 
 .resultado-destacado .label {
-  font-size: 0.85em;
-  color: #888888;
-  font-weight: 400;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text3);
+}
+
+/* ── Result details ── */
+.resultado {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 16px;
 }
 
 .resultado-item {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 8px;
-  font-weight: 400;
-  color: #888888;
-  font-size: 0.9em;
-  padding: 4px 0;
+  align-items: center;
+  padding: 11px 20px;
+  gap: 16px;
+  transition: background 0.15s;
+  border-bottom: 1px solid var(--border2);
 }
 
+.resultado-item:last-child { border-bottom: none; }
+.resultado-item:hover { background: var(--surface3); }
+
 .resultado-item strong {
-  color: #888888;
+  font-family: 'DM Sans', sans-serif;
   font-weight: 400;
+  font-size: 13px;
+  color: var(--text3);
 }
 
 .resultado-item span {
-  color: #aaaaaa;
-  font-weight: 500;
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  color: var(--text2);
+  font-weight: 400;
+  white-space: nowrap;
 }
 
+/* Coloured highlight chips */
 .highlight {
-  background: #4a4a4a;
-  color: #aaaaaa;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-weight: 400 !important;
+}
+
+/* entrada = amber */
+#at1.highlight, #at2.highlight {
+  background: var(--amber-dim);
+  color: var(--amber) !important;
+}
+
+/* préstamo = violet */
+#ht1.highlight, #ht2.highlight {
+  background: var(--violet-dim);
+  color: var(--violet) !important;
+}
+
+/* total = emerald */
+#tp1.highlight, #tp2.highlight {
+  background: var(--emerald-dim);
+  color: var(--emerald) !important;
 }
 
 .divisor {
   height: 1px;
-  background: #404040;
-  margin: 12px 0;
+  background: var(--border);
+  margin: 0 20px;
 }
 
-.hidden {
-  display: none;
-}
-
+/* ── Info note ── */
 .info-note {
-  background: #2e2e2e;
-  border-left: 3px solid #555555;
-  padding: 10px;
-  margin-top: 16px;
-  border-radius: 4px;
-  font-size: 0.85em;
-  color: #888888;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--text3);
   text-align: center;
+  opacity: 0.5;
 }
 
-@media (max-width: 600px) {
-  body {
-    font-size: 13px;
-    padding: 8px;
-  }
+/* ── Hidden ── */
+.hidden { display: none; }
 
-  header h1 {
-    font-size: 1.2em;
-  }
+/* ── Animations ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
-  header {
-    padding: 16px 10px;
-  }
-
-  main {
-    padding: 16px;
-  }
-
-  .input-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .resultado-item {
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-  }
-
-  h2 {
-    font-size: 1em;
-  }
-
-  .resultado-destacado .amount {
-    font-size: 1.8em;
-  }
+/* ── Responsive ── */
+@media (max-width: 580px) {
+  body { padding: 24px 12px 48px; }
+  h1 { font-size: 2em; }
+  .mode-body { padding: 24px 20px 20px; }
+  .input-grid { grid-template-columns: 1fr; gap: 12px; }
+  .resultado-destacado .amount { font-size: 2.4em; }
+  .resultado-item { flex-direction: column; align-items: flex-start; gap: 3px; padding: 10px 16px; }
+  .button-group { flex-direction: column; }
+  button.secondary { flex: 1; }
 }
 </style>
 </head>
 <body>
+<div class="page">
+
 <header>
-<h1>Calculadora Hipotecaria</h1>
-<p>Calcula desde precio o desde cuota mensual</p>
+  <div class="eyebrow">Herramienta financiera</div>
+  <h1>Calculadora <em>Hipotecaria</em></h1>
+  <p>Calcula desde precio de vivienda · o desde cuota mensual</p>
 </header>
 
-<main>
-<div class="mode-toggle">
-<button id="modePrice" class="active">Desde Precio</button>
-<button id="modeMonthly">Desde Cuota</button>
-</div>
+<div class="card">
 
-<!-- MODO 1: Desde Precio -->
-<div id="priceMode">
-<h2>Calcular Cuota Mensual</h2>
+  <div class="mode-toggle">
+    <button id="modePrice" class="active">Desde Precio</button>
+    <button id="modeMonthly">Desde Cuota</button>
+  </div>
 
-<div class="input-grid">
-<div class="input-group full">
-<label for="price">Precio de la vivienda (€)</label>
-<input type="number" id="price" value="180000">
-</div>
+  <!-- MODO 1: Desde Precio -->
+  <div id="priceMode" class="mode-body">
+    <h2><span class="h2-dot"></span>Calcular cuota mensual</h2>
 
-<div class="input-group">
-<label for="gp1">% Gastos compraventa</label>
-<input type="number" id="gp1" value="10.09" step="0.01">
-</div>
+    <div class="input-grid">
+      <div class="input-group full">
+        <label for="price">Precio de la vivienda <span style="font-family:'DM Mono';font-size:10px;color:var(--text3);letter-spacing:.1em">€</span></label>
+        <input type="number" id="price" value="180000">
+      </div>
 
-<div class="input-group">
-<label for="g1">Gastos calculados (€)</label>
-<input type="number" id="g1" readonly value="18162">
-</div>
+      <div class="input-group">
+        <label for="gp1">% Gastos compraventa</label>
+        <input type="number" id="gp1" value="10.09" step="0.01">
+      </div>
 
-<div class="input-group full">
-<label for="ap1">Aportación entrada (%)<small>Mínimo 20%</small></label>
-<input type="number" id="ap1" value="20" step="0.1">
-</div>
+      <div class="input-group">
+        <label for="g1">Gastos calculados <span style="font-family:'DM Mono';font-size:10px;color:var(--text3);letter-spacing:.1em">€</span></label>
+        <input type="number" id="g1" readonly value="18162">
+      </div>
 
-<div class="input-group">
-<label for="y1">Plazo (años)</label>
-<input type="number" id="y1" value="25" step="1">
-</div>
+      <div class="input-group full">
+        <label for="ap1">Aportación entrada (%) <small>mín. 20%</small></label>
+        <input type="number" id="ap1" value="20" step="0.1">
+      </div>
 
-<div class="input-group">
-<label for="tin1">TIN anual (%)</label>
-<input type="number" id="tin1" value="4.20" step="0.01">
-</div>
-</div>
+      <div class="input-group">
+        <label for="y1">Plazo <span style="font-family:'DM Mono';font-size:10px;color:var(--text3);letter-spacing:.1em">años</span></label>
+        <input type="number" id="y1" value="25" step="1">
+      </div>
 
-<div class="button-group">
-<button class="primary" id="c1">Calcular</button>
-<button class="secondary" id="r1">Restablecer</button>
-</div>
+      <div class="input-group">
+        <label for="tin1">TIN anual (%)</label>
+        <input type="number" id="tin1" value="4.20" step="0.01">
+      </div>
+    </div>
 
-<div class="resultado-destacado">
-<div class="amount" id="m1">854 €</div>
-<div class="label">Cuota mensual</div>
-</div>
+    <div class="button-group">
+      <button class="primary" id="c1">Calcular</button>
+      <button class="secondary" id="r1">Restablecer</button>
+    </div>
 
-<div class="resultado">
-<div class="resultado-item">
-<strong>Precio vivienda:</strong>
-<span id="po1">180.000,00 €</span>
-</div>
-<div class="resultado-item">
-<strong>Gastos compraventa:</strong>
-<span id="gt1">18.162,00 €</span>
-</div>
-<div class="resultado-item">
-<strong>Precio + gastos:</strong>
-<span id="pt1">198.162,00 €</span>
-</div>
-<div class="divisor"></div>
-<div class="resultado-item">
-<strong>Entrada (20% mínimo):</strong>
-<span class="highlight" id="at1">39.632,40 €</span>
-</div>
-<div class="resultado-item">
-<strong>Importe préstamo (80%):</strong>
-<span class="highlight" id="ht1">158.529,60 €</span>
-</div>
-<div class="divisor"></div>
-<div class="resultado-item">
-<strong>Plazo:</strong>
-<span id="mt1">300 cuotas (25 años)</span>
-</div>
-<div class="resultado-item">
-<strong>TIN anual:</strong>
-<span id="tinT1">4,20 %</span>
-</div>
-<div class="resultado-item">
-<strong>Total a pagar:</strong>
-<span class="highlight" id="tp1">256.200,00 €</span>
-</div>
-<div class="resultado-item">
-<strong>Intereses totales:</strong>
-<span id="it1">97.670,40 €</span>
-</div>
-</div>
+    <div class="resultado-destacado">
+      <div class="amount" id="m1">854 €</div>
+      <div class="label">Cuota mensual estimada</div>
+    </div>
 
-<div class="info-note">* Valores orientativos. No constituyen oferta vinculante.</div>
-</div>
+    <div class="resultado">
+      <div class="resultado-item">
+        <strong>Precio vivienda</strong>
+        <span id="po1">180.000,00 €</span>
+      </div>
+      <div class="resultado-item">
+        <strong>Gastos compraventa</strong>
+        <span id="gt1">18.162,00 €</span>
+      </div>
+      <div class="resultado-item">
+        <strong>Precio + gastos</strong>
+        <span id="pt1">198.162,00 €</span>
+      </div>
+      <div class="divisor"></div>
+      <div class="resultado-item">
+        <strong>Entrada (mín. 20%)</strong>
+        <span class="highlight" id="at1">39.632,40 €</span>
+      </div>
+      <div class="resultado-item">
+        <strong>Importe préstamo</strong>
+        <span class="highlight" id="ht1">158.529,60 €</span>
+      </div>
+      <div class="divisor"></div>
+      <div class="resultado-item">
+        <strong>Plazo</strong>
+        <span id="mt1">300 cuotas · 25 años</span>
+      </div>
+      <div class="resultado-item">
+        <strong>TIN anual</strong>
+        <span id="tinT1">4,20 %</span>
+      </div>
+      <div class="resultado-item">
+        <strong>Total a pagar</strong>
+        <span class="highlight" id="tp1">256.200,00 €</span>
+      </div>
+      <div class="resultado-item">
+        <strong>Intereses totales</strong>
+        <span id="it1">97.670,40 €</span>
+      </div>
+    </div>
 
-<!-- MODO 2: Desde Cuota -->
-<div id="monthlyMode" class="hidden">
-<h2>Calcular Precio Máximo de Vivienda</h2>
+    <p class="info-note">* Valores orientativos. No constituyen oferta vinculante.</p>
+  </div>
 
-<div class="input-grid">
-<div class="input-group full">
-<label for="m2in">Cuota mensual que puedes pagar (€)</label>
-<input type="number" id="m2in" value="854">
-</div>
+  <!-- MODO 2: Desde Cuota -->
+  <div id="monthlyMode" class="mode-body hidden">
+    <h2><span class="h2-dot"></span>Calcular precio máximo</h2>
 
-<div class="input-group">
-<label for="gp2">% Gastos compraventa</label>
-<input type="number" id="gp2" value="10.09" step="0.01">
-</div>
+    <div class="input-grid">
+      <div class="input-group full">
+        <label for="m2in">Cuota mensual disponible <span style="font-family:'DM Mono';font-size:10px;color:var(--text3);letter-spacing:.1em">€</span></label>
+        <input type="number" id="m2in" value="854">
+      </div>
 
-<div class="input-group">
-<label for="y2">Plazo (años)</label>
-<input type="number" id="y2" value="25" step="1">
-</div>
+      <div class="input-group">
+        <label for="gp2">% Gastos compraventa</label>
+        <input type="number" id="gp2" value="10.09" step="0.01">
+      </div>
 
-<div class="input-group">
-<label for="tin2">TIN anual (%)</label>
-<input type="number" id="tin2" value="4.20" step="0.01">
-</div>
+      <div class="input-group">
+        <label for="y2">Plazo <span style="font-family:'DM Mono';font-size:10px;color:var(--text3);letter-spacing:.1em">años</span></label>
+        <input type="number" id="y2" value="25" step="1">
+      </div>
 
-<div class="input-group">
-<label for="ap2">Aportación entrada (%)<small>Mínimo 20%</small></label>
-<input type="number" id="ap2" value="20" step="0.1">
-</div>
-</div>
+      <div class="input-group">
+        <label for="tin2">TIN anual (%)</label>
+        <input type="number" id="tin2" value="4.20" step="0.01">
+      </div>
 
-<div class="button-group">
-<button class="primary" id="c2">Calcular</button>
-<button class="secondary" id="r2">Restablecer</button>
-</div>
+      <div class="input-group">
+        <label for="ap2">Aportación entrada (%) <small>mín. 20%</small></label>
+        <input type="number" id="ap2" value="20" step="0.1">
+      </div>
+    </div>
 
-<div class="resultado-destacado">
-<div class="amount" id="pa2">180.000 €</div>
-<div class="label">Precio máximo de vivienda</div>
-</div>
+    <div class="button-group">
+      <button class="primary" id="c2">Calcular</button>
+      <button class="secondary" id="r2">Restablecer</button>
+    </div>
 
-<div class="resultado">
-<div class="resultado-item">
-<strong>Cuota mensual:</strong>
-<span id="mt2">854,00 €</span>
-</div>
-<div class="resultado-item">
-<strong>% Gastos compraventa:</strong>
-<span id="gpt2">10,09 %</span>
-</div>
-<div class="resultado-item">
-<strong>Gastos calculados:</strong>
-<span id="gt2">18.162,00 €</span>
-</div>
-<div class="resultado-item">
-<strong>Precio + gastos:</strong>
-<span id="pt2">198.162,00 €</span>
-</div>
-<div class="divisor"></div>
-<div class="resultado-item">
-<strong>Entrada (20% mínimo):</strong>
-<span class="highlight" id="at2">39.632,40 €</span>
-</div>
-<div class="resultado-item">
-<strong>Importe préstamo (80%):</strong>
-<span class="highlight" id="ht2">158.529,60 €</span>
-</div>
-<div class="divisor"></div>
-<div class="resultado-item">
-<strong>Plazo:</strong>
-<span id="pt2m">300 cuotas (25 años)</span>
-</div>
-<div class="resultado-item">
-<strong>TIN anual:</strong>
-<span id="tinT2">4,20 %</span>
-</div>
-<div class="resultado-item">
-<strong>Total a pagar:</strong>
-<span class="highlight" id="tp2">256.200,00 €</span>
-</div>
-<div class="resultado-item">
-<strong>Intereses totales:</strong>
-<span id="it2">97.670,40 €</span>
-</div>
-</div>
+    <div class="resultado-destacado">
+      <div class="amount" id="pa2">180.000 €</div>
+      <div class="label">Precio máximo de vivienda</div>
+    </div>
 
-<div class="info-note">* Valores orientativos. No constituyen oferta vinculante.</div>
-</div>
+    <div class="resultado">
+      <div class="resultado-item">
+        <strong>Cuota mensual</strong>
+        <span id="mt2">854,00 €</span>
+      </div>
+      <div class="resultado-item">
+        <strong>% Gastos compraventa</strong>
+        <span id="gpt2">10,09 %</span>
+      </div>
+      <div class="resultado-item">
+        <strong>Gastos calculados</strong>
+        <span id="gt2">18.162,00 €</span>
+      </div>
+      <div class="resultado-item">
+        <strong>Precio + gastos</strong>
+        <span id="pt2">198.162,00 €</span>
+      </div>
+      <div class="divisor"></div>
+      <div class="resultado-item">
+        <strong>Entrada (mín. 20%)</strong>
+        <span class="highlight" id="at2">39.632,40 €</span>
+      </div>
+      <div class="resultado-item">
+        <strong>Importe préstamo</strong>
+        <span class="highlight" id="ht2">158.529,60 €</span>
+      </div>
+      <div class="divisor"></div>
+      <div class="resultado-item">
+        <strong>Plazo</strong>
+        <span id="pt2m">300 cuotas · 25 años</span>
+      </div>
+      <div class="resultado-item">
+        <strong>TIN anual</strong>
+        <span id="tinT2">4,20 %</span>
+      </div>
+      <div class="resultado-item">
+        <strong>Total a pagar</strong>
+        <span class="highlight" id="tp2">256.200,00 €</span>
+      </div>
+      <div class="resultado-item">
+        <strong>Intereses totales</strong>
+        <span id="it2">97.670,40 €</span>
+      </div>
+    </div>
 
-</main>
+    <p class="info-note">* Valores orientativos. No constituyen oferta vinculante.</p>
+  </div>
+
+</div>
+</div>
 
 <script>
 const pm=document.getElementById('priceMode'),mm=document.getElementById('monthlyMode');
 document.getElementById('modePrice').onclick=()=>{
-  pm.classList.remove('hidden');
-  mm.classList.add('hidden');
+  pm.classList.remove('hidden');mm.classList.add('hidden');
   document.getElementById('modePrice').classList.add('active');
   document.getElementById('modeMonthly').classList.remove('active');
 };
 document.getElementById('modeMonthly').onclick=()=>{
-  mm.classList.remove('hidden');
-  pm.classList.add('hidden');
+  mm.classList.remove('hidden');pm.classList.add('hidden');
   document.getElementById('modeMonthly').classList.add('active');
   document.getElementById('modePrice').classList.remove('active');
 };
@@ -558,26 +711,24 @@ ap1.onchange=()=>{if(Number(ap1.value)<20)ap1.value=20};
 document.getElementById('c1').onclick=()=>{
   const p=Math.max(0,Number(pr.value)||0),gp=Math.max(0,Number(gp1.value)||0),g=(gp/100)*p;
   let ap=Math.max(0,Number(ap1.value)||0);
-  if(ap<20)ap=20;
-  ap1.value=ap;
+  if(ap<20)ap=20;ap1.value=ap;
   const y=Math.max(1,Number(y1.value)||1),tin=Math.max(0,Number(tin1.value)||0);
   g1.value=g.toFixed(2);
   const tc=p+g,e=(ap/100)*tc,h=tc*0.8,cm=cmp(h,tin,y),ms=y*12,tpa=cm*ms,i=tpa-h;
   document.getElementById('m1').innerHTML=Math.round(cm).toLocaleString('es-ES')+' €';
-  document.getElementById('tp1').innerHTML=Math.round(tpa).toLocaleString('es-ES')+' €';
   document.getElementById('po1').innerHTML=p.toLocaleString('es-ES',{minimumFractionDigits:2})+' €';
   document.getElementById('gt1').innerHTML=g.toLocaleString('es-ES',{minimumFractionDigits:2})+' €';
   document.getElementById('pt1').innerHTML=tc.toLocaleString('es-ES',{minimumFractionDigits:2})+' €';
   document.getElementById('at1').innerHTML=e.toLocaleString('es-ES',{minimumFractionDigits:2})+' €';
   document.getElementById('ht1').innerHTML=h.toLocaleString('es-ES',{minimumFractionDigits:2})+' €';
-  document.getElementById('mt1').innerHTML=ms+' cuotas ('+y+' años)';
+  document.getElementById('mt1').innerHTML=ms+' cuotas · '+y+' años';
   document.getElementById('tinT1').innerHTML=tin.toFixed(2).replace('.',',')+' %';
+  document.getElementById('tp1').innerHTML=Math.round(tpa).toLocaleString('es-ES')+' €';
   document.getElementById('it1').innerHTML=Math.round(i).toLocaleString('es-ES')+' €';
 };
 
 document.getElementById('r1').onclick=()=>{
   pr.value=180000;gp1.value=10.09;g1.value=18162;ap1.value=20;y1.value=25;tin1.value=4.20;
-  document.getElementById('m1').innerHTML='854 €';
   document.getElementById('c1').click();
 };
 
@@ -587,19 +738,19 @@ ap2.onchange=()=>{if(Number(ap2.value)<20)ap2.value=20};
 document.getElementById('c2').onclick=()=>{
   const mp=Math.max(0,Number(m2.value)||0),gp=Math.max(0,Number(gp2.value)||0);
   let ap=Math.max(0,Number(ap2.value)||0);
-  if(ap<20)ap=20;
-  ap2.value=ap;
-  const y=Math.max(1,Number(y2.value)||1),tin=Math.max(0,Number(tin2.value)||0),la=cla(mp,tin,y),tc=la/0.8,p=tc/(1+gp/100),g=p*(gp/100),e=tc*0.2,ms=y*12,tpa=mp*ms,i=tpa-la;
+  if(ap<20)ap=20;ap2.value=ap;
+  const y=Math.max(1,Number(y2.value)||1),tin=Math.max(0,Number(tin2.value)||0);
+  const la=cla(mp,tin,y),tc=la/0.8,p=tc/(1+gp/100),g=p*(gp/100),e=tc*0.2,ms=y*12,tpa=mp*ms,i=tpa-la;
   document.getElementById('pa2').innerHTML=Math.round(p).toLocaleString('es-ES')+' €';
-  document.getElementById('tp2').innerHTML=Math.round(tpa).toLocaleString('es-ES')+' €';
   document.getElementById('mt2').innerHTML=mp.toLocaleString('es-ES',{minimumFractionDigits:2})+' €';
   document.getElementById('gpt2').innerHTML=gp.toFixed(2).replace('.',',')+' %';
   document.getElementById('gt2').innerHTML=g.toLocaleString('es-ES',{minimumFractionDigits:2})+' €';
   document.getElementById('pt2').innerHTML=tc.toLocaleString('es-ES',{minimumFractionDigits:2})+' €';
   document.getElementById('at2').innerHTML=e.toLocaleString('es-ES',{minimumFractionDigits:2})+' €';
   document.getElementById('ht2').innerHTML=la.toLocaleString('es-ES',{minimumFractionDigits:2})+' €';
-  document.getElementById('pt2m').innerHTML=ms+' cuotas ('+y+' años)';
+  document.getElementById('pt2m').innerHTML=ms+' cuotas · '+y+' años';
   document.getElementById('tinT2').innerHTML=tin.toFixed(2).replace('.',',')+' %';
+  document.getElementById('tp2').innerHTML=Math.round(tpa).toLocaleString('es-ES')+' €';
   document.getElementById('it2').innerHTML=Math.round(i).toLocaleString('es-ES')+' €';
 };
 
