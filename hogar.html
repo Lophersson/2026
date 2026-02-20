@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Equipamiento - Minimal Tech Home</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg-deep:       #060910;
+    --bg-primary:    #0c1018;
+    --bg-card:       #111620;
+    --bg-card-hover: #151c28;
+    --border:        #1c2535;
+    --border-accent: #1e3a2e;
+    --text-primary:  #a1a1a1;
+    --text-secondary:#6e7e9e;
+    --text-muted:    #3d4d68;
+    --green:         #299983;
+    --green-subtle:  rgba(0,229,176,0.06);
+    --green-glow:    rgba(0,229,176,0.12);
+    --red:           #ff4d6d;
+    --red-subtle:    rgba(255,77,109,0.06);
+    --blue:          #3b82f6;
+    --blue-subtle:   rgba(59,130,246,0.08);
+    --mono: 'Space Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+    font-family: var(--sans);
+    background: var(--bg-deep);
+    min-height: 100vh;
+    color: var(--text-primary);
+    overflow-x: hidden;
+}
+
+body::before {
+    content:'';
+    position:fixed; inset:0;
+    background-image:
+        linear-gradient(rgba(0,229,176,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,229,176,0.02) 1px, transparent 1px);
+    background-size:40px 40px;
+    pointer-events:none; z-index:0;
+}
+
+body::after {
+    content:'';
+    position:fixed;
+    top:-200px; left:50%;
+    transform:translateX(-50%);
+    width:700px; height:500px;
+    background:radial-gradient(ellipse, rgba(0,229,176,0.05) 0%, transparent 65%);
+    pointer-events:none; z-index:0;
+}
+
+/* ── HEADER ── */
+.site-header {
+    position:sticky; top:0; z-index:100;
+    background:rgba(9,13,22,0.9);
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--border);
+    padding:0 16px;
+    height:56px;
+    display:flex; justify-content:space-between; align-items:center;
+}
+
+.logo {
+    font-family:var(--mono);
+    font-size:12px; font-weight:700;
+    color:var(--text-primary); letter-spacing:0.5px;
+}
+.logo span { color:var(--green); }
+
+.live-badge {
+    display:flex; align-items:center; gap:5px;
+    background:var(--green-subtle);
+    border:1px solid rgba(0,229,176,0.2);
+    border-radius:20px; padding:3px 8px 3px 7px;
+    font-size:9px; font-weight:700;
+    color:var(--green); letter-spacing:0.8px; text-transform:uppercase;
+    flex-shrink:0;
+}
+
+.live-dot {
+    width:5px; height:5px;
+    background:var(--green); border-radius:50%;
+    animation:softPulse 3s ease-in-out infinite;
+}
+
+@keyframes softPulse {
+    0%,100% { opacity:1; box-shadow:0 0 0 0 rgba(0,229,176,0.35); }
+    50%      { opacity:0.55; box-shadow:0 0 0 5px rgba(0,229,176,0); }
+}
+
+/* ── WRAPPER ── */
+.wrap {
+    max-width:900px;
+    margin:0 auto;
+    position:relative; z-index:1;
+    padding-bottom:32px;
+}
+
+/* ── SUBHEADER (lead + controls) ── */
+.subheader {
+    padding:14px 16px 12px;
+    background:var(--bg-primary);
+    border-bottom:1px solid var(--border);
+    display:flex; flex-wrap:wrap;
+    justify-content:space-between; align-items:center;
+    gap:10px;
+}
+
+.lead {
+    font-size:10px;
+    color:var(--text-muted);
+    font-family:var(--mono);
+    letter-spacing:0.3px;
+}
+
+.controls {
+    display:flex; flex-wrap:wrap; gap:8px;
+}
+
+button {
+    background:var(--bg-card);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:7px 12px;
+    color:var(--text-muted);
+    font-family:var(--mono);
+    font-size:9px; font-weight:700;
+    text-transform:uppercase; letter-spacing:0.8px;
+    cursor:pointer;
+    transition:border-color 0.2s, color 0.2s, background 0.2s;
+}
+
+button:hover {
+    border-color:rgba(0,229,176,0.3);
+    color:var(--green);
+    background:var(--green-subtle);
+}
+
+/* ── TOTAL HERO ── */
+.total-hero {
+    background: linear-gradient(135deg, rgba(41,153,131,0.15) 0%, rgba(6,9,16,0.95) 100%);
+    border-bottom: 1px solid var(--border-accent);
+    padding:18px 16px 16px;
+    position:relative; overflow:hidden;
+    display:flex; justify-content:space-between; align-items:flex-end;
+    flex-wrap:wrap; gap:8px;
+}
+
+.total-hero::before {
+    content:'';
+    position:absolute; inset:0;
+    background: radial-gradient(ellipse at 10% 50%, rgba(0,229,176,0.08) 0%, transparent 60%);
+    pointer-events:none;
+}
+
+.total-label {
+    font-size:9px; font-weight:700;
+    color:var(--text-muted);
+    text-transform:uppercase; letter-spacing:1.5px;
+    margin-bottom:6px;
+}
+
+.total-amount {
+    font-family:var(--mono);
+    font-size:28px; font-weight:700;
+    color:var(--green);
+    letter-spacing:-0.5px;
+}
+
+.budget-note {
+    font-family:var(--mono);
+    font-size:10px;
+    color:var(--text-muted);
+    text-align:right;
+}
+
+.budget-note strong {
+    color:var(--text-secondary);
+}
+
+/* ── SECTION HEADER ── */
+.section-title {
+    font-size:9px; font-weight:700;
+    color:var(--text-muted);
+    text-transform:uppercase; letter-spacing:1.5px;
+    padding:16px 16px 10px;
+    background:var(--bg-primary);
+}
+
+/* ── GRID ── */
+.grid {
+    background:var(--bg-primary);
+    padding:0 0 8px;
+}
+
+/* ── CARD ── */
+.card {
+    border-bottom:1px solid rgba(28,37,53,0.5);
+}
+
+.card:last-child { border-bottom:none; }
+
+/* ── ROOM TITLE (expandable style) ── */
+.room-title {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:11px 16px;
+    background:var(--blue-subtle);
+    border-left:2px solid var(--blue);
+    gap:12px;
+}
+
+.room-title h2 {
+    font-family:var(--sans);
+    font-size:11px; font-weight:600;
+    color:var(--text-primary);
+    margin:0; flex:1;
+}
+
+.room-total {
+    font-family:var(--mono);
+    font-size:10px; font-weight:700;
+    color:var(--green);
+    white-space:nowrap;
+}
+
+/* ── ITEMS LIST ── */
+ul.items {
+    list-style:none;
+    margin:0; padding:0;
+    background:rgba(0,0,0,0.18);
+}
+
+ul.items li {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:8px 16px 8px 28px;
+    gap:10px;
+    border-bottom:1px solid rgba(28,37,53,0.4);
+    transition:background 0.15s;
+}
+
+ul.items li:last-child { border-bottom:none; }
+
+ul.items li:hover { background:var(--bg-card-hover); }
+
+ul.items li .name {
+    font-size:10px;
+    color:var(--text-secondary);
+    flex:1;
+}
+
+ul.items li .price {
+    font-family:var(--mono);
+    font-size:10px; font-weight:600;
+    color:var(--text-muted);
+    white-space:nowrap;
+}
+
+/* ── FOOTER ── */
+.footer {
+    text-align:center;
+    font-size:9px; color:var(--text-muted);
+    font-family:var(--mono); letter-spacing:0.5px;
+    padding:16px 0 0;
+}
+
+@media (max-width:600px) {
+    .total-amount { font-size:22px; }
+    ul.items li .name,
+    ul.items li .price { font-size:9px; }
+    button { font-size:8px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="site-header">
+    <div class="logo"><span>M</span>inimal Tech Home <span>//</span> Equipamiento Hogar</div>
+    <div class="live-badge"><div class="live-dot"></div>2026</div>
+</div>
+
+<div class="wrap">
+
+    <!-- SUBHEADER -->
+    <div class="subheader">
+        <div class="lead">Lista minimalista y domótica — presupuesto estimado</div>
+        <div class="controls">
+            <button id="togglePrices">Ocultar precios</button>
+            <button id="exportJson">Exportar JSON</button>
+            <button id="printBtn">Imprimir</button>
+        </div>
+    </div>
+
+    <!-- TOTAL HERO -->
+    <div class="total-hero">
+        <div>
+            <div class="total-label">Total Estimado</div>
+            <div class="total-amount" id="totalAmount">€0</div>
+        </div>
+        <div class="budget-note">Presupuesto objetivo<br><strong>€20.000</strong></div>
+    </div>
+
+    <!-- ROOMS -->
+    <div class="section-title">Estancias y Equipamiento</div>
+    <section class="grid" id="roomsGrid"></section>
+
+    <div class="footer">Lophersson · Minimal Tech Home · Equipamiento</div>
+
+</div>
+
+<script>
+const data = [
+  {room: 'Salón', items:[
+    {name:'Sofá modular minimalista', price:1200},
+    {name:'Lámpara de pie y de lectura', price:80},
+    {name:'Dos mantas y dos cojines', price:60},
+    {name:'Mesa de centro baja', price:100},
+    {name:'Mesa comedor extensible', price:600},
+    {name:'4 sillas', price:300},
+    {name:'TV OLED 55"', price:2000},
+    {name:'Sistema de sonido 5 altavoces smart (Sonos Era)', price:270},
+    {name:'Mueble multimedia minimal', price:240},
+    {name:'Kit iluminación inteligente (Hue)', price:120},
+    {name:'Cortinas salón', price:100},
+  ]},
+  {room:'Cocina', items:[
+    {name:'Placa de inducción empotrada', price:800},
+    {name:'Horno empotrable multifunción', price:800},
+    {name:'Frigorífico integrado', price:900},
+    {name:'Lavavajillas integrado', price:600},
+    {name:'Grifería monomando', price:150},
+    {name:'Vajilla para 6', price:200},
+    {name:'Cubiertos 24 piezas', price:180},
+    {name:'Set ollas + sartenes', price:180},
+    {name:'Utensilios cocina + tablas', price:60},
+    {name:'Escoba/recogedor + fregona + cubo', price:40},
+  ]},
+  {room:'Entrada', items:[
+    {name:'Cerradura inteligente', price:180},
+    {name:'Consola pared + zapatero/perchero', price:140},
+  ]},
+  {room:'Baños (2)', items:[
+    {name:'Espejos LED antivaho (x2)', price:300},
+    {name:'Grifería/termostato ducha (ambos)', price:200},
+    {name:'Toallas (dos sets)', price:120},
+    {name:'Cortinas/estores x2', price:50},
+  {name:'Alfombrillas', price:50},
+      ]},
+  {room:'Dormitorios (2)', items:[
+    {name:'Camas (estructura+somier+colchón) x2', price:3600},
+    {name:'Ropa de cama completa x4', price:240},
+    {name:'Almohadas x4', price:120},
+    {name:'Armario empotrado / ropero modular', price:1200},
+    {name:'Mesillas x4', price:200},
+    {name:'TV 43" x2', price:1200},
+    {name:'Equipo de sonido 360° x2', price:600},
+    {name:'Estanterías y cajoneras', price:300},
+    {name:'Cortinas/estores dormitorios', price:200},
+  ]},
+  {room:'Despacho', items:[
+    {name:'Mesa de trabajo minimal', price:180},
+    {name:'Silla ergonómica premium', price:120},
+    {name:'Estanterías y cajoneras', price:180},
+    {name:'Iluminación LED ajustable (panel/tira)', price:60},
+  ]},
+  {room:'Robot y limpieza', items:[
+    {name:'Robot aspirador-mopa (Roborock S8 equiv.)', price:300},
+  ]},
+  {room:'Domótica / Iluminación / Red', items:[
+    {name:'Termostato inteligente', price:80},
+    {name:'Hub domótico / Home Assistant mini-PC', price:120},
+    {name:'Kit enchufes inteligentes y sensores', price:120},
+    {name:'Puntos de luz de techo (10 luminarias aprox.)', price:240},
+    {name:'Instalación eléctrica / empotrar luces', price:600},
+    {name:'Tiras de luces LED y accesorios', price:60},
+  ]},
+  {room:'Otros', items:[
+    {name:'Cubos de basura (cocina, baño1 y baño2)', price:120},
+    {name:'Plancha + tabla', price:80},
+    {name:'Limpieza y consumibles iniciales', price:60},
+  ]}
+];
+
+const roomsGrid   = document.getElementById("roomsGrid");
+const totalAmountEl = document.getElementById("totalAmount");
+
+function formatEUR(v) {
+    return new Intl.NumberFormat('es-ES', {
+        style:'currency', currency:'EUR', maximumFractionDigits:0
+    }).format(v);
+}
+
+function render() {
+    roomsGrid.innerHTML = "";
+    let totalGeneral = 0;
+
+    data.forEach(section => {
+        const card = document.createElement("article");
+        card.className = "card";
+
+        const title = document.createElement("div");
+        title.className = "room-title";
+
+        const h = document.createElement("h2");
+        h.textContent = section.room;
+
+        const totalBox = document.createElement("div");
+        totalBox.className = "room-total";
+
+        title.appendChild(h);
+        title.appendChild(totalBox);
+        card.appendChild(title);
+
+        const list = document.createElement("ul");
+        list.className = "items";
+
+        section.items.forEach(it => {
+            const li = document.createElement("li");
+            const name  = document.createElement("div");
+            name.className = "name";
+            name.textContent = it.name;
+            const price = document.createElement("div");
+            price.className = "price";
+            price.textContent = formatEUR(it.price);
+            li.appendChild(name);
+            li.appendChild(price);
+            list.appendChild(li);
+        });
+
+        card.appendChild(list);
+        roomsGrid.appendChild(card);
+
+        const suma = section.items.reduce((a, b) => a + b.price, 0);
+        totalBox.textContent = formatEUR(suma);
+        totalGeneral += suma;
+    });
+
+    totalAmountEl.textContent = formatEUR(totalGeneral);
+}
+
+render();
+
+let pricesHidden = false;
+document.getElementById("togglePrices").addEventListener("click", () => {
+    pricesHidden = !pricesHidden;
+    document.querySelectorAll(".price, .room-total").forEach(el => {
+        el.style.visibility = pricesHidden ? "hidden" : "visible";
+    });
+    document.getElementById("totalAmount").style.visibility = pricesHidden ? "hidden" : "visible";
+    document.getElementById("togglePrices").textContent =
+        pricesHidden ? "Mostrar precios" : "Ocultar precios";
+});
+
+document.getElementById("exportJson").addEventListener("click", () => {
+    const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement("a");
+    a.href = url; a.download = "equipamiento_minimal.json"; a.click();
+    URL.revokeObjectURL(url);
+});
+
+document.getElementById("printBtn").addEventListener("click", () => window.print());
+</script>
+</body>
+</html>
