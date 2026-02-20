@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Gastos Mensuales — Ferrol</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Mono:wght@300;400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #0d0f14;
+            --surface: #13161e;
+            --surface2: #1b1f2b;
+            --border: rgba(255,255,255,0.06);
+            --border-open: rgba(201,168,76,0.3);
+            --gold: #c9a84c;
+            --gold-light: #e8c97a;
+            --text: #e8e6e0;
+            --text-muted: #6b6e7a;
+            --text-dim: #9a9ba5;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            min-height: 100vh;
+            padding: 40px 20px 60px;
+            color: var(--text);
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            opacity: 0.4;
+            z-index: 0;
+        }
+
+        .wrapper {
+            position: relative;
+            z-index: 1;
+            max-width: 620px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeUp 0.5s ease both;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(201,168,76,0.1);
+            border: 1px solid rgba(201,168,76,0.2);
+            border-radius: 100px;
+            padding: 4px 14px;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 16px;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 30px;
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
+
+        h1 span {
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle { font-size: 13px; color: var(--text-muted); }
+
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 16px;
+        }
+
+        .chip {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            padding: 5px 12px;
+            font-size: 11px;
+            color: var(--text-dim);
+            letter-spacing: 0.04em;
+        }
+
+        .sections { display: flex; flex-direction: column; gap: 10px; }
+
+        .section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            animation: fadeUp 0.5s ease both;
+            transition: border-color 0.25s;
+        }
+
+        .section.open { border-color: var(--border-open); }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 22px;
+            cursor: pointer;
+            user-select: none;
+            gap: 12px;
+            transition: background 0.2s;
+        }
+
+        .section-header:hover { background: rgba(255,255,255,0.02); }
+
+        .section-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .section-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+        }
+
+        .section-info { min-width: 0; }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .section-desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+        .section-right {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-shrink: 0;
+        }
+
+        .section-amount {
+            font-family: 'DM Mono', monospace;
+            font-size: 15px;
+            color: var(--gold-light);
+            text-align: right;
+        }
+
+        .section-amount .range { font-size: 11px; color: var(--text-muted); display: block; }
+
+        .chevron {
+            width: 18px;
+            height: 18px;
+            color: var(--text-muted);
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .section.open .chevron { transform: rotate(180deg); }
+
+        .section-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .section-body-inner {
+            padding: 0 22px 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .items { display: flex; flex-direction: column; }
+
+        .item {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 11px 0;
+            border-bottom: 1px solid var(--border);
+            gap: 16px;
+        }
+
+        .item:last-child { border-bottom: none; }
+
+        .item-name { font-size: 13px; color: var(--text-dim); line-height: 1.4; }
+        .item-note { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+        .item-price {
+            font-family: 'DM Mono', monospace;
+            font-size: 13px;
+            color: var(--text);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .subtotal-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(201,168,76,0.15);
+        }
+
+        .subtotal-label {
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--gold);
+        }
+
+        .subtotal-value {
+            font-family: 'DM Mono', monospace;
+            font-size: 14px;
+            color: var(--gold-light);
+        }
+
+        .summary-card {
+            background: var(--surface);
+            border: 1px solid var(--border-open);
+            border-radius: 16px;
+            padding: 28px 24px;
+            margin-top: 16px;
+            animation: fadeUp 0.5s ease both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .summary-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 40px; right: 40px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+
+        .summary-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            color: var(--text);
+            margin-bottom: 20px;
+        }
+
+        .summary-rows { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+
+        .summary-row { display: flex; justify-content: space-between; align-items: center; }
+        .summary-row-label { font-size: 12px; color: var(--text-muted); }
+        .summary-row-val { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--text-dim); }
+
+        .summary-divider { height: 1px; background: var(--border); margin: 16px 0; }
+
+        .summary-total-row { display: flex; justify-content: space-between; align-items: baseline; }
+        .summary-total-label { font-size: 13px; font-weight: 500; color: var(--text); }
+
+        .summary-total-val {
+            font-family: 'Playfair Display', serif;
+            font-size: 26px;
+            color: var(--gold-light);
+        }
+
+        .salary-block {
+            margin-top: 20px;
+            padding: 16px 18px;
+            background: var(--surface2);
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        .salary-label {
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .salary-value { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--gold); }
+        .salary-note { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .section:nth-child(1)  { animation-delay: 0.05s; }
+        .section:nth-child(2)  { animation-delay: 0.10s; }
+        .section:nth-child(3)  { animation-delay: 0.15s; }
+        .section:nth-child(4)  { animation-delay: 0.20s; }
+        .section:nth-child(5)  { animation-delay: 0.25s; }
+        .section:nth-child(6)  { animation-delay: 0.30s; }
+        .section:nth-child(7)  { animation-delay: 0.35s; }
+        .section:nth-child(8)  { animation-delay: 0.40s; }
+        .section:nth-child(9)  { animation-delay: 0.45s; }
+        .section:nth-child(10) { animation-delay: 0.50s; }
+        .section:nth-child(11) { animation-delay: 0.55s; }
+        .summary-card          { animation-delay: 0.60s; }
+
+        .bar-wrap { margin-top: 20px; }
+
+        .bar-label-row {
+            font-size: 10px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .bar-track {
+            height: 6px;
+            background: var(--surface2);
+            border-radius: 100px;
+            overflow: hidden;
+            display: flex;
+            gap: 2px;
+        }
+
+        .bar-seg {
+            height: 100%;
+            border-radius: 100px;
+        }
+
+        .legend { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 12px; }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+
+        .legend-dot { width: 8px; height: 8px; border-radius: 100px; flex-shrink: 0; }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+
+    <div class="header">
+        <div class="badge">📍 Ferrol · Estimación mensual</div>
+        <h1>Mis <span>Gastos</span> Mensuales</h1>
+        <p class="subtitle">Desglose detallado · Gastos compartidos a medias con pareja</p>
+        <div class="chips">
+            <span class="chip">🏠 Piso compartido en pareja</span>
+            <span class="chip">👶 Bebé</span>
+            <span class="chip">🚗 Coche propio</span>
+        </div>
+    </div>
+
+    <div class="sections" id="sections"></div>
+    <div class="summary-card" id="summary"></div>
+
+</div>
+
+<script>
+    // ─── DATOS ────────────────────────────────────────────────────────────────────
+    // Cada ítem tiene priceMin y priceMax (números en €).
+    // Si no hay rango, pon el mismo valor en ambos.
+    // NO hay amountMin/amountMax ni subtotal en las secciones: JS los calcula solo.
+
+    const data = [
+        {
+            icon: '🏠',
+            title: 'Vivienda',
+            desc: 'Tu mitad del alquiler',
+            color: '#7c9cff',
+            items: [
+                { name: 'Alquiler piso (tu 50%)', note: 'Piso de ~900 € total en Ferrol, zona tranquila', priceMin: 450, priceMax: 450 },
+            ]
+        },
+        {
+            icon: '🛒',
+            title: 'Alimentación',
+            desc: 'Tu parte de la compra semanal',
+            color: '#4ade80',
+            items: [
+                { name: 'Supermercado (tu 50%)', note: 'Mercadona, Lidl, Froiz… compra semanal para dos adultos + bebé', priceMin: 130, priceMax: 130 },
+                { name: 'Frutas, verduras, carnicería', note: 'Mercado local, pequeñas compras frecuentes', priceMin: 30, priceMax: 30 },
+                { name: 'Café, bollería, caprichos', note: 'Lo que metes al carro sin querer', priceMin: 20, priceMax: 20 },
+            ]
+        },
+        {
+            icon: '💡',
+            title: 'Suministros del hogar',
+            desc: 'Tu mitad de los recibos fijos',
+            color: '#f59e0b',
+            items: [
+                { name: 'Electricidad (tu 50%)', note: 'Tarifa regulada, consumo normal de hogar', priceMin: 40, priceMax: 40 },
+                { name: 'Agua (tu 50%)', note: 'Recibo bimestral prorrateado al mes', priceMin: 20, priceMax: 20 },
+                { name: 'Gas / calefacción (tu 50%)', note: 'Inviernos en Ferrol son húmedos y fríos', priceMin: 10, priceMax: 10 },
+                { name: 'Tarifa móvil + Wifi + Móvil + Portátil (tu 50%)', note: 'Tarifa móvil más artículos', priceMin: 90, priceMax: 90 },
+            ]
+        },
+        {
+            icon: '🚗',
+            title: 'Coche',
+            desc: 'Cuota + extras — todo tú',
+            color: '#f87171',
+            items: [
+                { name: 'Cuota del préstamo', note: 'Pago mensual al banco, lo pagas íntegro tú', priceMin: 300, priceMax: 300 },
+                { name: 'Gasolina', note: 'Ferrol no es grande, pero los accesos a veces piden coche', priceMin: 60, priceMax: 60 },
+                { name: 'Seguro a todo riesgo', note: 'Prorrateado al mes', priceMin: 40, priceMax: 40 },
+                { name: 'Mantenimiento y taller', note: 'Aceite, filtros, frenos, revisiones periódicas prorrateadas', priceMin: 30, priceMax: 30 },
+                { name: 'Neumáticos', note: 'Cambio cada 2–3 años, prorrateado', priceMin: 15, priceMax: 15 },
+                { name: 'ITV', note: 'Cada 2 años (~60 €), prorrateada al mes', priceMin: 5, priceMax: 5 },
+                { name: 'Impuesto de circulación', note: 'Pago anual dividido entre 12', priceMin: 6, priceMax: 6 },
+                { name: 'Parking ocasional', note: 'Centro, consultas médicas, gestiones', priceMin: 6, priceMax: 6 },
+                { name: 'Peajes', note: 'Autopistas en desplazamientos fuera de Ferrol', priceMin: 15, priceMax: 15 },
+                { name: 'Lavado y limpieza', note: 'Túnel de lavado, aspirador…', priceMin: 3, priceMax: 3 },
+            ]
+        },
+        {
+            icon: '👶',
+            title: 'Bebé',
+            desc: 'Tu mitad de los gastos del bebé',
+            color: '#c084fc',
+            items: [
+                { name: 'Pañales (~240 ud/mes) (tu 50%)', note: 'Marca media-alta, Dodot o similar', priceMin: 48, priceMax: 48 },
+                { name: 'Leche de fórmula (tu 50%)', note: 'Si no hay lactancia materna, es el gasto más alto del bebé', priceMin: 18, priceMax: 18 },
+                { name: 'Toallitas, cremas, gel, champú (tu 50%)', note: 'Higiene diaria del bebé', priceMin: 8, priceMax: 8 },
+                { name: 'Ropa (tu 50%)', note: 'Crece cada 2–3 meses de talla, no para de necesitar ropa nueva', priceMin: 20, priceMax: 20 },
+                { name: 'Calzado (tu 50%)', note: 'Si ya anda; si aún no, mínimo o nada', priceMin: 10, priceMax: 10 },
+                { name: 'Juguetes y estimulación (tu 50%)', note: 'Mordedores, sonajeros, alfombra de actividades…', priceMin: 8, priceMax: 8 },
+                { name: 'Medicamentos y farmacia (tu 50%)', note: 'Vitamina D, suero fisiológico, termómetro, paracetamol…', priceMin: 8, priceMax: 8 },
+            ]
+        },
+        {
+            icon: '👕',
+            title: 'Ropa, calzado y complementos',
+            desc: 'Para ti',
+            color: '#34d399',
+            items: [
+                { name: 'Ropa de temporada', note: 'Camisetas, pantalones, sudaderas… repartido entre meses', priceMin: 20, priceMax: 20 },
+                { name: 'Calzado', note: 'Zapatillas, zapatos, botas… repartido entre meses', priceMin: 40, priceMax: 40 },
+                { name: 'Ropa interior y calcetines', note: 'Se renueva con más frecuencia de lo que parece', priceMin: 5, priceMax: 5 },
+                { name: 'Cinturón, gorra, mochila y otros complementos', note: 'Compras puntuales prorrateadas', priceMin: 5, priceMax: 5 },
+            ]
+        },
+        {
+            icon: '🍻',
+            title: 'Vida social y ocio',
+            desc: 'Cafeterías, restaurantes, cine y salidas',
+            color: '#fbbf24',
+            items: [
+                { name: 'Cafeterías y bares', note: 'Café con los colegas, cañas, meriendas… Ferrol tiene mucha barra', priceMin: 12, priceMax: 12 },
+                { name: 'Restaurantes', note: 'Salidas en familia o en pareja, algún menú del día', priceMin: 40, priceMax: 40 },
+                { name: 'Cine', note: 'Una vez cada dos meses si hay película que merezca la pena', priceMin: 6, priceMax: 6 },
+                { name: 'Cultura y eventos', note: 'Conciertos, fiestas locales, entradas varias', priceMin: 2, priceMax: 2 },
+            ]
+        },
+        {
+            icon: '🛋️',
+            title: 'Hogar: mobiliario y mantenimiento',
+            desc: 'Tu mitad de los gastos del hogar físico',
+            color: '#60a5fa',
+            items: [
+                { name: 'Mobiliario y decoración (tu 50%)', note: 'Compras puntuales prorrateadas: estanterías, lámparas, cuadros…', priceMin: 15, priceMax: 15 },
+                { name: 'Textil del hogar (tu 50%)', note: 'Sábanas, toallas, fundas nórdicas, cortinas…', priceMin: 10, priceMax: 10 },
+                { name: 'Bricolaje y pequeñas reparaciones (tu 50%)', note: 'Bombillas, tornillos, silicona, pintura… siempre hay algo', priceMin: 5, priceMax: 5 },
+                { name: 'Electrodomésticos (tu 50%)', note: 'Prorrateado; tarde o temprano algo se rompe', priceMin: 20, priceMax: 20 },
+            ]
+        },
+        {
+            icon: '🎟️',
+            title: 'Gastos varios',
+            desc: 'Farmacia, prensa, papelería, loterías…',
+            color: '#a78bfa',
+            items: [
+                { name: 'Farmacia adultos', note: 'Con receta, Ibuprofeno, vitaminas, tiritas, antihistamínicos…', priceMin: 8, priceMax: 8 },
+                { name: 'Peluquería', note: 'Cada mes o mes y medio', priceMin: 3, priceMax: 3 },
+                { name: 'Suscripciones digitales', note: 'Netflix, Spotify, HBO… la mitad suelen pagarla con la pareja', priceMin: 2, priceMax: 2 },
+                { name: 'Papelería y fotocopias', note: 'Folios, bolígrafos, sobres, sellos, imprimir documentos', priceMin: 3, priceMax: 3 },
+                { name: 'Prensa y revistas', note: 'Digital o física, alguna compra puntual', priceMin: 3, priceMax: 3 },
+                { name: 'Lotería, ONCE, apuestas', note: 'Euromillones, Primitiva, el décimo de Navidad…', priceMin: 8, priceMax: 8 },
+                { name: 'Gastos bancarios', note: 'Comisiones, transferencias, mantenimiento de cuenta', priceMin: 3, priceMax: 3 },
+            ]
+        },
+        {
+            icon: '✈️',
+            title: 'Vacaciones',
+            desc: 'Prorrateado mensualmente',
+            color: '#fb923c',
+            items: [
+                { name: 'Alojamiento', note: 'Hotel, rural, apartamento… prorrateado al mes', priceMin: 25, priceMax: 25 },
+                { name: 'Transporte', note: 'Gasolina, avión, tren… dependiendo del destino', priceMin: 15, priceMax: 15 },
+                { name: 'Comidas y ocio fuera', note: 'Restaurantes, entradas, excursiones en vacaciones', priceMin: 10, priceMax: 10 },
+            ]
+        },
+        {
+            icon: '🏦',
+            title: 'Ahorro',
+            desc: 'Mínimo recomendable como colchón',
+            color: '#2dd4bf',
+            items: [
+                { name: 'Fondo de emergencia', note: 'Objetivo: tener 3–6 meses de gastos guardados', priceMin: 70, priceMax: 70 },
+                { name: 'Ahorro a largo plazo / plan de pensiones', note: 'Aunque sea poco, el hábito es lo que cuenta', priceMin: 50, priceMax: 50 },
+            ]
+        },
+    ];
+
+    // ─── HELPERS ──────────────────────────────────────────────────────────────────
+
+    // Suma priceMin y priceMax de todos los ítems de una sección
+    function secTotals(sec) {
+        return {
+            min: sec.items.reduce((s, it) => s + it.priceMin, 0),
+            max: sec.items.reduce((s, it) => s + it.priceMax, 0),
+        };
+    }
+
+    // Formatea rango numérico como string legible
+    function fmtRange(min, max) {
+        return min === max ? `${min} €` : `${min}–${max} €`;
+    }
+
+    // ─── RENDER SECCIONES ─────────────────────────────────────────────────────────
+
+    function renderSections() {
+        const container = document.getElementById('sections');
+        data.forEach((sec, i) => {
+            const { min, max } = secTotals(sec);
+            const el = document.createElement('div');
+            el.className = 'section';
+            el.innerHTML = `
+                <div class="section-header" onclick="toggle(${i})">
+                    <div class="section-left">
+                        <div class="section-icon">${sec.icon}</div>
+                        <div class="section-info">
+                            <div class="section-title">${sec.title}</div>
+                            <div class="section-desc">${sec.desc}</div>
+                        </div>
+                    </div>
+                    <div class="section-right">
+                        <div class="section-amount">
+                            ${fmtRange(min, max)}
+                            <span class="range">al mes</span>
+                        </div>
+                        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="section-body" id="body-${i}">
+                    <div class="section-body-inner">
+                        <div class="items">
+                            ${sec.items.map(it => `
+                                <div class="item">
+                                    <div>
+                                        <div class="item-name">${it.name}</div>
+                                        ${it.note ? `<div class="item-note">${it.note}</div>` : ''}
+                                    </div>
+                                    <div class="item-price">${fmtRange(it.priceMin, it.priceMax)}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="subtotal-row">
+                            <span class="subtotal-label">Subtotal ${sec.title}</span>
+                            <span class="subtotal-value">${fmtRange(min, max)}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.appendChild(el);
+        });
+    }
+
+    // ─── ACORDEÓN ─────────────────────────────────────────────────────────────────
+
+    function toggle(i) {
+        const section = document.querySelectorAll('.section')[i];
+        const body = document.getElementById('body-' + i);
+        const isOpen = section.classList.contains('open');
+        if (isOpen) {
+            section.classList.remove('open');
+            body.style.maxHeight = '0';
+        } else {
+            section.classList.add('open');
+            body.style.maxHeight = body.scrollHeight + 'px';
+            setTimeout(() => { body.style.maxHeight = body.scrollHeight + 'px'; }, 10);
+        }
+    }
+
+    // ─── RENDER RESUMEN ───────────────────────────────────────────────────────────
+
+    function renderSummary() {
+        // Totales globales calculados desde los ítems
+        const totalMin = data.reduce((s, sec) => s + secTotals(sec).min, 0);
+        const totalMax = data.reduce((s, sec) => s + secTotals(sec).max, 0);
+
+        // Sueldo bruto estimado (~23% retención media)
+        const salMin = Math.round(totalMin / 0.77 / 100) * 100;
+        const salMax = Math.round(totalMax / 0.77 / 100) * 100;
+
+        const totalMid = (totalMin + totalMax) / 2;
+
+        const barSegs = data.map(sec => {
+            const { min, max } = secTotals(sec);
+            const w = ((min + max) / 2 / totalMid * 100).toFixed(1);
+            return `<div class="bar-seg" style="width:${w}%;background:${sec.color}" title="${sec.title}: ${fmtRange(min, max)}"></div>`;
+        }).join('');
+
+        const legendItems = data.map(sec =>
+            `<div class="legend-item"><div class="legend-dot" style="background:${sec.color}"></div>${sec.title}</div>`
+        ).join('');
+
+        const summaryRows = data.map(sec => {
+            const { min, max } = secTotals(sec);
+            return `<div class="summary-row">
+                <span class="summary-row-label">${sec.icon} ${sec.title}</span>
+                <span class="summary-row-val">${fmtRange(min, max)}</span>
+            </div>`;
+        }).join('');
+
+        document.getElementById('summary').innerHTML = `
+            <div class="summary-title">Resumen total</div>
+            <div class="summary-rows">${summaryRows}</div>
+            <div class="summary-divider"></div>
+            <div class="summary-total-row">
+                <div class="summary-total-label">Total mensual estimado</div>
+                <div style="text-align:right">
+                    <div class="summary-total-val">${fmtRange(totalMin, totalMax)}</div>
+                    <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text-muted);margin-top:4px">netos necesarios</div>
+                </div>
+            </div>
+            <div class="bar-wrap">
+                <div class="bar-label-row">Distribución por categoría</div>
+                <div class="bar-track">${barSegs}</div>
+                <div class="legend">${legendItems}</div>
+            </div>
+            <div class="salary-block">
+                <div class="salary-label">Sueldo bruto recomendado</div>
+                <div class="salary-value">${salMin.toLocaleString('es-ES')}–${salMax.toLocaleString('es-ES')} € / año</div>
+                <div class="salary-note">Estimado con ~23% de retención media (IRPF + Seguridad Social). Con hija a cargo pagas algo menos.</div>
+            </div>
+        `;
+    }
+
+    renderSections();
+    renderSummary();
+</script>
+</body>
+</html>
