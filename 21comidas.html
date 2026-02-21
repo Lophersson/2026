@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>21 Recetas · Plan Semanal Funcional</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Syne:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --void: #080808;
+  --dark1: #101010;
+  --dark2: #161616;
+  --dark3: #1e1e1e;
+  --dark4: #282828;
+  --border: rgba(255,255,255,0.07);
+  --text: #e8e4dc;
+  --muted: rgba(232,228,220,0.4);
+  --faint: rgba(232,228,220,0.12);
+
+  /* Meal accents */
+  --breakfast: #e8a54a;
+  --lunch: #6db88a;
+  --dinner: #7b8fe8;
+
+  --glow-b: rgba(232,165,74,0.15);
+  --glow-l: rgba(109,184,138,0.15);
+  --glow-d: rgba(123,143,232,0.15);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--void);
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ── CURSOR ── */
+#cur, #cur2 {
+  position: fixed;
+  pointer-events: none;
+  border-radius: 50%;
+  z-index: 9999;
+  transform: translate(-50%,-50%);
+}
+#cur { width:7px; height:7px; background:#fff; transition:transform .08s, background .3s; }
+#cur2 { width:32px; height:32px; border:1px solid rgba(255,255,255,.25); transition:all .18s ease; }
+
+/* ── GRAIN ── */
+body::after {
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  pointer-events:none;
+  z-index:8999;
+  opacity:.5;
+  mix-blend-mode:overlay;
+}
+
+/* ── PROGRESS ── */
+#prog {
+  position:fixed; top:0; left:0; height:1px;
+  background: linear-gradient(90deg, var(--breakfast), var(--lunch), var(--dinner));
+  z-index:9990; transition:width .1s linear;
+}
+
+/* ── NAV ── */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:500;
+  padding:1.4rem clamp(1.5rem,5vw,4rem);
+  display:flex; align-items:center; justify-content:space-between;
+  background: linear-gradient(to bottom, rgba(8,8,8,.95) 0%, transparent 100%);
+  backdrop-filter: blur(0px);
+}
+.nav-brand {
+  font-family:'Playfair Display', serif;
+  font-size:1rem; font-style:italic;
+  letter-spacing:.02em; color:var(--text);
+}
+.nav-tabs { display:flex; gap:.4rem; }
+.nav-tab {
+  font-size:.58rem; letter-spacing:.22em; text-transform:uppercase;
+  padding:.45rem 1rem; border-radius:999px; cursor:none;
+  border:1px solid var(--border); color:var(--muted);
+  background:transparent; transition:all .25s ease;
+  text-decoration:none;
+}
+.nav-tab[data-meal="breakfast"]:hover, .nav-tab[data-meal="breakfast"].active { border-color:var(--breakfast); color:var(--breakfast); background:var(--glow-b); }
+.nav-tab[data-meal="lunch"]:hover, .nav-tab[data-meal="lunch"].active { border-color:var(--lunch); color:var(--lunch); background:var(--glow-l); }
+.nav-tab[data-meal="dinner"]:hover, .nav-tab[data-meal="dinner"].active { border-color:var(--dinner); color:var(--dinner); background:var(--glow-d); }
+
+/* ── HERO ── */
+.hero {
+  min-height:100vh;
+  display:flex; flex-direction:column;
+  justify-content:flex-end;
+  padding: clamp(3rem,8vw,7rem);
+  position:relative; overflow:hidden;
+}
+
+.hero-bg {
+  position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse 60% 50% at 80% 30%, rgba(232,165,74,.08) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 60% at 20% 70%, rgba(123,143,232,.07) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 40% at 50% 50%, rgba(109,184,138,.06) 0%, transparent 70%);
+}
+
+.hero-week {
+  font-size:.6rem; letter-spacing:.5em; text-transform:uppercase;
+  color:var(--muted); margin-bottom:2rem;
+  opacity:0; animation: up .8s ease forwards .3s;
+}
+
+.hero-title {
+  font-family:'Playfair Display', serif;
+  font-size: clamp(3.8rem,10vw,10rem);
+  font-weight:900; line-height:.88;
+  letter-spacing:-.03em;
+  opacity:0; animation: up .9s ease forwards .5s;
+}
+
+.hero-title .line1 { display:block; color:var(--breakfast); }
+.hero-title .line2 { display:block; color:var(--text); font-style:italic; font-weight:400; }
+.hero-title .line3 { display:block; color:var(--lunch); }
+
+.hero-meta {
+  margin-top:3rem;
+  display:flex; gap:3rem; flex-wrap:wrap;
+  opacity:0; animation: up .9s ease forwards .7s;
+}
+.hero-stat { }
+.hero-stat-n {
+  font-family:'Playfair Display', serif;
+  font-size:2.5rem; font-weight:700;
+  display:block; line-height:1;
+}
+.hero-stat-l { font-size:.6rem; letter-spacing:.25em; text-transform:uppercase; color:var(--muted); }
+
+.hero-cta {
+  position:absolute; bottom:3rem; right:clamp(1.5rem,5vw,4rem);
+  display:flex; flex-direction:column; align-items:flex-end;
+  gap:.6rem; opacity:0; animation: fadeIn .8s ease forwards 1.2s;
+}
+.hero-cta-text { font-size:.6rem; letter-spacing:.3em; text-transform:uppercase; color:var(--muted); }
+.hero-cta-line { width:50px; height:1px; background: linear-gradient(90deg, transparent, var(--text)); animation: expandW 2s ease-in-out infinite; }
+@keyframes expandW { 0%,100%{width:50px} 50%{width:80px} }
+
+@keyframes up { from{opacity:0;transform:translateY(35px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+/* ── DAY SELECTOR ── */
+.day-selector {
+  position:sticky; top:56px; z-index:400;
+  background: rgba(8,8,8,.9); backdrop-filter:blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding:0 clamp(1.5rem,5vw,4rem);
+  display:flex; gap:0; overflow-x:auto;
+  scrollbar-width:none;
+}
+.day-selector::-webkit-scrollbar { display:none; }
+
+.day-btn {
+  flex-shrink:0;
+  padding:1.1rem 1.5rem;
+  font-family:'Syne'; font-size:.62rem;
+  letter-spacing:.2em; text-transform:uppercase;
+  color:var(--muted); background:transparent;
+  border:none; border-bottom:2px solid transparent;
+  cursor:none; transition:all .25s ease;
+  display:flex; flex-direction:column; align-items:center; gap:.3rem;
+}
+.day-btn .day-num {
+  font-family:'Playfair Display', serif;
+  font-size:1.6rem; font-weight:700; color:var(--dark4);
+  transition:color .25s ease; line-height:1;
+}
+.day-btn.active .day-num, .day-btn:hover .day-num { color:var(--text); }
+.day-btn.active { border-bottom-color:var(--text); color:var(--text); }
+.day-btn:hover { color:rgba(232,228,220,.7); }
+
+/* ── MAIN CONTENT ── */
+main { padding: 0 clamp(1.5rem,5vw,4rem) 6rem; }
+
+/* ── DAY PANEL ── */
+.day-panel { display:none; }
+.day-panel.active { display:block; }
+
+.day-header {
+  padding: 4rem 0 3rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom:3rem;
+  display:flex; align-items:flex-end; justify-content:space-between; flex-wrap:wrap; gap:1rem;
+}
+.day-header-left {}
+.day-label { font-size:.6rem; letter-spacing:.4em; text-transform:uppercase; color:var(--muted); margin-bottom:.6rem; }
+.day-name {
+  font-family:'Playfair Display', serif;
+  font-size:clamp(2.5rem,6vw,5rem); font-weight:700;
+  line-height:1; letter-spacing:-.02em;
+}
+.day-theme { font-size:.72rem; letter-spacing:.08em; color:var(--muted); margin-top:.8rem; }
+
+.day-macros {
+  display:flex; gap:2rem; flex-wrap:wrap;
+}
+.macro-pill {
+  display:flex; flex-direction:column; align-items:center;
+  padding:.8rem 1.2rem;
+  border:1px solid var(--border); border-radius:12px;
+  background:var(--dark2);
+}
+.macro-val { font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:700; line-height:1; }
+.macro-key { font-size:.55rem; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); margin-top:.3rem; }
+
+/* ── MEALS GRID ── */
+.meals-grid {
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap:1.5px;
+  background:var(--border);
+  border:1px solid var(--border);
+  border-radius:16px;
+  overflow:hidden;
+}
+
+.meal-card {
+  background:var(--dark1);
+  padding:2.5rem 2rem;
+  position:relative; overflow:hidden;
+  cursor:none;
+  transition:background .3s ease;
+}
+.meal-card:hover { background:var(--dark2); }
+
+/* Top colored stripe */
+.meal-card::before {
+  content:'';
+  position:absolute; top:0; left:0; right:0; height:2px;
+  background:var(--c, var(--breakfast));
+  transform:scaleX(0); transform-origin:left;
+  transition:transform .5s cubic-bezier(0.16,1,.3,1);
+}
+.meal-card:hover::before { transform:scaleX(1); }
+
+/* Ambient glow on hover */
+.meal-card::after {
+  content:'';
+  position:absolute; inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 0%, var(--glow, var(--glow-b)), transparent 70%);
+  opacity:0; transition:opacity .4s ease;
+  pointer-events:none;
+}
+.meal-card:hover::after { opacity:1; }
+
+.meal-card[data-type="breakfast"] { --c:var(--breakfast); --glow:var(--glow-b); }
+.meal-card[data-type="lunch"] { --c:var(--lunch); --glow:var(--glow-l); }
+.meal-card[data-type="dinner"] { --c:var(--dinner); --glow:var(--glow-d); }
+
+.meal-type-badge {
+  display:inline-flex; align-items:center; gap:.5rem;
+  font-size:.55rem; letter-spacing:.25em; text-transform:uppercase;
+  color:var(--c, var(--breakfast));
+  margin-bottom:1.2rem;
+}
+.meal-type-badge::before {
+  content:'';
+  width:6px; height:6px; border-radius:50%;
+  background:var(--c, var(--breakfast));
+  animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+.meal-emoji { font-size:2.2rem; display:block; margin-bottom:1rem; transition:transform .3s ease; }
+.meal-card:hover .meal-emoji { transform:scale(1.12) rotate(-4deg); }
+
+.meal-name {
+  font-family:'Playfair Display', serif;
+  font-size:1.35rem; font-weight:700;
+  line-height:1.2; margin-bottom:.8rem;
+  color:var(--text);
+}
+
+.meal-desc {
+  font-size:.67rem; line-height:2;
+  color:var(--muted);
+  margin-bottom:1.5rem;
+}
+
+/* Ingredients */
+.ingredients-toggle {
+  font-size:.58rem; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--c, var(--breakfast));
+  background:none; border:1px solid;
+  border-color:rgba(255,255,255,.1);
+  padding:.4rem .9rem; border-radius:999px;
+  cursor:none; transition:all .25s ease;
+  margin-bottom:1rem;
+}
+.ingredients-toggle:hover { border-color:var(--c, var(--breakfast)); background:rgba(255,255,255,.04); }
+
+.ingredients-list {
+  display:none; list-style:none;
+  padding:.8rem 0;
+  border-top:1px solid var(--border);
+}
+.ingredients-list.open { display:block; }
+.ingredients-list li {
+  font-size:.65rem; padding:.35rem 0;
+  border-bottom:1px solid var(--faint);
+  color:var(--muted);
+  display:flex; align-items:center; gap:.6rem;
+}
+.ingredients-list li::before { content:'·'; color:var(--c, var(--breakfast)); font-size:1rem; }
+
+/* Benefits chips */
+.meal-benefits {
+  display:flex; flex-wrap:wrap; gap:.4rem; margin-top:1rem;
+}
+.benefit-chip {
+  font-size:.52rem; letter-spacing:.1em;
+  padding:.25rem .65rem; border-radius:999px;
+  background:rgba(255,255,255,.05);
+  border:1px solid var(--border);
+  color:var(--muted);
+}
+
+/* Prep info */
+.meal-meta {
+  display:flex; gap:1rem; margin-top:1.2rem;
+  padding-top:1rem; border-top:1px solid var(--border);
+}
+.meal-meta-item { font-size:.58rem; color:var(--muted); }
+.meal-meta-item span { color:var(--c, var(--breakfast)); font-weight:500; }
+
+/* ── WEEK OVERVIEW ── */
+.overview {
+  padding: 5rem 0;
+  border-top:1px solid var(--border);
+  margin-top:5rem;
+}
+.overview-title {
+  font-family:'Playfair Display', serif;
+  font-size:clamp(1.8rem,4vw,3rem); font-weight:700;
+  margin-bottom:.5rem;
+}
+.overview-sub { font-size:.68rem; color:var(--muted); letter-spacing:.1em; margin-bottom:3rem; }
+
+.overview-grid {
+  display:grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap:1.5px;
+  background:var(--border);
+  border:1px solid var(--border); border-radius:12px;
+  overflow:hidden;
+}
+.ov-cell {
+  background:var(--dark1);
+  padding:1rem .8rem;
+}
+.ov-day { font-size:.55rem; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); margin-bottom:.8rem; }
+.ov-item { margin-bottom:.5rem; }
+.ov-dot { width:6px; height:6px; border-radius:50%; display:inline-block; margin-right:.4rem; }
+.ov-name { font-size:.6rem; color:var(--muted); }
+
+/* ── FOOTER ── */
+footer {
+  background:var(--dark1);
+  border-top:1px solid var(--border);
+  padding:3rem clamp(1.5rem,5vw,4rem);
+  display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:2rem;
+}
+.footer-brand { font-family:'Playfair Display',serif; font-size:1.5rem; font-style:italic; color:var(--muted); }
+.footer-note { font-size:.58rem; letter-spacing:.1em; color:var(--faint); max-width:45ch; line-height:2; text-align:right; }
+
+/* ── REVEAL ── */
+.reveal { opacity:0; transform:translateY(30px); transition:opacity .8s ease, transform .8s ease; }
+.reveal.vis { opacity:1; transform:none; }
+.rd1{transition-delay:.08s} .rd2{transition-delay:.16s} .rd3{transition-delay:.24s}
+
+/* ── RESP ── */
+@media(max-width:900px) {
+  .meals-grid { grid-template-columns:1fr; }
+  .overview-grid { grid-template-columns:repeat(3,1fr); }
+  .nav-tabs { display:none; }
+}
+@media(max-width:500px) {
+  .overview-grid { grid-template-columns:1fr 1fr; }
+  .day-macros { gap:1rem; }
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur2"></div>
+<div id="prog"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">Plan Semanal · 21 Recetas</div>
+  <div class="nav-tabs">
+    <a href="#breakfast" class="nav-tab" data-meal="breakfast">Desayunos</a>
+    <a href="#lunch" class="nav-tab" data-meal="lunch">Comidas</a>
+    <a href="#dinner" class="nav-tab" data-meal="dinner">Cenas</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <p class="hero-week">Plan Nutricional Funcional · 7 días completos</p>
+  <h1 class="hero-title">
+    <span class="line1">21</span>
+    <span class="line2">recetas que</span>
+    <span class="line3">sanan</span>
+  </h1>
+  <div class="hero-meta">
+    <div class="hero-stat">
+      <span class="hero-stat-n" style="color:var(--breakfast)">7</span>
+      <span class="hero-stat-l">Desayunos</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-n" style="color:var(--lunch)">7</span>
+      <span class="hero-stat-l">Comidas</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-n" style="color:var(--dinner)">7</span>
+      <span class="hero-stat-l">Cenas</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-n" style="color:var(--text)">+40</span>
+      <span class="hero-stat-l">Superalimentos</span>
+    </div>
+  </div>
+  <div class="hero-cta">
+    <span class="hero-cta-text">Explorar plan</span>
+    <div class="hero-cta-line"></div>
+  </div>
+</div>
+
+<!-- DAY SELECTOR -->
+<div class="day-selector" id="daySelector">
+  <button class="day-btn active" data-day="1"><span class="day-num">1</span>Lunes</button>
+  <button class="day-btn" data-day="2"><span class="day-num">2</span>Martes</button>
+  <button class="day-btn" data-day="3"><span class="day-num">3</span>Miércoles</button>
+  <button class="day-btn" data-day="4"><span class="day-num">4</span>Jueves</button>
+  <button class="day-btn" data-day="5"><span class="day-num">5</span>Viernes</button>
+  <button class="day-btn" data-day="6"><span class="day-num">6</span>Sábado</button>
+  <button class="day-btn" data-day="7"><span class="day-num">7</span>Domingo</button>
+</div>
+
+<main id="main"></main>
+
+<div id="overview-container" style="padding:0 clamp(1.5rem,5vw,4rem)"></div>
+
+<footer>
+  <div class="footer-brand">Alimentos que Sanan</div>
+  <div class="footer-note">Plan de carácter educativo elaborado con base en nutrición funcional y medicina integrativa. Consulta siempre a un profesional de la salud antes de realizar cambios en tu alimentación.</div>
+</footer>
+
+<script>
+// ── DATA ──
+const DAYS = [
+  {
+    name: 'Lunes', theme: 'Activación metabólica & sensibilidad a la insulina',
+    macros: { kcal:'1820', prot:'98g', carb:'165g', grasa:'72g' },
+    meals: [
+      {
+        type:'breakfast', emoji:'🫙', name:'Bowl de avena nocturna con kéfir y arándanos silvestres',
+        desc:'Avena remojada en kéfir de cabra con arándanos silvestres, semillas de chía y canela de Ceilán. La fermentación overnight convierte el almidón en resistente, maximizando el efecto prebiótico.',
+        ingredients:['80g avena en copos gruesos','150ml kéfir de cabra sin pasteurizar','80g arándanos silvestres (frescos o congelados)','1 cda semillas de chía','½ cdta canela de Ceilán','1 cda miel de manuka (opc.)','Ralladura de limón'],
+        benefits:['Resistencia insulina','Microbiota','Antioxidantes'],
+        prep:'5 min + noche', diff:'Fácil'
+      },
+      {
+        type:'lunch', emoji:'🐟', name:'Salmón al miso con brócoli al vapor y arroz integral',
+        desc:'Salmón salvaje marinado 2h en miso sin pasteurizar, jengibre rallado y tamari. Acompañado de brócoli vapor 4 minutos (máximo sulforafano) y arroz integral enfriado (almidón resistente).',
+        ingredients:['200g salmón salvaje','2 cdas miso sin pasteurizar','1 cda jengibre rallado','1 cda tamari sin gluten','300g brócoli','150g arroz integral cocido y enfriado','Sésamo negro','Lima'],
+        benefits:['Omega-3','Sulforafano','Probiótico'],
+        prep:'20 min + marinado', diff:'Media'
+      },
+      {
+        type:'dinner', emoji:'🥣', name:'Crema de lentejas con cúrcuma y leche de coco',
+        desc:'Lentejas rojas con caldo de huesos, cúrcuma fresca, pimienta negra y leche de coco. Las lentejas frías (servir templado) aportan almidón resistente. La grasa de coco potencia la absorción de curcumina.',
+        ingredients:['200g lentejas rojas','400ml leche de coco','1 cda cúrcuma fresca rallada','½ cdta pimienta negra molida','1 cebolla morada','3 dientes ajo','Caldo de huesos casero','Cilantro fresco'],
+        benefits:['Antiinflamatorio','Insulina','Digestión'],
+        prep:'30 min', diff:'Fácil'
+      }
+    ]
+  },
+  {
+    name: 'Martes', theme: 'Detox hepático & reducción de grasa visceral',
+    macros: { kcal:'1780', prot:'105g', carb:'148g', grasa:'68g' },
+    meals: [
+      {
+        type:'breakfast', emoji:'🥑', name:'Tostada de centeno con aguacate, huevo y chucrut',
+        desc:'Pan de centeno germinado con aguacate machacado con limón, huevo poché y chucrut sin pasteurizar. La combinación de MUFA del aguacate con la proteína del huevo y los probióticos del chucrut regula la glucemia matinal.',
+        ingredients:['2 rebanadas pan de centeno germinado','1 aguacate maduro','2 huevos camperos','60g chucrut sin pasteurizar','Zumo de ½ limón','Hojuelas de chile','Sal marina negra (kala namak)'],
+        benefits:['Microbiota','Grasa abdominal','Insulina'],
+        prep:'10 min', diff:'Fácil'
+      },
+      {
+        type:'lunch', emoji:'🥗', name:'Ensalada de garbanzos enfriados con sardinas y puerro',
+        desc:'Garbanzos cocidos y enfriados 24h (almidón resistente máximo), sardinas en aceite de oliva AOVE, puerro crudo finamente laminado, aceitunas kalamata y vinagreta de vinagre de manzana.',
+        ingredients:['250g garbanzos cocidos y enfriados','120g sardinas en AOVE','1 puerro (parte blanca y verde)','80g aceitunas kalamata','2 cdas vinagre de manzana crudo','4 cdas AOVE','Perejil fresco','Pimentón ahumado'],
+        benefits:['Prebiótico','Omega-3','Probiótico'],
+        prep:'15 min', diff:'Fácil'
+      },
+      {
+        type:'dinner', emoji:'🍄', name:'Setas shiitake salteadas con tempeh y col china',
+        desc:'Shiitake salteadas en AOVE con ajo negro fermentado, tempeh marinado en tamari y col china al wok. El lentinan del shiitake y los probióticos del tempeh activan los macrófagos NK del sistema inmune.',
+        ingredients:['200g shiitake frescas','180g tempeh','3 dientes ajo negro fermentado','200g col china','2 cdas tamari','1 cda aceite de sésamo tostado','Jengibre fresco','Cebollino'],
+        benefits:['Inmune','Probiótico','Antiinflamatorio'],
+        prep:'25 min', diff:'Media'
+      }
+    ]
+  },
+  {
+    name: 'Miércoles', theme: 'Neuroplasticidad & sistema nervioso central',
+    macros: { kcal:'1900', prot:'112g', carb:'172g', grasa:'74g' },
+    meals: [
+      {
+        type:'breakfast', emoji:'🍫', name:'Smoothie de cacao crudo con espirulina y nueces',
+        desc:'Batido cremoso de cacao 100% crudo, espirulina orgánica, nueces de California, plátano verde (almidón resistente) y leche de almendras. El BDNF del cacao y el DHA de las nueces sincronizan para la neuroplasticidad.',
+        ingredients:['2 cdas cacao crudo en polvo (>90%)','1 cdta espirulina orgánica','4 nueces de California','½ plátano verde congelado','250ml leche de almendras sin azúcar','1 cdta extracto de ashwagandha','Canela + pimienta negra'],
+        benefits:['BDNF','Neuroprotector','Adaptógeno'],
+        prep:'5 min', diff:'Fácil'
+      },
+      {
+        type:'lunch', emoji:'🐠', name:'Caballa en escabeche con patatas enfriadas y kimchi',
+        desc:'Caballa del Atlántico escabechada en AOVE, vinagre, laurel y tomillo. Patatas cocidas-enfriadas 12h para almidón resistente máximo. Kimchi como acompañamiento probiótico que eleva la diversidad microbiana.',
+        ingredients:['240g caballa del Atlántico','4 patatas medianas (cocidas y enfriadas)','120g kimchi artesano','1 cebolla roja','3 hojas de laurel','100ml AOVE','50ml vinagre de manzana','Pimienta en grano'],
+        benefits:['Omega-3 DHA','Almidón resistente','Microbiota'],
+        prep:'35 min + enfriado', diff:'Media'
+      },
+      {
+        type:'dinner', emoji:'🍵', name:'Curry de garbanzos y espinacas con aceite de hígado de bacalao',
+        desc:'Curry suave con garbanzos, espinacas baby, leche de coco y pasta de curry casera. Se añade una cucharada de aceite de hígado de bacalao fuera del fuego para preservar vitaminas A, D3 y omega-3 neurales.',
+        ingredients:['250g garbanzos cocidos','150g espinacas baby','400ml leche de coco','2 cdas pasta de curry amarillo','1 cdta cúrcuma','1 cda aceite de hígado de bacalao','Ajo y jengibre','Arroz basmati integral'],
+        benefits:['D3 neural','Omega-3','Antiinflamatorio'],
+        prep:'30 min', diff:'Fácil'
+      }
+    ]
+  },
+  {
+    name: 'Jueves', theme: 'Salud cardiovascular & presión arterial',
+    macros: { kcal:'1750', prot:'95g', carb:'160g', grasa:'70g' },
+    meals: [
+      {
+        type:'breakfast', emoji:'🫐', name:'Parfait de moras con yogur griego y semillas de lino',
+        desc:'Capas de moras silvestres (ORAC máximo), yogur griego natural al 10% (probiótico), semillas de lino molidas (lignanos y omega-3 ALA), miel cruda y granola de avena con nueces.',
+        ingredients:['150g moras silvestres y arándanos','180g yogur griego 10% natural','2 cdas semillas de lino molidas','1 cda miel cruda sin pasteurizar','40g granola de avena casera','4 nueces de California','Canela de Ceilán'],
+        benefits:['Antioxidantes','Probiótico','Cardiovascular'],
+        prep:'8 min', diff:'Fácil'
+      },
+      {
+        type:'lunch', emoji:'🥬', name:'Wrap de lechuga con pollo, aguacate y salsa de tahini-limón',
+        desc:'Pechuga de pollo de pasto marinada en limón y hierbas, servida en hojas de lechuga romana con aguacate, zanahoria rallada, cebolla morada y aderezo de tahini, limón y ajo. Sin gluten, antiinflamatorio.',
+        ingredients:['200g pechuga pollo de pasto','1 aguacate','4 hojas lechuga romana grande','1 zanahoria rallada','½ cebolla morada','2 cdas tahini','Zumo de 1 limón','Coriandro y comino'],
+        benefits:['MUFA','Grasa abdominal','Antiinflamatorio'],
+        prep:'20 min', diff:'Fácil'
+      },
+      {
+        type:'dinner', emoji:'🍅', name:'Sopa miso con alga wakame, tofu y jengibre',
+        desc:'Caldo dashi casero con miso de cebada sin pasteurizar, alga wakame, tofu sedoso, setas enoki y jengibre fresco. El yodo del wakame activa la tiroides y el miso aporta los probióticos que el calor del caldo no destruye si se añade al final.',
+        ingredients:['3 cdas miso de cebada sin pasteurizar','200g tofu sedoso','15g alga wakame seca','100g setas enoki','1 cdta jengibre rallado','Caldo dashi (kombu + katsuobushi)','Cebollino','1 cdta aceite de sésamo'],
+        benefits:['Tiroides','Probiótico','Cardiovascular'],
+        prep:'20 min', diff:'Media'
+      }
+    ]
+  },
+  {
+    name: 'Viernes', theme: 'Sistema inmune & reducción de inflamación sistémica',
+    macros: { kcal:'1840', prot:'102g', carb:'168g', grasa:'71g' },
+    meals: [
+      {
+        type:'breakfast', emoji:'🧇', name:'Tortitas de plátano y avena con mantequilla de almendras',
+        desc:'Tortitas sin gluten de avena integral y plátano maduro con mantequilla de almendras tostadas y frambuesas. El triptófano del plátano y el magnesio de la almendra regulan el cortisol y mejoran el sueño.',
+        ingredients:['2 plátanos maduros','80g avena integral','2 huevos camperos','2 cdas mantequilla de almendras sin azúcar','100g frambuesas','1 cdta extracto de vainilla','Canela de Ceilán','AOVE para la sartén'],
+        benefits:['Magnesio','Triptófano','Antiinflamatorio'],
+        prep:'15 min', diff:'Fácil'
+      },
+      {
+        type:'lunch', emoji:'🌿', name:'Bowl de quinoa con pollo, kale chips y salsa de cúrcuma',
+        desc:'Quinoa multicolor (proteína completa con los 9 aminoácidos), kale chips al horno con levadura nutricional (B12), muslo de pollo deshuesado confitado en AOVE y salsa dorada de cúrcuma, ajo y pimienta.',
+        ingredients:['180g quinoa multicolor','200g muslo de pollo confitado','60g kale','2 cdas levadura nutricional','1 cdta cúrcuma','1 cda AOVE','½ cdta pimienta negra','Limón y perejil'],
+        benefits:['B12','Inmune','Antiinflamatorio'],
+        prep:'30 min', diff:'Media'
+      },
+      {
+        type:'dinner', emoji:'🦐', name:'Langostinos al ajillo con espirulina y pasta de garbanzo',
+        desc:'Langostinos salvajes salteados en AOVE con ajo laminado, chile y perejil. Pasta de garbanzos (sin gluten, alta proteína) y espirulina disuelta en el caldo de cocción para no perder ficocianina.',
+        ingredients:['300g langostinos salvajes pelados','200g pasta de garbanzos','4 dientes ajo laminados','1 cdta hojuelas de chile','1 cdta espirulina','80ml vino blanco','4 cdas AOVE','Perejil abundante'],
+        benefits:['Inmune','Ficocianina','Cardiovascular'],
+        prep:'20 min', diff:'Fácil'
+      }
+    ]
+  },
+  {
+    name: 'Sábado', theme: 'Regeneración intestinal & microbiota avanzada',
+    macros: { kcal:'1950', prot:'108g', carb:'185g', grasa:'75g' },
+    meals: [
+      {
+        type:'breakfast', emoji:'🥚', name:'Shakshuka con feta, espinacas y za\'atar',
+        desc:'Huevos poché sobre base de tomate y pimientos asados con comino, pimentón ahumado y za\'atar. Feta de cabra (probiótico), espinacas baby y pan de masa madre para maximizar la saciedad y los probióticos.',
+        ingredients:['4 huevos camperos','400g tomate triturado','1 pimiento rojo asado','80g feta de cabra','100g espinacas baby','2 cdas za\'atar','1 cdta comino','Pan de masa madre integral'],
+        benefits:['Probiótico','Antioxidantes','Grasa abdominal'],
+        prep:'25 min', diff:'Media'
+      },
+      {
+        type:'lunch', emoji:'🫘', name:'Cazuela de alubias negras con chorizo de pavo y verduras',
+        desc:'Alubias negras cocidas el día anterior y enfriadas (almidón resistente tipo 3). Sofrito de chorizo de pavo, zanahoria, apio, cebolla y tomate. Caldo de huesos casero como base. Rico en zinc, hierro y folatos.',
+        ingredients:['300g alubias negras cocidas y enfriadas','150g chorizo de pavo','2 zanahorias','2 ramas apio','1 cebolla morada','400ml caldo de huesos','2 tomates maduros','Pimentón y laurel'],
+        benefits:['Almidón resistente','Hierro','Zinc'],
+        prep:'40 min + remojo', diff:'Media'
+      },
+      {
+        type:'dinner', emoji:'🍣', name:'Bowl de salmón teriyaki casero con edamame y arroz negro',
+        desc:'Salmón salvaje glaseado con teriyaki de tamari, miel cruda y jengibre. Arroz negro (antocianinas), edamame (isoflavonas estrógenas), aguacate y alga nori. Sin fritos, sin azúcares refinados.',
+        ingredients:['200g salmón salvaje','180g arroz negro','100g edamame','1 aguacate','2 hojas nori','2 cdas tamari','1 cda miel cruda','Jengibre y sésamo negro'],
+        benefits:['Omega-3','Antocianinas','Isoflavonas'],
+        prep:'25 min', diff:'Fácil'
+      }
+    ]
+  },
+  {
+    name: 'Domingo', theme: 'Recuperación celular, longevidad & día especial',
+    macros: { kcal:'2050', prot:'118g', carb:'178g', grasa:'80g' },
+    meals: [
+      {
+        type:'breakfast', emoji:'🥞', name:'Pancakes de harina de trigo sarraceno con reishi y moras',
+        desc:'Pancakes de trigo sarraceno (gluten-free, proteína completa) con polvo de reishi adaptógeno, huevos de corral y leche de avena. Coronados con moras silvestres maceradas en miel y nibs de cacao crudo.',
+        ingredients:['150g harina de trigo sarraceno','2 huevos camperos','200ml leche de avena','1 cdta polvo de reishi','100g moras silvestres','2 cdas nibs de cacao crudo','1 cda miel sin pasteurizar','½ cdta bicarbonato'],
+        benefits:['Adaptógeno','BDNF','Inmune'],
+        prep:'20 min', diff:'Media'
+      },
+      {
+        type:'lunch', emoji:'🥩', name:'Rosbif de ternera de pasto con salsa chimichurri y ensalada fermentada',
+        desc:'Ternera de pasto confitada a baja temperatura (58°C / 2h) con salsa chimichurri de perejil, ajo, vinagre de manzana y AOVE. Acompañada de ensalada de rúcula, remolacha encurtida y nueces de California.',
+        ingredients:['350g lomo bajo ternera grass-fed','Perejil, ajo, orégano','4 cdas AOVE','2 cdas vinagre de manzana','80g rúcula','1 remolacha encurtida','4 nueces de California','Sal marina en escamas'],
+        benefits:['CLA','Cardiovascular','Antioxidantes'],
+        prep:'2h 20 min', diff:'Avanzada'
+      },
+      {
+        type:'dinner', emoji:'🍲', name:'Caldo de huesos largo con verduras, algas y miso final',
+        desc:'Caldo de huesos de vaca de pasto cocido 12h con kombu, zanahoria, cebolla, apio y especias. Se enriquece con copos de alga wakame y una cucharada de miso añadida fuera del fuego. El colágeno II y los glicosaminoglicanos reparan la mucosa intestinal.',
+        ingredients:['1kg huesos ternera de pasto','1 trozo kombu (15cm)','2 cdas miso sin pasteurizar','2 zanahorias','1 cebolla entera','3 ramas apio','10g wakame seco','Vinagre de manzana (extrae minerales)'],
+        benefits:['Colágeno','Microbiota','Inmune'],
+        prep:'12h + 20 min', diff:'Avanzada'
+      }
+    ]
+  }
+];
+
+// ── RENDER ──
+function renderDay(d, idx) {
+  const panel = document.createElement('div');
+  panel.className = 'day-panel' + (idx === 0 ? ' active' : '');
+  panel.id = `day-${idx+1}`;
+
+  const mealHTML = d.meals.map(m => `
+    <div class="meal-card reveal" data-type="${m.type}">
+      <div class="meal-type-badge">${m.type === 'breakfast' ? 'Desayuno' : m.type === 'lunch' ? 'Comida' : 'Cena'}</div>
+      <span class="meal-emoji">${m.emoji}</span>
+      <div class="meal-name">${m.name}</div>
+      <div class="meal-desc">${m.desc}</div>
+      <div class="meal-benefits">${m.benefits.map(b => `<span class="benefit-chip">${b}</span>`).join('')}</div>
+      <div class="meal-meta">
+        <div class="meal-meta-item">⏱ <span>${m.prep}</span></div>
+        <div class="meal-meta-item">★ <span>${m.diff}</span></div>
+      </div>
+      <button class="ingredients-toggle" onclick="toggleIng(this)">+ Ver ingredientes</button>
+      <ul class="ingredients-list">${m.ingredients.map(i => `<li>${i}</li>`).join('')}</ul>
+    </div>
+  `).join('');
+
+  panel.innerHTML = `
+    <div class="day-header">
+      <div class="day-header-left">
+        <div class="day-label">Día ${idx+1} de 7</div>
+        <div class="day-name">${d.name}</div>
+        <div class="day-theme">${d.theme}</div>
+      </div>
+      <div class="day-macros">
+        <div class="macro-pill"><span class="macro-val" style="color:var(--breakfast)">${d.macros.kcal}</span><span class="macro-key">kcal</span></div>
+        <div class="macro-pill"><span class="macro-val" style="color:var(--lunch)">${d.macros.prot}</span><span class="macro-key">proteína</span></div>
+        <div class="macro-pill"><span class="macro-val" style="color:var(--dinner)">${d.macros.carb}</span><span class="macro-key">carbos</span></div>
+        <div class="macro-pill"><span class="macro-val" style="color:var(--muted)">${d.macros.grasa}</span><span class="macro-key">grasa</span></div>
+      </div>
+    </div>
+    <div class="meals-grid">${mealHTML}</div>
+  `;
+  return panel;
+}
+
+const main = document.getElementById('main');
+DAYS.forEach((d, i) => main.appendChild(renderDay(d, i)));
+
+// Overview
+const ov = document.getElementById('overview-container');
+ov.innerHTML = `
+  <div class="overview">
+    <div class="overview-title reveal">Visión semanal</div>
+    <div class="overview-sub reveal rd1">Las 21 recetas distribuidas en un vistazo</div>
+    <div class="overview-grid reveal rd2">
+      ${DAYS.map(d => `
+        <div class="ov-cell">
+          <div class="ov-day">${d.name}</div>
+          ${d.meals.map(m => `
+            <div class="ov-item">
+              <span class="ov-dot" style="background:${m.type==='breakfast'?'var(--breakfast)':m.type==='lunch'?'var(--lunch)':'var(--dinner)'}"></span>
+              <span class="ov-name">${m.emoji} ${m.name.split(' ').slice(0,4).join(' ')}…</span>
+            </div>
+          `).join('')}
+        </div>
+      `).join('')}
+    </div>
+  </div>
+`;
+
+// ── DAY SWITCH ──
+document.getElementById('daySelector').addEventListener('click', e => {
+  const btn = e.target.closest('.day-btn');
+  if (!btn) return;
+  document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.day-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(`day-${btn.dataset.day}`).classList.add('active');
+  // scroll to day selector
+  document.getElementById('daySelector').scrollIntoView({ behavior:'smooth', block:'start' });
+  setTimeout(observeReveal, 50);
+});
+
+// ── TOGGLE INGREDIENTS ──
+function toggleIng(btn) {
+  const list = btn.nextElementSibling;
+  list.classList.toggle('open');
+  btn.textContent = list.classList.contains('open') ? '− Ocultar ingredientes' : '+ Ver ingredientes';
+}
+
+// ── REVEAL ──
+function observeReveal() {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('vis'); });
+  }, { threshold:0.08 });
+  document.querySelectorAll('.reveal:not(.vis)').forEach(el => obs.observe(el));
+}
+observeReveal();
+
+// ── CURSOR ──
+const cur = document.getElementById('cur');
+const cur2 = document.getElementById('cur2');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cur.style.left=mx+'px'; cur.style.top=my+'px'; });
+(function loop() { rx+=(mx-rx)*.13; ry+=(my-ry)*.13; cur2.style.left=rx+'px'; cur2.style.top=ry+'px'; requestAnimationFrame(loop); })();
+document.querySelectorAll('button, a, .meal-card, .day-btn').forEach(el => {
+  el.addEventListener('mouseenter', () => { cur.style.transform='translate(-50%,-50%) scale(2.5)'; cur2.style.transform='translate(-50%,-50%) scale(1.6)'; cur2.style.opacity='1'; });
+  el.addEventListener('mouseleave', () => { cur.style.transform='translate(-50%,-50%) scale(1)'; cur2.style.transform='translate(-50%,-50%) scale(1)'; cur2.style.opacity='1'; });
+});
+
+// ── PROGRESS ──
+const prog = document.getElementById('prog');
+window.addEventListener('scroll', () => {
+  prog.style.width = (window.scrollY / (document.body.scrollHeight - innerHeight) * 100) + '%';
+});
+</script>
+</body>
+</html>
