@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía Nutricional · Alimentos que Sanan</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f5f0e8;
+    --dark: #1a1a14;
+    --sage: #7a9e7e;
+    --sage-light: #a8c5ac;
+    --amber: #c8892a;
+    --amber-light: #e8b560;
+    --rust: #b05030;
+    --teal: #3d7a78;
+    --lavender: #8080b0;
+    --rose: #c07070;
+    --ink: #2a2820;
+    --paper: #faf7f0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Mono', monospace;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    position: fixed;
+    width: 8px; height: 8px;
+    background: var(--amber);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease, background 0.3s ease;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1px solid var(--amber);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: all 0.15s ease;
+    opacity: 0.6;
+  }
+
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9000;
+    opacity: 0.4;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: clamp(3rem, 8vw, 8rem);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    right: -10%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 55vw;
+    height: 55vw;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 40%, var(--sage-light) 0%, transparent 60%);
+    opacity: 0.25;
+    animation: breathe 8s ease-in-out infinite;
+  }
+
+  @keyframes breathe {
+    0%, 100% { transform: translateY(-50%) scale(1); }
+    50% { transform: translateY(-50%) scale(1.06); }
+  }
+
+  .hero-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.2s;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3.5rem, 9vw, 9rem);
+    font-weight: 300;
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+    color: var(--dark);
+    opacity: 0;
+    animation: fadeUp 0.9s ease forwards 0.4s;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--sage);
+  }
+
+  .hero-subtitle {
+    margin-top: 2.5rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: var(--ink);
+    opacity: 0.5;
+    max-width: 40ch;
+    line-height: 2;
+    opacity: 0;
+    animation: fadeUp 0.9s ease forwards 0.6s;
+  }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 3rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ink);
+    opacity: 0.4;
+    animation: fadeIn 1s ease forwards 1.5s, bounce 2s ease-in-out infinite 2s;
+  }
+
+  .hero-scroll::after {
+    content: '';
+    width: 1px;
+    height: 50px;
+    background: linear-gradient(to bottom, var(--amber), transparent);
+    animation: stretch 2s ease-in-out infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(8px); }
+  }
+  @keyframes stretch {
+    0%, 100% { height: 50px; opacity: 0.4; }
+    50% { height: 70px; opacity: 0.8; }
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.5rem clamp(2rem, 5vw, 5rem);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    mix-blend-mode: multiply;
+  }
+
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--dark);
+    letter-spacing: 0.05em;
+  }
+
+  .nav-pills {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .nav-pill {
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.8rem;
+    border: 1px solid rgba(26,26,20,0.2);
+    border-radius: 999px;
+    cursor: none;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: var(--ink);
+  }
+
+  .nav-pill:hover {
+    background: var(--dark);
+    color: var(--paper);
+    border-color: var(--dark);
+  }
+
+  /* SECTIONS */
+  section {
+    padding: clamp(5rem, 10vw, 10rem) clamp(2rem, 6vw, 6rem);
+    position: relative;
+  }
+
+  .section-number {
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--dark);
+    max-width: 20ch;
+    margin-bottom: 1rem;
+  }
+
+  .section-title em { font-style: italic; }
+
+  .section-desc {
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    color: var(--ink);
+    opacity: 0.55;
+    max-width: 55ch;
+    line-height: 2.2;
+    margin-bottom: 4rem;
+  }
+
+  /* FOOD GRID */
+  .food-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5px;
+    background: rgba(26,26,20,0.1);
+    border: 1.5px solid rgba(26,26,20,0.1);
+  }
+
+  .food-card {
+    background: var(--paper);
+    padding: 2rem 1.8rem;
+    cursor: none;
+    transition: background 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .food-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%; height: 3px;
+    background: var(--accent, var(--sage));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .food-card:hover::before { transform: scaleX(1); }
+
+  .food-card:hover { background: #f8f4ea; }
+
+  .food-emoji {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+
+  .food-card:hover .food-emoji { transform: scale(1.15) rotate(-5deg); }
+
+  .food-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 400;
+    color: var(--dark);
+    margin-bottom: 0.5rem;
+  }
+
+  .food-benefit {
+    font-size: 0.63rem;
+    letter-spacing: 0.05em;
+    color: var(--ink);
+    opacity: 0.55;
+    line-height: 1.9;
+  }
+
+  .food-tag {
+    display: inline-block;
+    margin-top: 1rem;
+    font-size: 0.55rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    background: var(--tag-bg, rgba(122,158,126,0.12));
+    color: var(--accent, var(--sage));
+    border: 1px solid var(--accent, var(--sage));
+    opacity: 0.8;
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1.5px;
+    background: linear-gradient(to right, transparent, rgba(26,26,20,0.15), transparent);
+    margin: 0 clamp(2rem, 6vw, 6rem);
+  }
+
+  /* BIG QUOTE */
+  .quote-section {
+    text-align: center;
+    padding: clamp(4rem, 8vw, 8rem) clamp(2rem, 10vw, 15rem);
+    background: var(--dark);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .quote-section::before {
+    content: '"';
+    position: absolute;
+    top: -2rem;
+    left: 5%;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 25rem;
+    color: rgba(255,255,255,0.03);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .quote-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.8rem, 4vw, 3.5rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--cream);
+    line-height: 1.4;
+    margin-bottom: 1.5rem;
+  }
+
+  .quote-source {
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--amber-light);
+  }
+
+  /* FILTER BAR */
+  .filter-bar {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+  }
+
+  .filter-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.5rem 1.1rem;
+    border: 1px solid rgba(26,26,20,0.25);
+    background: transparent;
+    color: var(--ink);
+    cursor: none;
+    border-radius: 999px;
+    transition: all 0.25s ease;
+  }
+
+  .filter-btn:hover, .filter-btn.active {
+    background: var(--dark);
+    color: var(--paper);
+    border-color: var(--dark);
+  }
+
+  /* SECTION SPECIFIC COLORS */
+  .s1 { --accent: #7a9e7e; --tag-bg: rgba(122,158,126,0.1); }
+  .s2 { --accent: #c8892a; --tag-bg: rgba(200,137,42,0.1); }
+  .s3 { --accent: #3d7a78; --tag-bg: rgba(61,122,120,0.1); }
+  .s4 { --accent: #8080b0; --tag-bg: rgba(128,128,176,0.1); }
+
+  /* STRIPE pattern backgrounds */
+  .bg-stripe {
+    background-image: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 20px,
+      rgba(26,26,20,0.018) 20px,
+      rgba(26,26,20,0.018) 21px
+    );
+  }
+
+  /* STATS ROW */
+  .stats-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    border: 1.5px solid rgba(26,26,20,0.1);
+    margin-bottom: 4rem;
+  }
+
+  .stat-item {
+    flex: 1;
+    min-width: 160px;
+    padding: 2rem 1.5rem;
+    border-right: 1.5px solid rgba(26,26,20,0.1);
+    text-align: center;
+  }
+
+  .stat-item:last-child { border-right: none; }
+
+  .stat-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    font-weight: 300;
+    color: var(--accent-color, var(--sage));
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    opacity: 0.5;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--dark);
+    padding: 4rem clamp(2rem, 6vw, 6rem);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+
+  .footer-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-style: italic;
+    color: var(--cream);
+    opacity: 0.7;
+  }
+
+  .footer-note {
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: var(--cream);
+    opacity: 0.3;
+    max-width: 40ch;
+    line-height: 2;
+    text-align: right;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 0.4; }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+
+  /* PROGRESS LINE */
+  .progress-line {
+    position: fixed;
+    top: 0; left: 0;
+    height: 2px;
+    background: linear-gradient(to right, var(--sage), var(--amber), var(--rust));
+    z-index: 9999;
+    transition: width 0.1s linear;
+  }
+
+  /* Tooltip */
+  .food-card[data-tip]:hover::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--dark);
+    color: var(--paper);
+    font-size: 0.6rem;
+    padding: 0.5rem 0.9rem;
+    border-radius: 4px;
+    white-space: nowrap;
+    letter-spacing: 0.05em;
+    pointer-events: none;
+    z-index: 200;
+    animation: tipIn 0.2s ease forwards;
+  }
+
+  @keyframes tipIn {
+    from { opacity: 0; transform: translateX(-50%) translateY(5px); }
+    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+  }
+
+  /* SEARCH */
+  .search-wrap {
+    margin-bottom: 2.5rem;
+    position: relative;
+    max-width: 400px;
+  }
+
+  .search-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1.5px solid rgba(26,26,20,0.25);
+    padding: 0.8rem 2rem 0.8rem 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+
+  .search-input::placeholder { opacity: 0.35; }
+  .search-input:focus { border-color: var(--amber); }
+
+  .search-icon {
+    position: absolute;
+    right: 0; top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.35;
+    font-size: 0.9rem;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    .nav-pills { display: none; }
+    .food-grid { grid-template-columns: 1fr; }
+    .stats-row { flex-direction: column; }
+    .stat-item { border-right: none; border-bottom: 1.5px solid rgba(26,26,20,0.1); }
+    footer { text-align: center; }
+    .footer-note { text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="progress-line" id="progressLine"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Alimentos que Sanan</div>
+  <div class="nav-pills">
+    <a href="#insulina" class="nav-pill">Insulina</a>
+    <a href="#grasa" class="nav-pill">Grasa</a>
+    <a href="#digestión" class="nav-pill">Digestión</a>
+    <a href="#sistemas" class="nav-pill">Sistemas</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <p class="hero-label">Guía nutricional avanzada · 2025</p>
+  <h1 class="hero-title">Que tu<br>alimento<br>sea tu <em>medicina</em></h1>
+  <p class="hero-subtitle">Una selección de alimentos funcionales con evidencia científica para optimizar metabolismo, microbiota, sistema inmune y bienestar integral.</p>
+  <div class="hero-scroll">scroll</div>
+</div>
+
+<!-- SECTION 1: INSULINA -->
+<section id="insulina" class="bg-stripe">
+  <div class="section-number reveal">01 / 04</div>
+  <h2 class="section-title reveal reveal-delay-1">Resistencia a la <em>insulina</em></h2>
+  <p class="section-desc reveal reveal-delay-2">Estos alimentos mejoran la sensibilidad a la insulina, regulan el azúcar en sangre y reducen la inflamación metabólica crónica que subyace a la diabetes tipo 2 y al síndrome metabólico.</p>
+
+  <div class="stats-row reveal" style="--accent-color: var(--sage);">
+    <div class="stat-item">
+      <div class="stat-number">12</div>
+      <div class="stat-label">alimentos clave</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">↓40%</div>
+      <div class="stat-label">glucosa en ayunas</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">β</div>
+      <div class="stat-label">glucanos activos</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">AMPK</div>
+      <div class="stat-label">vía activada</div>
+    </div>
+  </div>
+
+  <div class="food-grid" id="grid-insulina">
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SECTION 2: GRASA ABDOMINAL -->
+<section id="grasa">
+  <div class="section-number reveal">02 / 04</div>
+  <h2 class="section-title reveal reveal-delay-1">Grasa <em>abdominal</em> & metabolismo</h2>
+  <p class="section-desc reveal reveal-delay-2">Alimentos termogénicos, saciantes y lipolíticos que activan el tejido adiposo pardo, reducen el cortisol y favorecen la oxidación de grasas viscerales.</p>
+
+  <div class="stats-row reveal" style="--accent-color: var(--amber);">
+    <div class="stat-item">
+      <div class="stat-number">11</div>
+      <div class="stat-label">alimentos termogénicos</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">↑8%</div>
+      <div class="stat-label">tasa metabólica basal</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">GLP-1</div>
+      <div class="stat-label">hormona saciedad</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">MCT</div>
+      <div class="stat-label">ácidos grasos activos</div>
+    </div>
+  </div>
+
+  <div class="food-grid" id="grid-grasa">
+  </div>
+</section>
+
+<div class="quote-section">
+  <p class="quote-text reveal">"La inflamación silenciosa es el hilo conductor de la mayoría de enfermedades crónicas del siglo XXI."</p>
+  <p class="quote-source reveal">— medicina funcional integrativa</p>
+</div>
+
+<!-- SECTION 3: DIGESTIÓN -->
+<section id="digestión" class="bg-stripe">
+  <div class="section-number reveal">03 / 04</div>
+  <h2 class="section-title reveal reveal-delay-1">Digestión, <em>microbiota</em> & absorción</h2>
+  <p class="section-desc reveal reveal-delay-2">Prebióticos, probióticos y fibras fermentables que nutren el eje intestino-cerebro, restauran la diversidad microbiana y optimizan la absorción de macro y micronutrientes.</p>
+
+  <div class="search-wrap reveal">
+    <input type="text" class="search-input" id="searchInput" placeholder="buscar alimento...">
+    <span class="search-icon">⌕</span>
+  </div>
+
+  <div class="filter-bar reveal" id="filterBar">
+    <button class="filter-btn active" data-filter="all">Todos</button>
+    <button class="filter-btn" data-filter="prebiótico">Prebiótico</button>
+    <button class="filter-btn" data-filter="probiótico">Probiótico</button>
+    <button class="filter-btn" data-filter="fibra">Fibra</button>
+    <button class="filter-btn" data-filter="enzimas">Enzimas</button>
+  </div>
+
+  <div class="food-grid" id="grid-digestion">
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SECTION 4: SISTEMAS -->
+<section id="sistemas">
+  <div class="section-number reveal">04 / 04</div>
+  <h2 class="section-title reveal reveal-delay-1">Cardio · Inmune · <em>Nervioso</em></h2>
+  <p class="section-desc reveal reveal-delay-2">Alimentos con polifenoles cardioprotectores, inmunomoduladores y neuroprotectores. Actúan sobre la neuroplasticidad, la síntesis de neurotransmisores y la salud endotelial.</p>
+
+  <div class="food-grid" id="grid-sistemas">
+  </div>
+</section>
+
+<footer>
+  <div class="footer-text">Que tu alimento<br>sea tu medicina.</div>
+  <div class="footer-note">Esta guía es de carácter educativo. Consulta siempre a un profesional de la salud. · Basada en literatura científica revisada y contrastada por @Lophersson. · 21 de Febrero de 2026</div>
+</footer>
+
+<script>
+// DATA
+const foodData = {
+  insulina: [
+    { emoji: '🫚', name: 'Vinagre de manzana', benefit: 'Reduce el índice glucémico de las comidas hasta un 34%. El ácido acético activa AMPK e inhibe enzimas digestivas del almidón.', tag: 'ácido acético', tip: 'Tomar 1-2 cdt diluidas antes de comer' },
+    { emoji: '🥣', name: 'Avena integral', benefit: 'Los β-glucanos forman un gel viscoso que ralentiza la absorción de glucosa. Reduce la hemoglobina glicosilada HbA1c.', tag: 'β-glucanos', tip: 'Preferir avena en grano o copos gruesos' },
+    { emoji: '🫘', name: 'Lentejas', benefit: 'Bajo índice glucémico (29). Almidón resistente que alimenta la microbiota y bloquea picos de insulina postprandial.', tag: 'almidón resistente', tip: 'Combinar con verdura y limón' },
+    { emoji: '🧄', name: 'Ajo', benefit: 'La alicina mejora la señalización de la insulina y reduce la glucosa en ayunas. Efecto antiinflamatorio sobre células beta pancreáticas.', tag: 'alicina', tip: 'Machacar y reposar 10 min antes de cocinar' },
+    { emoji: '🫙', name: 'Canela de Ceilán', benefit: 'Los polímeros de tipo A activan receptores de insulina. Reduce la glucemia en ayunas 10-29% en estudios clínicos.', tag: 'proantocianidinas', tip: 'Máx 1g/día. Solo Ceilán, no Cassia' },
+    { emoji: '🐟', name: 'Salmón salvaje', benefit: 'Omega-3 EPA/DHA mejoran la fluidez de membranas y la sensibilidad de receptores de insulina. Reduce triglicéridos hasta 50%.', tag: 'omega-3', tip: 'Mínimo 2 raciones semanales' },
+    { emoji: '🥑', name: 'Aguacate', benefit: 'Los ácidos grasos monoinsaturados y la fibra bloquean la absorción de glucosa. Reduce insulina postprandial en un 40%.', tag: 'MUFA', tip: 'Combinar con hidratos de carbono' },
+    { emoji: '🌰', name: 'Almendras', benefit: 'Magnesio cofactor esencial de 300 enzimas metabólicas. Su déficit multiplica x2 el riesgo de insulinorresistencia.', tag: 'magnesio', tip: 'Un puñado (30g) al día' },
+    { emoji: '🫛', name: 'Brócoli', benefit: 'El sulforafano activa NRF2 y mejora la sensibilidad a la insulina. Rico en cromo, mineral regulador del azúcar.', tag: 'sulforafano', tip: 'Cocinar al vapor máximo 5 min' },
+    { emoji: '🍵', name: 'Té verde matcha', benefit: 'El EGCG inhibe SGLT-1 reduciendo absorción intestinal de glucosa. Mejora la ratio insulina/glucagón.', tag: 'EGCG', tip: 'Ceremonial grade, 2-3 tazas/día' },
+    { emoji: '🫐', name: 'Arándanos silvestres', benefit: 'Las antocianinas mejoran la captación de glucosa muscular independientemente de la insulina mediante GLUT4.', tag: 'antocianinas', tip: 'Preferir congelados silvestres vs cultivados' },
+    { emoji: '🌿', name: 'Fenogreco', benefit: 'La 4-hidroxisoleucina estimula directamente la secreción de insulina. Reduce glucemia postprandial 25%.', tag: '4-OH-isoleucina', tip: 'Semillas remojadas o harina en recetas' },
+  ],
+  grasa: [
+    { emoji: '🌶️', name: 'Chile cayena', benefit: 'La capsaicina activa receptores TRPV1 y aumenta la termogénesis. Eleva el metabolismo basal 4-5% durante 30 min post-ingesta.', tag: 'capsaicina', tip: 'Añadir a cada comida principal' },
+    { emoji: '🥥', name: 'Aceite de coco virgen', benefit: 'Los MCT (ácidos grasos de cadena media) se oxidan directamente en el hígado produciendo cetones. Aumentan saciedad vs LCT.', tag: 'MCT', tip: 'No calentar a alta temperatura' },
+    { emoji: '☕', name: 'Café de especialidad', benefit: 'La cafeína y los ácidos clorogénicos aumentan la lipólisis y la termogénesis adrenérgica. Mejora el rendimiento en ejercicio de grasa.', tag: 'ácidos clorogénicos', tip: 'Tomar antes del ejercicio aeróbico' },
+    { emoji: '🍵', name: 'Té verde', benefit: 'La combinación EGCG + cafeína es sinérgica para la oxidación de grasa. Meta-análisis muestra -1.3kg de grasa abdominal.', tag: 'EGCG + cafeína', tip: 'No añadir leche (inhibe catequinas)' },
+    { emoji: '🥚', name: 'Huevos camperos', benefit: 'Proteína completa con alta saciedad. La colina reduce el depósito hepático de grasa. Bajan IGF-1 y mejoran composición corporal.', tag: 'colina', tip: 'Yema rica en nutrientes: no tirar' },
+    { emoji: '🧅', name: 'Cebolla morada', benefit: 'La quercetina activa PPAR-α y favorece la lipólisis. Inhibe la diferenciación de preadipocitos a adipocitos maduros.', tag: 'quercetina', tip: 'Mejor cruda en ensaladas' },
+    { emoji: '🫚', name: 'Aceite de oliva virgen extra', benefit: 'El oleocantal imita antiinflamatorios. Los polifenoles reducen TNF-α y aumentan adiponectina, hormona que activa el metabolismo de grasas.', tag: 'oleocantal', tip: 'AO prensado en frío, < 0.3% acidez' },
+    { emoji: '🥩', name: 'Carne de pasto (buey)', benefit: 'Perfil lipídico superior: mayor CLA y omega-3. El CLA redistribuye grasa de visceral a subcutánea y aumenta masa muscular.', tag: 'CLA', tip: 'Buscar etiqueta "grass-fed finished"' },
+    { emoji: '🫚', name: 'Ghee clarificado', benefit: 'El ácido butírico estimula la hormona GLP-1 de saciedad. Los MCT facilitan cetogénesis leve que ahorra glucosa muscular.', tag: 'ácido butírico', tip: 'Ideal para cocinar a alta temperatura' },
+    { emoji: '🌿', name: 'Ashwagandha', benefit: 'Adaptógeno que reduce cortisol (hormona que promueve grasa abdominal) hasta un 27.9% en estudios doble ciego.', tag: 'withanólidos', tip: 'Extracto KSM-66, 300-600mg/día' },
+    { emoji: '🐠', name: 'Sardinas en aceite', benefit: 'Omega-3 de alta biodisponibilidad. Reducen grasa visceral, triglicéridos y PCR. La vitamina D potencia receptores de insulina.', tag: 'omega-3 + D', tip: 'En aceite de oliva, con espinas (calcio)' },
+  ],
+  digestion: [
+    { emoji: '🥒', name: 'Kéfir de cabra', benefit: 'Más de 30 cepas probióticas. Mejora la permeabilidad intestinal (leaky gut), reduce IgE alérgica y sintetiza vitamina K2.', tag: 'probiótico', filter: 'probiótico', tip: 'Mejor en ayunas, sin calentar' },
+    { emoji: '🫙', name: 'Chucrut fermentado', benefit: 'Lactobacillus plantarum producen SCFA que nutren enterocitos. Aumenta enzimas digestivas y síntesis de vitamina B12.', tag: 'probiótico', filter: 'probiótico', tip: 'Sin pasteurizar, en frío' },
+    { emoji: '🫚', name: 'Miso sin pasteurizar', benefit: 'Fermentación larga (hatcho) produce péptidos bioactivos. Lactobacillus acidophilus mejora el peristaltismo y el pH intestinal.', tag: 'probiótico', filter: 'probiótico', tip: 'Añadir al final, sin hervir' },
+    { emoji: '🌿', name: 'Raíz de achicoria', benefit: 'La inulina es el prebiótico más estudiado. Alimenta Bifidobacterium y Faecalibacterium. Aumenta absorción de calcio y magnesio.', tag: 'prebiótico', filter: 'prebiótico', tip: 'Tostada es sustituto del café' },
+    { emoji: '🧅', name: 'Puerro', benefit: 'Alto en fructooligosacáridos FOS. Estimula el crecimiento de Lactobacillus. Mejora el tránsito intestinal en 24h.', tag: 'prebiótico', filter: 'prebiótico', tip: 'Comer la parte verde también' },
+    { emoji: '🍌', name: 'Plátano macho cocido', benefit: 'Almidón resistente tipo 2. En el intestino grueso produce SCFA butirato, acetato y propionato. Reduce el pH colónico.', tag: 'fibra', filter: 'fibra', tip: 'Cuanto más verde, más almidón resistente' },
+    { emoji: '🥕', name: 'Zanahoria cocida-enfriada', benefit: 'El enfriamiento convierte almidón digestible en resistente. Pectina soluble atrapa colesterol y metales pesados.', tag: 'fibra', filter: 'fibra', tip: 'Cocer y enfriar en nevera 12h' },
+    { emoji: '🌾', name: 'Psyllium husk', benefit: 'La fibra soluble aumenta volumen fecal x8. Reduce tiempo de tránsito 24h. Regula glucosa postprandial y LDL.', tag: 'fibra', filter: 'fibra', tip: 'Con mucha agua, alejado de medicamentos' },
+    { emoji: '🍍', name: 'Piña (bromelaína)', benefit: 'La bromelaína es una proteasa potente que descompone proteínas y reduce inflamación de la mucosa intestinal.', tag: 'enzimas', filter: 'enzimas', tip: 'Mejor el core central, más concentrado' },
+    { emoji: '🥭', name: 'Papaya (papaína)', benefit: 'La papaína digiere proteínas y gluten parcialmente. Mejora el síndrome de intestino irritable y reduce flatulencias.', tag: 'enzimas', filter: 'enzimas', tip: 'Incluir semillas (antiparasitarias)' },
+    { emoji: '🫙', name: 'Jengibre fresco', benefit: 'Los gingeroles aceleran el vaciado gástrico un 50%. Reduce náuseas, inflamación intestinal y el sobrecrecimiento de H. pylori.', tag: 'enzimas', filter: 'enzimas', tip: 'Rallado en smoothies o infusión en frío' },
+    { emoji: '🧄', name: 'Ajo fermentado negro', benefit: 'Fermentación 90 días duplica alliina. S-alilcisteína biodisponible mejora la microbiota colónica y reduce metanos intestinales.', tag: 'prebiótico', filter: 'prebiótico', tip: 'No calentar, tomar crudo' },
+  ],
+  sistemas: [
+    { emoji: '🍫', name: 'Cacao crudo (>90%)', benefit: 'Teobromina y epicatequina mejoran la vasodilatación endotelial. Aumentan BDNF neuronal y serotonina. Reducen PCR inflamatoria.', tag: '❤️ 🧠', tip: 'Mínimo 85%, sin azúcar añadido' },
+    { emoji: '🫐', name: 'Moras silvestres', benefit: 'Puntuación ORAC máxima. Antocianinas protegen neuronas del hipocampo. Mejoran memoria de trabajo en adultos mayores 8 semanas.', tag: '🧠 🛡️', tip: 'Congeladas conservan más antioxidantes' },
+    { emoji: '🐟', name: 'Caballa del Atlántico', benefit: 'Ratio omega-3/omega-6 óptima. DHA constituye el 60% de los lípidos cerebrales. EPA reduce IL-6 y protege mielina neuronal.', tag: '❤️ 🧠', tip: 'Más económica que el salmón, igual de nutritiva' },
+    { emoji: '🌿', name: 'Cúrcuma + pimienta negra', benefit: 'La curcumina cruza la barrera hematoencefálica. Anti-amiloidea. La piperina aumenta su biodisponibilidad un 2000%.', tag: '🧠 🛡️ ❤️', tip: 'Siempre con grasa y pimienta negra' },
+    { emoji: '🍄', name: 'Setas shiitake', benefit: 'El lentinan es un beta-glucano que activa macrófagos NK y T. Eritadenina reduce homocisteína cardiovascular.', tag: '🛡️ ❤️', tip: 'Secar potencia el D2 vitamínico' },
+    { emoji: '🌰', name: 'Nueces de California', benefit: 'Únicas entre los frutos secos en tener DHA vegetal (ALA). Melatonina y triptófano para el sueño. Polifenoles específicos de la nuez.', tag: '🧠 ❤️', tip: '4-7 nueces al día, sin tostar' },
+    { emoji: '🫙', name: 'Aceite de hígado de bacalao', benefit: 'Vitaminas A, D3 y omega-3 sinérgicas. D3 modula 200+ genes inmunes. Reduce riesgo cardiovascular 40% en estudios de cohorte.', tag: '🛡️ ❤️', tip: '1 cucharada diaria en ayunas' },
+    { emoji: '🧅', name: 'Cebollas rojas', benefit: 'Quercetina inhibe histamina (alergia). Antocianinas reducen presión arterial sistólica 7mmHg. Protegen LDL de oxidación.', tag: '🛡️ ❤️', tip: 'Marinar en limón activa más quercetina' },
+    { emoji: '🌿', name: 'Gotu kola', benefit: 'Asiaticiósidos estimulan BDNF y regeneración nerviosa. Mejoran cognición y reducen ansiedad. Refuerzan microcirculación cerebral.', tag: '🧠', tip: 'En infusión o suplemento estandarizado' },
+    { emoji: '🫚', name: 'Aceite MCT + Omega-3', benefit: 'Los cuerpos cetónicos son combustible neuronal directo. Mejoran la función mitocondrial neuronal y reducen el estrés oxidativo cerebral.', tag: '🧠 ❤️', tip: 'Blend óptimo 70% MCT / 30% omega-3' },
+    { emoji: '🍵', name: 'Reishi (Ganoderma)', benefit: 'Los triterpenoides modulan NF-κB reduciendo inflamación sistémica. Betaglucanos aumentan NK y TH1. Adaptógeno para el eje HPA.', tag: '🛡️ 🧠', tip: 'Extracto doble: agua + alcohol' },
+    { emoji: '🥬', name: 'Espirulina', benefit: 'Ficocianina inhibe histamina y COX-2. La vitamina B12 activa la mielina neuronal. Mejora hemoglobina y transporte de O2.', tag: '🛡️ ❤️ 🧠', tip: 'Orgánica certificada, 3-5g/día' },
+  ]
+};
+
+// RENDER CARDS
+function renderCards(containerId, items, colorClass) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML = items.map((item, i) => `
+    <div class="food-card ${colorClass}" 
+         data-filter="${item.filter || ''}" 
+         data-name="${item.name.toLowerCase()}"
+         data-tip="${item.tip || ''}"
+         style="animation-delay: ${i * 0.05}s">
+      <span class="food-emoji">${item.emoji}</span>
+      <div class="food-name">${item.name}</div>
+      <div class="food-benefit">${item.benefit}</div>
+      <span class="food-tag">${item.tag}</span>
+    </div>
+  `).join('');
+}
+
+renderCards('grid-insulina', foodData.insulina, 's1');
+renderCards('grid-grasa', foodData.grasa, 's2');
+renderCards('grid-digestion', foodData.digestion, 's3');
+renderCards('grid-sistemas', foodData.sistemas, 's4');
+
+// CURSOR
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+document.addEventListener('mousemove', e => {
+  mouseX = e.clientX; mouseY = e.clientY;
+  cursor.style.left = mouseX + 'px';
+  cursor.style.top = mouseY + 'px';
+});
+
+function animateCursor() {
+  ringX += (mouseX - ringX) * 0.12;
+  ringY += (mouseY - ringY) * 0.12;
+  ring.style.left = ringX + 'px';
+  ring.style.top = ringY + 'px';
+  requestAnimationFrame(animateCursor);
+}
+animateCursor();
+
+document.querySelectorAll('a, button, .food-card, .nav-pill').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.transform = 'translate(-50%, -50%) scale(2)';
+    ring.style.transform = 'translate(-50%, -50%) scale(1.5)';
+    ring.style.opacity = '1';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+    ring.style.transform = 'translate(-50%, -50%) scale(1)';
+    ring.style.opacity = '0.6';
+  });
+});
+
+// SCROLL PROGRESS
+const progressLine = document.getElementById('progressLine');
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+  progressLine.style.width = pct + '%';
+});
+
+// REVEAL on scroll
+const revealEls = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.15 });
+revealEls.forEach(el => observer.observe(el));
+
+// FILTER
+document.getElementById('filterBar')?.addEventListener('click', e => {
+  if (!e.target.classList.contains('filter-btn')) return;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  e.target.classList.add('active');
+  const filter = e.target.dataset.filter;
+  document.querySelectorAll('#grid-digestion .food-card').forEach(card => {
+    if (filter === 'all' || card.dataset.filter === filter) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+});
+
+// SEARCH
+document.getElementById('searchInput')?.addEventListener('input', e => {
+  const val = e.target.value.toLowerCase();
+  document.querySelectorAll('#grid-digestion .food-card').forEach(card => {
+    card.style.display = card.dataset.name.includes(val) ? '' : 'none';
+  });
+});
+
+// Card entrance animation on load via IntersectionObserver
+const cardObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.05 });
+
+document.querySelectorAll('.food-card').forEach((card, i) => {
+  card.style.opacity = '0';
+  card.style.transform = 'translateY(20px)';
+  card.style.transition = `opacity 0.6s ease ${i % 6 * 0.07}s, transform 0.6s ease ${i % 6 * 0.07}s`;
+  cardObs.observe(card);
+});
+</script>
+</body>
+</html>
