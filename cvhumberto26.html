@@ -257,7 +257,7 @@ body{
 /* ─── FOOTER ─────────────────────────────────────────────── */
 .cv-footer{
   border-top:1px solid var(--border);padding-top:7px;
-  display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;
+  display:grid;grid-template-columns:1fr 2fr;gap:8px;
 }
 .foot-label{
   font-size:6px;letter-spacing:1.2px;text-transform:uppercase;
@@ -317,7 +317,7 @@ body{
       <div class="contact-row">
         <div class="contact-item"><span class="icon">📍</span> Ferrol – A Coruña</div>
         <div class="contact-item"><span class="icon">📱</span> 658 868 490</div>
-        <div class="contact-item"><span class="icon">✉️</span> negronoche50@outlook.com</div>
+        <div class="contact-item"><span class="icon">✉️</span> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="80eee5e7f2efeeefe3e8e5b5b0c0eff5f4ecefefebaee3efed">[email&#160;protected]</a></div>
       </div>
     </div>
     <div class="header-tags">
@@ -522,10 +522,6 @@ body{
       <div class="foot-content" data-i18n-html="footLangContent"></div>
     </div>
     <div class="foot-col">
-      <div class="foot-label" data-i18n="footSoft">Habilidades blandas</div>
-      <div class="foot-content" data-i18n-html="footSoftContent"></div>
-    </div>
-    <div class="foot-col">
       <div class="foot-label" data-i18n="footProfile">Perfil</div>
       <div class="foot-content" data-i18n-html="footProfileContent"></div>
     </div>
@@ -533,7 +529,7 @@ body{
 
 </div><!-- /cv-wrap -->
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 const T = {
   es: {
     subtitle:"Finanzas · Programación · BBDD · Ciberseguridad",
@@ -571,17 +567,15 @@ const T = {
     cert4title:"Sistemas de Gestión de la Información IFCD0211",
     footLang:"Idiomas",
     footLangContent:"🇪🇸 Español — Nativo<br>🇬🇧 Inglés — Preintermedio (B1)",
-    footSoft:"Habilidades blandas",
-    footSoftContent:"Resolución de problemas · Trabajo autónomo<br>Aprendizaje continuo · Orientación al detalle",
     footProfile:"Perfil",
-    footProfileContent:"Buscando rol técnico donde combinar finanzas<br>+ tecnología. Proyectos complejos de análisis.",
+    footProfileContent:"Buscando un rol técnico que combine finanzas y tecnología. Orientado a proyectos complejos de análisis financiero FinTech, optimización de procesos financieros, desarrollo de soluciones tecnológicas escalables, arquitectura de soluciones financieras digitales e integración de sistemas corporativos.",
     lightMode:"Modo claro", darkMode:"Modo oscuro",
     print:"Imprimir PDF",
   },
   en: {
     subtitle:"Finance · Programming · DB · Cybersecurity",
     tag1:"Finance", tag2:"Web Development", tag3:"Cybersecurity", tag4:"Data Analysis",
-    presentation:`Professional with training in <strong>web programming</strong> and technologies applied to accounting, including <strong>databases, cybersecurity</strong> and information systems. Experience in the accounting field with competencies in financial data analysis, bank reconciliations and economic reports. Responsible, proactive profile with a continuous learning attitude.`,
+    presentation:`Professional with training in <strong>web programming</strong> and technologies applied to accounting, including <strong>databases, cybersecurity</strong> and information systems. Experience in accounting specialising in budgets, variances, financial data analysis, bank reconciliations and economic reports. Responsible, proactive profile with a continuous learning attitude.`,
     secExp:"Relevant Experience",
     job1title:"Cybersecurity Technician",      job1desc:"Monitoring, analysis and incident response",
     job2title:"QA Tester",                     job2desc:"Functional testing and web bug reporting",
@@ -614,17 +608,15 @@ const T = {
     cert4title:"Information Management Systems IFCD0211",
     footLang:"Languages",
     footLangContent:"🇪🇸 Spanish — Native<br>🇬🇧 English — Pre-Intermediate (B1)",
-    footSoft:"Soft Skills",
-    footSoftContent:"Problem solving · Autonomous work<br>Continuous learning · Attention to detail",
     footProfile:"Profile",
-    footProfileContent:"Seeking a technical role combining finance<br>+ technology. Complex analysis projects.",
+    footProfileContent:"Seeking a technical role combining finance and technology. Oriented towards complex FinTech financial analysis projects, financial process optimisation, development of scalable technological solutions, digital financial solutions architecture and corporate systems integration.",
     lightMode:"Light mode", darkMode:"Dark mode",
     print:"Print PDF",
   },
   pt: {
     subtitle:"Finanças · Programação · BD · Cibersegurança",
     tag1:"Finanças", tag2:"Desenvolvimento Web", tag3:"Cibersegurança", tag4:"Análise de Dados",
-    presentation:`Profissional com formação em <strong>programação web</strong> e tecnologias aplicadas à contabilidade, incluindo <strong>bases de dados, segurança informática</strong> e sistemas de informação. Experiência na área contabilística com competências em análise de dados financeiros, conciliações bancárias e relatórios económicos. Perfil responsável, proativo e com atitude de aprendizagem contínua.`,
+    presentation:`Profissional com formação em <strong>programação web</strong> e tecnologias aplicadas à contabilidade, incluindo <strong>bases de dados, segurança informática</strong> e sistemas de informação. Experiência na área contabilística especializado em orçamentos, desvios, análise de dados financeiros, conciliações bancárias e relatórios económicos. Perfil responsável, proativo e com atitude de aprendizagem contínua.`,
     secExp:"Experiência Relevante",
     job1title:"Técnico de Cibersegurança",     job1desc:"Monitorização, análise e resposta a incidentes",
     job2title:"QA Tester",                     job2desc:"Testes funcionais e reporte de erros web",
@@ -657,10 +649,8 @@ const T = {
     cert4title:"Sistemas de Gestão de Informação IFCD0211",
     footLang:"Idiomas",
     footLangContent:"🇪🇸 Espanhol — Nativo<br>🇬🇧 Inglês — Pré-Intermédio (B1)",
-    footSoft:"Competências Transversais",
-    footSoftContent:"Resolução de problemas · Trabalho autónomo<br>Aprendizagem contínua · Orientação para o detalhe",
     footProfile:"Perfil",
-    footProfileContent:"À procura de papel técnico que combine finanças<br>+ tecnologia. Projetos complexos de análise.",
+    footProfileContent:"À procura de um papel técnico que combine finanças e tecnologia. Orientado para projetos complexos de análise financeira FinTech, otimização de processos financeiros, desenvolvimento de soluções tecnológicas escaláveis, arquitetura de soluções financeiras digitais e integração de sistemas corporativos.",
     lightMode:"Modo claro", darkMode:"Modo escuro",
     print:"Imprimir PDF",
   }
