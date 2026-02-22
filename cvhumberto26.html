@@ -265,6 +265,56 @@ body{
 }
 .foot-content{font-size:7.5px;color:var(--text);line-height:1.55;}
 
+/* ─── CONTACT LINKS ──────────────────────────────────────── */
+.contact-link{
+  color:var(--text-dim);text-decoration:none;
+  transition:color .2s;
+}
+.contact-link:hover{color:var(--text);}
+
+/* ─── PHONE MODAL ────────────────────────────────────────── */
+.phone-modal-overlay{
+  display:none;position:fixed;inset:0;z-index:9999;
+  background:rgba(0,0,0,.6);backdrop-filter:blur(4px);
+  align-items:center;justify-content:center;
+}
+.phone-modal-overlay.open{display:flex;}
+.phone-modal{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:4px;padding:22px 28px 18px;min-width:230px;
+  box-shadow:0 8px 40px rgba(0,0,0,.6);
+  display:flex;flex-direction:column;gap:12px;
+  font-family:'Source Sans 3',sans-serif;
+}
+.phone-modal-title{
+  font-family:'Playfair Display',serif;
+  font-size:8px;letter-spacing:1px;text-transform:uppercase;
+  color:var(--text-dim);text-align:center;
+}
+.phone-modal-num{
+  font-size:15px;font-weight:600;color:var(--text-bright);
+  letter-spacing:.8px;text-align:center;
+}
+.phone-modal-actions{display:flex;gap:8px;justify-content:center;}
+.phone-btn{
+  display:flex;align-items:center;gap:5px;
+  background:var(--bg3);border:1px solid var(--border);
+  color:var(--text);font-family:'Source Sans 3',sans-serif;
+  font-size:9px;padding:7px 16px;border-radius:2px;
+  cursor:pointer;text-decoration:none;transition:all .2s;
+  letter-spacing:.2px;
+}
+.phone-btn:hover{border-color:var(--accent);color:var(--accent);}
+.phone-btn.whatsapp:hover{border-color:#25d366;color:#25d366;}
+.phone-modal-close{
+  background:none;border:none;color:var(--text-dim);
+  font-size:8.5px;cursor:pointer;letter-spacing:.4px;
+  align-self:center;font-family:'Source Sans 3',sans-serif;
+  transition:color .2s;padding:2px 8px;
+}
+.phone-modal-close:hover{color:var(--text);}
+@media print{.phone-modal-overlay{display:none!important}}
+
 /* ─── PRINT ──────────────────────────────────────────────── */
 @media print{
   @page{size:A4;margin:8mm;}
@@ -303,6 +353,19 @@ body{
   <button class="btn-ctrl" onclick="printCV()">🖨️ <span data-i18n="print">Imprimir PDF</span></button>
 </div>
 
+<!-- MODAL TELÉFONO -->
+<div class="phone-modal-overlay" id="phoneModal" onclick="closePhoneModal(event)">
+  <div class="phone-modal">
+    <div class="phone-modal-title">Contactar</div>
+    <div class="phone-modal-num">658 868 490</div>
+    <div class="phone-modal-actions">
+      <a class="phone-btn whatsapp" href="https://wa.me/34658868490" target="_blank" rel="noopener">💬 WhatsApp</a>
+      <a class="phone-btn" href="tel:+34658868490">📞 Llamar</a>
+    </div>
+    <button class="phone-modal-close" onclick="document.getElementById('phoneModal').classList.remove('open')">✕ Cerrar</button>
+  </div>
+</div>
+
 <div class="cv-wrap">
 
   <!-- HEADER -->
@@ -315,9 +378,9 @@ body{
       <h1><span>Humberto</span> López Rodríguez</h1>
       <div class="header-subtitle" data-i18n="subtitle">Finanzas · Programación · BBDD · Ciberseguridad</div>
       <div class="contact-row">
-        <div class="contact-item"><span class="icon">📍</span> Ferrol – A Coruña</div>
-        <div class="contact-item"><span class="icon">📱</span> 658 868 490</div>
-        <div class="contact-item"><span class="icon">✉️</span> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="80eee5e7f2efeeefe3e8e5b5b0c0eff5f4ecefefebaee3efed">negronoche50@outlook.com</a></div>
+        <div class="contact-item"><span class="icon">📍</span><a class="contact-link" href="https://www.google.com/maps/search/Ferrol,+A+Coruña,+España" target="_blank" rel="noopener">Ferrol – A Coruña</a></div>
+        <div class="contact-item"><span class="icon">📱</span><a class="contact-link" href="#" onclick="openPhoneModal(event)">658 868 490</a></div>
+        <div class="contact-item"><span class="icon">✉️</span><a class="contact-link" href="mailto:negronoche50@outlook.com">negronoche50@outlook.com</a></div>
       </div>
     </div>
     <div class="header-tags">
@@ -529,7 +592,7 @@ body{
 
 </div><!-- /cv-wrap -->
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 const T = {
   es: {
     subtitle:"Finanzas · Programación · BBDD · Ciberseguridad",
@@ -594,10 +657,7 @@ const T = {
     inProgress:"IN PROGRESS", completed:"COMPLETED",
     edu1title:"Web Application Development (DAW)",
     edu1detail:"Higher Vocational Training · CIFP Rodolfo Ucha – Ferrol · 2025",
-    edu2title:"Business Sciences – 90/240 ECTS",
-    edu2detail:"University Degree · University of A Coruña · 2020 · 3 years",
-    edu3title:"Administration and Finance",
-    edu3detail:"Higher Vocational Training · CIFP Rodolfo Ucha – Ferrol · 2018 · 2 years",
+    edu2title:"Business Sciences – 90/24rol · 2018 · 2 years",
     edu4title:"Pre-Intermediate English",
     edu4detail:"EOI Ferrol · 2010 · 3 years",
     secCerts:"Level 3 Professional Certificates",
@@ -705,6 +765,16 @@ const obs = new IntersectionObserver(entries => {
 }, { threshold: 0.3 });
 document.querySelectorAll('.skill-track').forEach(el => obs.observe(el));
 setTimeout(animateBars, 300);
+
+function openPhoneModal(e) {
+  e.preventDefault();
+  document.getElementById('phoneModal').classList.add('open');
+}
+function closePhoneModal(e) {
+  if (e.target === document.getElementById('phoneModal')) {
+    document.getElementById('phoneModal').classList.remove('open');
+  }
+}
 
 // init
 document.addEventListener('DOMContentLoaded', () => {
