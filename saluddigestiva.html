@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía Digestiva & Antiinflamatoria</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F0E8;
+    --warm-white: #FAFAF7;
+    --sage: #6B8F71;
+    --sage-light: #A8C5AB;
+    --sage-dark: #3D5C42;
+    --amber: #C47B2B;
+    --amber-light: #E8A84A;
+    --terracotta: #B5623A;
+    --soft-brown: #8B6355;
+    --dark: #1C2420;
+    --text: #2D3B35;
+    --text-muted: #6B7B74;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background-color: var(--cream);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    background: var(--sage-dark);
+    color: var(--cream);
+    padding: 80px 40px 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: rgba(168,197,171,0.12);
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: -40px;
+    width: 250px; height: 250px;
+    border-radius: 50%;
+    background: rgba(196,123,43,0.1);
+  }
+
+  .hero-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--sage-light);
+    margin-bottom: 20px;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 6vw, 4rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 20px;
+  }
+
+  .hero h1 span {
+    color: var(--amber-light);
+  }
+
+  .hero p {
+    max-width: 560px;
+    margin: 0 auto;
+    font-size: 1rem;
+    color: rgba(245,240,232,0.75);
+    line-height: 1.8;
+  }
+
+  /* LAYOUT */
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* SECTIONS */
+  .section {
+    padding: 56px 0;
+    border-bottom: 1px solid rgba(107,143,113,0.15);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .section-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+  }
+
+  .icon-sage { background: rgba(107,143,113,0.15); }
+  .icon-amber { background: rgba(196,123,43,0.12); }
+  .icon-terra { background: rgba(181,98,58,0.12); }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--dark);
+  }
+
+  .section-title small {
+    display: block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 2px;
+  }
+
+  /* CARDS */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    background: var(--warm-white);
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid rgba(107,143,113,0.12);
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--sage);
+    border-radius: 16px 16px 0 0;
+  }
+
+  .card.amber::before { background: var(--amber); }
+  .card.terra::before { background: var(--terracotta); }
+
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(61,92,66,0.1);
+  }
+
+  .card-emoji {
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+  }
+
+  .card-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 6px;
+  }
+
+  .card-desc {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* WARNING BOX */
+  .warning-box {
+    background: #FFF8F0;
+    border: 1px solid rgba(196,123,43,0.25);
+    border-left: 4px solid var(--amber);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-top: 24px;
+  }
+
+  .warning-box h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    color: var(--amber);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .warning-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .warning-list li {
+    background: rgba(196,123,43,0.1);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.82rem;
+    color: var(--soft-brown);
+    font-weight: 500;
+  }
+
+  /* INFUSIONS */
+  .infusions-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .infusion-pill {
+    background: var(--sage-dark);
+    color: var(--cream);
+    padding: 10px 22px;
+    border-radius: 30px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s;
+  }
+
+  .infusion-pill:hover {
+    background: var(--sage);
+  }
+
+  /* MEAL PLAN */
+  .meal-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .meal-item {
+    display: flex;
+    gap: 20px;
+    padding: 24px 0;
+    border-bottom: 1px dashed rgba(107,143,113,0.2);
+    position: relative;
+  }
+
+  .meal-item:last-child { border-bottom: none; }
+
+  .meal-time {
+    width: 90px;
+    flex-shrink: 0;
+    text-align: right;
+  }
+
+  .meal-time-label {
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--sage);
+  }
+
+  .meal-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--sage);
+    margin-top: 6px;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .meal-dot::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: calc(100% + 38px);
+    background: rgba(107,143,113,0.25);
+  }
+
+  .meal-item:last-child .meal-dot::after { display: none; }
+
+  .meal-content {
+    flex: 1;
+    padding-top: 2px;
+  }
+
+  .meal-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 4px;
+  }
+
+  .meal-desc {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+  }
+
+  /* CTA SECTION */
+  .cta-section {
+    padding: 64px 0;
+  }
+
+  .cta-section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 24px;
+  }
+
+  .cta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 14px;
+  }
+
+  .cta-card {
+    background: var(--warm-white);
+    border: 1px solid rgba(107,143,113,0.15);
+    border-radius: 16px;
+    padding: 22px;
+    cursor: pointer;
+    transition: all 0.25s;
+    text-align: center;
+  }
+
+  .cta-card:hover {
+    background: var(--sage-dark);
+    border-color: var(--sage-dark);
+    transform: translateY(-4px);
+    box-shadow: 0 16px 32px rgba(61,92,66,0.18);
+  }
+
+  .cta-card:hover .cta-label,
+  .cta-card:hover .cta-text {
+    color: var(--cream);
+  }
+
+  .cta-emoji {
+    font-size: 2rem;
+    margin-bottom: 10px;
+  }
+
+  .cta-label {
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin-bottom: 4px;
+    transition: color 0.25s;
+  }
+
+  .cta-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--dark);
+    line-height: 1.3;
+    transition: color 0.25s;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section, .hero p, .hero h1 {
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .card { animation: fadeUp 0.5s ease both; }
+  .card:nth-child(1) { animation-delay: 0.05s; }
+  .card:nth-child(2) { animation-delay: 0.1s; }
+  .card:nth-child(3) { animation-delay: 0.15s; }
+  .card:nth-child(4) { animation-delay: 0.2s; }
+  .card:nth-child(5) { animation-delay: 0.25s; }
+  .card:nth-child(6) { animation-delay: 0.3s; }
+  .card:nth-child(7) { animation-delay: 0.35s; }
+
+  @media (max-width: 600px) {
+    .hero { padding: 60px 24px 48px; }
+    .section { padding: 40px 0; }
+    .cards-grid { grid-template-columns: 1fr 1fr; }
+    .meal-time { width: 70px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-label">Nutrición & Bienestar Digestivo</div>
+  <h1>Tu guía para un<br><span>intestino sano</span></h1>
+  <p>Desinflamar, reducir gases y estabilizar el intestino con alimentos reales. Especialmente útil si quieres cuidar tu digestión y reducir la grasa abdominal.</p>
+</div>
+
+<div class="container">
+
+  <!-- DESINFLAMACIÓN -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-sage">🥦</div>
+      <div class="section-title">
+        <small>Categoría 01</small>
+        Alimentos que Desinflaman
+      </div>
+    </div>
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-emoji">🫚</div>
+        <div class="card-name">Jengibre</div>
+        <div class="card-desc">Potente antiinflamatorio natural que mejora la motilidad intestinal.</div>
+      </div>
+      <div class="card">
+        <div class="card-emoji">🌿</div>
+        <div class="card-name">Cúrcuma</div>
+        <div class="card-desc">Antiinflamatoria. Mejor con pimienta negra para mayor absorción.</div>
+      </div>
+      <div class="card">
+        <div class="card-emoji">🐟</div>
+        <div class="card-name">Pescado azul</div>
+        <div class="card-desc">Sardina, caballa, salmón. Rico en omega-3 antiinflamatorio.</div>
+      </div>
+      <div class="card">
+        <div class="card-emoji">🫒</div>
+        <div class="card-name">Aceite de oliva VE</div>
+        <div class="card-desc">Protector intestinal y antiinflamatorio de primer orden.</div>
+      </div>
+      <div class="card">
+        <div class="card-emoji">🥕</div>
+        <div class="card-name">Verduras cocidas</div>
+        <div class="card-desc">Calabacín, zanahoria y calabaza: suaves, digestivas y nutritivas.</div>
+      </div>
+      <div class="card">
+        <div class="card-emoji">🍚</div>
+        <div class="card-name">Arroz & patata</div>
+        <div class="card-desc">Arroz blanco y patata cocida. Fáciles de digerir y sin irritar.</div>
+      </div>
+      <div class="card">
+        <div class="card-emoji">🍍</div>
+        <div class="card-name">Papaya & piña</div>
+        <div class="card-desc">Enzimas digestivas naturales que facilitan la digestión proteica.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GASES -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-sage">🌿</div>
+      <div class="section-title">
+        <small>Categoría 02</small>
+        Reducir Gases
+      </div>
+    </div>
+    <div class="cards-grid">
+      <div class="card amber">
+        <div class="card-emoji">🌾</div>
+        <div class="card-name">Hinojo</div>
+        <div class="card-desc">En infusión, carminativo: expulsa gases de forma eficaz.</div>
+      </div>
+      <div class="card amber">
+        <div class="card-emoji">🌼</div>
+        <div class="card-name">Anís & manzanilla</div>
+        <div class="card-desc">Calman espasmos intestinales. Ideales en infusión tras la comida.</div>
+      </div>
+      <div class="card amber">
+        <div class="card-emoji">🥛</div>
+        <div class="card-name">Yogur & kéfir</div>
+        <div class="card-desc">Probióticos naturales, si toleras bien los lácteos.</div>
+      </div>
+      <div class="card amber">
+        <div class="card-emoji">🌾</div>
+        <div class="card-name">Avena cocida</div>
+        <div class="card-desc">Regula el tránsito sin fermentar en exceso.</div>
+      </div>
+      <div class="card amber">
+        <div class="card-emoji">🍌</div>
+        <div class="card-name">Plátano maduro</div>
+        <div class="card-desc">Menos fermentable que el verde. Mejor digestión garantizada.</div>
+      </div>
+    </div>
+    <div class="warning-box">
+      <h4>⚠️ Si tienes tendencia a gases, modera estos alimentos</h4>
+      <ul class="warning-list">
+        <li>Legumbres mal cocidas</li>
+        <li>Coles, brócoli, coliflor</li>
+        <li>Cebolla cruda</li>
+        <li>Refrescos con gas</li>
+        <li>Sorbitol & edulcorantes</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ESTABILIZAR -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-terra">🧘</div>
+      <div class="section-title">
+        <small>Categoría 03</small>
+        Estabilizar el Intestino
+      </div>
+    </div>
+    <div class="cards-grid">
+      <div class="card terra">
+        <div class="card-emoji">🥣</div>
+        <div class="card-name">Fibra soluble</div>
+        <div class="card-desc">Avena, chía hidratada y manzana cocida. Regula sin irritar.</div>
+      </div>
+      <div class="card terra">
+        <div class="card-emoji">🍚</div>
+        <div class="card-name">Arroz blanco</div>
+        <div class="card-desc">Ideal si hay diarrea o irritación intestinal activa.</div>
+      </div>
+      <div class="card terra">
+        <div class="card-emoji">🍞</div>
+        <div class="card-name">Pan masa madre</div>
+        <div class="card-desc">Pan tostado tipo masa madre. Más fácil de digerir.</div>
+      </div>
+      <div class="card terra">
+        <div class="card-emoji">🍵</div>
+        <div class="card-name">Caldo de verduras</div>
+        <div class="card-desc">Suave y reconfortante. Hidrata y aporta minerales.</div>
+      </div>
+      <div class="card terra">
+        <div class="card-emoji">🍗</div>
+        <div class="card-name">Proteínas magras</div>
+        <div class="card-desc">Pollo, pavo y merluza. Sin grasa, sin irritar el intestino.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INFUSIONES -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-sage">🫖</div>
+      <div class="section-title">
+        <small>Categoría 04</small>
+        Infusiones Clave
+      </div>
+    </div>
+    <div class="infusions-row">
+      <div class="infusion-pill">🌼 Manzanilla</div>
+      <div class="infusion-pill">🌾 Hinojo</div>
+      <div class="infusion-pill">🫚 Jengibre</div>
+      <div class="infusion-pill">🌿 Menta poleo</div>
+    </div>
+  </div>
+
+  <!-- MINI PLAN -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-sage">📌</div>
+      <div class="section-title">
+        <small>Mini plan digestivo</small>
+        Ejemplo de Día Ideal
+      </div>
+    </div>
+    <div class="meal-timeline">
+      <div class="meal-item">
+        <div class="meal-time">
+          <div class="meal-time-label">Desayuno</div>
+        </div>
+        <div class="meal-dot"></div>
+        <div class="meal-content">
+          <div class="meal-title">Inicio suave y nutritivo</div>
+          <div class="meal-desc">Avena cocida + plátano maduro + infusión de manzanilla</div>
+        </div>
+      </div>
+      <div class="meal-item">
+        <div class="meal-time">
+          <div class="meal-time-label">Comida</div>
+        </div>
+        <div class="meal-dot"></div>
+        <div class="meal-content">
+          <div class="meal-title">Digestivo y completo</div>
+          <div class="meal-desc">Arroz blanco + calabacín + pollo a la plancha + aceite de oliva virgen extra</div>
+        </div>
+      </div>
+      <div class="meal-item">
+        <div class="meal-time">
+          <div class="meal-time-label">Cena</div>
+        </div>
+        <div class="meal-dot"></div>
+        <div class="meal-content">
+          <div class="meal-title">Ligero y reparador</div>
+          <div class="meal-desc">Merluza a la plancha + zanahoria cocida + patata</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTAs -->
+  <div class="cta-section">
+    <h2>¿Quieres profundizar más?</h2>
+    <div class="cta-grid">
+      <div class="cta-card">
+        <div class="cta-emoji">🔥</div>
+        <div class="cta-label">Plan específico</div>
+        <div class="cta-text">Perder grasa abdominal</div>
+      </div>
+      <div class="cta-card">
+        <div class="cta-emoji">⚖️</div>
+        <div class="cta-label">Plan ajustado</div>
+        <div class="cta-text">1000 kcal diarias</div>
+      </div>
+      <div class="cta-card">
+        <div class="cta-emoji">🩺</div>
+        <div class="cta-label">Plan clínico</div>
+        <div class="cta-text">Ante RGE (reflujo)</div>
+      </div>
+      <div class="cta-card">
+        <div class="cta-emoji">💪</div>
+        <div class="cta-label">Plan avanzado</div>
+        <div class="cta-text">Antiinflamatorio para marcar abdomen</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
