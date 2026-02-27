@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FP&A Analyst | FinCore Intelligence</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0d14;
+    --surface: #111520;
+    --card: #151b2e;
+    --border: #1e2a45;
+    --accent: #00d4aa;
+    --accent2: #4f8ef7;
+    --gold: #f0c040;
+    --text: #e8edf5;
+    --muted: #7a8ba8;
+    --subtle: #1a2340;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* GRID BACKGROUND */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,170,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,170,0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* NAVBAR */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,13,20,0.92);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-dot {
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: inline-block;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(0,212,170,0.4); }
+    50% { box-shadow: 0 0 0 6px rgba(0,212,170,0); }
+  }
+
+  .lang-buttons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .lang-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 6px 16px;
+    border-radius: 4px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-transform: uppercase;
+  }
+
+  .lang-btn:hover, .lang-btn.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(0,212,170,0.08);
+  }
+
+  .lang-btn.active {
+    box-shadow: 0 0 12px rgba(0,212,170,0.2);
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    z-index: 1;
+    padding: 100px 48px 60px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,212,170,0.08);
+    border: 1px solid rgba(0,212,170,0.2);
+    color: var(--accent);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 3px;
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.1s forwards;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 5vw, 4.2rem);
+    font-weight: 900;
+    line-height: 1.06;
+    letter-spacing: -0.03em;
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.2s forwards;
+  }
+
+  h1 span {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-desc {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--muted);
+    max-width: 680px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.35s forwards;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* STATS ROW */
+  .stats {
+    display: flex;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 56px 0 0;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.5s forwards;
+  }
+
+  .stat {
+    flex: 1;
+    background: var(--surface);
+    padding: 28px 32px;
+    transition: background 0.2s;
+  }
+
+  .stat:hover { background: var(--card); }
+
+  .stat-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-label {
+    font-size: 0.78rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* MAIN CONTENT */
+  .content {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 48px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.7rem;
+    font-weight: 700;
+    margin-bottom: 36px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+  }
+
+  /* RESPONSIBILITIES GRID */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+    gap: 16px;
+    margin-bottom: 80px;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.25s, transform 0.25s;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+
+  .card:hover {
+    border-color: rgba(0,212,170,0.3);
+    transform: translateY(-3px);
+  }
+
+  .card:hover::before { opacity: 1; }
+
+  .card-icon {
+    width: 40px; height: 40px;
+    background: rgba(0,212,170,0.1);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+    font-size: 1.2rem;
+  }
+
+  .card-title {
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-bottom: 10px;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+
+  .card-text {
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  /* SKILLS TWO-COL */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 80px;
+  }
+
+  @media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
+
+  .skill-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .skill-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 18px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--muted);
+    transition: border-color 0.2s;
+  }
+
+  .skill-item:hover { border-color: rgba(79,142,247,0.3); }
+
+  .skill-key {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--accent2);
+    background: rgba(79,142,247,0.1);
+    padding: 3px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+
+  /* CAREER PATH */
+  .career-path {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 40px;
+    margin-bottom: 80px;
+  }
+
+  .career-intro {
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: var(--muted);
+    margin-bottom: 36px;
+    max-width: 700px;
+  }
+
+  .path-track {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+
+  .path-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    min-width: 130px;
+  }
+
+  .path-node {
+    width: 52px; height: 52px;
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: border-color 0.3s, transform 0.3s;
+    cursor: default;
+  }
+
+  .path-step:hover .path-node {
+    border-color: var(--accent);
+    transform: scale(1.12);
+  }
+
+  .path-label {
+    font-size: 0.72rem;
+    text-align: center;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .path-arrow {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    min-width: 32px;
+    position: relative;
+    top: -16px;
+    opacity: 0.4;
+  }
+
+  /* TICKER BAR */
+  .ticker-wrap {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 99;
+    background: rgba(10,13,20,0.95);
+    border-top: 1px solid var(--border);
+    height: 36px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+  }
+
+  .ticker-inner {
+    display: flex;
+    gap: 56px;
+    animation: ticker 28s linear infinite;
+    white-space: nowrap;
+  }
+
+  .ticker-item {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .ticker-up { color: var(--accent); }
+  .ticker-down { color: #f05a5a; }
+
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* ── TABLET (≤ 900px) ─────────────────────────────── */
+  @media (max-width: 900px) {
+    nav { padding: 0 24px; }
+    .hero { padding: 72px 24px 48px; }
+    .content { padding: 56px 24px; }
+    .stats { display: grid; grid-template-columns: 1fr 1fr; }
+    .cards-grid { grid-template-columns: 1fr 1fr; }
+    .two-col { grid-template-columns: 1fr; gap: 20px; }
+    .career-path { padding: 28px 20px; }
+    .section-title { font-size: 1.4rem; }
+  }
+
+  /* ── MOBILE (≤ 600px) ─────────────────────────────── */
+  @media (max-width: 600px) {
+    nav { padding: 0 16px; height: 56px; }
+    .logo { font-size: 1.05rem; }
+    .lang-btn { padding: 5px 10px; font-size: 0.68rem; letter-spacing: 0.06em; }
+    .hero { padding: 56px 16px 36px; }
+    .content { padding: 40px 16px 60px; }
+    h1 { font-size: clamp(1.9rem, 8vw, 2.8rem); margin-bottom: 18px; }
+    .hero-desc { font-size: 0.93rem; }
+    .tag { font-size: 0.65rem; padding: 5px 10px; margin-bottom: 20px; }
+    .stats { grid-template-columns: 1fr 1fr; gap: 1px; }
+    .stat { padding: 18px 16px; }
+    .stat-val { font-size: 1.7rem; }
+    .stat-label { font-size: 0.68rem; }
+    .cards-grid { grid-template-columns: 1fr; gap: 12px; margin-bottom: 48px; }
+    .card { padding: 22px 18px; }
+    .two-col { grid-template-columns: 1fr; gap: 12px; margin-bottom: 48px; }
+    .skill-item { padding: 14px 14px; font-size: 0.82rem; }
+    .section-title { font-size: 1.25rem; margin-bottom: 24px; }
+    .career-path { padding: 22px 16px; margin-bottom: 48px; }
+    .career-intro { font-size: 0.84rem; margin-bottom: 24px; }
+    .path-track { gap: 0; padding-bottom: 12px; -webkit-overflow-scrolling: touch; }
+    .path-step { min-width: 80px; gap: 8px; }
+    .path-node { width: 42px; height: 42px; font-size: 1rem; }
+    .path-label { font-size: 0.62rem; }
+    .path-arrow { min-width: 20px; }
+    .ticker-wrap { height: 30px; }
+    .ticker-item { font-size: 0.62rem; gap: 5px; }
+  }
+
+  /* ── VERY SMALL (≤ 380px) ────────────────────────── */
+  @media (max-width: 380px) {
+    .logo span:last-of-type { display: none; }
+    .stats { grid-template-columns: 1fr 1fr; }
+    .stat-val { font-size: 1.45rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">
+    <span class="logo-dot"></span>
+    FinCore Intelligence
+  </div>
+  <div class="lang-buttons">
+    <button class="lang-btn active" onclick="setLang('en')" id="btn-en">EN</button>
+    <button class="lang-btn" onclick="setLang('es')" id="btn-es">ES</button>
+    <button class="lang-btn" onclick="setLang('pt')" id="btn-pt">PT</button>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="tag" data-key="tag">● Role Definition</div>
+  <h1>FP&amp;A <span data-key="headline">Analyst</span></h1>
+  <p class="hero-desc" data-key="heroParagraph">
+    An FP&A (Financial Planning & Analysis) Analyst is a corporate finance professional responsible for budgeting, forecasting, and reporting to guide strategic business decisions. They analyze financial data, monitor performance against goals, and create financial models. These analysts bridge financial data with operational strategy, often specializing in sales revenue, costs, or company-wide performance.
+  </p>
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-val">1–3</div>
+      <div class="stat-label" data-key="stat1">Years Exp. Entry</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val">CFO</div>
+      <div class="stat-label" data-key="stat2">Career Ceiling</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val">CPA</div>
+      <div class="stat-label" data-key="stat3">Top Certification</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val">360°</div>
+      <div class="stat-label" data-key="stat4">Business View</div>
+    </div>
+  </div>
+</section>
+
+<div class="content">
+
+  <!-- RESPONSIBILITIES -->
+  <h2 class="section-title" data-key="respTitle">Key Responsibilities</h2>
+  <div class="cards-grid">
+    <div class="card">
+      <div class="card-icon">📊</div>
+      <div class="card-title" data-key="r1title">Budgeting & Forecasting</div>
+      <div class="card-text" data-key="r1text">Leading the annual budgeting process and creating monthly or quarterly forecasts to predict future performance.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">📉</div>
+      <div class="card-title" data-key="r2title">Variance Analysis</div>
+      <div class="card-text" data-key="r2text">Comparing actual results against budget and forecasts, identifying reasons for differences, and explaining variances to leadership.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🧮</div>
+      <div class="card-title" data-key="r3title">Financial Modeling</div>
+      <div class="card-text" data-key="r3text">Creating models to analyze business scenarios, such as the impact of potential acquisitions, new product launches, or cost-cutting initiatives.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">📋</div>
+      <div class="card-title" data-key="r4title">Performance Tracking & Reporting</div>
+      <div class="card-text" data-key="r4text">Developing dashboards and reports to monitor KPIs, profitability, and financial health.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🎯</div>
+      <div class="card-title" data-key="r5title">Strategic Decision Support</div>
+      <div class="card-text" data-key="r5text">Providing actionable insights to senior management, helping them make data-driven decisions.</div>
+    </div>
+  </div>
+
+  <!-- SKILLS -->
+  <h2 class="section-title" data-key="skillsTitle">Required Skills & Qualifications</h2>
+  <div class="two-col">
+    <ul class="skill-list">
+      <li class="skill-item"><span class="skill-key">01</span><span data-key="s1"><strong style="color:#e8edf5">Technical Skills:</strong> Advanced proficiency in Microsoft Excel (modeling, PivotTables) and data visualization tools like Power BI or Tableau.</span></li>
+      <li class="skill-item"><span class="skill-key">02</span><span data-key="s2"><strong style="color:#e8edf5">Education:</strong> A Bachelor's degree in Finance, Accounting, Economics, or Business Administration is typical.</span></li>
+      <li class="skill-item"><span class="skill-key">03</span><span data-key="s3"><strong style="color:#e8edf5">Analytical Abilities:</strong> Strong capacity to interpret complex data and translate it into business insights.</span></li>
+    </ul>
+    <ul class="skill-list">
+      <li class="skill-item"><span class="skill-key">04</span><span data-key="s4"><strong style="color:#e8edf5">Communication:</strong> Ability to communicate financial results to non-financial stakeholders.</span></li>
+      <li class="skill-item"><span class="skill-key">05</span><span data-key="s5"><strong style="color:#e8edf5">Experience:</strong> Often requires 1–3 years in accounting or financial roles, with certifications like CPA, CIMA, or CFA preferred for career advancement.</span></li>
+    </ul>
+  </div>
+
+  <!-- CAREER PATH -->
+  <h2 class="section-title" data-key="careerTitle">Career Path</h2>
+  <div class="career-path">
+    <p class="career-intro" data-key="careerIntro">FP&A Analysts often start in general accounting or junior analyst roles before specializing in FP&A. Career progression typically moves from Analyst to Senior Analyst, FP&A Manager, Director of Finance, and potentially Chief Financial Officer (CFO).</p>
+    <div class="path-track">
+      <div class="path-step">
+        <div class="path-node">🔰</div>
+        <div class="path-label" data-key="p1">Junior Analyst</div>
+      </div>
+      <div class="path-arrow"></div>
+      <div class="path-step">
+        <div class="path-node">📈</div>
+        <div class="path-label" data-key="p2">FP&A Analyst</div>
+      </div>
+      <div class="path-arrow"></div>
+      <div class="path-step">
+        <div class="path-node">⭐</div>
+        <div class="path-label" data-key="p3">Senior Analyst</div>
+      </div>
+      <div class="path-arrow"></div>
+      <div class="path-step">
+        <div class="path-node">🏛️</div>
+        <div class="path-label" data-key="p4">FP&A Manager</div>
+      </div>
+      <div class="path-arrow"></div>
+      <div class="path-step">
+        <div class="path-node">🎖️</div>
+        <div class="path-label" data-key="p5">Director of Finance</div>
+      </div>
+      <div class="path-arrow"></div>
+      <div class="path-step">
+        <div class="path-node">👑</div>
+        <div class="path-label" data-key="p6">CFO</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-inner" id="ticker"></div>
+</div>
+
+<script>
+const translations = {
+  en: {
+    tag: '● Role Definition',
+    headline: 'Analyst',
+    heroParagraph: 'An FP&A (Financial Planning & Analysis) Analyst is a corporate finance professional responsible for budgeting, forecasting, and reporting to guide strategic business decisions. They analyze financial data, monitor performance against goals, and create financial models. These analysts bridge financial data with operational strategy, often specializing in sales revenue, costs, or company-wide performance.',
+    stat1: 'Years Exp. Entry',
+    stat2: 'Career Ceiling',
+    stat3: 'Top Certification',
+    stat4: 'Business View',
+    respTitle: 'Key Responsibilities',
+    r1title: 'Budgeting & Forecasting',
+    r1text: 'Leading the annual budgeting process and creating monthly or quarterly forecasts to predict future performance.',
+    r2title: 'Variance Analysis',
+    r2text: 'Comparing actual results against budget and forecasts, identifying reasons for differences, and explaining variances to leadership.',
+    r3title: 'Financial Modeling',
+    r3text: 'Creating models to analyze business scenarios, such as the impact of potential acquisitions, new product launches, or cost-cutting initiatives.',
+    r4title: 'Performance Tracking & Reporting',
+    r4text: 'Developing dashboards and reports to monitor KPIs, profitability, and financial health.',
+    r5title: 'Strategic Decision Support',
+    r5text: 'Providing actionable insights to senior management, helping them make data-driven decisions.',
+    skillsTitle: 'Required Skills & Qualifications',
+    s1: '<strong style="color:#e8edf5">Technical Skills:</strong> Advanced proficiency in Microsoft Excel (modeling, PivotTables) and data visualization tools like Power BI or Tableau.',
+    s2: '<strong style="color:#e8edf5">Education:</strong> A Bachelor\'s degree in Finance, Accounting, Economics, or Business Administration is typical.',
+    s3: '<strong style="color:#e8edf5">Analytical Abilities:</strong> Strong capacity to interpret complex data and translate it into business insights.',
+    s4: '<strong style="color:#e8edf5">Communication:</strong> Ability to communicate financial results to non-financial stakeholders.',
+    s5: '<strong style="color:#e8edf5">Experience:</strong> Often requires 1–3 years in accounting or financial roles, with certifications like CPA, CIMA, or CFA preferred for career advancement.',
+    careerTitle: 'Career Path',
+    careerIntro: 'FP&A Analysts often start in general accounting or junior analyst roles before specializing in FP&A. Career progression typically moves from Analyst to Senior Analyst, FP&A Manager, Director of Finance, and potentially Chief Financial Officer (CFO).',
+    p1: 'Junior Analyst', p2: 'FP&A Analyst', p3: 'Senior Analyst', p4: 'FP&A Manager', p5: 'Director of Finance', p6: 'CFO',
+  },
+  es: {
+    tag: '● Definición del Rol',
+    headline: 'Analista',
+    heroParagraph: 'Un Analista de FP&A (Planificación y Análisis Financiero) es un profesional de finanzas corporativas responsable de la elaboración de presupuestos, proyecciones y reportes para orientar decisiones estratégicas. Analizan datos financieros, monitorean el desempeño frente a objetivos y construyen modelos financieros. Estos analistas conectan los datos financieros con la estrategia operativa, especializándose frecuentemente en ingresos por ventas, costos o el desempeño global de la empresa.',
+    stat1: 'Años Exp. Inicial',
+    stat2: 'Techo Profesional',
+    stat3: 'Certificación Principal',
+    stat4: 'Visión 360° del Negocio',
+    respTitle: 'Responsabilidades Clave',
+    r1title: 'Presupuestación y Proyecciones',
+    r1text: 'Liderar el proceso de presupuestación anual y crear proyecciones mensuales o trimestrales para anticipar el desempeño futuro.',
+    r2title: 'Análisis de Variaciones',
+    r2text: 'Comparar los resultados reales con el presupuesto y las proyecciones, identificar las causas de las diferencias y explicar las variaciones a la dirección.',
+    r3title: 'Modelado Financiero',
+    r3text: 'Crear modelos para analizar escenarios de negocio, como el impacto de posibles adquisiciones, lanzamientos de nuevos productos o iniciativas de reducción de costos.',
+    r4title: 'Seguimiento del Desempeño e Informes',
+    r4text: 'Desarrollar paneles e informes para monitorear KPIs, rentabilidad y salud financiera.',
+    r5title: 'Apoyo a la Toma de Decisiones Estratégicas',
+    r5text: 'Proporcionar conclusiones accionables a la alta dirección para facilitar decisiones basadas en datos.',
+    skillsTitle: 'Habilidades y Requisitos',
+    s1: '<strong style="color:#e8edf5">Habilidades Técnicas:</strong> Dominio avanzado de Microsoft Excel (modelado, tablas dinámicas) y herramientas de visualización como Power BI o Tableau.',
+    s2: '<strong style="color:#e8edf5">Formación:</strong> Habitualmente se requiere licenciatura en Finanzas, Contabilidad, Economía o Administración de Empresas.',
+    s3: '<strong style="color:#e8edf5">Capacidades Analíticas:</strong> Gran capacidad para interpretar datos complejos y traducirlos en insights de negocio.',
+    s4: '<strong style="color:#e8edf5">Comunicación:</strong> Habilidad para comunicar resultados financieros a interlocutores no financieros.',
+    s5: '<strong style="color:#e8edf5">Experiencia:</strong> Generalmente requiere 1–3 años en roles contables o financieros, con certificaciones como CPA, CIMA o CFA preferidas para el avance profesional.',
+    careerTitle: 'Trayectoria Profesional',
+    careerIntro: 'Los Analistas de FP&A suelen comenzar en roles de contabilidad general o de analista junior antes de especializarse en FP&A. La progresión profesional típica va desde Analista hasta Analista Senior, Gerente de FP&A, Director de Finanzas y, potencialmente, Director Financiero (CFO).',
+    p1: 'Analista Junior', p2: 'Analista FP&A', p3: 'Analista Senior', p4: 'Gerente FP&A', p5: 'Director Financiero', p6: 'CFO',
+  },
+  pt: {
+    tag: '● Definição do Cargo',
+    headline: 'Analista',
+    heroParagraph: 'Um Analista de FP&A (Planejamento e Análise Financeira) é um profissional de finanças corporativas responsável por orçamento, previsões e relatórios para orientar decisões estratégicas. Analisam dados financeiros, monitoram o desempenho em relação às metas e criam modelos financeiros. Esses analistas conectam os dados financeiros à estratégia operacional, frequentemente se especializando em receita de vendas, custos ou desempenho geral da empresa.',
+    stat1: 'Anos Exp. Inicial',
+    stat2: 'Teto de Carreira',
+    stat3: 'Certificação Principal',
+    stat4: 'Visão 360° do Negócio',
+    respTitle: 'Principais Responsabilidades',
+    r1title: 'Orçamento e Previsões',
+    r1text: 'Liderar o processo de orçamento anual e criar previsões mensais ou trimestrais para antecipar o desempenho futuro.',
+    r2title: 'Análise de Variações',
+    r2text: 'Comparar os resultados reais com o orçamento e as previsões, identificar as causas das diferenças e explicar as variações à liderança.',
+    r3title: 'Modelagem Financeira',
+    r3text: 'Criar modelos para analisar cenários de negócios, como o impacto de possíveis aquisições, lançamentos de novos produtos ou iniciativas de redução de custos.',
+    r4title: 'Acompanhamento de Desempenho e Relatórios',
+    r4text: 'Desenvolver dashboards e relatórios para monitorar KPIs, lucratividade e saúde financeira.',
+    r5title: 'Suporte à Decisão Estratégica',
+    r5text: 'Fornecer insights acionáveis à alta gestão para auxiliar na tomada de decisões baseadas em dados.',
+    skillsTitle: 'Habilidades e Qualificações Necessárias',
+    s1: '<strong style="color:#e8edf5">Habilidades Técnicas:</strong> Proficiência avançada em Microsoft Excel (modelagem, Tabelas Dinâmicas) e ferramentas de visualização como Power BI ou Tableau.',
+    s2: '<strong style="color:#e8edf5">Formação:</strong> Normalmente exige graduação em Finanças, Contabilidade, Economia ou Administração de Empresas.',
+    s3: '<strong style="color:#e8edf5">Capacidade Analítica:</strong> Grande capacidade de interpretar dados complexos e traduzi-los em insights de negócio.',
+    s4: '<strong style="color:#e8edf5">Comunicação:</strong> Capacidade de comunicar resultados financeiros a interlocutores não financeiros.',
+    s5: '<strong style="color:#e8edf5">Experiência:</strong> Geralmente requer 1–3 anos em funções contábeis ou financeiras, com certificações como CPA, CIMA ou CFA preferidas para progressão na carreira.',
+    careerTitle: 'Trajetória de Carreira',
+    careerIntro: 'Os Analistas de FP&A geralmente começam em funções de contabilidade geral ou de analista júnior antes de se especializarem em FP&A. A progressão típica vai de Analista a Analista Sênior, Gerente de FP&A, Diretor Financeiro e, potencialmente, Diretor Executivo de Finanças (CFO).',
+    p1: 'Analista Júnior', p2: 'Analista FP&A', p3: 'Analista Sênior', p4: 'Gerente FP&A', p5: 'Diretor Financeiro', p6: 'CFO',
+  }
+};
+
+function setLang(lang) {
+  const t = translations[lang];
+  document.querySelectorAll('[data-key]').forEach(el => {
+    const key = el.dataset.key;
+    if (t[key] !== undefined) {
+      el.innerHTML = t[key];
+    }
+  });
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('btn-' + lang).classList.add('active');
+}
+
+// Build ticker
+const tickerData = [
+  { sym: 'AAPL', val: '189.42', chg: '+1.23%', up: true },
+  { sym: 'MSFT', val: '378.91', chg: '+0.87%', up: true },
+  { sym: 'GOOGL', val: '140.55', chg: '-0.34%', up: false },
+  { sym: 'AMZN', val: '185.03', chg: '+2.11%', up: true },
+  { sym: 'META', val: '502.77', chg: '+1.65%', up: true },
+  { sym: 'TSLA', val: '248.10', chg: '-1.82%', up: false },
+  { sym: 'NVDA', val: '875.39', chg: '+3.44%', up: true },
+  { sym: 'JPM', val: '196.22', chg: '+0.55%', up: true },
+  { sym: 'GS', val: '451.08', chg: '-0.21%', up: false },
+  { sym: 'BRK.B', val: '368.50', chg: '+0.12%', up: true },
+];
+
+const ticker = document.getElementById('ticker');
+const doubled = [...tickerData, ...tickerData];
+ticker.innerHTML = doubled.map(d =>
+  `<div class="ticker-item">
+    <span style="color:#e8edf5;font-weight:500">${d.sym}</span>
+    <span>${d.val}</span>
+    <span class="${d.up ? 'ticker-up' : 'ticker-down'}">${d.chg}</span>
+  </div>`
+).join('');
+</script>
+</body>
+</html>
