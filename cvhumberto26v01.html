@@ -1,0 +1,691 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CV – Humberto López Rodríguez</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ── TOKENS ─────────────────────────────────────── */
+  :root {
+    --bg:#f5f3ee; --card:#ffffff; --accent:#1a3a5c; --accent2:#c8a96e;
+    --text:#1e1e1e; --muted:#6b7280; --border:#e5e0d8; --tag-bg:#eef2f7;
+  }
+  [data-dark] {
+    --bg:#111827; --card:#1f2937; --accent:#60a5fa; --accent2:#c8a96e;
+    --text:#f9fafb; --muted:#9ca3af; --border:#374151; --tag-bg:#2d3748;
+  }
+
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+
+  body {
+    font-family:'DM Sans',sans-serif;
+    background:var(--bg); color:var(--text);
+    min-height:100vh;
+    transition:background .3s, color .3s;
+    font-size:15px;
+  }
+
+  /* ── STICKY BAR ─────────────────────────────────── */
+  .lang-bar {
+    position:sticky; top:0; z-index:100;
+    background:var(--card);
+    border-bottom:1px solid var(--border);
+    box-shadow:0 2px 8px rgba(0,0,0,.06);
+    padding:10px 16px;
+    display:flex; gap:8px; align-items:center;
+    overflow-x:auto; scrollbar-width:none;
+  }
+  .lang-bar::-webkit-scrollbar { display:none; }
+
+  .lang-btn {
+    flex-shrink:0;
+    padding:6px 16px; border-radius:20px;
+    border:1px solid var(--border);
+    background:var(--tag-bg); color:var(--text);
+    font-size:13px; font-weight:500; cursor:pointer;
+    display:flex; align-items:center; gap:5px;
+    transition:all .2s; font-family:inherit;
+  }
+  .lang-btn.active, .lang-btn:hover {
+    background:var(--accent); color:#fff; border-color:var(--accent);
+  }
+  .lang-btn.dark-btn {
+    background:#374151; color:#f9fafb; border-color:#4b5563;
+  }
+  .lang-btn.dark-btn:hover { background:#4b5563; }
+  .lang-btn.pdf-btn {
+    margin-left:auto;
+    background:var(--accent2); color:#fff; border-color:var(--accent2);
+  }
+  .lang-btn.pdf-btn:hover { opacity:.9; }
+
+  /* ── WRAPPER ─────────────────────────────────────── */
+  .page-wrap {
+    max-width:680px;
+    margin:0 auto;
+    padding:28px 20px 40px;
+  }
+
+  /* ── HEADER ──────────────────────────────────────── */
+  .header {
+    background:#1a3a5c; color:#fff;
+    padding:32px 28px 28px;
+    border-radius:20px;
+    position:relative; overflow:hidden;
+    margin-bottom:20px;
+  }
+  .header::before {
+    content:''; position:absolute;
+    top:-50px; right:-50px;
+    width:180px; height:180px; border-radius:50%;
+    background:rgba(200,169,110,.18);
+    pointer-events:none;
+  }
+  .header::after {
+    content:''; position:absolute;
+    bottom:-40px; left:35%;
+    width:120px; height:120px; border-radius:50%;
+    background:rgba(255,255,255,.04);
+    pointer-events:none;
+  }
+  .header-inner {
+    display:flex; align-items:center; gap:20px;
+    position:relative;
+  }
+  .avatar {
+    width:88px; height:88px; border-radius:50%;
+    object-fit:cover;
+    border:3px solid rgba(255,255,255,.35);
+    flex-shrink:0;
+  }
+  .header-text h1 {
+    font-family:'Playfair Display',serif;
+    font-size:28px; font-weight:900;
+    line-height:1.1; letter-spacing:-.5px;
+  }
+  .header-text .subtitle {
+    font-size:11px; letter-spacing:2px;
+    text-transform:uppercase; color:var(--accent2);
+    margin-top:6px; font-weight:600;
+  }
+  .contact-links {
+    margin-top:20px; position:relative;
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .contact-link {
+    display:flex; align-items:center; gap:12px;
+    color:rgba(255,255,255,.85); text-decoration:none;
+    font-size:14px; padding:10px 14px;
+    background:rgba(255,255,255,.1);
+    border-radius:12px; border:1px solid rgba(255,255,255,.15);
+    transition:background .2s;
+  }
+  .contact-link:hover { background:rgba(255,255,255,.2); color:#fff; }
+  .contact-link .icon { font-size:17px; width:22px; text-align:center; }
+  .cat-row {
+    display:flex; flex-wrap:wrap; gap:8px; margin-top:18px;
+    position:relative;
+  }
+  .cat-pill {
+    padding:5px 14px; border-radius:20px;
+    font-size:12px; font-weight:600; letter-spacing:.5px;
+  }
+
+  /* ── CARDS ───────────────────────────────────────── */
+  .main { display:flex; flex-direction:column; gap:16px; }
+
+  .card {
+    background:var(--card); border-radius:16px;
+    padding:22px; border:1px solid var(--border);
+    box-shadow:0 2px 10px rgba(0,0,0,.05);
+  }
+
+  .section-title {
+    font-size:11px; letter-spacing:2.5px;
+    text-transform:uppercase; color:var(--accent2);
+    font-weight:700; margin-bottom:16px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .section-title::after {
+    content:''; flex:1; height:1px; background:var(--border);
+  }
+
+  /* ── SUMMARY ─────────────────────────────────────── */
+  .summary { line-height:1.8; color:var(--muted); font-size:14.5px; }
+  .summary strong { color:var(--text); font-weight:600; }
+
+  /* ── EXPERIENCE ──────────────────────────────────── */
+  .exp-item {
+    margin-bottom:18px; padding-bottom:18px;
+    border-bottom:1px dashed var(--border);
+  }
+  .exp-item:last-child { margin-bottom:0; padding-bottom:0; border-bottom:none; }
+  .exp-title { font-size:16px; font-weight:600; color:var(--text); margin-bottom:3px; }
+  .exp-company { font-size:13px; color:var(--accent); font-weight:500; margin-bottom:5px; }
+  .exp-desc { font-size:13px; color:var(--muted); line-height:1.55; }
+  .exp-year {
+    display:inline-block; background:var(--tag-bg); color:var(--accent);
+    font-size:11px; font-weight:700; padding:3px 10px;
+    border-radius:20px; margin-top:7px; letter-spacing:.5px;
+  }
+
+  /* ── SKILLS ──────────────────────────────────────── */
+  .skills-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .skill-name {
+    font-size:13px; font-weight:500; margin-bottom:5px;
+    display:flex; justify-content:space-between;
+  }
+  .skill-pct { color:var(--muted); font-size:12px; }
+  .bar-bg { background:var(--border); border-radius:4px; height:7px; overflow:hidden; }
+  .bar-fill {
+    height:100%; border-radius:4px;
+    background:linear-gradient(90deg, var(--accent), var(--accent2));
+    animation:fillBar 1.2s ease forwards; width:0;
+  }
+  @keyframes fillBar { to { width:var(--w); } }
+
+  /* ── EDUCATION ───────────────────────────────────── */
+  .edu-item {
+    margin-bottom:16px; padding-bottom:16px;
+    border-bottom:1px dashed var(--border);
+  }
+  .edu-item:last-child { margin-bottom:0; padding-bottom:0; border-bottom:none; }
+  .edu-title { font-size:15px; font-weight:600; }
+  .edu-place { font-size:12.5px; color:var(--muted); margin-top:4px; }
+  .badge {
+    display:inline-block; padding:3px 10px; border-radius:5px;
+    font-size:10px; font-weight:700; letter-spacing:1px;
+    text-transform:uppercase; margin-top:6px;
+  }
+  .badge-active { background:#d1fae5; color:#065f46; }
+  .badge-done   { background:#e0e7ff; color:#3730a3; }
+  [data-dark] .badge-active { background:#064e3b; color:#6ee7b7; }
+  [data-dark] .badge-done   { background:#312e81; color:#a5b4fc; }
+
+  /* ── SOFT SKILLS ─────────────────────────────────── */
+  .soft-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .soft-item {
+    display:flex; align-items:center; gap:10px;
+    font-size:13.5px; padding:10px 12px;
+    background:var(--tag-bg); border-radius:10px; font-weight:500;
+  }
+  .soft-dot {
+    width:9px; height:9px; border-radius:50%;
+    background:var(--accent2); flex-shrink:0;
+  }
+
+  /* ── TOOLS ───────────────────────────────────────── */
+  .tools-wrap { display:flex; flex-wrap:wrap; gap:9px; }
+  .tool-tag {
+    background:var(--tag-bg); border:1px solid var(--border);
+    border-radius:9px; padding:6px 14px;
+    font-size:13px; font-weight:500; color:var(--text);
+  }
+
+  /* ── CERTS ───────────────────────────────────────── */
+  .cert-item {
+    display:flex; gap:14px; margin-bottom:16px; padding-bottom:16px;
+    border-bottom:1px dashed var(--border); align-items:flex-start;
+  }
+  .cert-item:last-child { margin-bottom:0; padding-bottom:0; border-bottom:none; }
+  .cert-num {
+    width:32px; height:32px; flex-shrink:0; border-radius:50%;
+    background:var(--accent); color:#fff;
+    font-size:13px; font-weight:700;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .cert-title  { font-size:14px; font-weight:600; }
+  .cert-sub    { font-size:12px; color:var(--muted); margin-top:3px; }
+  .cert-hours  { font-size:12px; font-weight:700; color:var(--accent2); margin-top:2px; }
+
+  /* ── LANGUAGES ───────────────────────────────────── */
+  .lang-row {
+    display:flex; justify-content:space-between; align-items:center;
+    margin-bottom:10px;
+  }
+  .lang-row:last-child { margin-bottom:0; }
+  .lang-name  { font-size:14px; font-weight:500; display:flex; align-items:center; gap:7px; }
+  .lang-level {
+    font-size:12px; color:var(--muted);
+    background:var(--tag-bg); padding:3px 10px; border-radius:20px;
+  }
+
+  /* ── PROFILE ─────────────────────────────────────── */
+  .profile-text { font-size:14px; color:var(--muted); line-height:1.8; }
+
+  /* ── FOOTER ──────────────────────────────────────── */
+  footer { text-align:center; padding:24px; font-size:12px; color:var(--muted); }
+
+  /* ══════════════════════════════════════════════════
+     RESPONSIVE
+  ══════════════════════════════════════════════════ */
+
+  /* Tablet */
+  @media (max-width: 700px) {
+    .page-wrap { padding:20px 14px 32px; }
+    .header { padding:26px 22px 22px; border-radius:16px; }
+    .header-text h1 { font-size:24px; }
+    .skills-grid { grid-template-columns:1fr 1fr; }
+    .soft-grid    { grid-template-columns:1fr 1fr; }
+  }
+
+  /* Mobile */
+  @media (max-width: 480px) {
+    body { font-size:14px; }
+    .page-wrap { padding:12px 12px 24px; }
+    .header { padding:22px 18px 20px; border-radius:14px; margin-bottom:14px; }
+    .header-inner { gap:14px; }
+    .avatar { width:74px; height:74px; }
+    .header-text h1 { font-size:21px; }
+    .header-text .subtitle { font-size:10px; }
+    .contact-link { font-size:13px; padding:9px 12px; }
+    .card { padding:18px; }
+    .skills-grid { grid-template-columns:1fr; }
+    .soft-grid    { grid-template-columns:1fr; }
+    .lang-btn { font-size:12px; padding:5px 12px; }
+  }
+
+  /* Print */
+  @media print {
+    .lang-bar { display:none; }
+    body { background:#fff; font-size:12px; }
+    .page-wrap { max-width:100%; padding:0; }
+    .header { border-radius:0; margin-bottom:14px; }
+    .card { box-shadow:none; border:1px solid #ddd; break-inside:avoid; }
+  }
+</style>
+</head>
+<body data-dark>
+
+<!-- BARRA SUPERIOR -->
+<div class="lang-bar">
+  <button class="lang-btn active" onclick="setLang('es')">🇪🇸 ES</button>
+  <button class="lang-btn"        onclick="setLang('en')">🇬🇧 EN</button>
+  <button class="lang-btn"        onclick="setLang('pt')">🇵🇹 PT</button>
+  <button class="lang-btn dark-btn" id="darkBtn" onclick="toggleDark()">☀️ Modo claro</button>
+  <button class="lang-btn pdf-btn"  onclick="window.print()" data-i18n="pdf">🖨️ PDF</button>
+</div>
+
+<!-- CONTENIDO CENTRADO -->
+<div class="page-wrap">
+
+  <!-- CABECERA -->
+  <div class="header">
+    <div class="header-inner">
+      <img class="avatar"
+           src="https://pbs.twimg.com/profile_images/2012681173093216257/DOMH01O8_200x200.jpg"
+           alt="Humberto López Rodríguez">
+      <div class="header-text">
+        <h1>Humberto López Rodríguez</h1>
+        <div class="subtitle" data-i18n="subtitle"></div>
+      </div>
+    </div>
+    <div class="contact-links">
+      <a class="contact-link" href="https://maps.google.com/?q=Ferrol,+A+Coruña,+España" target="_blank">
+        <span class="icon">📍</span><span>Ferrol – A Coruña</span>
+      </a>
+      <a class="contact-link" href="tel:+34658868490">
+        <span class="icon">📞</span><span>658 868 490</span>
+        <span style="margin-left:auto;font-size:12px;opacity:.7;" data-i18n="callWhatsapp"></span>
+      </a>
+      <a class="contact-link" href="https://wa.me/34658868490" target="_blank">
+        <span class="icon">💬</span><span>WhatsApp</span>
+      </a>
+      <a class="contact-link" href="mailto:negronoche50@outlook.com">
+        <span class="icon">✉️</span><span>negronoche50@outlook.com</span>
+      </a>
+    </div>
+    <div class="cat-row">
+      <span class="cat-pill" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.2);" data-i18n="cat1"></span>
+      <span class="cat-pill" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.2);" data-i18n="cat2"></span>
+      <span class="cat-pill" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.2);" data-i18n="cat3"></span>
+      <span class="cat-pill" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.2);" data-i18n="cat4"></span>
+    </div>
+  </div>
+
+  <!-- SECCIONES -->
+  <div class="main">
+
+    <div class="card">
+      <p class="summary" data-i18n-html="summary"></p>
+    </div>
+
+    <div class="card">
+      <div class="section-title" data-i18n="expTitle"></div>
+      <div class="exp-item">
+        <div class="exp-title"   data-i18n="exp1Title"></div>
+        <div class="exp-company">Escuela de Finanzas Business School – Oleiros</div>
+        <div class="exp-desc"    data-i18n="exp1Desc"></div>
+        <span class="exp-year">2024</span>
+      </div>
+      <div class="exp-item">
+        <div class="exp-title"   data-i18n="exp2Title"></div>
+        <div class="exp-company">Editorial La Capital – A Coruña</div>
+        <div class="exp-desc"    data-i18n="exp2Desc"></div>
+        <span class="exp-year">2024</span>
+      </div>
+      <div class="exp-item">
+        <div class="exp-title"   data-i18n="exp3Title"></div>
+        <div class="exp-company">Libolis – A Coruña</div>
+        <div class="exp-desc"    data-i18n="exp3Desc"></div>
+        <span class="exp-year">2023</span>
+      </div>
+      <div class="exp-item">
+        <div class="exp-title"   data-i18n="exp4Title"></div>
+        <div class="exp-company">Abanca Servicios Financieros – A Coruña</div>
+        <div class="exp-desc"    data-i18n="exp4Desc"></div>
+        <span class="exp-year">2020</span>
+      </div>
+      <div class="exp-item">
+        <div class="exp-title"   data-i18n="exp5Title"></div>
+        <div class="exp-company">Asesoría Serva – Ferrol</div>
+        <div class="exp-desc"    data-i18n="exp5Desc"></div>
+        <span class="exp-year">2017</span>
+      </div>
+      <div class="exp-item">
+        <div class="exp-title"   data-i18n="exp6Title"></div>
+        <div class="exp-company">BNP Paribas · Bankinter · Ibercaja</div>
+        <div class="exp-desc"    data-i18n="exp6Desc"></div>
+        <span class="exp-year">2005</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title" data-i18n="skillsTitle"></div>
+      <div class="skills-grid">
+        <div class="skill-item">
+          <div class="skill-name"><span data-i18n="skill1"></span><span class="skill-pct">90%</span></div>
+          <div class="bar-bg"><div class="bar-fill" style="--w:90%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name"><span data-i18n="skill2"></span><span class="skill-pct">82%</span></div>
+          <div class="bar-bg"><div class="bar-fill" style="--w:82%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name"><span>Power BI</span><span class="skill-pct">72%</span></div>
+          <div class="bar-bg"><div class="bar-fill" style="--w:72%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name"><span>Excel / BBDD</span><span class="skill-pct">80%</span></div>
+          <div class="bar-bg"><div class="bar-fill" style="--w:80%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name"><span data-i18n="skill5"></span><span class="skill-pct">68%</span></div>
+          <div class="bar-bg"><div class="bar-fill" style="--w:68%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name"><span data-i18n="skill6"></span><span class="skill-pct">65%</span></div>
+          <div class="bar-bg"><div class="bar-fill" style="--w:65%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name"><span>SQL / MySQL</span><span class="skill-pct">70%</span></div>
+          <div class="bar-bg"><div class="bar-fill" style="--w:70%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name"><span>ERP SAP/NAV</span><span class="skill-pct">75%</span></div>
+          <div class="bar-bg"><div class="bar-fill" style="--w:75%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title" data-i18n="eduTitle"></div>
+      <div class="edu-item">
+        <div class="edu-title" data-i18n="edu1Title"></div>
+        <div class="edu-place" data-i18n="edu1Place"></div>
+        <span class="badge badge-active" data-i18n="inProgress"></span>
+      </div>
+      <div class="edu-item">
+        <div class="edu-title" data-i18n="edu2Title"></div>
+        <div class="edu-place" data-i18n="edu2Place"></div>
+      </div>
+      <div class="edu-item">
+        <div class="edu-title" data-i18n="edu3Title"></div>
+        <div class="edu-place" data-i18n="edu3Place"></div>
+        <span class="badge badge-done" data-i18n="completed"></span>
+      </div>
+      <div class="edu-item">
+        <div class="edu-title" data-i18n="edu4Title"></div>
+        <div class="edu-place" data-i18n="edu4Place"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title" data-i18n="softTitle"></div>
+      <div class="soft-grid">
+        <div class="soft-item"><div class="soft-dot"></div><span data-i18n="soft1"></span></div>
+        <div class="soft-item"><div class="soft-dot"></div><span data-i18n="soft2"></span></div>
+        <div class="soft-item"><div class="soft-dot"></div><span data-i18n="soft3"></span></div>
+        <div class="soft-item"><div class="soft-dot"></div><span data-i18n="soft4"></span></div>
+        <div class="soft-item"><div class="soft-dot"></div><span data-i18n="soft5"></span></div>
+        <div class="soft-item"><div class="soft-dot"></div><span data-i18n="soft6"></span></div>
+        <div class="soft-item"><div class="soft-dot"></div><span data-i18n="soft7"></span></div>
+        <div class="soft-item"><div class="soft-dot"></div><span data-i18n="soft8"></span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title" data-i18n="toolsTitle"></div>
+      <div class="tools-wrap">
+        <span class="tool-tag">Dynamics 365</span>
+        <span class="tool-tag">SAP</span>
+        <span class="tool-tag">Excel</span>
+        <span class="tool-tag">Power BI</span>
+        <span class="tool-tag">Odoo</span>
+        <span class="tool-tag">Anfix</span>
+        <span class="tool-tag">VS Code</span>
+        <span class="tool-tag">GitHub</span>
+        <span class="tool-tag">MySQL</span>
+        <span class="tool-tag">HTML / CSS / JS</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title" data-i18n="certTitle"></div>
+      <div class="cert-item">
+        <div class="cert-num">1</div>
+        <div>
+          <div class="cert-title" data-i18n="cert1Title"></div>
+          <div class="cert-sub">London Institute – Ferrol · 2025</div>
+          <div class="cert-hours">620h</div>
+        </div>
+      </div>
+      <div class="cert-item">
+        <div class="cert-num">2</div>
+        <div>
+          <div class="cert-title" data-i18n="cert2Title"></div>
+          <div class="cert-sub">Informática A Coruña · 2024</div>
+          <div class="cert-hours">500h</div>
+        </div>
+      </div>
+      <div class="cert-item">
+        <div class="cert-num">3</div>
+        <div>
+          <div class="cert-title" data-i18n="cert3Title"></div>
+          <div class="cert-sub">Academia Postal – A Coruña · 2023</div>
+          <div class="cert-hours">590h</div>
+        </div>
+      </div>
+      <div class="cert-item">
+        <div class="cert-num">4</div>
+        <div>
+          <div class="cert-title" data-i18n="cert4Title"></div>
+          <div class="cert-sub">nFOR – A Coruña · 2023</div>
+          <div class="cert-hours">590h</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title" data-i18n="langsTitle"></div>
+      <div class="lang-row">
+        <div class="lang-name">🇪🇸 Español</div>
+        <span class="lang-level" data-i18n="langNative"></span>
+      </div>
+      <div class="lang-row">
+        <div class="lang-name">🇬🇧 Inglés</div>
+        <span class="lang-level" data-i18n="langEnLevel"></span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title" data-i18n="profileTitle"></div>
+      <p class="profile-text" data-i18n="profileText"></p>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /page-wrap -->
+
+<footer data-i18n="footer"></footer>
+
+<script>
+const T = {
+  es: {
+    darkMode:"🌙 Modo oscuro", lightMode:"☀️ Modo claro", pdf:"🖨️ PDF",
+    subtitle:"Finanzas · Programación · BBDD · Ciberseguridad",
+    callWhatsapp:"Llamar / WhatsApp",
+    cat1:"Finanzas", cat2:"Programación Web", cat3:"Ciberseguridad", cat4:"Análisis de Datos",
+    summary:`Profesional con formación en <strong>programación web</strong> y tecnologías aplicadas a la contabilidad, incluyendo <strong>BBDD, seguridad informática</strong> y sistemas de información. Experiencia en el área contable especializado en presupuestos, desviaciones, análisis de datos financieros, conciliaciones bancarias, tesorería e informes económicos. Perfil responsable, proactivo y con actitud de aprendizaje continuo.`,
+    expTitle:"⬡ Experiencia Relevante",
+    exp1Title:"Técnico de Ciberseguridad",   exp1Desc:"Monitorización, análisis y respuesta a incidentes",
+    exp2Title:"QA Tester",                   exp2Desc:"Pruebas funcionales y reporte de errores web",
+    exp3Title:"Gestor de la Información",    exp3Desc:"Gestión de información, BBDD y CRM",
+    exp4Title:"Gestor de Operaciones",       exp4Desc:"Créditos, back office y aplicativo oficina",
+    exp5Title:"Administrativo Contable",     exp5Desc:"Contabilidad, impuestos, laboral y tesorería",
+    exp6Title:"Empleado de Banca",           exp6Desc:"Operativa, financiación y declaraciones IRPF",
+    skillsTitle:"⬡ Competencias Técnicas",
+    skill1:"Contabilidad", skill2:"Finanzas", skill5:"Prog. Web", skill6:"Ciberseg.",
+    eduTitle:"⬡ Formación Académica",
+    edu1Title:"Desarrollo de Aplicaciones Web (DAW)", edu1Place:"CFGS · CIPF Rodolfo Ucha – Ferrol · 2025",
+    edu2Title:"Ciencias Empresariales – 90/240 ECTS", edu2Place:"Grado Universitario · Universidad A Coruña · 2020 · 3 años",
+    edu3Title:"Administración y Finanzas",             edu3Place:"CFGS · CIPF Rodolfo Ucha – Ferrol · 2018 · 2 años",
+    edu4Title:"Inglés Nivel Preintermedio",            edu4Place:"EOI Ferrol · 2010 · 3 años",
+    inProgress:"EN CURSO", completed:"FINALIZADO",
+    softTitle:"⬡ Habilidades Blandas",
+    soft1:"Resolución de problemas", soft2:"Trabajo autónomo",   soft3:"Aprendizaje continuo",
+    soft4:"Orientación al detalle",  soft5:"Trabajo en equipo",  soft6:"Adaptabilidad",
+    soft7:"Proactividad",            soft8:"Comunicación efectiva",
+    toolsTitle:"⬡ Herramientas & Tecnologías",
+    certTitle:"⬡ Certificados Profesionalidad N3",
+    cert1Title:"Programación en Lenguajes Estructurados IFCD0111",
+    cert2Title:"Seguridad Informática IFCT0109",
+    cert3Title:"Desarrollo de Aplic. con Tecnologías Web IFCD0210",
+    cert4Title:"Sistemas de Gestión de la Información IFCT0211",
+    langsTitle:"⬡ Idiomas", langNative:"Nativo", langEnLevel:"Preintermedio (B1)",
+    profileTitle:"⬡ Perfil",
+    profileText:"Buscando un rol técnico que combine finanzas y tecnología. Orientado a proyectos complejos de análisis financiero FinTech, optimización de procesos financieros, desarrollo de soluciones tecnológicas escalables, arquitectura de soluciones financieras digitales e integración de sistemas corporativos.",
+    footer:"negronoche50@outlook.com"
+  },
+  en: {
+    darkMode:"🌙 Dark mode", lightMode:"☀️ Light mode", pdf:"🖨️ PDF",
+    subtitle:"Finance · Programming · DB · Cybersecurity",
+    callWhatsapp:"Call / WhatsApp",
+    cat1:"Finance", cat2:"Web Development", cat3:"Cybersecurity", cat4:"Data Analysis",
+    summary:`Professional with training in <strong>web programming</strong> and technologies applied to accounting, including <strong>databases, information security</strong> and information systems. Experience in the accounting area specialising in budgets, variance analysis, financial data analysis, bank reconciliations, treasury and economic reports. Responsible, proactive profile with a continuous-learning mindset.`,
+    expTitle:"⬡ Relevant Experience",
+    exp1Title:"Cybersecurity Technician",   exp1Desc:"Monitoring, analysis and incident response",
+    exp2Title:"QA Tester",                  exp2Desc:"Functional testing and web bug reporting",
+    exp3Title:"Information Manager",        exp3Desc:"Information management, databases and CRM",
+    exp4Title:"Operations Manager",         exp4Desc:"Credits, back office and branch application",
+    exp5Title:"Accounting Administrator",   exp5Desc:"Accounting, taxes, payroll and treasury",
+    exp6Title:"Bank Employee",              exp6Desc:"Operations, financing and income tax returns",
+    skillsTitle:"⬡ Technical Skills",
+    skill1:"Accounting", skill2:"Finance", skill5:"Web Dev.", skill6:"Cybersec.",
+    eduTitle:"⬡ Academic Education",
+    edu1Title:"Web Application Development (DAW)", edu1Place:"Higher Vocational · CIPF Rodolfo Ucha – Ferrol · 2025",
+    edu2Title:"Business Sciences – 90/240 ECTS",   edu2Place:"University Degree · University of A Coruña · 2020 · 3 years",
+    edu3Title:"Administration and Finance",         edu3Place:"Higher Vocational · CIPF Rodolfo Ucha – Ferrol · 2018 · 2 years",
+    edu4Title:"Pre-intermediate English",           edu4Place:"EOI Ferrol · 2010 · 3 years",
+    inProgress:"IN PROGRESS", completed:"COMPLETED",
+    softTitle:"⬡ Soft Skills",
+    soft1:"Problem solving",    soft2:"Independent work",   soft3:"Continuous learning",
+    soft4:"Attention to detail",soft5:"Teamwork",           soft6:"Adaptability",
+    soft7:"Proactivity",        soft8:"Effective communication",
+    toolsTitle:"⬡ Tools & Technologies",
+    certTitle:"⬡ Level 3 Professional Certificates",
+    cert1Title:"Programming in Structured Languages IFCD0111",
+    cert2Title:"Computer Security IFCT0109",
+    cert3Title:"Web Technologies Application Development IFCD0210",
+    cert4Title:"Information Management Systems IFCT0211",
+    langsTitle:"⬡ Languages", langNative:"Native", langEnLevel:"Pre-intermediate (B1)",
+    profileTitle:"⬡ Profile",
+    profileText:"Seeking a technical role that combines finance and technology. Focused on complex FinTech financial analysis projects, financial process optimisation, scalable technology solution development, digital financial solution architecture and corporate systems integration.",
+    footer:"negronoche50@outlook.com"
+  },
+  pt: {
+    darkMode:"🌙 Modo escuro", lightMode:"☀️ Modo claro", pdf:"🖨️ PDF",
+    subtitle:"Finanças · Programação · BD · Cibersegurança",
+    callWhatsapp:"Ligar / WhatsApp",
+    cat1:"Finanças", cat2:"Desenvolvimento Web", cat3:"Cibersegurança", cat4:"Análise de Dados",
+    summary:`Profissional com formação em <strong>programação web</strong> e tecnologias aplicadas à contabilidade, incluindo <strong>bases de dados, segurança informática</strong> e sistemas de informação. Experiência na área contabilística especializada em orçamentos, desvios, análise de dados financeiros, reconciliações bancárias, tesouraria e relatórios económicos. Perfil responsável, proativo e com atitude de aprendizagem contínua.`,
+    expTitle:"⬡ Experiência Relevante",
+    exp1Title:"Técnico de Cibersegurança",      exp1Desc:"Monitorização, análise e resposta a incidentes",
+    exp2Title:"QA Tester",                      exp2Desc:"Testes funcionais e reporte de erros web",
+    exp3Title:"Gestor de Informação",           exp3Desc:"Gestão de informação, BD e CRM",
+    exp4Title:"Gestor de Operações",            exp4Desc:"Créditos, back office e aplicativo de agência",
+    exp5Title:"Administrativo Contabilístico",  exp5Desc:"Contabilidade, impostos, laboral e tesouraria",
+    exp6Title:"Funcionário Bancário",           exp6Desc:"Operativa, financiamento e declarações de IRS",
+    skillsTitle:"⬡ Competências Técnicas",
+    skill1:"Contabilidade", skill2:"Finanças", skill5:"Dev. Web", skill6:"Ciberseg.",
+    eduTitle:"⬡ Formação Académica",
+    edu1Title:"Desenvolvimento de Aplicações Web (DAW)", edu1Place:"CFGS · CIPF Rodolfo Ucha – Ferrol · 2025",
+    edu2Title:"Ciências Empresariais – 90/240 ECTS",     edu2Place:"Licenciatura · Universidade da Corunha · 2020 · 3 anos",
+    edu3Title:"Administração e Finanças",                edu3Place:"CFGS · CIPF Rodolfo Ucha – Ferrol · 2018 · 2 anos",
+    edu4Title:"Inglês Nível Pré-intermédio",             edu4Place:"EOI Ferrol · 2010 · 3 anos",
+    inProgress:"EM CURSO", completed:"CONCLUÍDO",
+    softTitle:"⬡ Competências Pessoais",
+    soft1:"Resolução de problemas", soft2:"Trabalho autónomo",   soft3:"Aprendizagem contínua",
+    soft4:"Orientação ao detalhe",  soft5:"Trabalho em equipa",  soft6:"Adaptabilidade",
+    soft7:"Proatividade",           soft8:"Comunicação eficaz",
+    toolsTitle:"⬡ Ferramentas & Tecnologias",
+    certTitle:"⬡ Certificados Profissionalidade N3",
+    cert1Title:"Programação em Linguagens Estruturadas IFCD0111",
+    cert2Title:"Segurança Informática IFCT0109",
+    cert3Title:"Desenvolvimento de Aplic. com Tecnologias Web IFCD0210",
+    cert4Title:"Sistemas de Gestão da Informação IFCT0211",
+    langsTitle:"⬡ Idiomas", langNative:"Nativo", langEnLevel:"Pré-intermédio (B1)",
+    profileTitle:"⬡ Perfil",
+    profileText:"À procura de um papel técnico que combine finanças e tecnologia. Focado em projetos complexos de análise financeira FinTech, otimização de processos financeiros, desenvolvimento de soluções tecnológicas escaláveis, arquitetura de soluções financeiras digitais e integração de sistemas corporativos.",
+    footer:"negronoche50@outlook.com"
+  }
+};
+
+let currentLang = 'es';
+
+function setLang(lang) {
+  currentLang = lang;
+  const t = T[lang];
+  document.documentElement.lang = lang;
+  document.querySelectorAll('.lang-btn[onclick^="setLang"]').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('onclick') === `setLang('${lang}')`);
+  });
+  const isDark = document.body.hasAttribute('data-dark');
+  document.getElementById('darkBtn').textContent = isDark ? t.lightMode : t.darkMode;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (t[key] !== undefined) el.textContent = t[key];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const key = el.getAttribute('data-i18n-html');
+    if (t[key] !== undefined) el.innerHTML = t[key];
+  });
+}
+
+function toggleDark() {
+  const isDark = document.body.hasAttribute('data-dark');
+  const t = T[currentLang];
+  if (isDark) {
+    document.body.removeAttribute('data-dark');
+    document.getElementById('darkBtn').textContent = t.darkMode;
+  } else {
+    document.body.setAttribute('data-dark', '');
+    document.getElementById('darkBtn').textContent = t.lightMode;
+  }
+}
+
+setLang('es');
+</script>
+</body>
+</html>
