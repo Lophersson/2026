@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guión ODS 9 — Ártabro Tech</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --bg:#0e1117; --surface:#161c26; --surface2:#1b2232;
+  --amber:#e6a817; --amber-l:#f5c842; --teal:#2dd4bf; --rose:#fb7185;
+  --text:#dde6f0; --muted:#7a8799; --wc:#f9a8a8; --mc:#93c5fd; --border:#2a3343;
+}
+body { background:var(--bg); color:var(--text); font-family:'Source Serif 4',Georgia,serif; min-height:100vh;
+  background-image:radial-gradient(ellipse 60% 50% at 10% 10%,rgba(45,212,191,.05) 0%,transparent 60%),
+  radial-gradient(ellipse 60% 50% at 90% 90%,rgba(230,168,23,.05) 0%,transparent 60%); }
+
+header { padding:2.5rem 3.5rem 2rem; border-bottom:1px solid var(--border); position:relative; overflow:hidden; }
+header::after { content:'ODS 9'; position:absolute; right:2.5rem; top:50%; transform:translateY(-50%);
+  font-family:'Playfair Display',serif; font-size:6rem; font-weight:900; color:rgba(230,168,23,.06);
+  pointer-events:none; user-select:none; letter-spacing:-.02em; }
+.sup-tag { font-size:.68rem; letter-spacing:.22em; text-transform:uppercase; color:var(--teal); margin-bottom:.6rem; }
+header h1 { font-family:'Playfair Display',serif; font-size:2.1rem; font-weight:700; color:var(--amber-l); max-width:560px; line-height:1.2; }
+header .sub { color:var(--muted); margin-top:.4rem; font-size:.9rem; font-style:italic; }
+
+.controls { display:flex; align-items:center; gap:.8rem; flex-wrap:wrap;
+  padding:1.2rem 3.5rem; background:var(--surface); border-bottom:1px solid var(--border); }
+.btn { display:flex; align-items:center; gap:.4rem; padding:.55rem 1.3rem; border-radius:6px; border:none;
+  cursor:pointer; font-family:'Source Serif 4',serif; font-size:.88rem; transition:all .2s; letter-spacing:.02em; }
+.btn-play { background:var(--amber); color:#0e1117; font-weight:700; }
+.btn-play:hover { background:var(--amber-l); }
+.btn-pause { background:transparent; color:var(--teal); border:1px solid var(--teal); }
+.btn-pause:hover { background:rgba(45,212,191,.1); }
+.btn-stop { background:transparent; color:var(--rose); border:1px solid var(--rose); }
+.btn-stop:hover { background:rgba(251,113,133,.1); }
+.btn-voices { background:transparent; color:var(--muted); border:1px solid var(--border); font-size:.8rem; }
+.btn-voices:hover { border-color:var(--muted); color:var(--text); }
+.status { margin-left:auto; font-size:.78rem; color:var(--muted); font-style:italic; display:flex; align-items:center; gap:.45rem; }
+.dot { width:8px; height:8px; border-radius:50%; background:var(--muted); transition:background .3s; }
+.dot.on { background:#22c55e; animation:blink 1.1s infinite; }
+@keyframes blink { 0%,100%{opacity:1}50%{opacity:.25} }
+
+.voice-panel { display:none; background:var(--surface2); border-bottom:1px solid var(--border);
+  padding:1.5rem 3.5rem; gap:2rem; flex-wrap:wrap; }
+.voice-panel.open { display:flex; }
+.vp-col { flex:1; min-width:260px; }
+.vp-col h3 { font-size:.72rem; letter-spacing:.18em; text-transform:uppercase; margin-bottom:.8rem; }
+.vp-col.jenny h3 { color:var(--wc); }
+.vp-col.humberto h3 { color:var(--mc); }
+.vp-col select { width:100%; background:var(--bg); color:var(--text); border:1px solid var(--border);
+  border-radius:6px; padding:.45rem .7rem; font-family:'Source Serif 4',serif; font-size:.85rem; outline:none; cursor:pointer; }
+.vp-col select:focus { border-color:var(--amber); }
+.vp-hint { font-size:.72rem; color:var(--muted); margin-top:.5rem; font-style:italic; }
+.pitch-row { display:flex; align-items:center; gap:.8rem; margin-top:.7rem; }
+.pitch-row label { font-size:.72rem; color:var(--muted); white-space:nowrap; min-width:60px; }
+.pitch-row input[type=range] { flex:1; accent-color:var(--amber); }
+.pitch-row span { font-size:.72rem; color:var(--text); min-width:30px; text-align:right; }
+
+.legend { display:flex; gap:2rem; padding:.9rem 3.5rem; background:var(--surface);
+  border-bottom:1px solid var(--border); flex-wrap:wrap; align-items:center; }
+.badge { padding:.18rem .65rem; border-radius:20px; font-size:.72rem; font-weight:700; letter-spacing:.05em; }
+.badge-w { background:rgba(249,168,168,.13); color:var(--wc); border:1px solid rgba(249,168,168,.28); }
+.badge-m { background:rgba(147,197,253,.13); color:var(--mc); border:1px solid rgba(147,197,253,.28); }
+.leg-item { display:flex; align-items:center; gap:.5rem; font-size:.82rem; color:var(--muted); }
+.leg-hint { margin-left:auto; font-size:.72rem; color:var(--border); font-style:italic; }
+
+.script { max-width:860px; margin:0 auto; padding:2.5rem 3.5rem 6rem; }
+.section { margin-bottom:2.8rem; }
+.sec-title { font-size:.7rem; letter-spacing:.24em; text-transform:uppercase; color:var(--amber);
+  padding-bottom:.45rem; margin-bottom:1.4rem; border-bottom:1px solid rgba(230,168,23,.18);
+  font-family:'Playfair Display',serif; }
+
+.line { display:flex; gap:1.4rem; margin-bottom:1.3rem; padding:1.1rem 1.3rem; border-radius:8px;
+  cursor:pointer; transition:background .2s,border-color .2s; border:1px solid transparent; position:relative; }
+.line:hover { background:var(--surface); border-color:var(--border); }
+.line.active { border-color:rgba(230,168,23,.38); background:rgba(230,168,23,.04); }
+.line.active::before { content:'▶'; position:absolute; left:-.9rem; top:50%; transform:translateY(-50%);
+  color:var(--amber); font-size:.55rem; }
+
+.spk { flex-shrink:0; width:86px; padding-top:.1rem; }
+.spk-name { font-size:.7rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; }
+.spk-name.w { color:var(--wc); }
+.spk-name.m { color:var(--mc); }
+.spk-role { font-size:.62rem; color:var(--muted); margin-top:.12rem; font-style:italic; }
+.txt { font-size:.97rem; line-height:1.8; color:var(--text); font-weight:300; }
+
+.note { background:rgba(45,212,191,.04); border-left:3px solid var(--teal);
+  padding:.7rem 1rem; border-radius:0 6px 6px 0; font-size:.8rem; color:var(--muted);
+  font-style:italic; margin-bottom:1.3rem; }
+
+.timebar { position:sticky; bottom:0; display:flex; align-items:center; gap:1.2rem;
+  padding:.9rem 3.5rem; background:var(--surface); border-top:1px solid var(--border); z-index:10; }
+.tl { font-size:.68rem; color:var(--muted); text-transform:uppercase; letter-spacing:.1em; }
+.tv { font-family:'Playfair Display',serif; font-size:1rem; color:var(--amber); }
+.track { flex:1; height:3px; background:var(--border); border-radius:2px; overflow:hidden; }
+.fill { height:100%; background:var(--amber); width:0%; transition:width .5s; border-radius:2px; }
+
+@media(max-width:680px){
+  header,.controls,.legend,.script,.voice-panel,.timebar{ padding-left:1.2rem; padding-right:1.2rem; }
+  header h1 { font-size:1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="sup-tag">Análisis de Sostenibilidad Empresarial · Ferrol, Galicia · 2025</div>
+  <h1>ODS 9 — Industria, Innovación e Infraestructura</h1>
+  <p class="sub">Ártabro Tech · Guión de presentación · 5 minutos · Jenny Paola &amp; Humberto López</p>
+</header>
+
+<div class="controls">
+  <button class="btn btn-play"   onclick="startAll()">&#9654; &nbsp;Reproducir todo</button>
+  <button class="btn btn-pause"  onclick="togglePause()" id="btnPause">&#9646;&#9646; &nbsp;Pausar</button>
+  <button class="btn btn-stop"   onclick="stopAll()">&#9632; &nbsp;Detener</button>
+  <button class="btn btn-voices" onclick="toggleVoicePanel()">&#127897; &nbsp;Ajustar voces</button>
+  <div class="status">
+    <div class="dot" id="dot"></div>
+    <span id="statusTxt">Listo para reproducir</span>
+  </div>
+</div>
+
+<div class="voice-panel" id="voicePanel">
+  <div class="vp-col jenny">
+    <h3>Jenny — Contralto · Bogotana</h3>
+    <select id="selJenny"></select>
+    <div class="vp-hint">Busca voces "es-CO", "es-US" o "es-419" para acento latinoamericano</div>
+    <div class="pitch-row">
+      <label>Tono</label>
+      <input type="range" id="pitchJenny" min="0.1" max="1.5" step="0.05" value="0.75"
+        oninput="document.getElementById('pJv').textContent=parseFloat(this.value).toFixed(2)">
+      <span id="pJv">0.75</span>
+    </div>
+    <div class="pitch-row">
+      <label>Velocidad</label>
+      <input type="range" id="rateJenny" min="0.5" max="1.5" step="0.05" value="1.25"
+        oninput="document.getElementById('rJv').textContent=parseFloat(this.value).toFixed(2)">
+      <span id="rJv">1.25</span>
+    </div>
+  </div>
+  <div class="vp-col humberto">
+    <h3>Humberto — Baritono · Castellano</h3>
+    <select id="selHumberto"></select>
+    <div class="vp-hint">Busca voces "es-ES" para acento castellano de España</div>
+    <div class="pitch-row">
+      <label>Tono</label>
+      <input type="range" id="pitchHumberto" min="0.1" max="1.5" step="0.05" value="0.6"
+        oninput="document.getElementById('pHv').textContent=parseFloat(this.value).toFixed(2)">
+      <span id="pHv">0.60</span>
+    </div>
+    <div class="pitch-row">
+      <label>Velocidad</label>
+      <input type="range" id="rateHumberto" min="0.5" max="1.5" step="0.05" value="1.40"
+        oninput="document.getElementById('rHv').textContent=parseFloat(this.value).toFixed(2)">
+      <span id="rHv">1.40</span>
+    </div>
+  </div>
+</div>
+
+<div class="legend">
+  <div class="leg-item"><span class="badge badge-w">JENNY</span> Contralto · Acento bogotano</div>
+  <div class="leg-item"><span class="badge badge-m">HUMBERTO</span> Baritono · Acento castellano</div>
+  <div class="leg-hint">Clic en cualquier línea para reproducirla individualmente</div>
+</div>
+
+<div class="script">
+
+  <!-- BLOQUE 1: APERTURA -->
+  <div class="section">
+    <div class="sec-title">Bloque 1 — Apertura &nbsp;|&nbsp; 0:00 – 0:45</div>
+
+    <div class="line" data-spk="jenny" onclick="playOne(this)">
+      <div class="spk"><div class="spk-name w">Jenny</div><div class="spk-role">Bienvenida</div></div>
+      <div class="txt">Buenos días a todos. Soy Jenny Paola Lozano, y junto a mi compañero Humberto López vamos a presentar nuestro análisis sobre el ODS 9: Industria, Innovación e Infraestructura, aplicado a una empresa tecnológica real de Ferrol.</div>
+    </div>
+
+    <div class="line" data-spk="humberto" onclick="playOne(this)">
+      <div class="spk"><div class="spk-name m">Humberto</div><div class="spk-role">La empresa</div></div>
+      <div class="txt">La empresa elegida es Ártabro Tech, con sede en Ferrol, Galicia. Desarrollan una plataforma de Big Data e Inteligencia Artificial especializada en análisis predictivo de licitaciones públicas: ayudan a las empresas a identificar oportunidades, automatizar búsquedas de convocatorias y diseñar estrategias para ganar concursos públicos. Además, representan un ejemplo de diversificación económica en una región históricamente ligada a la industria naval.</div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 2: ODS 9 -->
+  <div class="section">
+    <div class="sec-title">Bloque 2 — El ODS 9 y sus metas &nbsp;|&nbsp; 0:45 – 1:30</div>
+
+    <div class="line" data-spk="jenny" onclick="playOne(this)">
+      <div class="spk"><div class="spk-name w">Jenny</div><div class="spk-role">Definición</div></div>
+      <div class="txt">El ODS 9 busca promover infraestructuras modernas, sostenibles y eficientes, y fomentar la innovación tecnológica. De sus metas, hemos seleccionado dos especialmente relevantes para Ártabro Tech.</div>
+    </div>
+
+    <div class="line" data-spk="humberto" onclick="playOne(this)">
+      <div class="spk"><div class="spk-name m">Humberto</div><div class="spk-role">Meta 9.4</div></div>
+      <div class="txt">La Meta 9.4 busca mejorar la eficiencia y sostenibilidad de las infraestructuras tecnológicas. En la práctica, implicaría migrar los servidores de Ártabro Tech a centros de datos que funcionen con energía renovable, como los que operan con electricidad eólica o solar en Europa. Resultado: menos contaminación, menos gasto y mejor imagen de sostenibilidad.</div>
+    </div>
+
+    <div class="line" data-spk="jenny" onclick="playOne(this)">
+      <div class="spk"><div class="spk-name w">Jenny</div><div class="spk-role">Meta 9.5</div></div>
+      <div class="txt">La Meta 9.5 impulsa la inversión en investigación, desarrollo e innovación. Ártabro Tech podría colaborar con la Universidade da Coruña para crear modelos de IA más precisos, trabajar con estudiantes en proyectos conjuntos y formar talento tecnológico local, fortaleciendo el ecosistema digital de Galicia.</div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 3: PROBLEMÁTICAS -->
+  <div class="section">
+    <div class="sec-title">Bloque 3 — Problemáticas detectadas &nbsp;|&nbsp; 1:30 – 2:50</div>
+    <div class="note">Cinco problemáticas identificadas en Ártabro Tech en relación al ODS 9.</div>
+
+    <div class="line" data-spk="humberto" onclick="playOne(this)">
+      <div class="spk"><div class="spk-name m">Humberto</div><div class="spk-role">P.1 Energía</div></div>
+      <div class="txt">Primera: alto consumo energético. Los servidores de Big Data e IA gastan mucha electricidad. Según Greenpeace, los centros de datos ya representan cerca del uno por ciento del consumo eléctrico mundial. Si esa energía proviene de combustibles fósiles, el impacto ambiental y los costes son muy elevados.</div>
+    </div>
+
+    <div class="line" data-spk="jenny" onclick="playOne(this)">
+      <div class="spk"><div class="spk-name w">Jenny</div><div class="spk-role">P.2 Sesgo</div></div>
+      <div class="txt">Segunda: riesgo de sesgo algorítmico. Si los datos de entrenamiento están desequilibrados, la IA puede favorecer injustamente a unas empresas frente a otras. El documental Coded Bias muestra cómo los algoritmos pueden discriminar a mujeres y personas racializadas, algo igualmente posible en la contratación pública.</div>
+    </div>
+
+    <div class="line" data-spk="humberto" onclick="playOne(this)">
+      <div class="spk"><div class="spk-name m">Humberto</div><div class="spk-role">P.3 Opacidad</div></div>
+      <div class="txt">Tercera: falta de transparencia. Los clientes y las administraciones públicas no siempre entienden cómo la IA llega a sus conclusiones. Hoy, muchas instituciones exigen inteligencia artificial explicable para aceptar sus resultados legalmente.</div>
+    </div>
+
+    <div class="line" data-spk="jenny" onclick="playOne(this)">
+      <div class="spk"><div class="spk-name w">Jenny</div><div class="spk-role">P.4 Género</div></div>
+      <div class="txt">Cuarta: brecha de género. Como ocurre en muchas tecnológicas, hay pocas mujeres en puestos de IA y Big Data. En España, solo el dieciséis por ciento de los profesionales de inteligencia artificial son mujeres.</div>
+    </div>
+
+    <div class="line" data-spk="humberto" onclick="playOne(this)">
+      <div class="spk"><div class="spk-name m">Humberto</div><div class="spk-role">P.5 Dependencia</div></div>
+      <div class="txt">Y quinta: dependencia de proveedores externos, principalmente empresas de Estados Unidos o Asia. Si uno de ellos cambia precios o políticas, Ártabro Tech queda expuesta a riesgos fuera de su control.</div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 4: PROPUESTAS -->
+  <div class="section">
+    <div class="sec-title">Bloque 4 — Propuesta de medidas &nbsp;|&nbsp; 2:50 – 4:10</div>
+
+    <div class="line" data-spk="jenny" onclick="playOne(this)">
+      <div class="spk"><div class="spk-name w">Jenny</div><div class="spk-role">M.1 Energía</div></div>
+      <div class="txt">Proponemos cuatro medidas. Primera: mejorar la eficiencia energética, migrando a servicios cloud con energías renovables y optimizando los modelos de IA para que consuman menos. El Centro de Supercomputación de Galicia, el CESGA, ya opera con energía renovable y puede ser un referente cercano.</div>
+    </div>
+
+    <div class="line" data-spk="humberto" onclick="playOne(this)">
+      <div class="spk"><div class="spk-name m">Humberto</div><div class="spk-role">M.2 Transparencia</div></div>
+      <div class="txt">Segunda: reforzar la transparencia y la ética en la IA, explicando qué datos usa el sistema y cómo toma decisiones, y revisando periódicamente los algoritmos para detectar sesgos. Herramientas como SHAP permiten visualizar qué factores pesan más en cada predicción, haciendo la IA más comprensible para los clientes.</div>
+    </div>
+
+    <div class="line" data-spk="jenny" onclick="playOne(this)">
+      <div class="spk"><div class="spk-name w">Jenny</div><div class="spk-role">M.3 Diversidad</div></div>
+      <div class="txt">Tercera: fomentar la igualdad y la diversidad, con procesos de selección más inclusivos y formación específica para mujeres en inteligencia artificial. Programas como Women in Tech han demostrado ser muy eficaces para incorporar más mujeres al sector.</div>
+    </div>
+
+    <div class="line" data-spk="humberto" onclick="playOne(this)">
+      <div class="spk"><div class="spk-name m">Humberto</div><div class="spk-role">M.4 Autonomía</div></div>
+      <div class="txt">Y cuarta: apostar por la autonomía tecnológica, priorizando proveedores locales, colaborando con la UDC y el Campus Industrial de Ferrol, y desarrollando más tecnología propia. Reducir la dependencia de grandes proveedores externos es más sostenible y más estratégico a largo plazo.</div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 5: BENEFICIOS Y CIERRE -->
+  <div class="section">
+    <div class="sec-title">Bloque 5 — Beneficios y conclusiones &nbsp;|&nbsp; 4:10 – 5:00</div>
+
+    <div class="line" data-spk="jenny" onclick="playOne(this)">
+      <div class="spk"><div class="spk-name w">Jenny</div><div class="spk-role">Beneficios</div></div>
+      <div class="txt">Estas medidas generarían beneficios en cuatro dimensiones: económicamente, menos gasto energético y más clientes por mayor confianza; ambientalmente, menos emisiones y uso más eficiente de los recursos; socialmente, más diversidad en el equipo; y estratégicamente, mejor preparación para el AI Act europeo y mayor autonomía tecnológica.</div>
+    </div>
+
+    <div class="line" data-spk="humberto" onclick="playOne(this)">
+      <div class="spk"><div class="spk-name m">Humberto</div><div class="spk-role">Conclusión</div></div>
+      <div class="txt">En conclusión, Ártabro Tech es una empresa innovadora con un papel importante en el ecosistema tecnológico gallego, pero con camino por recorrer para alinearse con el ODS 9. Las problemáticas identificadas no son solo dificultades: son oportunidades reales de mejora. Este trabajo demuestra que innovación tecnológica y sostenibilidad pueden ir perfectamente de la mano.</div>
+    </div>
+
+    <div class="line" data-spk="jenny" onclick="playOne(this)">
+      <div class="spk"><div class="spk-name w">Jenny</div><div class="spk-role">Cierre</div></div>
+      <div class="txt">Ártabro Tech tiene la oportunidad de convertirse en un ejemplo de cómo una empresa tecnológica puede crecer de forma responsable y alineada con los Objetivos de Desarrollo Sostenible. Muchas gracias por su atención.</div>
+    </div>
+
+    <div class="line" data-spk="humberto" onclick="playOne(this)">
+      <div class="spk"><div class="spk-name m">Humberto</div><div class="spk-role">Despedida</div></div>
+      <div class="txt">Muchas gracias a todos. Quedamos a su disposición por si tienen alguna pregunta.</div>
+    </div>
+  </div>
+
+</div><!-- /script -->
+
+<div class="timebar">
+  <div><div class="tl">Tiempo</div><div class="tv" id="tvTime">0:00</div></div>
+  <div class="track"><div class="fill" id="fillBar"></div></div>
+  <div style="text-align:right"><div class="tl">Total estimado</div><div class="tv">5:00</div></div>
+</div>
+
+<script>
+const allLines = Array.from(document.querySelectorAll('.line'));
+let playing = false, paused = false, curIdx = 0;
+let startTime = null, savedElapsed = 0, timerID = null;
+
+function populateVoiceSelects() {
+  const voices = speechSynthesis.getVoices();
+  ['selJenny','selHumberto'].forEach(id => {
+    const sel = document.getElementById(id);
+    sel.innerHTML = '';
+    const spanish = voices.filter(v => v.lang.toLowerCase().startsWith('es'));
+    const others  = voices.filter(v => !v.lang.toLowerCase().startsWith('es'));
+    [...spanish, ...others].forEach(v => {
+      const o = document.createElement('option');
+      o.value = v.name;
+      o.textContent = v.name + ' (' + v.lang + ')';
+      sel.appendChild(o);
+    });
+  });
+  const voices2 = speechSynthesis.getVoices();
+  const pick = (prefs) => {
+    for (const p of prefs) {
+      const v = voices2.find(v => v.lang === p || v.lang.startsWith(p));
+      if (v) return v;
+    }
+    return voices2.find(v => v.lang.toLowerCase().startsWith('es')) || voices2[0];
+  };
+  const bestJ = pick(['es-CO','es-419','es-US','es-MX']);
+  const bestH = pick(['es-ES','es-AR','es']);
+  if (bestJ) document.getElementById('selJenny').value = bestJ.name;
+  if (bestH) document.getElementById('selHumberto').value = bestH.name;
+}
+
+function toggleVoicePanel() {
+  const p = document.getElementById('voicePanel');
+  p.classList.toggle('open');
+  if (p.classList.contains('open')) populateVoiceSelects();
+}
+
+function setStatus(txt, active) {
+  document.getElementById('statusTxt').textContent = txt;
+  document.getElementById('dot').className = 'dot' + (active ? ' on' : '');
+}
+
+function highlight(el) {
+  allLines.forEach(l => l.classList.remove('active'));
+  if (el) { el.classList.add('active'); el.scrollIntoView({behavior:'smooth',block:'center'}); }
+}
+
+function tick() {
+  if (!startTime) return;
+  const e = savedElapsed + (Date.now() - startTime) / 1000;
+  const m = Math.floor(e/60), s = Math.floor(e%60);
+  document.getElementById('tvTime').textContent = m + ':' + String(s).padStart(2,'0');
+  document.getElementById('fillBar').style.width = Math.min(100,(e/300)*100) + '%';
+}
+
+function startTimer() {
+  clearInterval(timerID);
+  startTime = Date.now();
+  timerID = setInterval(tick, 500);
+}
+
+function makeU(text, spk, onEnd) {
+  const u = new SpeechSynthesisUtterance(text);
+  const voices = speechSynthesis.getVoices();
+  const selName = document.getElementById(spk === 'jenny' ? 'selJenny' : 'selHumberto').value;
+  const picked = voices.find(v => v.name === selName);
+  if (picked) u.voice = picked;
+  u.lang   = spk === 'jenny' ? 'es-CO' : 'es-ES';
+  u.pitch  = parseFloat(document.getElementById(spk === 'jenny' ? 'pitchJenny' : 'pitchHumberto').value);
+  u.rate   = parseFloat(document.getElementById(spk === 'jenny' ? 'rateJenny'  : 'rateHumberto').value);
+  u.volume = 1;
+  u.onend  = onEnd;
+  u.onerror = e => { if (e.error !== 'canceled') onEnd(); };
+  return u;
+}
+
+function speak(idx) {
+  if (idx >= allLines.length) { finishAll(); return; }
+  curIdx = idx;
+  const line = allLines[idx];
+  const spk  = line.dataset.spk;
+  const text = line.querySelector('.txt').innerText;
+  highlight(line);
+  setStatus('Hablando — ' + (spk === 'jenny' ? 'Jenny' : 'Humberto'), true);
+  const u = makeU(text, spk, () => {
+    line.classList.remove('active');
+    if (playing) speak(idx + 1);
+    else setStatus('Listo para reproducir', false);
+  });
+  speechSynthesis.speak(u);
+}
+
+function finishAll() {
+  playing = false; paused = false;
+  clearInterval(timerID);
+  allLines.forEach(l => l.classList.remove('active'));
+  setStatus('Presentación finalizada', false);
+}
+
+function startAll() {
+  if (paused) {
+    speechSynthesis.resume();
+    paused = false; playing = true;
+    startTimer();
+    setStatus('Reproduciendo...', true);
+    document.getElementById('btnPause').innerHTML = '&#9646;&#9646; &nbsp;Pausar';
+    return;
+  }
+  speechSynthesis.cancel();
+  playing = true; savedElapsed = 0;
+  startTimer();
+  speak(0);
+}
+
+function togglePause() {
+  const btn = document.getElementById('btnPause');
+  if (!playing) return;
+  if (paused) {
+    speechSynthesis.resume();
+    paused = false;
+    startTimer();
+    setStatus('Reproduciendo...', true);
+    btn.innerHTML = '&#9646;&#9646; &nbsp;Pausar';
+  } else {
+    speechSynthesis.pause();
+    paused = true;
+    savedElapsed += (Date.now() - startTime) / 1000;
+    startTime = null;
+    clearInterval(timerID);
+    setStatus('En pausa', false);
+    btn.innerHTML = '&#9654; &nbsp;Continuar';
+  }
+}
+
+function stopAll() {
+  playing = false; paused = false;
+  speechSynthesis.cancel();
+  clearInterval(timerID);
+  allLines.forEach(l => l.classList.remove('active'));
+  setStatus('Detenido', false);
+  document.getElementById('btnPause').innerHTML = '&#9646;&#9646; &nbsp;Pausar';
+}
+
+function playOne(lineEl) {
+  playing = false;
+  speechSynthesis.cancel();
+  const spk  = lineEl.dataset.spk;
+  const text = lineEl.querySelector('.txt').innerText;
+  highlight(lineEl);
+  setStatus('Leyendo — ' + (spk === 'jenny' ? 'Jenny' : 'Humberto'), true);
+  const u = makeU(text, spk, () => {
+    lineEl.classList.remove('active');
+    setStatus('Listo para reproducir', false);
+  });
+  speechSynthesis.speak(u);
+}
+
+if (typeof speechSynthesis !== 'undefined') {
+  speechSynthesis.onvoiceschanged = populateVoiceSelects;
+  if (speechSynthesis.getVoices().length > 0) populateVoiceSelects();
+}
+</script>
+</body>
+</html>
