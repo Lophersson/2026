@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Finance & Tech Roles | FinCore Intelligence</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0d14;
+    --surface: #111520;
+    --card: #151b2e;
+    --border: #1e2a45;
+    --accent: #00d4aa;
+    --accent2: #4f8ef7;
+    --gold: #f0c040;
+    --violet: #a78bfa;
+    --red: #f05a7a;
+    --orange: #fb923c;
+    --text: #e8edf5;
+    --muted: #7a8ba8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    overflow-x: hidden;
+    padding-bottom: 50px;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(79,142,247,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,170,0.025) 1px, transparent 1px);
+    background-size: 52px 52px;
+    pointer-events: none; z-index: 0;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,13,20,0.94);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px;
+  }
+
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem; font-weight: 700;
+    letter-spacing: -0.02em;
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  .logo-dot {
+    width: 8px; height: 8px;
+    background: var(--accent); border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(0,212,170,0.4); }
+    50%      { box-shadow: 0 0 0 6px rgba(0,212,170,0); }
+  }
+
+  .lang-buttons { display: flex; gap: 8px; }
+
+  .lang-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 6px 16px; border-radius: 4px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem; letter-spacing: 0.1em;
+    cursor: pointer; transition: all 0.25s;
+    text-transform: uppercase;
+  }
+
+  .lang-btn:hover, .lang-btn.active {
+    border-color: var(--accent); color: var(--accent);
+    background: rgba(0,212,170,0.08);
+    box-shadow: 0 0 12px rgba(0,212,170,0.15);
+  }
+
+  /* HERO */
+  .hero {
+    position: relative; z-index: 1;
+    padding: 90px 48px 60px;
+    max-width: 1160px; margin: 0 auto;
+  }
+
+  .tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(79,142,247,0.08);
+    border: 1px solid rgba(79,142,247,0.2);
+    color: var(--accent2);
+    font-family: 'DM Mono', monospace; font-size: 0.72rem;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 6px 14px; border-radius: 3px; margin-bottom: 28px;
+    opacity: 0; animation: fadeUp 0.5s ease 0.1s forwards;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 4.5vw, 3.8rem);
+    font-weight: 900; line-height: 1.06;
+    letter-spacing: -0.03em; margin-bottom: 22px;
+    opacity: 0; animation: fadeUp 0.5s ease 0.2s forwards;
+  }
+
+  h1 span {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-desc {
+    font-size: 1rem; line-height: 1.85;
+    color: var(--muted); max-width: 740px;
+    opacity: 0; animation: fadeUp 0.5s ease 0.35s forwards;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* COUNTERS */
+  .stats-bar {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1px; background: var(--border);
+    border: 1px solid var(--border); border-radius: 8px;
+    overflow: hidden; margin-top: 52px;
+    opacity: 0; animation: fadeUp 0.5s ease 0.5s forwards;
+  }
+
+  .stat-cell {
+    background: var(--surface); padding: 22px 26px;
+    transition: background 0.2s;
+  }
+
+  .stat-cell:hover { background: var(--card); }
+
+  .stat-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.9rem; font-weight: 700;
+    line-height: 1; margin-bottom: 5px;
+  }
+
+  .stat-label {
+    font-size: 0.71rem; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* CONTENT */
+  .content {
+    position: relative; z-index: 1;
+    max-width: 1160px; margin: 0 auto;
+    padding: 80px 48px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem; font-weight: 700;
+    margin-bottom: 36px;
+    display: flex; align-items: center; gap: 16px;
+  }
+
+  .section-title::after {
+    content: ''; flex: 1; height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+  }
+
+  /* ROLE CARDS GRID */
+  .roles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
+    gap: 18px;
+    margin-bottom: 90px;
+  }
+
+  .role-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 30px 28px;
+    position: relative; overflow: hidden;
+    transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+    display: flex; flex-direction: column; gap: 16px;
+  }
+
+  .role-card::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 2px;
+    opacity: 0; transition: opacity 0.25s;
+  }
+
+  .role-card:hover { transform: translateY(-4px); }
+  .role-card:hover::before { opacity: 1; }
+
+  /* Color themes per card */
+  .card-bi    { --c: #00d4aa; } .card-bi:hover    { border-color: rgba(0,212,170,.35); box-shadow: 0 12px 32px rgba(0,212,170,.08); } .card-bi::before    { background: linear-gradient(90deg,#00d4aa,#4f8ef7); }
+  .card-fa    { --c: #4f8ef7; } .card-fa:hover    { border-color: rgba(79,142,247,.35); box-shadow: 0 12px 32px rgba(79,142,247,.08); } .card-fa::before    { background: linear-gradient(90deg,#4f8ef7,#a78bfa); }
+  .card-ac    { --c: #a78bfa; } .card-ac:hover    { border-color: rgba(167,139,250,.35); box-shadow: 0 12px 32px rgba(167,139,250,.08); } .card-ac::before    { background: linear-gradient(90deg,#a78bfa,#f0c040); }
+  .card-isa   { --c: #f05a7a; } .card-isa:hover   { border-color: rgba(240,90,122,.35); box-shadow: 0 12px 32px rgba(240,90,122,.08); } .card-isa::before   { background: linear-gradient(90deg,#f05a7a,#fb923c); }
+  .card-grc   { --c: #fb923c; } .card-grc:hover   { border-color: rgba(251,146,60,.35); box-shadow: 0 12px 32px rgba(251,146,60,.08); } .card-grc::before   { background: linear-gradient(90deg,#fb923c,#f0c040); }
+  .card-soc   { --c: #f0c040; } .card-soc:hover   { border-color: rgba(240,192,64,.35); box-shadow: 0 12px 32px rgba(240,192,64,.08); } .card-soc::before   { background: linear-gradient(90deg,#f0c040,#f05a7a); }
+  .card-cfo   { --c: #e8edf5; } .card-cfo:hover   { border-color: rgba(232,237,245,.25); box-shadow: 0 12px 32px rgba(232,237,245,.06); } .card-cfo::before   { background: linear-gradient(90deg,#e8edf5,#4f8ef7); }
+
+  .card-header {
+    display: flex; align-items: flex-start;
+    justify-content: space-between; gap: 12px;
+  }
+
+  .card-icon {
+    width: 46px; height: 46px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; flex-shrink: 0;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+  }
+
+  .card-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 3px 10px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.09);
+    color: var(--c);
+    white-space: nowrap;
+  }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem; font-weight: 700;
+    line-height: 1.2; letter-spacing: -0.02em;
+    color: var(--text);
+  }
+
+  .card-rows {
+    display: flex; flex-direction: column; gap: 10px;
+  }
+
+  .card-row {
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+
+  .row-key {
+    font-family: 'DM Mono', monospace; font-size: 0.62rem;
+    text-transform: uppercase; letter-spacing: 0.07em;
+    padding: 2px 8px; border-radius: 3px;
+    white-space: nowrap; flex-shrink: 0; margin-top: 1px;
+    color: var(--c);
+    background: color-mix(in srgb, var(--c) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--c) 25%, transparent);
+  }
+
+  .row-text {
+    font-size: 0.83rem; line-height: 1.65; color: var(--muted);
+  }
+
+  /* COMPARISON TABLE */
+  .cmp-table {
+    width: 100%; border-collapse: collapse;
+    font-size: 0.84rem; margin-bottom: 80px;
+  }
+
+  .cmp-table thead tr { border-bottom: 2px solid var(--border); }
+
+  .cmp-table th {
+    padding: 13px 18px; text-align: left;
+    font-family: 'DM Mono', monospace; font-size: 0.68rem;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted); font-weight: 400;
+  }
+
+  .cmp-table th:first-child { color: var(--accent2); }
+
+  .cmp-table tbody tr {
+    border-bottom: 1px solid rgba(30,42,69,0.5);
+    transition: background 0.15s;
+  }
+
+  .cmp-table tbody tr:hover { background: rgba(21,27,46,0.8); }
+
+  .cmp-table td {
+    padding: 14px 18px; vertical-align: top;
+    line-height: 1.6; color: var(--muted);
+  }
+
+  .cmp-table td:first-child {
+    font-family: 'DM Mono', monospace; font-size: 0.74rem;
+    color: var(--text); font-weight: 500; white-space: nowrap;
+  }
+
+  .pill {
+    display: inline-block; font-family: 'DM Mono', monospace;
+    font-size: 0.62rem; padding: 2px 9px; border-radius: 20px;
+    margin: 1px 2px;
+  }
+
+  /* TICKER */
+  .ticker-wrap {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 99;
+    background: rgba(10,13,20,0.95);
+    border-top: 1px solid var(--border);
+    height: 34px; overflow: hidden;
+    display: flex; align-items: center;
+  }
+
+  .ticker-inner {
+    display: flex; gap: 56px;
+    animation: tick 30s linear infinite; white-space: nowrap;
+  }
+
+  .t-item {
+    font-family: 'DM Mono', monospace; font-size: 0.68rem;
+    color: var(--muted); display: flex; gap: 8px; align-items: center;
+  }
+
+  .t-up { color: var(--accent); }
+  .t-dn { color: var(--red); }
+
+  @keyframes tick {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* ── TABLET (≤ 900px) ─────────────────────────────── */
+  @media (max-width: 900px) {
+    nav { padding: 0 24px; }
+    .hero { padding: 72px 24px 48px; }
+    .content { padding: 56px 24px; }
+    .stats-bar { grid-template-columns: 1fr 1fr; }
+    .roles-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+    .section-title { font-size: 1.4rem; }
+    .cmp-table { font-size: 0.8rem; }
+    .cmp-table th, .cmp-table td { padding: 11px 14px; }
+  }
+
+  /* ── MOBILE (≤ 600px) ─────────────────────────────── */
+  @media (max-width: 600px) {
+    nav { padding: 0 16px; height: 56px; }
+    .logo { font-size: 1.05rem; }
+    .lang-btn { padding: 5px 10px; font-size: 0.68rem; letter-spacing: 0.06em; }
+    .hero { padding: 56px 16px 36px; }
+    .content { padding: 40px 16px 60px; }
+    h1 { font-size: clamp(1.9rem, 8vw, 2.8rem); margin-bottom: 18px; }
+    .hero-desc { font-size: 0.93rem; }
+    .tag { font-size: 0.65rem; padding: 5px 10px; margin-bottom: 20px; }
+    .stats-bar { grid-template-columns: 1fr 1fr; }
+    .stat-cell { padding: 16px 14px; }
+    .stat-val { font-size: 1.55rem; }
+    .stat-label { font-size: 0.66rem; }
+    .roles-grid { grid-template-columns: 1fr; gap: 12px; margin-bottom: 48px; }
+    .role-card { padding: 22px 18px; gap: 12px; }
+    .card-title { font-size: 1.05rem; }
+    .row-text { font-size: 0.8rem; }
+    .section-title { font-size: 1.25rem; margin-bottom: 20px; }
+    .cmp-table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.75rem; }
+    .cmp-table th, .cmp-table td { padding: 10px 12px; white-space: nowrap; }
+    .ticker-wrap { height: 30px; }
+    .t-item { font-size: 0.62rem; gap: 5px; }
+  }
+
+  /* ── VERY SMALL (≤ 380px) ────────────────────────── */
+  @media (max-width: 380px) {
+    .logo { font-size: 0.95rem; }
+    .stat-val { font-size: 1.35rem; }
+    .role-card { padding: 18px 14px; }
+    .card-icon { width: 38px; height: 38px; font-size: 1.1rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo"><span class="logo-dot"></span>FinCore Intelligence</div>
+  <div class="lang-buttons">
+    <button class="lang-btn active" onclick="setLang('en')" id="btn-en">EN</button>
+    <button class="lang-btn" onclick="setLang('es')" id="btn-es">ES</button>
+    <button class="lang-btn" onclick="setLang('pt')" id="btn-pt">PT</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="tag" data-key="tag">● Finance & Tech Ecosystem</div>
+  <h1><span data-key="h1">Seven Key Roles</span></h1>
+  <p class="hero-desc" data-key="heroDesc">
+    Modern finance organizations blend traditional accounting expertise with data intelligence and cybersecurity capabilities. The seven roles below represent the full spectrum — from ground-level financial operations and BI analytics to governance, security operations, and executive leadership.
+  </p>
+  <div class="stats-bar">
+    <div class="stat-cell">
+      <div class="stat-val" style="color:var(--accent)">7</div>
+      <div class="stat-label" data-key="sc1">Critical Roles</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-val" style="color:var(--accent2)">3</div>
+      <div class="stat-label" data-key="sc2">Domains Covered</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-val" style="color:var(--violet)">CFO</div>
+      <div class="stat-label" data-key="sc3">Leadership Apex</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-val" style="color:var(--gold)">360°</div>
+      <div class="stat-label" data-key="sc4">Business Coverage</div>
+    </div>
+  </div>
+</section>
+
+<!-- ROLE CARDS -->
+<div class="content">
+  <h2 class="section-title" data-key="rolesTitle">Role Profiles</h2>
+  <div class="roles-grid">
+
+    <!-- BI SPECIALIST -->
+    <div class="role-card card-bi">
+      <div class="card-header">
+        <div class="card-icon">📊</div>
+        <span class="card-badge" data-key="bi_badge">Data & BI</span>
+      </div>
+      <div class="card-title" data-key="bi_title">BI Data Analyst / BI Specialist</div>
+      <div class="card-rows">
+        <div class="card-row"><span class="row-key" data-key="k_focus">Focus</span><span class="row-text" data-key="bi_focus">Transforms raw business data into actionable intelligence through dashboards, reports, and data models that drive strategic decisions.</span></div>
+        <div class="card-row"><span class="row-key" data-key="k_tasks">Tasks</span><span class="row-text" data-key="bi_tasks">Building KPI dashboards in Power BI or Tableau, writing SQL queries, designing data pipelines, and presenting findings to stakeholders.</span></div>
+        <div class="card-row"><span class="row-key" data-key="k_skills">Skills</span><span class="row-text" data-key="bi_skills">SQL, Power BI / Tableau, DAX, Python or R basics, data warehousing concepts, strong visual communication.</span></div>
+        <div class="card-row"><span class="row-key" data-key="k_goal">Goal</span><span class="row-text" data-key="bi_goal">Provide management with a clear, real-time picture of business performance to enable faster, data-driven decisions.</span></div>
+      </div>
+    </div>
+
+    <!-- FINANCIAL ASSISTANT -->
+    <div class="role-card card-fa">
+      <div class="card-header">
+        <div class="card-icon">💼</div>
+        <span class="card-badge" data-key="fa_badge">Finance Ops</span>
+      </div>
+      <div class="card-title" data-key="fa_title">Online Financial & Accounting Assistant</div>
+      <div class="card-rows">
+        <div class="card-row"><span class="row-key" data-key="k_focus2">Focus</span><span class="row-text" data-key="fa_focus">Supports day-to-day financial and accounting operations remotely, ensuring transactions are recorded accurately and deadlines are met.</span></div>
+        <div class="card-row"><span class="row-key" data-key="k_tasks2">Tasks</span><span class="row-text" data-key="fa_tasks">Invoice processing, bank reconciliation, accounts payable/receivable management, data entry in ERP systems, and supporting month-end close.</span></div>
+        <div class="card-row"><span class="row-key" data-key="k_skills2">Skills</span><span class="row-text" data-key="fa_skills">Excel, ERP/accounting software (SAP, QuickBooks, Odoo), attention to detail, time management, digital collaboration tools.</span></div>
+        <div class="card-row"><span class="row-key" data-key="k_goal2">Goal</span><span class="row-text" data-key="fa_goal">Keep financial records clean, current, and compliant while freeing senior staff to focus on analysis and strategy.</span></div>
+      </div>
+    </div>
+
+    <!-- ADMIN CONTABLE -->
+    <div class="role-card card-ac">
+      <div class="card-header">
+        <div class="card-icon">🗂️</div>
+        <span class="card-badge" data-key="ac_badge">Accounting</span>
+      </div>
+      <div class="card-title" data-key="ac_title">Administrative Accounting & Finance Officer</div>
+      <div class="card-rows">
+        <div class="card-row"><span class="row-key" data-key="k_focus3">Focus</span><span class="row-text" data-key="ac_focus">Bridges administrative management with financial control, overseeing bookkeeping, reporting, and budget monitoring across the organization.</span></div>
+        <div class="card-row"><span class="row-key" data-key="k_tasks3">Tasks</span><span class="row-text" data-key="ac_tasks">General ledger maintenance, preparation of financial statements, cash flow monitoring, payroll support, supplier and client account management.</span></div>
+        <div class="card-row"><span class="row-key" data-key="k_skills3">Skills</span><span class="row-text" data-key="ac_skills">Double-entry bookkeeping, IFRS/GAAP knowledge, advanced Excel, ERP systems, organizational skills, regulatory awareness.</span></div>
+        <div class="card-row"><span class="row-key" data-key="k_goal3">Goal</span><span class="row-text" data-key="ac_goal">Maintain accurate financial records, ensure regulatory compliance, and provide reliable data for management reporting.</span></div>
+      </div>
+    </div>
+
+    <!-- INFORMATION SECURITY -->
+    <div class="role-card card-isa">
+      <div class="card-header">
+        <div class="card-icon">🛡️</div>
+        <span class="card-badge" data-key="isa_badge">Cybersecurity</span>
+      </div>
+      <div class="card-title" data-key="isa_title">Information Security Analyst</div>
+      <div class="card-rows">
+        <div class="card-row"><span class="row-key" data-key="k_focus4">Focus</span><span class="row-text" data-key="isa_focus">Protects the organization's information assets by identifying vulnerabilities, monitoring threats, and implementing security controls.</span></div>
+        <div class="card-row"><span class="row-key" data-key="k_tasks4">Tasks</span><span class="row-text" data-key="isa_tasks">Vulnerability assessments, security audits, incident response, firewall and IDS management, security awareness training, and policy enforcement.</span></div>
+        <div class="card-row"><span class="row-key" data-key="k_skills4">Skills</span><span class="row-text" data-key="isa_skills">SIEM tools, network security, ISO 27001, penetration testing basics, risk assessment frameworks, CISSP or Security+ certifications.</span></div>
+        <div class="card-row"><span class="row-key" data-key="k_goal4">Goal</span><span class="row-text" data-key="isa_goal">Reduce the organization's attack surface and ensure the confidentiality, integrity, and availability (CIA) of all information systems.</span></div>
+      </div>
+    </div>
+
+    <!-- GRC TECHNICIAN -->
+    <div class="role-card card-grc">
+      <div class="card-header">
+        <div class="card-icon">⚖️</div>
+        <span class="card-badge" data-key="grc_badge">Governance</span>
+      </div>
+      <div class="card-title" data-key="grc_title">GRC Technician (Governance, Risk & Compliance)</div>
+      <div class="card-rows">
+        <div class="card-row"><span class="row-key" data-key="k_focus5">Focus</span><span class="row-text" data-key="grc_focus">Ensures the organization operates within regulatory frameworks, manages enterprise risk, and maintains governance standards.</span></div>
+        <div class="card-row"><span class="row-key" data-key="k_tasks5">Tasks</span><span class="row-text" data-key="grc_tasks">Risk register management, compliance gap analysis, internal controls testing, policy drafting, regulatory reporting, and audit support.</span></div>
+        <div class="card-row"><span class="row-key" data-key="k_skills5">Skills</span><span class="row-text" data-key="grc_skills">Risk frameworks (COSO, ISO 31000), regulatory knowledge (GDPR, SOX), GRC platforms (Archer, ServiceNow), audit methodologies.</span></div>
+        <div class="card-row"><span class="row-key" data-key="k_goal5">Goal</span><span class="row-text" data-key="grc_goal">Align business operations with legal, regulatory, and ethical standards while proactively managing enterprise risks.</span></div>
+      </div>
+    </div>
+
+    <!-- SOC ANALYST -->
+    <div class="role-card card-soc">
+      <div class="card-header">
+        <div class="card-icon">🔍</div>
+        <span class="card-badge" data-key="soc_badge">Security Ops</span>
+      </div>
+      <div class="card-title" data-key="soc_title">SOC Analyst (Security Operations Center)</div>
+      <div class="card-rows">
+        <div class="card-row"><span class="row-key" data-key="k_focus6">Focus</span><span class="row-text" data-key="soc_focus">Monitors, detects, investigates, and responds to cybersecurity threats in real time from within a Security Operations Center.</span></div>
+        <div class="card-row"><span class="row-key" data-key="k_tasks6">Tasks</span><span class="row-text" data-key="soc_tasks">Alert triage and investigation, log analysis, threat hunting, incident containment, escalation procedures, and threat intelligence consumption.</span></div>
+        <div class="card-row"><span class="row-key" data-key="k_skills6">Skills</span><span class="row-text" data-key="soc_skills">SIEM (Splunk, Microsoft Sentinel), EDR tools, MITRE ATT&CK framework, network forensics, scripting (Python/Bash), CompTIA CySA+.</span></div>
+        <div class="card-row"><span class="row-key" data-key="k_goal6">Goal</span><span class="row-text" data-key="soc_goal">Detect and neutralize threats as early as possible to minimize damage and downtime to the business.</span></div>
+      </div>
+    </div>
+
+    <!-- CFO -->
+    <div class="role-card card-cfo">
+      <div class="card-header">
+        <div class="card-icon">👑</div>
+        <span class="card-badge" data-key="cfo_badge">C-Suite</span>
+      </div>
+      <div class="card-title" data-key="cfo_title">Chief Financial Officer (CFO)</div>
+      <div class="card-rows">
+        <div class="card-row"><span class="row-key" data-key="k_focus7">Focus</span><span class="row-text" data-key="cfo_focus">Leads the entire financial strategy of the organization, overseeing all financial operations, reporting, planning, and capital allocation.</span></div>
+        <div class="card-row"><span class="row-key" data-key="k_tasks7">Tasks</span><span class="row-text" data-key="cfo_tasks">Setting financial strategy, investor relations, capital structure decisions, M&A oversight, board reporting, and leading finance, accounting, and treasury teams.</span></div>
+        <div class="card-row"><span class="row-key" data-key="k_skills7">Skills</span><span class="row-text" data-key="cfo_skills">Strategic leadership, deep financial expertise, M&A experience, stakeholder communication, risk management, CPA/CFA qualifications typical.</span></div>
+        <div class="card-row"><span class="row-key" data-key="k_goal7">Goal</span><span class="row-text" data-key="cfo_goal">Maximize the financial health and long-term value of the company while ensuring transparency and trust with all stakeholders.</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- QUICK COMPARE TABLE -->
+  <h2 class="section-title" data-key="cmpTitle">At-a-Glance Comparison</h2>
+  <table class="cmp-table">
+    <thead>
+      <tr>
+        <th data-key="th_role">Role</th>
+        <th data-key="th_domain">Domain</th>
+        <th data-key="th_horizon">Horizon</th>
+        <th data-key="th_output">Core Output</th>
+        <th data-key="th_cert">Key Credential</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-key="t1_role">BI Analyst</td>
+        <td><span class="pill" style="background:rgba(0,212,170,.12);color:#00d4aa;border:1px solid rgba(0,212,170,.25)" data-key="t1_domain">Data & Analytics</span></td>
+        <td data-key="t1_horizon">Real-time / Present</td>
+        <td data-key="t1_output">Dashboards, KPI reports</td>
+        <td data-key="t1_cert">PL-300, Tableau Cert.</td>
+      </tr>
+      <tr>
+        <td data-key="t2_role">Financial Assistant</td>
+        <td><span class="pill" style="background:rgba(79,142,247,.12);color:#4f8ef7;border:1px solid rgba(79,142,247,.25)" data-key="t2_domain">Finance Ops</span></td>
+        <td data-key="t2_horizon">Day-to-day</td>
+        <td data-key="t2_output">Reconciliations, entries</td>
+        <td data-key="t2_cert">AAT, bookkeeping cert.</td>
+      </tr>
+      <tr>
+        <td data-key="t3_role">Admin Accounting Officer</td>
+        <td><span class="pill" style="background:rgba(167,139,250,.12);color:#a78bfa;border:1px solid rgba(167,139,250,.25)" data-key="t3_domain">Accounting</span></td>
+        <td data-key="t3_horizon">Monthly / Annual</td>
+        <td data-key="t3_output">Financial statements</td>
+        <td data-key="t3_cert">CPA, ACCA</td>
+      </tr>
+      <tr>
+        <td data-key="t4_role">Info Security Analyst</td>
+        <td><span class="pill" style="background:rgba(240,90,122,.12);color:#f05a7a;border:1px solid rgba(240,90,122,.25)" data-key="t4_domain">Cybersecurity</span></td>
+        <td data-key="t4_horizon">Continuous</td>
+        <td data-key="t4_output">Security assessments</td>
+        <td data-key="t4_cert">CISSP, Security+</td>
+      </tr>
+      <tr>
+        <td data-key="t5_role">GRC Technician</td>
+        <td><span class="pill" style="background:rgba(251,146,60,.12);color:#fb923c;border:1px solid rgba(251,146,60,.25)" data-key="t5_domain">Governance & Risk</span></td>
+        <td data-key="t5_horizon">Quarterly / Ongoing</td>
+        <td data-key="t5_output">Risk register, audit reports</td>
+        <td data-key="t5_cert">CISA, CRISC</td>
+      </tr>
+      <tr>
+        <td data-key="t6_role">SOC Analyst</td>
+        <td><span class="pill" style="background:rgba(240,192,64,.12);color:#f0c040;border:1px solid rgba(240,192,64,.25)" data-key="t6_domain">Security Ops</span></td>
+        <td data-key="t6_horizon">Real-time 24/7</td>
+        <td data-key="t6_output">Incident reports, alerts</td>
+        <td data-key="t6_cert">CySA+, CEH</td>
+      </tr>
+      <tr>
+        <td data-key="t7_role">CFO</td>
+        <td><span class="pill" style="background:rgba(232,237,245,.08);color:#e8edf5;border:1px solid rgba(232,237,245,.15)" data-key="t7_domain">Executive Leadership</span></td>
+        <td data-key="t7_horizon">Strategic / Long-term</td>
+        <td data-key="t7_output">Financial strategy, board reports</td>
+        <td data-key="t7_cert">CPA, CFA, MBA</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-inner" id="ticker"></div>
+</div>
+
+<script>
+const T = {
+  en: {
+    tag:'● Finance & Tech Ecosystem', h1:'Seven Key Roles',
+    heroDesc:'Modern finance organizations blend traditional accounting expertise with data intelligence and cybersecurity capabilities. The seven roles below represent the full spectrum — from ground-level financial operations and BI analytics to governance, security operations, and executive leadership.',
+    sc1:'Critical Roles', sc2:'Domains Covered', sc3:'Leadership Apex', sc4:'Business Coverage',
+    rolesTitle:'Role Profiles',
+    // Keys
+    k_focus:'Focus', k_focus2:'Focus', k_focus3:'Focus', k_focus4:'Focus', k_focus5:'Focus', k_focus6:'Focus', k_focus7:'Focus',
+    k_tasks:'Tasks', k_tasks2:'Tasks', k_tasks3:'Tasks', k_tasks4:'Tasks', k_tasks5:'Tasks', k_tasks6:'Tasks', k_tasks7:'Tasks',
+    k_skills:'Skills', k_skills2:'Skills', k_skills3:'Skills', k_skills4:'Skills', k_skills5:'Skills', k_skills6:'Skills', k_skills7:'Skills',
+    k_goal:'Goal', k_goal2:'Goal', k_goal3:'Goal', k_goal4:'Goal', k_goal5:'Goal', k_goal6:'Goal', k_goal7:'Goal',
+    // BI
+    bi_badge:'Data & BI', bi_title:'BI Data Analyst / BI Specialist',
+    bi_focus:'Transforms raw business data into actionable intelligence through dashboards, reports, and data models that drive strategic decisions.',
+    bi_tasks:'Building KPI dashboards in Power BI or Tableau, writing SQL queries, designing data pipelines, and presenting findings to stakeholders.',
+    bi_skills:'SQL, Power BI / Tableau, DAX, Python or R basics, data warehousing concepts, strong visual communication.',
+    bi_goal:'Provide management with a clear, real-time picture of business performance to enable faster, data-driven decisions.',
+    // FA
+    fa_badge:'Finance Ops', fa_title:'Online Financial & Accounting Assistant',
+    fa_focus:'Supports day-to-day financial and accounting operations remotely, ensuring transactions are recorded accurately and deadlines are met.',
+    fa_tasks:'Invoice processing, bank reconciliation, accounts payable/receivable management, data entry in ERP systems, and supporting month-end close.',
+    fa_skills:'Excel, ERP/accounting software (SAP, QuickBooks, Odoo), attention to detail, time management, digital collaboration tools.',
+    fa_goal:'Keep financial records clean, current, and compliant while freeing senior staff to focus on analysis and strategy.',
+    // AC
+    ac_badge:'Accounting', ac_title:'Administrative Accounting & Finance Officer',
+    ac_focus:'Bridges administrative management with financial control, overseeing bookkeeping, reporting, and budget monitoring across the organization.',
+    ac_tasks:'General ledger maintenance, preparation of financial statements, cash flow monitoring, payroll support, supplier and client account management.',
+    ac_skills:'Double-entry bookkeeping, IFRS/GAAP knowledge, advanced Excel, ERP systems, organizational skills, regulatory awareness.',
+    ac_goal:'Maintain accurate financial records, ensure regulatory compliance, and provide reliable data for management reporting.',
+    // ISA
+    isa_badge:'Cybersecurity', isa_title:'Information Security Analyst',
+    isa_focus:'Protects the organization\'s information assets by identifying vulnerabilities, monitoring threats, and implementing security controls.',
+    isa_tasks:'Vulnerability assessments, security audits, incident response, firewall and IDS management, security awareness training, and policy enforcement.',
+    isa_skills:'SIEM tools, network security, ISO 27001, penetration testing basics, risk assessment frameworks, CISSP or Security+ certifications.',
+    isa_goal:'Reduce the organization\'s attack surface and ensure the confidentiality, integrity, and availability (CIA) of all information systems.',
+    // GRC
+    grc_badge:'Governance', grc_title:'GRC Technician (Governance, Risk & Compliance)',
+    grc_focus:'Ensures the organization operates within regulatory frameworks, manages enterprise risk, and maintains governance standards.',
+    grc_tasks:'Risk register management, compliance gap analysis, internal controls testing, policy drafting, regulatory reporting, and audit support.',
+    grc_skills:'Risk frameworks (COSO, ISO 31000), regulatory knowledge (GDPR, SOX), GRC platforms (Archer, ServiceNow), audit methodologies.',
+    grc_goal:'Align business operations with legal, regulatory, and ethical standards while proactively managing enterprise risks.',
+    // SOC
+    soc_badge:'Security Ops', soc_title:'SOC Analyst (Security Operations Center)',
+    soc_focus:'Monitors, detects, investigates, and responds to cybersecurity threats in real time from within a Security Operations Center.',
+    soc_tasks:'Alert triage and investigation, log analysis, threat hunting, incident containment, escalation procedures, and threat intelligence consumption.',
+    soc_skills:'SIEM (Splunk, Microsoft Sentinel), EDR tools, MITRE ATT&CK framework, network forensics, scripting (Python/Bash), CompTIA CySA+.',
+    soc_goal:'Detect and neutralize threats as early as possible to minimize damage and downtime to the business.',
+    // CFO
+    cfo_badge:'C-Suite', cfo_title:'Chief Financial Officer (CFO)',
+    cfo_focus:'Leads the entire financial strategy of the organization, overseeing all financial operations, reporting, planning, and capital allocation.',
+    cfo_tasks:'Setting financial strategy, investor relations, capital structure decisions, M&A oversight, board reporting, and leading finance, accounting, and treasury teams.',
+    cfo_skills:'Strategic leadership, deep financial expertise, M&A experience, stakeholder communication, risk management, CPA/CFA qualifications typical.',
+    cfo_goal:'Maximize the financial health and long-term value of the company while ensuring transparency and trust with all stakeholders.',
+    // Table
+    cmpTitle:'At-a-Glance Comparison',
+    th_role:'Role', th_domain:'Domain', th_horizon:'Horizon', th_output:'Core Output', th_cert:'Key Credential',
+    t1_role:'BI Analyst', t1_domain:'Data & Analytics', t1_horizon:'Real-time / Present', t1_output:'Dashboards, KPI reports', t1_cert:'PL-300, Tableau Cert.',
+    t2_role:'Financial Assistant', t2_domain:'Finance Ops', t2_horizon:'Day-to-day', t2_output:'Reconciliations, entries', t2_cert:'AAT, bookkeeping cert.',
+    t3_role:'Admin Accounting Officer', t3_domain:'Accounting', t3_horizon:'Monthly / Annual', t3_output:'Financial statements', t3_cert:'CPA, ACCA',
+    t4_role:'Info Security Analyst', t4_domain:'Cybersecurity', t4_horizon:'Continuous', t4_output:'Security assessments', t4_cert:'CISSP, Security+',
+    t5_role:'GRC Technician', t5_domain:'Governance & Risk', t5_horizon:'Quarterly / Ongoing', t5_output:'Risk register, audit reports', t5_cert:'CISA, CRISC',
+    t6_role:'SOC Analyst', t6_domain:'Security Ops', t6_horizon:'Real-time 24/7', t6_output:'Incident reports, alerts', t6_cert:'CySA+, CEH',
+    t7_role:'CFO', t7_domain:'Executive Leadership', t7_horizon:'Strategic / Long-term', t7_output:'Financial strategy, board reports', t7_cert:'CPA, CFA, MBA',
+  },
+  es: {
+    tag:'● Ecosistema Financiero y Tecnológico', h1:'Siete Roles Clave',
+    heroDesc:'Las organizaciones financieras modernas combinan la experiencia contable tradicional con inteligencia de datos y capacidades de ciberseguridad. Los siete roles que se presentan a continuación representan el espectro completo: desde las operaciones financieras de base y el análisis BI hasta la gobernanza, las operaciones de seguridad y el liderazgo ejecutivo.',
+    sc1:'Roles Críticos', sc2:'Áreas Cubiertas', sc3:'Cúspide Ejecutiva', sc4:'Cobertura del Negocio',
+    rolesTitle:'Perfiles de Roles',
+    k_focus:'Enfoque', k_focus2:'Enfoque', k_focus3:'Enfoque', k_focus4:'Enfoque', k_focus5:'Enfoque', k_focus6:'Enfoque', k_focus7:'Enfoque',
+    k_tasks:'Tareas', k_tasks2:'Tareas', k_tasks3:'Tareas', k_tasks4:'Tareas', k_tasks5:'Tareas', k_tasks6:'Tareas', k_tasks7:'Tareas',
+    k_skills:'Habilidades', k_skills2:'Habilidades', k_skills3:'Habilidades', k_skills4:'Habilidades', k_skills5:'Habilidades', k_skills6:'Habilidades', k_skills7:'Habilidades',
+    k_goal:'Objetivo', k_goal2:'Objetivo', k_goal3:'Objetivo', k_goal4:'Objetivo', k_goal5:'Objetivo', k_goal6:'Objetivo', k_goal7:'Objetivo',
+    bi_badge:'Datos & BI', bi_title:'Analista de Datos BI / Especialista BI',
+    bi_focus:'Transforma datos empresariales en bruto en inteligencia accionable mediante dashboards, informes y modelos de datos que impulsan decisiones estratégicas.',
+    bi_tasks:'Construcción de dashboards de KPIs en Power BI o Tableau, redacción de consultas SQL, diseño de pipelines de datos y presentación de resultados a los interesados.',
+    bi_skills:'SQL, Power BI / Tableau, DAX, nociones de Python o R, conceptos de almacenes de datos, comunicación visual sólida.',
+    bi_goal:'Proporcionar a la dirección una visión clara y en tiempo real del desempeño empresarial para facilitar decisiones más rápidas y basadas en datos.',
+    fa_badge:'Operaciones Financieras', fa_title:'Asistente Financiero-Contable Online',
+    fa_focus:'Apoya las operaciones financieras y contables del día a día de forma remota, garantizando que las transacciones se registren con exactitud y se cumplan los plazos.',
+    fa_tasks:'Procesamiento de facturas, conciliación bancaria, gestión de cuentas a pagar/cobrar, entrada de datos en sistemas ERP y apoyo al cierre de fin de mes.',
+    fa_skills:'Excel, software ERP/contable (SAP, QuickBooks, Odoo), atención al detalle, gestión del tiempo, herramientas de colaboración digital.',
+    fa_goal:'Mantener los registros financieros ordenados, actualizados y conformes a la normativa, liberando al personal sénior para que se centre en el análisis y la estrategia.',
+    ac_badge:'Contabilidad', ac_title:'Administrativo Contable/Financiero',
+    ac_focus:'Conecta la gestión administrativa con el control financiero, supervisando la contabilidad, el reporting y el seguimiento presupuestario en toda la organización.',
+    ac_tasks:'Mantenimiento del libro mayor, elaboración de estados financieros, seguimiento del flujo de caja, soporte a nóminas y gestión de cuentas de proveedores y clientes.',
+    ac_skills:'Contabilidad por partida doble, conocimiento de NIIF/PCGA, Excel avanzado, sistemas ERP, capacidades organizativas, conocimiento regulatorio.',
+    ac_goal:'Mantener registros financieros precisos, garantizar el cumplimiento normativo y proporcionar datos fiables para el reporting de gestión.',
+    isa_badge:'Ciberseguridad', isa_title:'Analista de Seguridad de la Información',
+    isa_focus:'Protege los activos de información de la organización identificando vulnerabilidades, monitorizando amenazas e implementando controles de seguridad.',
+    isa_tasks:'Evaluaciones de vulnerabilidades, auditorías de seguridad, respuesta a incidentes, gestión de firewalls e IDS, formación en concienciación de seguridad y aplicación de políticas.',
+    isa_skills:'Herramientas SIEM, seguridad de redes, ISO 27001, nociones de pentesting, marcos de evaluación de riesgos, certificaciones CISSP o Security+.',
+    isa_goal:'Reducir la superficie de ataque de la organización y garantizar la confidencialidad, integridad y disponibilidad (CIA) de todos los sistemas de información.',
+    grc_badge:'Gobernanza', grc_title:'Técnico de GRC (Gobernanza, Riesgo y Cumplimiento)',
+    grc_focus:'Garantiza que la organización opere dentro de los marcos regulatorios, gestiona el riesgo corporativo y mantiene los estándares de gobernanza.',
+    grc_tasks:'Gestión del registro de riesgos, análisis de brechas de cumplimiento, pruebas de controles internos, redacción de políticas, reporting regulatorio y apoyo a auditorías.',
+    grc_skills:'Marcos de riesgo (COSO, ISO 31000), conocimiento regulatorio (RGPD, SOX), plataformas GRC (Archer, ServiceNow), metodologías de auditoría.',
+    grc_goal:'Alinear las operaciones empresariales con los estándares legales, regulatorios y éticos, gestionando proactivamente los riesgos corporativos.',
+    soc_badge:'Operaciones de Seguridad', soc_title:'Analista SOC (Centro de Operaciones de Seguridad)',
+    soc_focus:'Monitoriza, detecta, investiga y responde a amenazas de ciberseguridad en tiempo real desde un Centro de Operaciones de Seguridad.',
+    soc_tasks:'Triaje e investigación de alertas, análisis de logs, caza de amenazas, contención de incidentes, procedimientos de escalado y consumo de inteligencia de amenazas.',
+    soc_skills:'SIEM (Splunk, Microsoft Sentinel), herramientas EDR, marco MITRE ATT&CK, análisis forense de redes, scripting (Python/Bash), CompTIA CySA+.',
+    soc_goal:'Detectar y neutralizar amenazas lo antes posible para minimizar los daños y el tiempo de inactividad del negocio.',
+    cfo_badge:'Alta Dirección', cfo_title:'Director Financiero (CFO)',
+    cfo_focus:'Lidera toda la estrategia financiera de la organización, supervisando las operaciones financieras, el reporting, la planificación y la asignación de capital.',
+    cfo_tasks:'Definición de la estrategia financiera, relaciones con inversores, decisiones sobre estructura de capital, supervisión de M&A, reporting al consejo y liderazgo de los equipos de finanzas, contabilidad y tesorería.',
+    cfo_skills:'Liderazgo estratégico, profunda experiencia financiera, experiencia en M&A, comunicación con grupos de interés, gestión de riesgos, titulaciones CPA/CFA habituales.',
+    cfo_goal:'Maximizar la salud financiera y el valor a largo plazo de la empresa garantizando la transparencia y la confianza con todos los grupos de interés.',
+    cmpTitle:'Comparativa Rápida',
+    th_role:'Rol', th_domain:'Área', th_horizon:'Horizonte', th_output:'Entregable Principal', th_cert:'Credencial Clave',
+    t1_role:'Analista BI', t1_domain:'Datos & Analítica', t1_horizon:'Tiempo real / Presente', t1_output:'Dashboards, informes de KPI', t1_cert:'PL-300, Cert. Tableau',
+    t2_role:'Asistente Financiero', t2_domain:'Operaciones Financieras', t2_horizon:'Día a día', t2_output:'Conciliaciones, asientos', t2_cert:'AAT, cert. contabilidad',
+    t3_role:'Administrativo Contable', t3_domain:'Contabilidad', t3_horizon:'Mensual / Anual', t3_output:'Estados financieros', t3_cert:'CPA, ACCA',
+    t4_role:'Analista Seg. Información', t4_domain:'Ciberseguridad', t4_horizon:'Continuo', t4_output:'Evaluaciones de seguridad', t4_cert:'CISSP, Security+',
+    t5_role:'Técnico GRC', t5_domain:'Gobernanza & Riesgo', t5_horizon:'Trimestral / Continuo', t5_output:'Registro de riesgos, auditorías', t5_cert:'CISA, CRISC',
+    t6_role:'Analista SOC', t6_domain:'Operaciones de Seguridad', t6_horizon:'Tiempo real 24/7', t6_output:'Informes de incidentes, alertas', t6_cert:'CySA+, CEH',
+    t7_role:'CFO', t7_domain:'Liderazgo Ejecutivo', t7_horizon:'Estratégico / Largo plazo', t7_output:'Estrategia financiera, informes al consejo', t7_cert:'CPA, CFA, MBA',
+  },
+  pt: {
+    tag:'● Ecossistema Financeiro e Tecnológico', h1:'Sete Cargos Essenciais',
+    heroDesc:'As organizações financeiras modernas combinam expertise contábil tradicional com inteligência de dados e capacidades de cibersegurança. Os sete cargos a seguir representam o espectro completo — desde as operações financeiras de base e análises de BI até a governança, operações de segurança e liderança executiva.',
+    sc1:'Cargos Críticos', sc2:'Domínios Cobertos', sc3:'Topo da Liderança', sc4:'Cobertura do Negócio',
+    rolesTitle:'Perfis de Cargo',
+    k_focus:'Foco', k_focus2:'Foco', k_focus3:'Foco', k_focus4:'Foco', k_focus5:'Foco', k_focus6:'Foco', k_focus7:'Foco',
+    k_tasks:'Tarefas', k_tasks2:'Tarefas', k_tasks3:'Tarefas', k_tasks4:'Tarefas', k_tasks5:'Tarefas', k_tasks6:'Tarefas', k_tasks7:'Tarefas',
+    k_skills:'Habilidades', k_skills2:'Habilidades', k_skills3:'Habilidades', k_skills4:'Habilidades', k_skills5:'Habilidades', k_skills6:'Habilidades', k_skills7:'Habilidades',
+    k_goal:'Objetivo', k_goal2:'Objetivo', k_goal3:'Objetivo', k_goal4:'Objetivo', k_goal5:'Objetivo', k_goal6:'Objetivo', k_goal7:'Objetivo',
+    bi_badge:'Dados & BI', bi_title:'Analista de Dados BI / Especialista BI',
+    bi_focus:'Transforma dados brutos de negócio em inteligência acionável por meio de dashboards, relatórios e modelos de dados que orientam decisões estratégicas.',
+    bi_tasks:'Construção de dashboards de KPIs no Power BI ou Tableau, escrita de consultas SQL, design de pipelines de dados e apresentação de resultados às partes interessadas.',
+    bi_skills:'SQL, Power BI / Tableau, DAX, noções de Python ou R, conceitos de data warehouse, comunicação visual sólida.',
+    bi_goal:'Fornecer à gestão uma visão clara e em tempo real do desempenho do negócio para possibilitar decisões mais rápidas e baseadas em dados.',
+    fa_badge:'Operações Financeiras', fa_title:'Assistente Financeiro-Contábil Online',
+    fa_focus:'Apoia as operações financeiras e contábeis do dia a dia de forma remota, garantindo que as transações sejam registradas com precisão e que os prazos sejam cumpridos.',
+    fa_tasks:'Processamento de faturas, conciliação bancária, gestão de contas a pagar/receber, lançamentos em sistemas ERP e apoio ao fechamento mensal.',
+    fa_skills:'Excel, software ERP/contábil (SAP, QuickBooks, Odoo), atenção aos detalhes, gestão do tempo, ferramentas de colaboração digital.',
+    fa_goal:'Manter os registros financeiros organizados, atualizados e em conformidade, liberando a equipe sênior para focar em análise e estratégia.',
+    ac_badge:'Contabilidade', ac_title:'Administrativo Contábil/Financeiro',
+    ac_focus:'Une a gestão administrativa ao controle financeiro, supervisionando a escrituração contábil, o reporte e o acompanhamento orçamentário em toda a organização.',
+    ac_tasks:'Manutenção do razão geral, elaboração de demonstrações financeiras, monitoramento do fluxo de caixa, suporte à folha de pagamento e gestão de contas de fornecedores e clientes.',
+    ac_skills:'Contabilidade por partidas dobradas, conhecimento de IFRS/GAAP, Excel avançado, sistemas ERP, capacidade organizacional, conhecimento regulatório.',
+    ac_goal:'Manter registros financeiros precisos, garantir a conformidade regulatória e fornecer dados confiáveis para o reporte de gestão.',
+    isa_badge:'Cibersegurança', isa_title:'Analista de Segurança da Informação',
+    isa_focus:'Protege os ativos de informação da organização identificando vulnerabilidades, monitorando ameaças e implementando controles de segurança.',
+    isa_tasks:'Avaliações de vulnerabilidade, auditorias de segurança, resposta a incidentes, gestão de firewalls e IDS, treinamento de conscientização em segurança e aplicação de políticas.',
+    isa_skills:'Ferramentas SIEM, segurança de redes, ISO 27001, noções de pentest, frameworks de avaliação de risco, certificações CISSP ou Security+.',
+    isa_goal:'Reduzir a superfície de ataque da organização e garantir a confidencialidade, integridade e disponibilidade (CIA) de todos os sistemas de informação.',
+    grc_badge:'Governança', grc_title:'Técnico de GRC (Governança, Risco e Conformidade)',
+    grc_focus:'Garante que a organização opere dentro dos marcos regulatórios, gere o risco corporativo e mantenha os padrões de governança.',
+    grc_tasks:'Gestão do registro de riscos, análise de lacunas de conformidade, testes de controles internos, elaboração de políticas, reporte regulatório e suporte a auditorias.',
+    grc_skills:'Frameworks de risco (COSO, ISO 31000), conhecimento regulatório (LGPD/GDPR, SOX), plataformas GRC (Archer, ServiceNow), metodologias de auditoria.',
+    grc_goal:'Alinhar as operações de negócio aos padrões legais, regulatórios e éticos, gerenciando proativamente os riscos corporativos.',
+    soc_badge:'Operações de Segurança', soc_title:'Analista SOC (Centro de Operações de Segurança)',
+    soc_focus:'Monitora, detecta, investiga e responde a ameaças de cibersegurança em tempo real a partir de um Centro de Operações de Segurança.',
+    soc_tasks:'Triagem e investigação de alertas, análise de logs, caça a ameaças, contenção de incidentes, procedimentos de escalonamento e consumo de inteligência de ameaças.',
+    soc_skills:'SIEM (Splunk, Microsoft Sentinel), ferramentas EDR, framework MITRE ATT&CK, forense de rede, scripting (Python/Bash), CompTIA CySA+.',
+    soc_goal:'Detectar e neutralizar ameaças o mais rápido possível para minimizar danos e tempo de inatividade do negócio.',
+    cfo_badge:'C-Suite', cfo_title:'Diretor Financeiro (CFO)',
+    cfo_focus:'Lidera toda a estratégia financeira da organização, supervisionando todas as operações financeiras, o reporte, o planejamento e a alocação de capital.',
+    cfo_tasks:'Definição da estratégia financeira, relações com investidores, decisões sobre estrutura de capital, supervisão de M&A, reporte ao conselho e liderança das equipes de finanças, contabilidade e tesouraria.',
+    cfo_skills:'Liderança estratégica, profunda expertise financeira, experiência em M&A, comunicação com stakeholders, gestão de riscos, qualificações CPA/CFA habituais.',
+    cfo_goal:'Maximizar a saúde financeira e o valor de longo prazo da empresa, garantindo transparência e confiança com todos os stakeholders.',
+    cmpTitle:'Comparativo Rápido',
+    th_role:'Cargo', th_domain:'Área', th_horizon:'Horizonte', th_output:'Entregável Principal', th_cert:'Credencial-Chave',
+    t1_role:'Analista BI', t1_domain:'Dados & Análise', t1_horizon:'Tempo real / Presente', t1_output:'Dashboards, relatórios de KPI', t1_cert:'PL-300, Cert. Tableau',
+    t2_role:'Assistente Financeiro', t2_domain:'Operações Financeiras', t2_horizon:'Diário', t2_output:'Conciliações, lançamentos', t2_cert:'AAT, cert. contábil',
+    t3_role:'Administrativo Contábil', t3_domain:'Contabilidade', t3_horizon:'Mensal / Anual', t3_output:'Demonstrações financeiras', t3_cert:'CPA, ACCA',
+    t4_role:'Analista Seg. Informação', t4_domain:'Cibersegurança', t4_horizon:'Contínuo', t4_output:'Avaliações de segurança', t4_cert:'CISSP, Security+',
+    t5_role:'Técnico GRC', t5_domain:'Governança & Risco', t5_horizon:'Trimestral / Contínuo', t5_output:'Registro de riscos, auditorias', t5_cert:'CISA, CRISC',
+    t6_role:'Analista SOC', t6_domain:'Operações de Segurança', t6_horizon:'Tempo real 24/7', t6_output:'Relatórios de incidentes, alertas', t6_cert:'CySA+, CEH',
+    t7_role:'CFO', t7_domain:'Liderança Executiva', t7_horizon:'Estratégico / Longo prazo', t7_output:'Estratégia financeira, relatórios ao conselho', t7_cert:'CPA, CFA, MBA',
+  }
+};
+
+function setLang(l) {
+  const t = T[l];
+  document.querySelectorAll('[data-key]').forEach(el => {
+    const k = el.dataset.key;
+    if (t[k] !== undefined) el.innerHTML = t[k];
+  });
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('btn-' + l).classList.add('active');
+}
+
+// Ticker
+const ticks = [
+  {s:'AAPL',v:'189.42',c:'+1.23%',u:true},{s:'MSFT',v:'378.91',c:'+0.87%',u:true},
+  {s:'GOOGL',v:'140.55',c:'-0.34%',u:false},{s:'AMZN',v:'185.03',c:'+2.11%',u:true},
+  {s:'META',v:'502.77',c:'+1.65%',u:true},{s:'TSLA',v:'248.10',c:'-1.82%',u:false},
+  {s:'NVDA',v:'875.39',c:'+3.44%',u:true},{s:'JPM',v:'196.22',c:'+0.55%',u:true},
+  {s:'GS',v:'451.08',c:'-0.21%',u:false},{s:'BRK.B',v:'368.50',c:'+0.12%',u:true},
+];
+const el = document.getElementById('ticker');
+el.innerHTML = [...ticks,...ticks].map(d=>`<div class="t-item"><span style="color:var(--text);font-weight:500">${d.s}</span><span>${d.v}</span><span class="${d.u?'t-up':'t-dn'}">${d.c}</span></div>`).join('');
+</script>
+</body>
+</html>
