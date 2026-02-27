@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guión ODS 9 — Ártabro Tech</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --bg:#0e1117; --surface:#161c26; --surface2:#1b2232;
+  --amber:#e6a817; --amber-l:#f5c842; --teal:#2dd4bf; --rose:#fb7185;
+  --text:#dde6f0; --muted:#7a8799; --wc:#f9a8a8; --mc:#93c5fd; --border:#2a3343;
+}
+body { background:var(--bg); color:var(--text); font-family:'Source Serif 4',Georgia,serif; min-height:100vh;
+  background-image:radial-gradient(ellipse 60% 50% at 10% 10%,rgba(45,212,191,.05) 0%,transparent 60%),
+  radial-gradient(ellipse 60% 50% at 90% 90%,rgba(230,168,23,.05) 0%,transparent 60%); }
+
+header { padding:2.5rem 3.5rem 2rem; border-bottom:1px solid var(--border); position:relative; overflow:hidden; }
+header::after { content:'ODS 9'; position:absolute; right:2.5rem; top:50%; transform:translateY(-50%);
+  font-family:'Playfair Display',serif; font-size:6rem; font-weight:900; color:rgba(230,168,23,.06);
+  pointer-events:none; user-select:none; letter-spacing:-.02em; }
+.sup-tag { font-size:.68rem; letter-spacing:.22em; text-transform:uppercase; color:var(--teal); margin-bottom:.6rem; }
+header h1 { font-family:'Playfair Display',serif; font-size:2.1rem; font-weight:700; color:var(--amber-l); max-width:600px; line-height:1.2; }
+header .sub { color:var(--muted); margin-top:.4rem; font-size:.9rem; font-style:italic; }
+
+.controls { display:flex; align-items:center; gap:.8rem; flex-wrap:wrap;
+  padding:1.2rem 3.5rem; background:var(--surface); border-bottom:1px solid var(--border); }
+.btn { display:flex; align-items:center; gap:.4rem; padding:.55rem 1.3rem; border-radius:6px; border:none;
+  cursor:pointer; font-family:'Source Serif 4',serif; font-size:.88rem; transition:all .2s; letter-spacing:.02em; }
+.btn-play { background:var(--amber); color:#0e1117; font-weight:700; }
+.btn-play:hover { background:var(--amber-l); }
+.btn-pause { background:transparent; color:var(--teal); border:1px solid var(--teal); }
+.btn-pause:hover { background:rgba(45,212,191,.1); }
+.btn-stop { background:transparent; color:var(--rose); border:1px solid var(--rose); }
+.btn-stop:hover { background:rgba(251,113,133,.1); }
+.btn-voices { background:transparent; color:var(--muted); border:1px solid var(--border); font-size:.8rem; }
+.btn-voices:hover { border-color:var(--muted); color:var(--text); }
+.status { margin-left:auto; font-size:.78rem; color:var(--muted); font-style:italic; display:flex; align-items:center; gap:.45rem; }
+.dot { width:8px; height:8px; border-radius:50%; background:var(--muted); transition:background .3s; }
+.dot.on { background:#22c55e; animation:blink 1.1s infinite; }
+@keyframes blink { 0%,100%{opacity:1}50%{opacity:.25} }
+
+.voice-panel { display:none; background:var(--surface2); border-bottom:1px solid var(--border);
+  padding:1.5rem 3.5rem; gap:2rem; flex-wrap:wrap; }
+.voice-panel.open { display:flex; }
+.vp-col { flex:1; min-width:260px; }
+.vp-col h3 { font-size:.72rem; letter-spacing:.18em; text-transform:uppercase; margin-bottom:.8rem; }
+.vp-col.jenny h3 { color:var(--wc); }
+.vp-col.humberto h3 { color:var(--mc); }
+.vp-col select { width:100%; background:var(--bg); color:var(--text); border:1px solid var(--border);
+  border-radius:6px; padding:.45rem .7rem; font-family:'Source Serif 4',serif; font-size:.85rem; outline:none; cursor:pointer; }
+.vp-col select:focus { border-color:var(--amber); }
+.vp-hint { font-size:.72rem; color:var(--muted); margin-top:.5rem; font-style:italic; }
+.pitch-row { display:flex; align-items:center; gap:.8rem; margin-top:.7rem; }
+.pitch-row label { font-size:.72rem; color:var(--muted); white-space:nowrap; min-width:60px; }
+.pitch-row input[type=range] { flex:1; accent-color:var(--amber); }
+.pitch-row span { font-size:.72rem; color:var(--text); min-width:30px; text-align:right; }
+
+.legend { display:flex; gap:2rem; padding:.9rem 3.5rem; background:var(--surface);
+  border-bottom:1px solid var(--border); flex-wrap:wrap; align-items:center; }
+.badge { padding:.18rem .65rem; border-radius:20px; font-size:.72rem; font-weight:700; letter-spacing:.05em; }
+.badge-w { background:rgba(249,168,168,.13); color:var(--wc); border:1px solid rgba(249,168,168,.28); }
+.badge-m { background:rgba(147,197,253,.13); color:var(--mc); border:1px solid rgba(147,197,253,.28); }
+.leg-item { display:flex; align-items:center; gap:.5rem; font-size:.82rem; color:var(--muted); }
+.leg-hint { margin-left:auto; font-size:.72rem; color:var(--border); font-style:italic; }
+
+.script { max-width:860px; margin:0 auto; padding:2.5rem 3.5rem 6rem; }
+.section { margin-bottom:2.8rem; }
+.sec-title { font-size:.7rem; letter-spacing:.24em; text-transform:uppercase; color:var(--amber);
+  padding-bottom:.45rem; margin-bottom:1.4rem; border-bottom:1px solid rgba(230,168,23,.18);
+  font-family:'Playfair Display',serif; }
+
+.line { display:flex; gap:1.4rem; margin-bottom:1.3rem; padding:1.1rem 1.3rem; border-radius:8px;
+  cursor:pointer; transition:background .2s,border-color .2s; border:1px solid transparent; position:relative; }
+.line:hover { background:var(--surface); border-color:var(--border); }
+.line.active { border-color:rgba(230,168,23,.38); background:rgba(230,168,23,.04); }
+.line.active::before { content:'▶'; position:absolute; left:-.9rem; top:50%; transform:translateY(-50%);
+  color:var(--amber); font-size:.55rem; }
+
+.spk { flex-shrink:0; width:86px; padding-top:.1rem; }
+.spk-name { font-size:.7rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; }
+.spk-name.w { color:var(--wc); }
+.spk-name.m { color:var(--mc); }
+.spk-role { font-size:.62rem; color:var(--muted); margin-top:.12rem; font-style:italic; }
+.txt { font-size:.97rem; line-height:1.8; color:var(--text); font-weight:300; }
+
+.note { background:rgba(45,212,191,.04); border-left:3px solid var(--teal);
+  padding:.7rem 1rem; border-radius:0 6px 6px 0; font-size:.8rem; color:var(--muted);
+  font-style:italic; margin-bottom:1.3rem; }
+
+.timebar { position:sticky; bottom:0; display:flex; align-items:center; gap:1.2rem;
+  padding:.9rem 3.5rem; background:var(--surface); border-top:1px solid var(--border); z-index:10; }
+.tl { font-size:.68rem; color:var(--muted); text-transform:uppercase; letter-spacing:.1em; }
+.tv { font-family:'Playfair Display',serif; font-size:1rem; color:var(--amber); }
+.track { flex:1; height:3px; background:var(--border); border-radius:2px; overflow:hidden; }
+.fill { height:100%; background:var(--amber); width:0%; transition:width .5s; border-radius:2px; }
+
+@media(max-width:680px){
+  header,.controls,.legend,.script,.voice-panel,.timebar{ padding-left:1.2rem; padding-right:1.2rem; }
+  header h1 { font-size:1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="sup-tag">Los ODS en la Práctica Profesional · Ferrol, Galicia · Febrero 2026</div>
+  <h1>ODS 9 — Industria, Innovación e Infraestructura</h1>
+  <p class="sub">Ártabro Tech · Guión de presentación · 5 minutos · Jenny Paola Lozano &amp; Humberto López Rodríguez</p>
+</header>
+
+<div class="controls">
+  <button class="btn btn-play"   onclick="startAll()">&#9654; &nbsp;Reproducir todo</button>
+  <button class="btn btn-pause"  onclick="togglePause()" id="btnPause">&#9646;&#9646; &nbsp;Pausar</button>
+  <button class="btn btn-stop"   onclick="stopAll()">&#9632; &nbsp;Detener</button>
+  <button class="btn btn-voices" onclick="toggleVoicePanel()">&#127897; &nbsp;Ajustar voces</button>
+  <div class="status">
+    <div class="dot" id="dot"></div>
+    <span id="statusTxt">Listo para reproducir</span>
+  </div>
+</div>
+
+<div class="voice-panel" id="voicePanel">
+  <div class="vp-col jenny">
+    <h3>Jenny — Contralto · Bogotana</h3>
+    <select id="selJenny"></select>
+    <div class="vp-hint">Busca voces "es-CO", "es-US" o "es-419" para acento latinoamericano</div>
+    <div class="pitch-row">
+      <label>Tono</label>
+      <input type="range" id="pitchJenny" min="0.1" max="1.5" step="0.05" value="0.75"
+        oninput="document.getElementById('pJv').textContent=parseFloat(this.value).toFixed(2)">
+      <span id="pJv">0.75</span>
+    </div>
+    <div class="pitch-row">
+      <label>Velocidad</label>
+      <input type="range" id="rateJenny" min="0.5" max="1.5" step="0.05" value="1.25"
+        oninput="document.getElementById('rJv').textContent=parseFloat(this.value).toFixed(2)">
+      <span id="rJv">1.25</span>
+    </div>
+  </div>
+  <div class="vp-col humberto">
+    <h3>Humberto — Baritono · Castellano</h3>
+    <select id="selHumberto"></select>
+    <div class="vp-hint">Busca voces "es-ES" para acento castellano de España</div>
+    <div class="pitch-row">
+      <label>Tono</label>
+      <input type="range" id="pitchHumberto" min="0.1" max="1.5" step="0.05" value="0.6"
+        oninput="document.getElementById('pHv').textContent=parseFloat(this.value).toFixed(2)">
+      <span id="pHv">0.60</span>
+    </div>
+    <div class="pitch-row">
+      <label>Velocidad</label>
+      <input type="range" id="rateHumberto" min="0.5" max="1.5" step="0.05" value="1.40"
+        oninput="document.getElementById('rHv').textContent=parseFloat(this.value).toFixed(2)">
+      <span id="rHv">1.40</span>
+    </div>
+  </div>
+</div>
+
+<div class="legend">
+  <div class="leg-item"><span class="badge badge-w">JENNY</span> Contralto · Acento bogotano</div>
+  <div class="leg-item"><span class="badge badge-m">HUMBERTO</span> Baritono · Acento castellano</div>
+  <div class="leg-hint">Clic en cualquier línea para reproducirla individualmente</div>
+</div>
+
+<div class="script">
+
+  <!-- INTERVENCIÓN 1 — JENNY: Introducción + La empresa -->
+  <div class="section">
+    <div class="sec-title">Intervención 1 — Jenny &nbsp;|&nbsp; 0:00 – 0:45 &nbsp;·&nbsp; Introducción y empresa</div>
+    <div class="line" data-spk="jenny" onclick="playOne(this)">
+      <div class="spk"><div class="spk-name w">Jenny</div><div class="spk-role">Intro + empresa</div></div>
+      <div class="txt">Buenos días a todos. Soy Jenny Paola Lozano Pérez y junto a mi compañero Humberto López Rodríguez les presentamos nuestro análisis sobre los ODS en la práctica profesional, centrado en el ODS 9: Industria, Innovación e Infraestructura. La empresa que hemos analizado es Ártabro Tech, una empresa tecnológica de Ferrol que trabaja con Big Data e Inteligencia Artificial aplicados a la contratación pública. Su actividad principal es una plataforma de análisis predictivo de licitaciones: identifica oportunidades ocultas de negocio, automatiza la búsqueda de convocatorias y diseña estrategias para ganar concursos públicos. Además, representa un ejemplo de diversificación económica en una región históricamente ligada a la industria naval. Nuestro objetivo es identificar problemas reales de sostenibilidad tecnológica en esta empresa y proponer soluciones concretas y aplicables.</div>
+    </div>
+  </div>
+
+  <!-- INTERVENCIÓN 2 — HUMBERTO: ODS 9 + Metas 9.4 y 9.5 -->
+  <div class="section">
+    <div class="sec-title">Intervención 2 — Humberto &nbsp;|&nbsp; 0:45 – 1:30 &nbsp;·&nbsp; ODS 9 y sus metas clave</div>
+    <div class="line" data-spk="humberto" onclick="playOne(this)">
+      <div class="spk"><div class="spk-name m">Humberto</div><div class="spk-role">ODS 9 + metas</div></div>
+      <div class="txt">Gracias, Jenny. El ODS 9 busca promover infraestructuras modernas, sostenibles y eficientes, y fomentar la innovación tecnológica como motor del desarrollo. De sus metas, hemos seleccionado dos especialmente relevantes para Ártabro Tech. La Meta 9.4 busca mejorar la eficiencia y sostenibilidad de las infraestructuras tecnológicas. Para aplicarla, Ártabro Tech debería migrar sus servidores a proveedores que usen energías renovables, como eólica o solar, o usar centros de datos europeos con electricidad cien por ciento verde. Actualmente, sus servidores están activos las veinticuatro horas incluso sin actividad, generando consumo innecesario y más emisiones de CO2. La Meta 9.5 impulsa la inversión en investigación, desarrollo e innovación. Ártabro Tech podría colaborar con la Universidade da Coruña para desarrollar modelos de IA más precisos, probando nuevas técnicas de análisis de datos, desarrollando prototipos y ofreciendo prácticas a estudiantes locales, lo que fortalecería el ecosistema tecnológico de Galicia.</div>
+    </div>
+  </div>
+
+  <!-- INTERVENCIÓN 3 — JENNY: Problemáticas detectadas -->
+  <div class="section">
+    <div class="sec-title">Intervención 3 — Jenny &nbsp;|&nbsp; 1:30 – 2:30 &nbsp;·&nbsp; Cinco problemáticas detectadas</div>
+    <div class="note">Núcleo del análisis: cinco retos identificados en Ártabro Tech respecto al ODS 9.</div>
+    <div class="line" data-spk="jenny" onclick="playOne(this)">
+      <div class="spk"><div class="spk-name w">Jenny</div><div class="spk-role">5 problemáticas</div></div>
+      <div class="txt">Pasando al análisis de la empresa, hemos identificado cinco problemáticas. Primera: alto consumo energético. Los servidores de Big Data e IA activos veinticuatro horas generan un gasto eléctrico innecesario y emisiones de CO2 evitables. Según Greenpeace, los centros de datos ya representan cerca del uno por ciento del consumo eléctrico mundial. Segunda: riesgo de sesgo algorítmico. Si los datos de entrenamiento están desequilibrados, la IA puede favorecer injustamente a unas empresas frente a otras. El documental Coded Bias muestra cómo ciertos algoritmos discriminan a mujeres y personas racializadas, algo igualmente posible en la contratación pública. Tercera: falta de transparencia. Los clientes y las administraciones no siempre entienden cómo la IA toma sus decisiones, y hoy muchas instituciones exigen inteligencia artificial explicable para confiar en sus resultados. Cuarta: brecha de género. En España, solo el dieciséis por ciento de los profesionales de la inteligencia artificial son mujeres. Y quinta: dependencia de proveedores externos de Estados Unidos o Asia, lo que expone a la empresa ante cambios de precios o políticas que escapan a su control.</div>
+    </div>
+  </div>
+
+  <!-- INTERVENCIÓN 4 — HUMBERTO: Plan de acción ejes 1 y 2 -->
+  <div class="section">
+    <div class="sec-title">Intervención 4 — Humberto &nbsp;|&nbsp; 2:30 – 3:15 &nbsp;·&nbsp; Plan de acción: eficiencia energética y transparencia</div>
+    <div class="line" data-spk="humberto" onclick="playOne(this)">
+      <div class="spk"><div class="spk-name m">Humberto</div><div class="spk-role">Ejes 1 y 2</div></div>
+      <div class="txt">Frente a estas problemáticas, proponemos un plan de acción con cinco ejes estratégicos para una IA sostenible y responsable en Ártabro Tech. El primer eje es eficiencia energética e infraestructura verde: migrar el setenta por ciento de la infraestructura cloud a energía cien por ciento renovable, aplicar técnicas de Green AI para reducir un treinta por ciento el consumo por operación, e implementar monitorización en tiempo real con apagado automático de recursos ociosos. La inversión inicial estimada es de dieciocho mil quinientos euros, con un ahorro anual de ocho mil euros. El segundo eje es transparencia y ética algorítmica: integrar herramientas de inteligencia artificial explicable, como SHAP y LIME, junto con dashboards de explicación para clientes, realizar auditorías de sesgo trimestrales con métricas de equidad claras, diversificar los datos de entrenamiento y obtener certificación ética ISO barra IEC. La inversión estimada es de treinta y tres mil euros en un plazo clave de cuatro meses.</div>
+    </div>
+  </div>
+
+  <!-- INTERVENCIÓN 5 — JENNY: Plan de acción ejes 3 y 4 -->
+  <div class="section">
+    <div class="sec-title">Intervención 5 — Jenny &nbsp;|&nbsp; 3:15 – 3:55 &nbsp;·&nbsp; Plan de acción: diversidad y soberanía tecnológica</div>
+    <div class="line" data-spk="jenny" onclick="playOne(this)">
+      <div class="spk"><div class="spk-name w">Jenny</div><div class="spk-role">Ejes 3 y 4</div></div>
+      <div class="txt">El tercer eje es inclusión y diversidad: cerrar la brecha de género alcanzando al menos el cuarenta por ciento de mujeres en el equipo técnico en veinticuatro meses, mediante becas, mentorías y formación cien por ciento financiada en IA y Big Data, políticas de flexibilidad y un comité de diversidad. Inversión anual estimada de treinta y seis mil euros. El cuarto eje es soberanía tecnológica: garantizar que al menos el treinta por ciento de los servicios sean con proveedores españoles o gallegos, destinar el quince por ciento del presupuesto anual a I más D interno, contribuir a proyectos de código abierto, y establecer colaboraciones con el CESGA y la Universidade da Coruña, con prácticas y trabajos de fin de grado o máster. Esto reduce la dependencia de proveedores externos y fortalece la autonomía tecnológica de la empresa a largo plazo.</div>
+    </div>
+  </div>
+
+  <!-- INTERVENCIÓN 6 — HUMBERTO: Beneficios y ROI -->
+  <div class="section">
+    <div class="sec-title">Intervención 6 — Humberto &nbsp;|&nbsp; 3:55 – 4:30 &nbsp;·&nbsp; Beneficios y retorno de la inversión</div>
+    <div class="line" data-spk="humberto" onclick="playOne(this)">
+      <div class="spk"><div class="spk-name m">Humberto</div><div class="spk-role">Beneficios + ROI</div></div>
+      <div class="txt">Todas estas medidas generan un impacto medible a corto y medio plazo. Económicamente, los ahorros y beneficios anuales estimados alcanzan los noventa y cinco mil euros, con retorno de la inversión en un plazo de dieciocho a veinticuatro meses y un beneficio neto a tres años superior a ciento ochenta mil euros. Ambientalmente, se estima una reducción de la huella de carbono en torno al cuarenta por ciento. Y estratégicamente, la empresa refuerza su reputación, la confianza de los clientes y su liderazgo sectorial, preparándose al mismo tiempo para el cumplimiento del AI Act europeo y la Agenda 2030. La innovación tecnológica y la sostenibilidad no son objetivos contrapuestos: son palancas complementarias que se refuerzan mutuamente.</div>
+    </div>
+  </div>
+
+  <!-- INTERVENCIÓN 7 — JENNY: Conclusiones -->
+  <div class="section">
+    <div class="sec-title">Intervención 7 — Jenny &nbsp;|&nbsp; 4:30 – 4:50 &nbsp;·&nbsp; Conclusiones</div>
+    <div class="line" data-spk="jenny" onclick="playOne(this)">
+      <div class="spk"><div class="spk-name w">Jenny</div><div class="spk-role">Conclusiones</div></div>
+      <div class="txt">En conclusión, Ártabro Tech es una empresa innovadora con un papel importante en el ecosistema tecnológico gallego, pero con retos claros para alinearse con el ODS 9. Las problemáticas detectadas no son solo dificultades: son también oportunidades reales de mejora. Con un plan de acción progresivo, apoyado en un comité interno de sostenibilidad, la empresa puede avanzar hacia una IA más eficiente, más ética y más inclusiva, alineada con el ODS 9, el AI Act europeo, la Agenda 2030 y los marcos éticos internacionales de inteligencia artificial.</div>
+    </div>
+  </div>
+
+  <!-- INTERVENCIÓN 8 — HUMBERTO: Cierre y referencias -->
+  <div class="section">
+    <div class="sec-title">Intervención 8 — Humberto &nbsp;|&nbsp; 4:50 – 5:00 &nbsp;·&nbsp; Cierre y referencias</div>
+    <div class="line" data-spk="humberto" onclick="playOne(this)">
+      <div class="spk"><div class="spk-name m">Humberto</div><div class="spk-role">Cierre</div></div>
+      <div class="txt">Ártabro Tech tiene la oportunidad de convertirse en un caso de éxito de inteligencia artificial ética y sostenible en Galicia. Este trabajo se apoya en referencias como Buolamwini y Gebru, dos mil dieciocho; Jobin et al., dos mil diecinueve; el AI Act de dos mil veinticuatro; la UNESCO, dos mil veintiuno; y la Estratexia Galega de Intelixencia Artificial de la Xunta de dos mil veintidós. Muchas gracias por su atención. Quedamos a su disposición para cualquier pregunta.</div>
+    </div>
+  </div>
+
+</div><!-- /script -->
+
+<div class="timebar">
+  <div><div class="tl">Tiempo</div><div class="tv" id="tvTime">0:00</div></div>
+  <div class="track"><div class="fill" id="fillBar"></div></div>
+  <div style="text-align:right"><div class="tl">Total estimado</div><div class="tv">5:00</div></div>
+</div>
+
+<script>
+const allLines = Array.from(document.querySelectorAll('.line'));
+let playing = false, paused = false, curIdx = 0;
+let startTime = null, savedElapsed = 0, timerID = null;
+
+function populateVoiceSelects() {
+  const voices = speechSynthesis.getVoices();
+  ['selJenny','selHumberto'].forEach(id => {
+    const sel = document.getElementById(id);
+    sel.innerHTML = '';
+    const spanish = voices.filter(v => v.lang.toLowerCase().startsWith('es'));
+    const others  = voices.filter(v => !v.lang.toLowerCase().startsWith('es'));
+    [...spanish, ...others].forEach(v => {
+      const o = document.createElement('option');
+      o.value = v.name;
+      o.textContent = v.name + ' (' + v.lang + ')';
+      sel.appendChild(o);
+    });
+  });
+  const voices2 = speechSynthesis.getVoices();
+  const pick = (prefs) => {
+    for (const p of prefs) {
+      const v = voices2.find(v => v.lang === p || v.lang.startsWith(p));
+      if (v) return v;
+    }
+    return voices2.find(v => v.lang.toLowerCase().startsWith('es')) || voices2[0];
+  };
+  const bestJ = pick(['es-CO','es-419','es-US','es-MX']);
+  const bestH = pick(['es-ES','es-AR','es']);
+  if (bestJ) document.getElementById('selJenny').value = bestJ.name;
+  if (bestH) document.getElementById('selHumberto').value = bestH.name;
+}
+
+function toggleVoicePanel() {
+  const p = document.getElementById('voicePanel');
+  p.classList.toggle('open');
+  if (p.classList.contains('open')) populateVoiceSelects();
+}
+
+function setStatus(txt, active) {
+  document.getElementById('statusTxt').textContent = txt;
+  document.getElementById('dot').className = 'dot' + (active ? ' on' : '');
+}
+
+function highlight(el) {
+  allLines.forEach(l => l.classList.remove('active'));
+  if (el) { el.classList.add('active'); el.scrollIntoView({behavior:'smooth',block:'center'}); }
+}
+
+function tick() {
+  if (!startTime) return;
+  const e = savedElapsed + (Date.now() - startTime) / 1000;
+  const m = Math.floor(e/60), s = Math.floor(e%60);
+  document.getElementById('tvTime').textContent = m + ':' + String(s).padStart(2,'0');
+  document.getElementById('fillBar').style.width = Math.min(100,(e/300)*100) + '%';
+}
+
+function startTimer() {
+  clearInterval(timerID);
+  startTime = Date.now();
+  timerID = setInterval(tick, 500);
+}
+
+function makeU(text, spk, onEnd) {
+  const u = new SpeechSynthesisUtterance(text);
+  const voices = speechSynthesis.getVoices();
+  const selName = document.getElementById(spk === 'jenny' ? 'selJenny' : 'selHumberto').value;
+  const picked = voices.find(v => v.name === selName);
+  if (picked) u.voice = picked;
+  u.lang   = spk === 'jenny' ? 'es-CO' : 'es-ES';
+  u.pitch  = parseFloat(document.getElementById(spk === 'jenny' ? 'pitchJenny' : 'pitchHumberto').value);
+  u.rate   = parseFloat(document.getElementById(spk === 'jenny' ? 'rateJenny'  : 'rateHumberto').value);
+  u.volume = 1;
+  u.onend  = onEnd;
+  u.onerror = e => { if (e.error !== 'canceled') onEnd(); };
+  return u;
+}
+
+function speak(idx) {
+  if (idx >= allLines.length) { finishAll(); return; }
+  curIdx = idx;
+  const line = allLines[idx];
+  const spk  = line.dataset.spk;
+  const text = line.querySelector('.txt').innerText;
+  highlight(line);
+  setStatus('Hablando — ' + (spk === 'jenny' ? 'Jenny' : 'Humberto'), true);
+  const u = makeU(text, spk, () => {
+    line.classList.remove('active');
+    if (playing) speak(idx + 1);
+    else setStatus('Listo para reproducir', false);
+  });
+  speechSynthesis.speak(u);
+}
+
+function finishAll() {
+  playing = false; paused = false;
+  clearInterval(timerID);
+  allLines.forEach(l => l.classList.remove('active'));
+  setStatus('Presentación finalizada', false);
+}
+
+function startAll() {
+  if (paused) {
+    speechSynthesis.resume();
+    paused = false; playing = true;
+    startTimer();
+    setStatus('Reproduciendo...', true);
+    document.getElementById('btnPause').innerHTML = '&#9646;&#9646; &nbsp;Pausar';
+    return;
+  }
+  speechSynthesis.cancel();
+  playing = true; savedElapsed = 0;
+  startTimer();
+  speak(0);
+}
+
+function togglePause() {
+  const btn = document.getElementById('btnPause');
+  if (!playing) return;
+  if (paused) {
+    speechSynthesis.resume();
+    paused = false;
+    startTimer();
+    setStatus('Reproduciendo...', true);
+    btn.innerHTML = '&#9646;&#9646; &nbsp;Pausar';
+  } else {
+    speechSynthesis.pause();
+    paused = true;
+    savedElapsed += (Date.now() - startTime) / 1000;
+    startTime = null;
+    clearInterval(timerID);
+    setStatus('En pausa', false);
+    btn.innerHTML = '&#9654; &nbsp;Continuar';
+  }
+}
+
+function stopAll() {
+  playing = false; paused = false;
+  speechSynthesis.cancel();
+  clearInterval(timerID);
+  allLines.forEach(l => l.classList.remove('active'));
+  setStatus('Detenido', false);
+  document.getElementById('btnPause').innerHTML = '&#9646;&#9646; &nbsp;Pausar';
+}
+
+function playOne(lineEl) {
+  playing = false;
+  speechSynthesis.cancel();
+  const spk  = lineEl.dataset.spk;
+  const text = lineEl.querySelector('.txt').innerText;
+  highlight(lineEl);
+  setStatus('Leyendo — ' + (spk === 'jenny' ? 'Jenny' : 'Humberto'), true);
+  const u = makeU(text, spk, () => {
+    lineEl.classList.remove('active');
+    setStatus('Listo para reproducir', false);
+  });
+  speechSynthesis.speak(u);
+}
+
+if (typeof speechSynthesis !== 'undefined') {
+  speechSynthesis.onvoiceschanged = populateVoiceSelects;
+  if (speechSynthesis.getVoices().length > 0) populateVoiceSelects();
+}
+</script>
+</body>
+</html>
