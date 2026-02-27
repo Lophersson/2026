@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FP&A vs Controller | FinCore Intelligence</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0d14;
+    --surface: #111520;
+    --card: #151b2e;
+    --border: #1e2a45;
+    --accent: #00d4aa;
+    --accent2: #4f8ef7;
+    --gold: #f0c040;
+    --red: #f05a7a;
+    --text: #e8edf5;
+    --muted: #7a8ba8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    overflow-x: hidden;
+    padding-bottom: 40px;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,170,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(79,142,247,0.025) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,13,20,0.93);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  .logo-dot {
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(0,212,170,0.4); }
+    50% { box-shadow: 0 0 0 6px rgba(0,212,170,0); }
+  }
+
+  .lang-buttons { display: flex; gap: 8px; }
+
+  .lang-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 6px 16px;
+    border-radius: 4px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.25s;
+    text-transform: uppercase;
+  }
+
+  .lang-btn:hover, .lang-btn.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(0,212,170,0.08);
+    box-shadow: 0 0 12px rgba(0,212,170,0.15);
+  }
+
+  /* HERO */
+  .hero {
+    position: relative; z-index: 1;
+    padding: 90px 48px 60px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(0,212,170,0.08);
+    border: 1px solid rgba(0,212,170,0.2);
+    color: var(--accent);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 3px;
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.5s ease 0.1s forwards;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 4.5vw, 3.8rem);
+    font-weight: 900;
+    line-height: 1.06;
+    letter-spacing: -0.03em;
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.5s ease 0.2s forwards;
+  }
+
+  h1 .fpa-color { background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  h1 .ctrl-color { background: linear-gradient(135deg, var(--gold), var(--red)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+  .hero-desc {
+    font-size: 1rem;
+    line-height: 1.85;
+    color: var(--muted);
+    max-width: 720px;
+    opacity: 0;
+    animation: fadeUp 0.5s ease 0.35s forwards;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* QUICK STATS BAR */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 56px;
+    opacity: 0;
+    animation: fadeUp 0.5s ease 0.5s forwards;
+  }
+
+  .stat-cell {
+    background: var(--surface);
+    padding: 24px 28px;
+    transition: background 0.2s;
+  }
+
+  .stat-cell:hover { background: var(--card); }
+
+  .stat-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-label {
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* CONTENT */
+  .content {
+    position: relative; z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 48px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 32px;
+    display: flex; align-items: center; gap: 16px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1; height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+  }
+
+  /* VERSUS CARDS */
+  .versus-grid {
+    display: grid;
+    grid-template-columns: 1fr 56px 1fr;
+    gap: 0;
+    margin-bottom: 80px;
+    align-items: stretch;
+  }
+
+  .role-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 36px 32px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.25s, transform 0.25s;
+  }
+
+  .role-card:hover { transform: translateY(-3px); }
+
+  .role-card.fpa { border-top: 3px solid var(--accent); }
+  .role-card.fpa:hover { border-color: var(--accent); }
+
+  .role-card.ctrl { border-top: 3px solid var(--gold); }
+  .role-card.ctrl:hover { border-color: var(--gold); }
+
+  .role-badge {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 3px;
+    margin-bottom: 18px;
+  }
+
+  .badge-fpa { background: rgba(0,212,170,0.1); color: var(--accent); border: 1px solid rgba(0,212,170,0.25); }
+  .badge-ctrl { background: rgba(240,192,64,0.1); color: var(--gold); border: 1px solid rgba(240,192,64,0.25); }
+
+  .role-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 24px;
+    letter-spacing: -0.02em;
+  }
+
+  .role-row {
+    display: flex; flex-direction: column; gap: 16px;
+  }
+
+  .role-item {
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+
+  .role-key {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 3px 9px;
+    border-radius: 3px;
+    white-space: nowrap;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
+  .key-fpa { background: rgba(0,212,170,0.08); color: var(--accent); }
+  .key-ctrl { background: rgba(240,192,64,0.08); color: var(--gold); }
+
+  .role-item-text {
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  .role-item-text strong { color: var(--text); font-weight: 500; }
+
+  .vs-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .vs-circle {
+    width: 44px; height: 44px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  /* DIFFERENCES TABLE */
+  .diff-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 80px;
+    font-size: 0.875rem;
+  }
+
+  .diff-table thead tr {
+    border-bottom: 2px solid var(--border);
+  }
+
+  .diff-table th {
+    padding: 14px 20px;
+    text-align: left;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  .diff-table th:first-child { color: var(--accent2); }
+  .diff-table th:nth-child(2) { color: var(--accent); }
+  .diff-table th:nth-child(3) { color: var(--gold); }
+
+  .diff-table tbody tr {
+    border-bottom: 1px solid rgba(30,42,69,0.6);
+    transition: background 0.15s;
+  }
+
+  .diff-table tbody tr:hover { background: rgba(21,27,46,0.8); }
+
+  .diff-table td {
+    padding: 16px 20px;
+    vertical-align: top;
+    line-height: 1.65;
+    color: var(--muted);
+  }
+
+  .diff-table td:first-child {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    color: var(--text);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .tag-fwd {
+    display: inline-block;
+    background: rgba(0,212,170,0.1); color: var(--accent);
+    border: 1px solid rgba(0,212,170,0.2);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    padding: 2px 8px;
+    border-radius: 20px;
+  }
+
+  .tag-bwd {
+    display: inline-block;
+    background: rgba(240,192,64,0.1); color: var(--gold);
+    border: 1px solid rgba(240,192,64,0.2);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    padding: 2px 8px;
+    border-radius: 20px;
+  }
+
+  /* TICKER */
+  .ticker-wrap {
+    position: fixed;
+    bottom: 0; left: 0; right: 0; z-index: 99;
+    background: rgba(10,13,20,0.95);
+    border-top: 1px solid var(--border);
+    height: 34px;
+    overflow: hidden;
+    display: flex; align-items: center;
+  }
+
+  .ticker-inner {
+    display: flex; gap: 56px;
+    animation: ticker 30s linear infinite;
+    white-space: nowrap;
+  }
+
+  .ticker-item {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--muted);
+    display: flex; gap: 8px; align-items: center;
+  }
+
+  .t-up { color: var(--accent); }
+  .t-dn { color: var(--red); }
+
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* ── TABLET (≤ 900px) ─────────────────────────────── */
+  @media (max-width: 900px) {
+    nav { padding: 0 24px; }
+    .hero { padding: 72px 24px 48px; }
+    .content { padding: 56px 24px; }
+    .stats-bar { grid-template-columns: 1fr 1fr; }
+    .versus-grid { grid-template-columns: 1fr; gap: 16px; }
+    .vs-divider { display: none; }
+    .section-title { font-size: 1.4rem; }
+  }
+
+  /* ── MOBILE (≤ 600px) ─────────────────────────────── */
+  @media (max-width: 600px) {
+    nav { padding: 0 16px; height: 56px; }
+    .logo { font-size: 1.05rem; }
+    .lang-btn { padding: 5px 10px; font-size: 0.68rem; letter-spacing: 0.06em; }
+    .hero { padding: 56px 16px 36px; }
+    .content { padding: 40px 16px 60px; }
+    h1 { font-size: clamp(1.9rem, 8vw, 2.8rem); margin-bottom: 18px; }
+    .hero-desc { font-size: 0.93rem; }
+    .tag { font-size: 0.65rem; padding: 5px 10px; margin-bottom: 20px; }
+    .stats-bar { grid-template-columns: 1fr 1fr; }
+    .stat-cell { padding: 16px 14px; }
+    .stat-val { font-size: 1.55rem; }
+    .stat-label { font-size: 0.66rem; }
+    .versus-grid { grid-template-columns: 1fr; gap: 14px; margin-bottom: 48px; }
+    .vs-divider { display: none; }
+    .role-card { padding: 24px 18px; }
+    .role-title { font-size: 1.25rem; }
+    .role-item-text { font-size: 0.82rem; }
+    .section-title { font-size: 1.25rem; margin-bottom: 20px; }
+    .diff-table { font-size: 0.78rem; display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .diff-table th, .diff-table td { padding: 10px 12px; white-space: nowrap; }
+    .ticker-wrap { height: 30px; }
+    .ticker-item { font-size: 0.62rem; gap: 5px; }
+  }
+
+  /* ── VERY SMALL (≤ 380px) ────────────────────────── */
+  @media (max-width: 380px) {
+    .logo span:last-of-type { display: none; }
+    .stat-val { font-size: 1.3rem; }
+    .role-card { padding: 18px 14px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">
+    <span class="logo-dot"></span>
+    FinCore Intelligence
+  </div>
+  <div class="lang-buttons">
+    <button class="lang-btn active" onclick="setLang('en')" id="btn-en">EN</button>
+    <button class="lang-btn" onclick="setLang('es')" id="btn-es">ES</button>
+    <button class="lang-btn" onclick="setLang('pt')" id="btn-pt">PT</button>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="tag" data-key="tag">● Role Comparison</div>
+  <h1><span class="fpa-color">FP&amp;A</span> vs <span class="ctrl-color" data-key="ctrlWord">Controller</span></h1>
+  <p class="hero-desc" data-key="heroParagraph">
+    An FP&A analyst focuses on forward-looking strategy, budgeting, and forecasting to drive business decisions, while a Controller manages historical financial accuracy, compliance, and accounting operations. FP&A analysts analyze trends for growth, whereas Controllers ensure data integrity and internal controls.
+  </p>
+  <div class="stats-bar">
+    <div class="stat-cell">
+      <div class="stat-val" style="color:var(--accent)">→</div>
+      <div class="stat-label" data-key="s1label">FP&A: Forward-Looking</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-val" style="color:var(--gold)">←</div>
+      <div class="stat-label" data-key="s2label">Controller: Backward-Looking</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-val" style="color:var(--accent2)">📊</div>
+      <div class="stat-label" data-key="s3label">FP&A: Strategic</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-val" style="color:var(--red)">📋</div>
+      <div class="stat-label" data-key="s4label">Controller: Operational</div>
+    </div>
+  </div>
+</section>
+
+<div class="content">
+
+  <!-- ROLE CARDS -->
+  <h2 class="section-title" data-key="rolesTitle">Role Profiles</h2>
+  <div class="versus-grid" style="margin-bottom:80px">
+
+    <div class="role-card fpa">
+      <span class="role-badge badge-fpa" data-key="fpaTag">FP&A Analyst</span>
+      <div class="role-title" data-key="fpaTitle">Financial Planning<br>&amp; Analysis</div>
+      <div class="role-row">
+        <div class="role-item">
+          <span class="role-key key-fpa" data-key="focusKey">Focus</span>
+          <div class="role-item-text" data-key="fpaFocus">Future-oriented, strategic planning, budgeting, forecasting, and data-driven insights.</div>
+        </div>
+        <div class="role-item">
+          <span class="role-key key-fpa" data-key="tasksKey">Tasks</span>
+          <div class="role-item-text" data-key="fpaTasks">Financial modeling, variance analysis (actuals vs. budget), and performance evaluation.</div>
+        </div>
+        <div class="role-item">
+          <span class="role-key key-fpa" data-key="goalKey">Goal</span>
+          <div class="role-item-text" data-key="fpaGoal">Drive profitability and support management decision-making.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vs-divider">
+      <div class="vs-circle">VS</div>
+    </div>
+
+    <div class="role-card ctrl">
+      <span class="role-badge badge-ctrl" data-key="ctrlTag">Controller</span>
+      <div class="role-title" data-key="ctrlTitle">Financial Control<br>&amp; Compliance</div>
+      <div class="role-row">
+        <div class="role-item">
+          <span class="role-key key-ctrl" data-key="focusKey2">Focus</span>
+          <div class="role-item-text" data-key="ctrlFocus">Past-oriented, financial reporting, compliance, and operational control.</div>
+        </div>
+        <div class="role-item">
+          <span class="role-key key-ctrl" data-key="tasksKey2">Tasks</span>
+          <div class="role-item-text" data-key="ctrlTasks">Managing the general ledger, closing books, tax compliance, and auditing.</div>
+        </div>
+        <div class="role-item">
+          <span class="role-key key-ctrl" data-key="goalKey2">Goal</span>
+          <div class="role-item-text" data-key="ctrlGoal">Ensure accuracy, financial integrity, and compliance with regulations.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DIFFERENCES TABLE -->
+  <h2 class="section-title" data-key="diffTitle">Key Differences Summary</h2>
+  <table class="diff-table">
+    <thead>
+      <tr>
+        <th data-key="thDimension">Dimension</th>
+        <th data-key="thFpa">FP&A Analyst</th>
+        <th data-key="thCtrl">Controller</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-key="row1dim">Time Horizon</td>
+        <td><span class="tag-fwd" data-key="row1fpa">Forward →</span></td>
+        <td><span class="tag-bwd" data-key="row1ctrl">Backward ←</span></td>
+      </tr>
+      <tr>
+        <td data-key="row2dim">Primary Function</td>
+        <td data-key="row2fpa">Analytical / Strategic</td>
+        <td data-key="row2ctrl">Accounting / Operational</td>
+      </tr>
+      <tr>
+        <td data-key="row3dim">Core Deliverables</td>
+        <td data-key="row3fpa">Forecasts, financial models, dashboards</td>
+        <td data-key="row3ctrl">Balance Sheet, Income Statement, audit reports</td>
+      </tr>
+      <tr>
+        <td data-key="row4dim">Key Interactions</td>
+        <td data-key="row4fpa">Works closely with operational managers to guide decisions</td>
+        <td data-key="row4ctrl">Works with auditors and manages internal controls</td>
+      </tr>
+      <tr>
+        <td data-key="row5dim">Mindset</td>
+        <td data-key="row5fpa">Growth and insight-driven</td>
+        <td data-key="row5ctrl">Compliance and accuracy-driven</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-inner" id="ticker"></div>
+</div>
+
+<script>
+const T = {
+  en: {
+    tag: '● Role Comparison',
+    ctrlWord: 'Controller',
+    heroParagraph: 'An FP&A analyst focuses on forward-looking strategy, budgeting, and forecasting to drive business decisions, while a Controller manages historical financial accuracy, compliance, and accounting operations. FP&A analysts analyze trends for growth, whereas Controllers ensure data integrity and internal controls.',
+    s1label: 'FP&A: Forward-Looking',
+    s2label: 'Controller: Backward-Looking',
+    s3label: 'FP&A: Strategic',
+    s4label: 'Controller: Operational',
+    rolesTitle: 'Role Profiles',
+    fpaTag: 'FP&A Analyst',
+    fpaTitle: 'Financial Planning<br>&amp; Analysis',
+    focusKey: 'Focus', focusKey2: 'Focus',
+    tasksKey: 'Tasks', tasksKey2: 'Tasks',
+    goalKey: 'Goal', goalKey2: 'Goal',
+    fpaFocus: 'Future-oriented, strategic planning, budgeting, forecasting, and data-driven insights.',
+    fpaTasks: 'Financial modeling, variance analysis (actuals vs. budget), and performance evaluation.',
+    fpaGoal: 'Drive profitability and support management decision-making.',
+    ctrlTag: 'Controller',
+    ctrlTitle: 'Financial Control<br>&amp; Compliance',
+    ctrlFocus: 'Past-oriented, financial reporting, compliance, and operational control.',
+    ctrlTasks: 'Managing the general ledger, closing books, tax compliance, and auditing.',
+    ctrlGoal: 'Ensure accuracy, financial integrity, and compliance with regulations.',
+    diffTitle: 'Key Differences Summary',
+    thDimension: 'Dimension', thFpa: 'FP&A Analyst', thCtrl: 'Controller',
+    row1dim: 'Time Horizon', row1fpa: 'Forward →', row1ctrl: 'Backward ←',
+    row2dim: 'Primary Function', row2fpa: 'Analytical / Strategic', row2ctrl: 'Accounting / Operational',
+    row3dim: 'Core Deliverables', row3fpa: 'Forecasts, financial models, dashboards', row3ctrl: 'Balance Sheet, Income Statement, audit reports',
+    row4dim: 'Key Interactions', row4fpa: 'Works closely with operational managers to guide decisions', row4ctrl: 'Works with auditors and manages internal controls',
+    row5dim: 'Mindset', row5fpa: 'Growth and insight-driven', row5ctrl: 'Compliance and accuracy-driven',
+  },
+  es: {
+    tag: '● Comparación de Roles',
+    ctrlWord: 'Controller',
+    heroParagraph: 'Un analista de FP&A se enfoca en la estrategia prospectiva, la presupuestación y las proyecciones para impulsar las decisiones empresariales, mientras que un Controller gestiona la exactitud financiera histórica, el cumplimiento normativo y las operaciones contables. Los analistas de FP&A analizan tendencias para el crecimiento, mientras que los Controllers garantizan la integridad de los datos y los controles internos.',
+    s1label: 'FP&A: Prospectivo',
+    s2label: 'Controller: Retrospectivo',
+    s3label: 'FP&A: Estratégico',
+    s4label: 'Controller: Operativo',
+    rolesTitle: 'Perfiles de Rol',
+    fpaTag: 'Analista FP&A',
+    fpaTitle: 'Planificación y Análisis<br>Financiero',
+    focusKey: 'Enfoque', focusKey2: 'Enfoque',
+    tasksKey: 'Tareas', tasksKey2: 'Tareas',
+    goalKey: 'Objetivo', goalKey2: 'Objetivo',
+    fpaFocus: 'Orientado al futuro, planificación estratégica, presupuestación, proyecciones e insights basados en datos.',
+    fpaTasks: 'Modelado financiero, análisis de variaciones (real vs. presupuesto) y evaluación del desempeño.',
+    fpaGoal: 'Impulsar la rentabilidad y apoyar la toma de decisiones de la dirección.',
+    ctrlTag: 'Controller',
+    ctrlTitle: 'Control Financiero<br>y Cumplimiento',
+    ctrlFocus: 'Orientado al pasado, reporting financiero, cumplimiento normativo y control operativo.',
+    ctrlTasks: 'Gestión del libro mayor, cierre contable, cumplimiento fiscal y auditoría.',
+    ctrlGoal: 'Garantizar la exactitud, la integridad financiera y el cumplimiento de la normativa.',
+    diffTitle: 'Resumen de Diferencias Clave',
+    thDimension: 'Dimensión', thFpa: 'Analista FP&A', thCtrl: 'Controller',
+    row1dim: 'Horizonte Temporal', row1fpa: 'Futuro →', row1ctrl: 'Pasado ←',
+    row2dim: 'Función Principal', row2fpa: 'Analítica / Estratégica', row2ctrl: 'Contable / Operativa',
+    row3dim: 'Entregables Clave', row3fpa: 'Proyecciones, modelos financieros, dashboards', row3ctrl: 'Balance general, Estado de resultados, informes de auditoría',
+    row4dim: 'Interacciones Clave', row4fpa: 'Trabaja estrechamente con gerentes operativos para orientar decisiones', row4ctrl: 'Trabaja con auditores y gestiona los controles internos',
+    row5dim: 'Mentalidad', row5fpa: 'Orientada al crecimiento y al insight', row5ctrl: 'Orientada al cumplimiento y la exactitud',
+  },
+  pt: {
+    tag: '● Comparação de Cargos',
+    ctrlWord: 'Controller',
+    heroParagraph: 'Um analista de FP&A foca em estratégia prospectiva, orçamento e previsões para orientar as decisões de negócio, enquanto um Controller gerencia a precisão financeira histórica, a conformidade e as operações contábeis. Os analistas de FP&A analisam tendências para o crescimento, enquanto os Controllers garantem a integridade dos dados e os controles internos.',
+    s1label: 'FP&A: Prospectivo',
+    s2label: 'Controller: Retrospectivo',
+    s3label: 'FP&A: Estratégico',
+    s4label: 'Controller: Operacional',
+    rolesTitle: 'Perfis de Cargo',
+    fpaTag: 'Analista FP&A',
+    fpaTitle: 'Planejamento e Análise<br>Financeira',
+    focusKey: 'Foco', focusKey2: 'Foco',
+    tasksKey: 'Tarefas', tasksKey2: 'Tarefas',
+    goalKey: 'Objetivo', goalKey2: 'Objetivo',
+    fpaFocus: 'Orientado ao futuro, planejamento estratégico, orçamento, previsões e insights baseados em dados.',
+    fpaTasks: 'Modelagem financeira, análise de variações (realizado vs. orçado) e avaliação de desempenho.',
+    fpaGoal: 'Impulsionar a lucratividade e apoiar a tomada de decisões da gestão.',
+    ctrlTag: 'Controller',
+    ctrlTitle: 'Controle Financeiro<br>e Conformidade',
+    ctrlFocus: 'Orientado ao passado, reporte financeiro, conformidade e controle operacional.',
+    ctrlTasks: 'Gestão do razão geral, fechamento contábil, conformidade fiscal e auditoria.',
+    ctrlGoal: 'Garantir a precisão, a integridade financeira e a conformidade com as normas.',
+    diffTitle: 'Resumo das Principais Diferenças',
+    thDimension: 'Dimensão', thFpa: 'Analista FP&A', thCtrl: 'Controller',
+    row1dim: 'Horizonte Temporal', row1fpa: 'Futuro →', row1ctrl: 'Passado ←',
+    row2dim: 'Função Principal', row2fpa: 'Analítica / Estratégica', row2ctrl: 'Contábil / Operacional',
+    row3dim: 'Entregáveis Principais', row3fpa: 'Previsões, modelos financeiros, dashboards', row3ctrl: 'Balanço patrimonial, DRE, relatórios de auditoria',
+    row4dim: 'Interações Principais', row4fpa: 'Trabalha com gestores operacionais para orientar decisões', row4ctrl: 'Trabalha com auditores e gerencia controles internos',
+    row5dim: 'Mentalidade', row5fpa: 'Orientada ao crescimento e ao insight', row5ctrl: 'Orientada à conformidade e à precisão',
+  }
+};
+
+function setLang(lang) {
+  const t = T[lang];
+  document.querySelectorAll('[data-key]').forEach(el => {
+    const k = el.dataset.key;
+    if (t[k] !== undefined) el.innerHTML = t[k];
+  });
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('btn-' + lang).classList.add('active');
+}
+
+// Ticker
+const ticks = [
+  { s:'AAPL', v:'189.42', c:'+1.23%', u:true },
+  { s:'MSFT', v:'378.91', c:'+0.87%', u:true },
+  { s:'GOOGL', v:'140.55', c:'-0.34%', u:false },
+  { s:'AMZN', v:'185.03', c:'+2.11%', u:true },
+  { s:'META', v:'502.77', c:'+1.65%', u:true },
+  { s:'TSLA', v:'248.10', c:'-1.82%', u:false },
+  { s:'NVDA', v:'875.39', c:'+3.44%', u:true },
+  { s:'JPM', v:'196.22', c:'+0.55%', u:true },
+  { s:'GS', v:'451.08', c:'-0.21%', u:false },
+  { s:'BRK.B', v:'368.50', c:'+0.12%', u:true },
+];
+const el = document.getElementById('ticker');
+const all = [...ticks,...ticks];
+el.innerHTML = all.map(d=>`<div class="ticker-item"><span style="color:var(--text);font-weight:500">${d.s}</span><span>${d.v}</span><span class="${d.u?'t-up':'t-dn'}">${d.c}</span></div>`).join('');
+</script>
+</body>
+</html>
