@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delicatessen Ferrol — Catálogo Gourmet</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Jost:wght@200;300;400;500&family=Cormorant:ital,wght@0,400;1,300;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg:       #141210;
+            --surface:  #1c1917;
+            --surface2: #242220;
+            --border:   rgba(196,161,100,0.18);
+            --gold:     #c4a164;
+            --gold-lt:  #e2c990;
+            --cream:    #f0e8d8;
+            --text:     #d8cfc0;
+            --muted:    #7a7060;
+            --accent:   #a0785a;
+        }
+
+        body.light-mode {
+            --bg:       #f7f3ed;
+            --surface:  #ede7dd;
+            --surface2: #e4ddd2;
+            --border:   rgba(139,101,50,0.2);
+            --gold:     #8b6532;
+            --gold-lt:  #a07840;
+            --cream:    #2a1f10;
+            --text:     #3a3028;
+            --muted:    #8a7a68;
+            --accent:   #a0785a;
+        }
+
+        body, body::before,
+        .wrapper, .lang-bar, .header, .intro,
+        .categories, .category, .footer,
+        .product-item, .brand-name, .brand-sub,
+        .category-title, .product-name,
+        .product-price, .lang-btn, .print-btn,
+        .theme-btn, .expand-all-btn {
+            transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+        }
+
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Jost', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ── Background texture ── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 20% 10%, rgba(196,161,100,0.05) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 80% at 80% 90%, rgba(160,120,90,0.04) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .wrapper {
+            position: relative;
+            z-index: 1;
+            max-width: 860px;
+            margin: 0 auto;
+        }
+
+        /* ── Language bar ── */
+        .lang-bar {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 16px 36px 0;
+            gap: 4px;
+        }
+
+        .lang-divider {
+            width: 1px;
+            height: 14px;
+            background: var(--border);
+            margin: 0 8px;
+        }
+
+        /* ── Theme toggle ── */
+        .theme-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--muted);
+            font-family: 'Jost', sans-serif;
+            font-size: 0.7em;
+            font-weight: 400;
+            letter-spacing: 1.5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.25s ease;
+        }
+
+        .theme-btn:hover { color: var(--gold-lt); border-color: rgba(196,161,100,0.5); }
+        .theme-btn svg { transition: transform 0.5s ease; }
+        .theme-btn:hover svg { transform: rotate(20deg); }
+
+        .lang-label {
+            font-size: 0.65em;
+            letter-spacing: 2px;
+            color: var(--muted);
+            text-transform: uppercase;
+            margin-right: 10px;
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--muted);
+            font-family: 'Jost', sans-serif;
+            font-size: 0.7em;
+            font-weight: 400;
+            letter-spacing: 1.5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.25s ease;
+        }
+
+        .lang-btn:hover { color: var(--gold-lt); border-color: rgba(196,161,100,0.5); }
+
+        .lang-btn.active {
+            background: rgba(196,161,100,0.12);
+            color: var(--gold);
+            border-color: var(--gold);
+        }
+
+        /* ── Header ── */
+        .header {
+            padding: 48px 36px 40px;
+            position: relative;
+        }
+
+        .header-ornament {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .ornament-line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--gold), transparent);
+        }
+
+        .ornament-diamond {
+            width: 6px;
+            height: 6px;
+            background: var(--gold);
+            transform: rotate(45deg);
+            flex-shrink: 0;
+        }
+
+        .brand-name {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2em, 5vw, 3.2em);
+            font-weight: 400;
+            letter-spacing: 6px;
+            color: var(--cream);
+            text-transform: uppercase;
+            line-height: 1;
+        }
+
+        .brand-sub {
+            font-family: 'Jost', sans-serif;
+            font-size: 0.72em;
+            font-weight: 200;
+            letter-spacing: 5px;
+            color: var(--gold);
+            text-transform: uppercase;
+            margin-top: 8px;
+        }
+
+        .header-bottom {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-top: 28px;
+        }
+
+        .header-bottom .ornament-line {
+            background: linear-gradient(to right, var(--gold), transparent);
+        }
+
+        /* ── Intro ── */
+        .intro {
+            padding: 0 36px 36px;
+            text-align: center;
+        }
+
+        .intro-text {
+            font-family: 'Cormorant', serif;
+            font-style: italic;
+            font-size: 1.2em;
+            color: var(--muted);
+            line-height: 1.7;
+            max-width: 540px;
+            margin: 0 auto;
+            font-weight: 300;
+        }
+
+        /* ── Categories ── */
+        .categories {
+            padding: 0 36px;
+        }
+
+        .category {
+            border-top: 1px solid var(--border);
+            position: relative;
+        }
+
+        .category:last-child {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 0;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s ease;
+        }
+
+        .category-header:hover .category-title {
+            color: var(--gold-lt);
+        }
+
+        .category-header:hover .cat-icon { color: var(--gold); }
+
+        .cat-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .cat-icon {
+            font-size: 0.75em;
+            color: var(--gold);
+            letter-spacing: 1px;
+            font-family: 'Jost', sans-serif;
+            font-weight: 200;
+            min-width: 24px;
+            text-align: right;
+            transition: color 0.2s;
+        }
+
+        .category-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.0em;
+            font-weight: 400;
+            color: var(--text);
+            letter-spacing: 1px;
+            transition: color 0.2s;
+        }
+
+        .cat-toggle {
+            width: 22px;
+            height: 22px;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--muted);
+            font-size: 0.9em;
+            font-weight: 200;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .category.active .cat-toggle {
+            border-color: var(--gold);
+            color: var(--gold);
+            background: rgba(196,161,100,0.08);
+        }
+
+        /* ── Products ── */
+        .category-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .category.active .category-content {
+            max-height: 2000px;
+        }
+
+        .products-list {
+            padding: 4px 0 20px 38px;
+        }
+
+        .product-item {
+            display: flex;
+            align-items: baseline;
+            padding: 9px 0;
+            border-bottom: 1px solid rgba(196,161,100,0.06);
+            gap: 8px;
+            transition: background 0.15s;
+        }
+
+        .product-item:last-child { border-bottom: none; }
+
+        .product-item:hover {
+            padding-left: 6px;
+        }
+
+        .product-dot {
+            width: 3px;
+            height: 3px;
+            background: var(--gold);
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-bottom: 2px;
+            opacity: 0.6;
+        }
+
+        .product-name {
+            font-size: 0.88em;
+            color: var(--text);
+            font-weight: 300;
+            flex: 1;
+            line-height: 1.4;
+        }
+
+        .product-unit {
+            font-size: 0.72em;
+            color: var(--muted);
+            font-weight: 200;
+            white-space: nowrap;
+            letter-spacing: 0.5px;
+        }
+
+        .product-dots-fill {
+            flex: 1;
+            height: 1px;
+            border-bottom: 1px dotted rgba(196,161,100,0.2);
+            min-width: 20px;
+        }
+
+        .product-price {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.92em;
+            color: var(--gold);
+            font-weight: 400;
+            white-space: nowrap;
+            letter-spacing: 0.5px;
+        }
+
+        /* ── Footer ── */
+        .footer {
+            padding: 48px 36px;
+            text-align: center;
+        }
+
+        .footer-ornament {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .footer-ornament .ornament-line {
+            background: linear-gradient(to right, transparent, var(--gold), transparent);
+        }
+
+        .print-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: transparent;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            font-family: 'Jost', sans-serif;
+            font-size: 0.7em;
+            font-weight: 400;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            padding: 13px 40px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .print-btn:hover {
+            background: rgba(196,161,100,0.1);
+            color: var(--gold-lt);
+            border-color: var(--gold-lt);
+            letter-spacing: 4px;
+        }
+
+        .footer-copy {
+            margin-top: 28px;
+            font-size: 0.65em;
+            color: var(--muted);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* ── Expand all toggle ── */
+        .controls {
+            display: flex;
+            justify-content: flex-end;
+            padding: 0 36px 20px;
+        }
+
+        .expand-all-btn {
+            background: transparent;
+            border: none;
+            color: var(--muted);
+            font-family: 'Jost', sans-serif;
+            font-size: 0.7em;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            padding: 4px 0;
+            border-bottom: 1px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .expand-all-btn:hover {
+            color: var(--gold);
+            border-bottom-color: var(--gold);
+        }
+
+        /* ── Print ── */
+        @media print {
+            body { background: #fff; color: #111; }
+            body::before { display: none; }
+            .lang-bar, .expand-all-btn, .print-btn, .cat-toggle { display: none; }
+            .category-content { max-height: none !important; }
+            .brand-name { color: #111; }
+            .brand-sub, .cat-icon, .product-price { color: #555; }
+            .product-name { color: #222; }
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 640px) {
+            .header, .intro, .categories, .footer, .controls { padding-left: 20px; padding-right: 20px; }
+            .lang-bar { padding-right: 20px; }
+            .products-list { padding-left: 16px; }
+            .brand-name { letter-spacing: 3px; }
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+
+    <!-- Language Bar -->
+    <div class="lang-bar">
+        <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Cambiar tema">
+            <svg id="themeIcon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+            <span id="themeLabel">Claro</span>
+        </button>
+        <div class="lang-divider"></div>
+        <span class="lang-label" data-i18n="lang">Idioma</span>
+        <button class="lang-btn active" onclick="setLang('es')">ES</button>
+        <button class="lang-btn" onclick="setLang('pt')">PT</button>
+        <button class="lang-btn" onclick="setLang('en')">EN</button>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="header-ornament">
+            <div class="ornament-line"></div>
+            <div class="ornament-diamond"></div>
+            <div class="ornament-line"></div>
+        </div>
+        <div style="text-align:center">
+            <div class="brand-name">Delicatessen Ferrol</div>
+            <div class="brand-sub" data-i18n="subtitle">Catálogo de Productos</div>
+        </div>
+        <div class="header-bottom">
+            <div class="ornament-line"></div>
+        </div>
+    </div>
+
+    <!-- Intro -->
+    <div class="intro">
+        <p class="intro-text" data-i18n="intro">Una cuidada selección de productos gourmet europeos para el paladar más exigente</p>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+        <button class="expand-all-btn" onclick="toggleAll(this)" data-i18n="expand">Expandir todo</button>
+    </div>
+
+    <!-- Categories -->
+    <div class="categories" id="categories">
+
+        <!-- Bebidas Calientes -->
+        <div class="category">
+            <div class="category-header" onclick="toggleCategory(this)">
+                <div class="cat-left">
+                    <span class="cat-icon">01</span>
+                    <h3 class="category-title" data-i18n="cat1">Bebidas Calientes</h3>
+                </div>
+                <div class="cat-toggle">+</div>
+            </div>
+            <div class="category-content">
+                <div class="products-list">
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name">Café Lavazza Qualità Rossa</span>
+                        <span class="product-unit">250g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">8,50 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name">Café Illy Espresso Intenso</span>
+                        <span class="product-unit">250g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">9,20 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-earl">Té Earl Grey Premium</span>
+                        <span class="product-unit">100g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">12,50 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-matcha">Té Matcha Ceremonial</span>
+                        <span class="product-unit">50g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">24,00 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-rooibos">Infusión Rooibos Vainilla</span>
+                        <span class="product-unit">80g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">7,80 €</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chocolates y Dulces -->
+        <div class="category">
+            <div class="category-header" onclick="toggleCategory(this)">
+                <div class="cat-left">
+                    <span class="cat-icon">02</span>
+                    <h3 class="category-title" data-i18n="cat2">Chocolates y Dulces</h3>
+                </div>
+                <div class="cat-toggle">+</div>
+            </div>
+            <div class="category-content">
+                <div class="products-list">
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name">Chocolate Lindt Excellence 85%</span>
+                        <span class="product-unit">100g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">3,95 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-bombon">Bombones Belgas Assortment</span>
+                        <span class="product-unit">250g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">18,50 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name">Chocolate Valor 70% Cacao</span>
+                        <span class="product-unit">100g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">2,85 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-mermelada">Mermelada de Fresa Artesanal</span>
+                        <span class="product-unit">340g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">6,50 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-higos">Confitura de Higos</span>
+                        <span class="product-unit">250g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">7,20 €</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charcutería -->
+        <div class="category">
+            <div class="category-header" onclick="toggleCategory(this)">
+                <div class="cat-left">
+                    <span class="cat-icon">03</span>
+                    <h3 class="category-title" data-i18n="cat3">Charcutería</h3>
+                </div>
+                <div class="cat-toggle">+</div>
+            </div>
+            <div class="category-content">
+                <div class="products-list">
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-jamon-ib">Jamón Ibérico de Bellota 5J</span>
+                        <span class="product-unit">100g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">16,90 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-jamon-s">Jamón Serrano Reserva</span>
+                        <span class="product-unit">100g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">4,50 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-chorizo">Chorizo Ibérico Extra</span>
+                        <span class="product-unit">300g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">12,80 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-salchi">Salchichón Vela</span>
+                        <span class="product-unit">250g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">9,50 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-lomo">Lomo Embuchado Ibérico</span>
+                        <span class="product-unit">200g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">11,20 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-cecina">Cecina de León IGP</span>
+                        <span class="product-unit">100g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">7,80 €</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quesos y Lácteos -->
+        <div class="category">
+            <div class="category-header" onclick="toggleCategory(this)">
+                <div class="cat-left">
+                    <span class="cat-icon">04</span>
+                    <h3 class="category-title" data-i18n="cat4">Quesos y Lácteos</h3>
+                </div>
+                <div class="cat-toggle">+</div>
+            </div>
+            <div class="category-content">
+                <div class="products-list">
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-manchego">Manchego DOP Curado 12 Meses</span>
+                        <span class="product-unit">250g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">8,90 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name">Parmigiano Reggiano DOP 24 Meses</span>
+                        <span class="product-unit">200g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">7,50 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name">Brie de Meaux AOP</span>
+                        <span class="product-unit">200g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">6,80 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name">Roquefort AOP</span>
+                        <span class="product-unit">150g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">5,90 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-tetilla">Tetilla DOP Gallega</span>
+                        <span class="product-unit">400g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">6,20 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-mantequilla">Mantequilla Francesa Échiré</span>
+                        <span class="product-unit">250g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">5,40 €</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panadería y Bollería -->
+        <div class="category">
+            <div class="category-header" onclick="toggleCategory(this)">
+                <div class="cat-left">
+                    <span class="cat-icon">05</span>
+                    <h3 class="category-title" data-i18n="cat5">Panadería y Bollería</h3>
+                </div>
+                <div class="cat-toggle">+</div>
+            </div>
+            <div class="category-content">
+                <div class="products-list">
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-panettone">Panettone Bauli Clásico</span>
+                        <span class="product-unit">750g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">12,90 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-shortbread">Galletas Shortbread Escocesas</span>
+                        <span class="product-unit">200g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">5,80 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name">Biscotti di Prato</span>
+                        <span class="product-unit">250g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">6,50 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-speculoos">Speculoos Belgas</span>
+                        <span class="product-unit">300g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">4,90 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-reganyas">Regañás Sevillanas Artesanas</span>
+                        <span class="product-unit">180g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">3,80 €</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Conservas de Mar -->
+        <div class="category">
+            <div class="category-header" onclick="toggleCategory(this)">
+                <div class="cat-left">
+                    <span class="cat-icon">06</span>
+                    <h3 class="category-title" data-i18n="cat6">Conservas de Mar</h3>
+                </div>
+                <div class="cat-toggle">+</div>
+            </div>
+            <div class="category-content">
+                <div class="products-list">
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-berberechos">Berberechos al Natural Rías Gallegas</span>
+                        <span class="product-unit">120g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">18,50 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-mejillones">Mejillones en Escabeche Premium</span>
+                        <span class="product-unit">115g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">5,90 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-navajas">Navajas al Natural</span>
+                        <span class="product-unit">115g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">14,20 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-ventresca">Ventresca de Atún en Aceite de Oliva</span>
+                        <span class="product-unit">120g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">12,80 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-anchoas">Anchoas del Cantábrico en Aceite</span>
+                        <span class="product-unit">50g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">11,50 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-pulpo">Pulpo en Aceite de Oliva</span>
+                        <span class="product-unit">120g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">9,80 €</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Aceites y Vinagres -->
+        <div class="category">
+            <div class="category-header" onclick="toggleCategory(this)">
+                <div class="cat-left">
+                    <span class="cat-icon">07</span>
+                    <h3 class="category-title" data-i18n="cat7">Aceites y Vinagres</h3>
+                </div>
+                <div class="cat-toggle">+</div>
+            </div>
+            <div class="category-content">
+                <div class="products-list">
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-picual">AOVE Picual Premium</span>
+                        <span class="product-unit">500ml</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">15,90 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-arbequina">AOVE Arbequina Ecológico</span>
+                        <span class="product-unit">500ml</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">18,50 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-balsam">Vinagre Balsámico de Módena IGP</span>
+                        <span class="product-unit">250ml</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">12,80 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-jerez">Vinagre de Jerez Reserva</span>
+                        <span class="product-unit">375ml</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">8,90 €</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Conservas Vegetales -->
+        <div class="category">
+            <div class="category-header" onclick="toggleCategory(this)">
+                <div class="cat-left">
+                    <span class="cat-icon">08</span>
+                    <h3 class="category-title" data-i18n="cat8">Conservas Vegetales</h3>
+                </div>
+                <div class="cat-toggle">+</div>
+            </div>
+            <div class="category-content">
+                <div class="products-list">
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-piquillo">Pimientos del Piquillo DOP</span>
+                        <span class="product-unit">290g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">5,60 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-esparragos">Espárragos de Navarra Extra</span>
+                        <span class="product-unit">220g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">8,90 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-aceitunas">Aceitunas Arbequinas Premium</span>
+                        <span class="product-unit">350g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">6,50 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-alcachofas">Alcachofas al Natural</span>
+                        <span class="product-unit">290g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">7,20 €</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Despensa Gourmet -->
+        <div class="category">
+            <div class="category-header" onclick="toggleCategory(this)">
+                <div class="cat-left">
+                    <span class="cat-icon">09</span>
+                    <h3 class="category-title" data-i18n="cat9">Despensa Gourmet</h3>
+                </div>
+                <div class="cat-toggle">+</div>
+            </div>
+            <div class="category-content">
+                <div class="products-list">
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name">Pasta De Cecco Spaghetti</span>
+                        <span class="product-unit">500g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">2,80 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-ravioli">Ravioli Frescos de Trufa</span>
+                        <span class="product-unit">250g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">8,90 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-bomba">Arroz Bomba Valencia DOP</span>
+                        <span class="product-unit">1kg</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">5,40 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-arborio">Arroz Arborio para Risotto</span>
+                        <span class="product-unit">500g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">3,90 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-almendras">Almendras Marcona Tostadas</span>
+                        <span class="product-unit">200g</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">7,50 €</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vinos y Bebidas -->
+        <div class="category">
+            <div class="category-header" onclick="toggleCategory(this)">
+                <div class="cat-left">
+                    <span class="cat-icon">10</span>
+                    <h3 class="category-title" data-i18n="cat10">Vinos y Bebidas</h3>
+                </div>
+                <div class="cat-toggle">+</div>
+            </div>
+            <div class="category-content">
+                <div class="products-list">
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-albarino">Albariño Rías Baixas DOP</span>
+                        <span class="product-unit">750ml</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">14,50 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-mencia">Ribeira Sacra Mencía</span>
+                        <span class="product-unit">750ml</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">16,80 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-cava">Cava Brut Nature Reserva</span>
+                        <span class="product-unit">750ml</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">12,90 €</span>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-dot"></div>
+                        <span class="product-name" data-i18n="p-godello">Godello DO Valdeorras</span>
+                        <span class="product-unit">750ml</span>
+                        <div class="product-dots-fill"></div>
+                        <span class="product-price">11,50 €</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /categories -->
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="footer-ornament">
+            <div class="ornament-line"></div>
+            <div class="ornament-diamond"></div>
+            <div class="ornament-line"></div>
+        </div>
+        <button class="print-btn" onclick="window.print()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            <span data-i18n="print">Imprimir Catálogo</span>
+        </button>
+        <p class="footer-copy">© Delicatessen Ferrol — Ferrol, Galicia</p>
+    </div>
+
+</div>
+
+<script>
+    /* ── i18n ── */
+    const translations = {
+        es: {
+            lang: 'Idioma', subtitle: 'CATÁLOGO DE PRODUCTOS',
+            intro: 'Una cuidada selección de productos gourmet europeos para el paladar más exigente',
+            expand: 'Expandir todo', collapse: 'Colapsar todo', print: 'Imprimir Catálogo',
+            cat1: 'Bebidas Calientes', cat2: 'Chocolates y Dulces', cat3: 'Charcutería',
+            cat4: 'Quesos y Lácteos', cat5: 'Panadería y Bollería', cat6: 'Conservas de Mar',
+            cat7: 'Aceites y Vinagres', cat8: 'Conservas Vegetales', cat9: 'Despensa Gourmet',
+            cat10: 'Vinos y Bebidas',
+            'p-earl': 'Té Earl Grey Premium', 'p-matcha': 'Té Matcha Ceremonial',
+            'p-rooibos': 'Infusión Rooibos Vainilla', 'p-bombon': 'Bombones Belgas Assortment',
+            'p-mermelada': 'Mermelada de Fresa Artesanal', 'p-higos': 'Confitura de Higos',
+            'p-jamon-ib': 'Jamón Ibérico de Bellota 5J', 'p-jamon-s': 'Jamón Serrano Reserva',
+            'p-chorizo': 'Chorizo Ibérico Extra', 'p-salchi': 'Salchichón Vela',
+            'p-lomo': 'Lomo Embuchado Ibérico', 'p-cecina': 'Cecina de León IGP',
+            'p-manchego': 'Manchego DOP Curado 12 Meses', 'p-tetilla': 'Tetilla DOP Gallega',
+            'p-mantequilla': 'Mantequilla Francesa Échiré',
+            'p-panettone': 'Panettone Bauli Clásico', 'p-shortbread': 'Galletas Shortbread Escocesas',
+            'p-speculoos': 'Speculoos Belgas', 'p-reganyas': 'Regañás Sevillanas Artesanas',
+            'p-berberechos': 'Berberechos al Natural Rías Gallegas',
+            'p-mejillones': 'Mejillones en Escabeche Premium', 'p-navajas': 'Navajas al Natural',
+            'p-ventresca': 'Ventresca de Atún en Aceite de Oliva',
+            'p-anchoas': 'Anchoas del Cantábrico en Aceite', 'p-pulpo': 'Pulpo en Aceite de Oliva',
+            'p-picual': 'AOVE Picual Premium', 'p-arbequina': 'AOVE Arbequina Ecológico',
+            'p-balsam': 'Vinagre Balsámico de Módena IGP', 'p-jerez': 'Vinagre de Jerez Reserva',
+            'p-piquillo': 'Pimientos del Piquillo DOP', 'p-esparragos': 'Espárragos de Navarra Extra',
+            'p-aceitunas': 'Aceitunas Arbequinas Premium', 'p-alcachofas': 'Alcachofas al Natural',
+            'p-ravioli': 'Ravioli Frescos de Trufa', 'p-bomba': 'Arroz Bomba Valencia DOP',
+            'p-arborio': 'Arroz Arborio para Risotto', 'p-almendras': 'Almendras Marcona Tostadas',
+            'p-albarino': 'Albariño Rías Baixas DOP', 'p-mencia': 'Ribeira Sacra Mencía',
+            'p-cava': 'Cava Brut Nature Reserva', 'p-godello': 'Godello DO Valdeorras',
+        },
+        pt: {
+            lang: 'Idioma', subtitle: 'CATÁLOGO DE PRODUTOS',
+            intro: 'Uma seleção cuidadosa de produtos gourmet europeus para o paladar mais exigente',
+            expand: 'Expandir tudo', collapse: 'Recolher tudo', print: 'Imprimir Catálogo',
+            cat1: 'Bebidas Quentes', cat2: 'Chocolates e Doces', cat3: 'Charcutaria',
+            cat4: 'Queijos e Laticínios', cat5: 'Padaria e Pastelaria', cat6: 'Conservas do Mar',
+            cat7: 'Azeites e Vinagres', cat8: 'Conservas Vegetais', cat9: 'Dispensa Gourmet',
+            cat10: 'Vinhos e Bebidas',
+            'p-earl': 'Chá Earl Grey Premium', 'p-matcha': 'Chá Matcha Ceremonial',
+            'p-rooibos': 'Infusão Rooibos Baunilha', 'p-bombon': 'Bombons Belgas Sortidos',
+            'p-mermelada': 'Doce de Morango Artesanal', 'p-higos': 'Compota de Figo',
+            'p-jamon-ib': 'Presunto Ibérico de Bellota 5J', 'p-jamon-s': 'Presunto Serrano Reserva',
+            'p-chorizo': 'Chouriço Ibérico Extra', 'p-salchi': 'Salchichão Vela',
+            'p-lomo': 'Lombo Embutido Ibérico', 'p-cecina': 'Cecina de León IGP',
+            'p-manchego': 'Manchego DOP Curado 12 Meses', 'p-tetilla': 'Tetilla DOP Galega',
+            'p-mantequilla': 'Manteiga Francesa Échiré',
+            'p-panettone': 'Panettone Bauli Clássico', 'p-shortbread': 'Biscoitos Shortbread Escoceses',
+            'p-speculoos': 'Speculoos Belgas', 'p-reganyas': 'Regañás Sevilhanas Artesanais',
+            'p-berberechos': 'Berbigão Natural Rías Gallegas',
+            'p-mejillones': 'Mexilhões em Escabeche Premium', 'p-navajas': 'Navalhas ao Natural',
+            'p-ventresca': 'Barriga de Atum em Azeite de Oliva',
+            'p-anchoas': 'Anchovas do Cantábrico em Azeite', 'p-pulpo': 'Polvo em Azeite de Oliva',
+            'p-picual': 'Azeite Picual Premium', 'p-arbequina': 'Azeite Arbequina Ecológico',
+            'p-balsam': 'Vinagre Balsâmico de Módena IGP', 'p-jerez': 'Vinagre de Xerez Reserva',
+            'p-piquillo': 'Pimentos Piquillo DOP', 'p-esparragos': 'Espargos de Navarra Extra',
+            'p-aceitunas': 'Azeitonas Arbequinas Premium', 'p-alcachofas': 'Alcachofras ao Natural',
+            'p-ravioli': 'Ravioli Frescos de Trufa', 'p-bomba': 'Arroz Bomba Valência DOP',
+            'p-arborio': 'Arroz Arborio para Risotto', 'p-almendras': 'Amêndoas Marcona Torradas',
+            'p-albarino': 'Albariño Rías Baixas DOP', 'p-mencia': 'Ribeira Sacra Mencía',
+            'p-cava': 'Cava Brut Nature Reserva', 'p-godello': 'Godello DO Valdeorras',
+        },
+        en: {
+            lang: 'Language', subtitle: 'PRODUCT CATALOGUE',
+            intro: 'A curated selection of European gourmet products for the most discerning palate',
+            expand: 'Expand all', collapse: 'Collapse all', print: 'Print Catalogue',
+            cat1: 'Hot Beverages', cat2: 'Chocolates & Sweets', cat3: 'Charcuterie',
+            cat4: 'Cheeses & Dairy', cat5: 'Bakery & Pastries', cat6: 'Seafood Preserves',
+            cat7: 'Oils & Vinegars', cat8: 'Vegetable Preserves', cat9: 'Gourmet Pantry',
+            cat10: 'Wines & Beverages',
+            'p-earl': 'Premium Earl Grey Tea', 'p-matcha': 'Ceremonial Matcha Tea',
+            'p-rooibos': 'Vanilla Rooibos Infusion', 'p-bombon': 'Belgian Chocolates Assortment',
+            'p-mermelada': 'Artisan Strawberry Jam', 'p-higos': 'Fig Preserve',
+            'p-jamon-ib': 'Iberian Acorn Ham 5J', 'p-jamon-s': 'Serrano Reserva Ham',
+            'p-chorizo': 'Iberian Chorizo Extra', 'p-salchi': 'Salchichón Vela',
+            'p-lomo': 'Iberian Cured Loin', 'p-cecina': 'León Dried Beef IGP',
+            'p-manchego': 'Manchego DOP Aged 12 Months', 'p-tetilla': 'Tetilla DOP Galician',
+            'p-mantequilla': 'French Échiré Butter',
+            'p-panettone': 'Classic Bauli Panettone', 'p-shortbread': 'Scottish Shortbread Cookies',
+            'p-speculoos': 'Belgian Speculoos', 'p-reganyas': 'Artisan Sevillian Crackers',
+            'p-berberechos': 'Natural Cockles from Galician Rias',
+            'p-mejillones': 'Premium Mussels in Escabeche', 'p-navajas': 'Natural Razor Clams',
+            'p-ventresca': 'Tuna Ventresca in Olive Oil',
+            'p-anchoas': 'Cantabrian Anchovies in Oil', 'p-pulpo': 'Octopus in Olive Oil',
+            'p-picual': 'Premium Picual EVOO', 'p-arbequina': 'Organic Arbequina EVOO',
+            'p-balsam': 'Balsamic Vinegar of Modena IGP', 'p-jerez': 'Jerez Reserva Vinegar',
+            'p-piquillo': 'Piquillo Peppers DOP', 'p-esparragos': 'Navarra Extra Asparagus',
+            'p-aceitunas': 'Premium Arbequina Olives', 'p-alcachofas': 'Natural Artichoke Hearts',
+            'p-ravioli': 'Fresh Truffle Ravioli', 'p-bomba': 'Valencia Bomba Rice DOP',
+            'p-arborio': 'Arborio Risotto Rice', 'p-almendras': 'Roasted Marcona Almonds',
+            'p-albarino': 'Albariño Rías Baixas DOP', 'p-mencia': 'Ribeira Sacra Mencía',
+            'p-cava': 'Cava Brut Nature Reserva', 'p-godello': 'Godello DO Valdeorras',
+        }
+    };
+
+    let currentLang = 'es';
+    let allExpanded = false;
+    let isLight = false;
+
+    const themeLabels = {
+        es: { light: 'Claro', dark: 'Oscuro' },
+        pt: { light: 'Claro', dark: 'Escuro' },
+        en: { light: 'Light', dark: 'Dark' }
+    };
+
+    const sunIcon = `<path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/>`;
+    const moonIcon = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>`;
+
+    function toggleTheme() {
+        isLight = !isLight;
+        document.body.classList.toggle('light-mode', isLight);
+        const icon = document.getElementById('themeIcon');
+        const label = document.getElementById('themeLabel');
+        icon.innerHTML = isLight ? sunIcon : moonIcon;
+        label.textContent = isLight ? themeLabels[currentLang].dark : themeLabels[currentLang].light;
+    }
+
+    function updateThemeLabel() {
+        const label = document.getElementById('themeLabel');
+        if (label) label.textContent = isLight ? themeLabels[currentLang].dark : themeLabels[currentLang].light;
+    }
+
+    function setLang(lang) {
+        currentLang = lang;
+        document.documentElement.lang = lang;
+        const t = translations[lang];
+
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (t[key]) el.textContent = t[key];
+        });
+
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.textContent === lang.toUpperCase());
+        });
+
+        // Update page title
+        const titles = { es: 'Catálogo — Delicatessen Ferrol', pt: 'Catálogo — Delicatessen Ferrol', en: 'Catalogue — Delicatessen Ferrol' };
+        document.title = titles[lang];
+
+        // Update expand button text
+        const expandBtn = document.querySelector('.expand-all-btn');
+        if (expandBtn) expandBtn.textContent = allExpanded ? t.collapse : t.expand;
+
+        updateThemeLabel();
+    }
+
+    function toggleCategory(header) {
+        const category = header.parentElement;
+        const isActive = category.classList.contains('active');
+        category.classList.toggle('active');
+        const toggle = header.querySelector('.cat-toggle');
+        toggle.textContent = !isActive ? '−' : '+';
+    }
+
+    function toggleAll(btn) {
+        allExpanded = !allExpanded;
+        const t = translations[currentLang];
+        btn.textContent = allExpanded ? t.collapse : t.expand;
+
+        document.querySelectorAll('.category').forEach(cat => {
+            cat.classList.toggle('active', allExpanded);
+            const toggle = cat.querySelector('.cat-toggle');
+            if (toggle) toggle.textContent = allExpanded ? '−' : '+';
+        });
+    }
+</script>
+</body>
+</html>
