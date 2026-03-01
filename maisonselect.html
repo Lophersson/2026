@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maison Select</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Jost:wght@200;300;400;500&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap" rel="stylesheet">
+
+<!-- ═══════════════════════════════════════════════════════════════
+     CONFIGURABLE PRODUCT IMAGES — edit these URLs freely
+═══════════════════════════════════════════════════════════════ -->
+<script>
+const IMAGES = {
+  /* ── Delicatessen ── */
+  'del-001': 'https://images.unsplash.com/photo-1544025162-d76694265947?w=480&q=80',
+  'del-002': 'https://images.unsplash.com/photo-1452195100486-9cc805987862?w=480&q=80',
+  'del-003': 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=480&q=80',
+  'del-004': 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=480&q=80',
+  'del-005': 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=480&q=80',
+  'del-006': 'https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=480&q=80',
+  /* ── Ropa ── */
+  'ropa-001': 'https://images.unsplash.com/photo-1594938298603-c8148c4b4416?w=480&q=80',
+  'ropa-002': 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=480&q=80',
+  'ropa-003': 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5d?w=480&q=80',
+  'ropa-004': 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=480&q=80',
+  'ropa-005': 'https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?w=480&q=80',
+  'ropa-006': 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=480&q=80',
+  /* ── Calzado ── */
+  'cal-001': 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=480&q=80',
+  'cal-002': 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=480&q=80',
+  'cal-003': 'https://images.unsplash.com/photo-1516478177764-9fe5bd7e9717?w=480&q=80',
+  'cal-004': 'https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?w=480&q=80',
+  'cal-005': 'https://images.unsplash.com/photo-1561861422-a549073e547a?w=480&q=80',
+  'cal-006': 'https://images.unsplash.com/photo-1581954548122-4eb9296c20d4?w=480&q=80',
+  /* ── Hogar ── */
+  'hog-001': 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=480&q=80',
+  'hog-002': 'https://images.unsplash.com/photo-1588854337236-6889d631faa8?w=480&q=80',
+  'hog-003': 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=480&q=80',
+  'hog-004': 'https://images.unsplash.com/photo-1550581190-9c1c48d21d6c?w=480&q=80',
+  'hog-005': 'https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?w=480&q=80',
+  'hog-006': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=480&q=80',
+  /* ── Electrónica ── */
+  'elec-001': 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=480&q=80',
+  'elec-002': 'https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=480&q=80',
+  'elec-003': 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=480&q=80',
+  'elec-004': 'https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=480&q=80',
+  'elec-005': 'https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=480&q=80',
+  'elec-006': 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=480&q=80',
+};
+</script>
+
+<style>
+/* ══════════════════════ RESET & VARIABLES ══════════════════════ */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; font-size:16px; overflow-x:hidden; }
+
+:root {
+  --bg:        #f5f0e8;
+  --bg2:       #ede7da;
+  --bg3:       #e4dcd0;
+  --surface:   #fff8f0;
+  --border:    rgba(139,101,50,0.18);
+  --gold:      #8b6532;
+  --gold-lt:   #a07840;
+  --gold-dk:   #6b4d22;
+  --text:      #2c2218;
+  --text2:     #5a4a38;
+  --muted:     #9a8870;
+  --card-bg:   #ffffff;
+  --card-shad: 0 2px 20px rgba(139,101,50,0.10);
+  --radius:    4px;
+  --trans:     0.3s ease;
+}
+
+body.dark {
+  --bg:        #100e0c;
+  --bg2:       #1a1712;
+  --bg3:       #221e19;
+  --surface:   #1c1916;
+  --border:    rgba(196,161,100,0.18);
+  --gold:      #c4a164;
+  --gold-lt:   #e2c990;
+  --gold-dk:   #a08044;
+  --text:      #e8e0d0;
+  --text2:     #b8aa96;
+  --muted:     #7a6e60;
+  --card-bg:   #1e1b16;
+  --card-shad: 0 2px 20px rgba(0,0,0,0.4);
+}
+
+body {
+  font-family:'Jost',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+  transition: background var(--trans), color var(--trans);
+}
+
+/* ══════════════════════ MODAL ══════════════════════ */
+#langModal {
+  position:fixed; inset:0; z-index:9999;
+  background:rgba(0,0,0,0.75);
+  backdrop-filter:blur(8px);
+  display:flex; align-items:center; justify-content:center;
+  animation: fadeIn 0.4s ease;
+}
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+.modal-box {
+  background: linear-gradient(145deg, #2a2218, #1a1510);
+  border:1px solid rgba(196,161,100,0.3);
+  padding:60px 52px 52px;
+  text-align:center;
+  max-width:480px; width:90%;
+  position:relative;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+  animation: slideUp 0.5s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes slideUp { from{transform:translateY(40px);opacity:0} to{transform:none;opacity:1} }
+
+.modal-ornament {
+  display:flex; align-items:center; gap:12px; margin-bottom:32px;
+}
+.modal-ornament .line { flex:1; height:1px; background:linear-gradient(to right,transparent,rgba(196,161,100,0.5),transparent); }
+.modal-ornament .diamond { width:5px; height:5px; background:#c4a164; transform:rotate(45deg); }
+
+.modal-title {
+  font-family:'Playfair Display',serif;
+  font-size:1.9em; font-weight:400;
+  color:#f0e8d8; letter-spacing:3px;
+  margin-bottom:6px;
+}
+.modal-sub {
+  font-size:0.72em; color:#c4a164; letter-spacing:4px;
+  text-transform:uppercase; font-weight:200;
+  margin-bottom:48px;
+}
+
+.lang-options {
+  display:flex; gap:20px; justify-content:center; flex-wrap:wrap;
+}
+
+.lang-option {
+  cursor:pointer;
+  display:flex; flex-direction:column; align-items:center; gap:12px;
+  padding:24px 28px;
+  border:1px solid rgba(196,161,100,0.2);
+  background:rgba(196,161,100,0.05);
+  transition:all 0.3s ease;
+  min-width:110px;
+}
+.lang-option:hover {
+  border-color:rgba(196,161,100,0.6);
+  background:rgba(196,161,100,0.12);
+  transform:translateY(-4px);
+}
+.lang-option .flag { font-size:2.8em; line-height:1; }
+.lang-option .lname {
+  font-family:'Jost',sans-serif;
+  font-size:0.7em; letter-spacing:3px;
+  text-transform:uppercase; color:#c4a164; font-weight:300;
+}
+.lang-option .city {
+  font-family:'Playfair Display',serif;
+  font-size:0.9em; color:#f0e8d8; font-weight:400;
+  letter-spacing:1px;
+}
+
+/* ══════════════════════ HEADER ══════════════════════ */
+header {
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  position:sticky; top:0; z-index:100;
+  transition: background var(--trans);
+  width:100%;
+}
+
+/* Row 1: Logo + Search + Cart */
+.header-row1 {
+  display:flex; align-items:center; gap:12px;
+  padding:0 24px;
+  height:56px;
+  border-bottom:1px solid var(--border);
+}
+
+/* Row 2: Controls bar */
+.header-row2 {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 24px;
+  height:40px;
+  gap:8px;
+}
+
+.header-row2-left { display:flex; align-items:center; gap:6px; }
+.header-row2-right { display:flex; align-items:center; gap:6px; }
+
+.logo-area {
+  display:flex; flex-direction:column; line-height:1;
+  flex-shrink:0;
+}
+.logo-name {
+  font-family:'Playfair Display',serif;
+  font-size:1.15em; font-weight:400; letter-spacing:2px;
+  color:var(--gold); text-transform:uppercase;
+}
+.logo-city {
+  font-size:0.58em; letter-spacing:2.5px; color:var(--muted);
+  text-transform:uppercase; font-weight:300; margin-top:2px;
+}
+
+.search-wrap {
+  flex:1; min-width:0;
+  position:relative;
+}
+.search-wrap input {
+  width:100%; padding:7px 12px 7px 34px;
+  background:var(--bg2); border:1px solid var(--border);
+  color:var(--text); font-family:'Jost',sans-serif;
+  font-size:0.8em; font-weight:300; letter-spacing:0.3px;
+  outline:none; transition:all var(--trans);
+  border-radius:var(--radius);
+}
+.search-wrap input::placeholder { color:var(--muted); }
+.search-wrap input:focus { border-color:var(--gold); background:var(--surface); }
+.search-wrap .s-icon {
+  position:absolute; left:10px; top:50%; transform:translateY(-50%);
+  color:var(--muted); pointer-events:none;
+}
+
+.ctrl-btn {
+  background:transparent; border:1px solid var(--border);
+  color:var(--muted); cursor:pointer;
+  font-family:'Jost',sans-serif; font-size:0.65em;
+  letter-spacing:1px; text-transform:uppercase;
+  padding:5px 9px; transition:all 0.2s ease;
+  display:flex; align-items:center; gap:4px;
+  border-radius:var(--radius); white-space:nowrap; flex-shrink:0;
+}
+.ctrl-btn:hover { color:var(--gold); border-color:var(--gold); }
+.ctrl-btn.active { background:rgba(139,101,50,0.12); color:var(--gold); border-color:var(--gold); }
+
+.view-btns { display:flex; gap:3px; }
+.view-btn {
+  background:transparent; border:1px solid var(--border);
+  color:var(--muted); cursor:pointer; padding:5px 8px;
+  transition:all 0.2s ease; border-radius:var(--radius); flex-shrink:0;
+}
+.view-btn:hover { color:var(--gold); border-color:var(--gold); }
+.view-btn.active { background:rgba(139,101,50,0.12); color:var(--gold); border-color:var(--gold); }
+
+.cart-btn {
+  background:var(--gold); border:none; color:#fff;
+  cursor:pointer; padding:7px 12px; font-family:'Jost',sans-serif;
+  font-size:0.7em; letter-spacing:1px; text-transform:uppercase;
+  font-weight:400; transition:all 0.2s ease; display:flex;
+  align-items:center; gap:6px; border-radius:var(--radius);
+  flex-shrink:0;
+}
+.cart-btn:hover { background:var(--gold-lt); }
+.cart-count {
+  background:#fff; color:var(--gold-dk); border-radius:50%;
+  width:17px; height:17px; font-size:0.72em; font-weight:500;
+  display:flex; align-items:center; justify-content:center;
+}
+
+/* ── Category Nav ── */
+.cat-nav {
+  display:flex; gap:0; overflow-x:auto; scrollbar-width:none;
+  border-top:1px solid var(--border);
+  padding:0 20px;
+}
+.cat-nav::-webkit-scrollbar { display:none; }
+
+.cat-tab {
+  background:none; border:none; cursor:pointer;
+  font-family:'Jost',sans-serif; font-size:0.72em; font-weight:400;
+  letter-spacing:1.5px; text-transform:uppercase; color:var(--muted);
+  padding:10px 16px; white-space:nowrap;
+  border-bottom:2px solid transparent; transition:all 0.2s ease;
+  display:flex; align-items:center; gap:6px;
+}
+.cat-tab:hover { color:var(--text); }
+.cat-tab.active { color:var(--gold); border-bottom-color:var(--gold); }
+.cat-tab .cat-emoji { font-size:1.05em; }
+
+/* ══════════════════════ MAIN LAYOUT ══════════════════════ */
+.page {
+  display:flex; gap:0;
+  max-width:1280px; margin:0 auto;
+  padding:28px 28px 60px;
+  min-height:calc(100vh - 130px);
+}
+
+/* ── Sidebar Filters ── */
+.sidebar {
+  width:210px; flex-shrink:0;
+  padding-right:28px;
+}
+
+.sidebar-section { margin-bottom:32px; }
+.sidebar-title {
+  font-size:0.62em; letter-spacing:3px; text-transform:uppercase;
+  color:var(--muted); font-weight:400; margin-bottom:14px;
+  padding-bottom:8px; border-bottom:1px solid var(--border);
+}
+
+.filter-btn {
+  display:block; width:100%; text-align:left;
+  background:none; border:none; cursor:pointer;
+  font-family:'Jost',sans-serif; font-size:0.84em; font-weight:300;
+  color:var(--text2); padding:6px 10px; transition:all 0.15s;
+  border-radius:var(--radius); letter-spacing:0.3px;
+}
+.filter-btn:hover { color:var(--gold); background:var(--bg2); }
+.filter-btn.active { color:var(--gold); background:rgba(139,101,50,0.1); font-weight:400; }
+
+.price-range { padding:4px 10px; }
+.price-range label { font-size:0.75em; color:var(--muted); display:block; margin-bottom:6px; letter-spacing:0.5px; }
+.price-range input[type=range] {
+  width:100%; accent-color:var(--gold); cursor:pointer;
+}
+.price-val { font-family:'Playfair Display',serif; font-size:0.85em; color:var(--gold); margin-top:4px; }
+
+/* ── Products Area ── */
+.products-area { flex:1; min-width:0; }
+
+.products-header {
+  display:flex; align-items:baseline; gap:12px;
+  margin-bottom:22px; padding-bottom:14px;
+  border-bottom:1px solid var(--border);
+}
+.products-header h2 {
+  font-family:'Playfair Display',serif;
+  font-size:1.5em; font-weight:400; color:var(--text);
+  letter-spacing:1px;
+}
+.products-count { font-size:0.75em; color:var(--muted); font-weight:300; letter-spacing:1px; }
+
+/* ── GRID VIEW ── */
+.grid-view {
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap:20px;
+}
+
+.card {
+  background:var(--card-bg);
+  border:1px solid var(--border);
+  box-shadow:var(--card-shad);
+  overflow:hidden;
+  transition:all 0.3s ease;
+  border-radius:var(--radius);
+  cursor:pointer;
+  animation:cardIn 0.35s ease both;
+}
+@keyframes cardIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
+.card:hover { transform:translateY(-4px); box-shadow:0 8px 32px rgba(139,101,50,0.18); border-color:var(--gold); }
+
+.card-img {
+  width:100%; aspect-ratio:4/3; overflow:hidden;
+  background:var(--bg3);
+}
+.card-img img {
+  width:100%; height:100%; object-fit:cover;
+  transition:transform 0.5s ease;
+}
+.card:hover .card-img img { transform:scale(1.05); }
+.card-img .no-img {
+  width:100%; height:100%; display:flex; align-items:center;
+  justify-content:center; font-size:2.5em; color:var(--muted);
+  background:var(--bg2);
+}
+
+.card-body { padding:16px; }
+.card-sub {
+  font-size:0.62em; letter-spacing:2.5px; text-transform:uppercase;
+  color:var(--gold); font-weight:400; margin-bottom:6px;
+}
+.card-name {
+  font-family:'Playfair Display',serif;
+  font-size:1.02em; font-weight:400; color:var(--text);
+  line-height:1.35; margin-bottom:8px;
+}
+.card-desc {
+  font-size:0.78em; color:var(--muted); font-weight:300;
+  line-height:1.55; margin-bottom:14px;
+  font-family:'Cormorant Garamond',serif; font-style:italic; font-size:0.9em;
+}
+.card-footer {
+  display:flex; align-items:center; justify-content:space-between;
+}
+.card-price {
+  font-family:'Playfair Display',serif;
+  font-size:1.15em; color:var(--gold); font-weight:400;
+}
+.card-detail {
+  font-size:0.65em; color:var(--muted); font-weight:300;
+  letter-spacing:0.5px; margin-top:2px;
+}
+.add-btn {
+  background:transparent; border:1px solid var(--gold);
+  color:var(--gold); cursor:pointer; padding:6px 12px;
+  font-family:'Jost',sans-serif; font-size:0.68em;
+  letter-spacing:1.5px; text-transform:uppercase; font-weight:400;
+  transition:all 0.2s ease; border-radius:var(--radius);
+}
+.add-btn:hover { background:var(--gold); color:#fff; }
+
+/* ── LIST VIEW ── */
+.list-view { display:flex; flex-direction:column; gap:1px; }
+
+.list-item {
+  background:var(--card-bg);
+  border:1px solid var(--border);
+  display:flex; align-items:center; gap:20px;
+  padding:16px 20px;
+  transition:all 0.2s ease;
+  border-radius:var(--radius);
+  margin-bottom:4px;
+  animation:cardIn 0.35s ease both;
+}
+.list-item:hover { border-color:var(--gold); background:var(--surface); }
+
+.list-num {
+  font-family:'Playfair Display',serif;
+  font-size:0.85em; color:var(--muted); min-width:28px;
+  text-align:right; font-style:italic;
+}
+.list-info { flex:1; min-width:0; }
+.list-sub {
+  font-size:0.6em; letter-spacing:2px; text-transform:uppercase;
+  color:var(--gold); font-weight:400;
+}
+.list-name {
+  font-family:'Playfair Display',serif;
+  font-size:0.98em; color:var(--text); font-weight:400;
+  margin:3px 0;
+}
+.list-desc {
+  font-family:'Cormorant Garamond',serif; font-style:italic;
+  font-size:0.92em; color:var(--muted); font-weight:300;
+}
+.list-right { display:flex; align-items:center; gap:16px; flex-shrink:0; }
+.list-detail { font-size:0.72em; color:var(--muted); text-align:right; font-weight:300; }
+.list-price {
+  font-family:'Playfair Display',serif;
+  font-size:1.08em; color:var(--gold); font-weight:400;
+  white-space:nowrap; min-width:72px; text-align:right;
+}
+.list-add {
+  background:transparent; border:1px solid var(--border);
+  color:var(--muted); cursor:pointer; padding:6px 10px;
+  font-family:'Jost',sans-serif; font-size:0.65em;
+  letter-spacing:1px; text-transform:uppercase;
+  transition:all 0.2s ease; border-radius:var(--radius);
+  white-space:nowrap;
+}
+.list-add:hover { border-color:var(--gold); color:var(--gold); }
+
+/* ── Empty state ── */
+.empty-state {
+  text-align:center; padding:80px 20px; color:var(--muted);
+}
+.empty-state .empty-icon { font-size:3em; margin-bottom:16px; }
+.empty-state p { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.1em; }
+
+/* ══════════════════════ CART PANEL ══════════════════════ */
+#cartPanel {
+  position:fixed; right:0; top:0; bottom:0; width:360px;
+  background:var(--surface); border-left:1px solid var(--border);
+  z-index:200; transform:translateX(100%);
+  transition:transform 0.4s cubic-bezier(0.4,0,0.2,1);
+  display:flex; flex-direction:column;
+  box-shadow:-8px 0 40px rgba(0,0,0,0.15);
+}
+#cartPanel.open { transform:none; }
+
+.cart-panel-header {
+  padding:24px 24px 20px;
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between;
+}
+.cart-panel-title {
+  font-family:'Playfair Display',serif; font-size:1.2em; font-weight:400;
+  color:var(--text); letter-spacing:1px;
+}
+.cart-close {
+  background:none; border:none; cursor:pointer;
+  color:var(--muted); font-size:1.3em; line-height:1;
+  padding:4px; transition:color 0.2s;
+}
+.cart-close:hover { color:var(--text); }
+
+.cart-items { flex:1; overflow-y:auto; padding:16px 24px; }
+.cart-empty-msg {
+  text-align:center; padding:60px 0; color:var(--muted);
+  font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.1em;
+}
+.cart-item {
+  display:flex; gap:12px; align-items:flex-start;
+  padding:12px 0; border-bottom:1px solid var(--border);
+}
+.cart-item:last-child { border-bottom:none; }
+.cart-item-info { flex:1; }
+.cart-item-name {
+  font-family:'Playfair Display',serif; font-size:0.9em;
+  color:var(--text); font-weight:400; margin-bottom:4px;
+}
+.cart-item-price { font-size:0.8em; color:var(--gold); }
+.cart-item-qty {
+  display:flex; align-items:center; gap:8px; margin-top:8px;
+}
+.qty-btn {
+  background:var(--bg2); border:1px solid var(--border);
+  color:var(--text); cursor:pointer; width:22px; height:22px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:0.85em; transition:all 0.2s; border-radius:2px;
+}
+.qty-btn:hover { border-color:var(--gold); color:var(--gold); }
+.qty-num { font-size:0.82em; color:var(--text); min-width:16px; text-align:center; }
+.cart-item-del {
+  background:none; border:none; color:var(--muted); cursor:pointer;
+  font-size:1em; padding:2px; transition:color 0.2s;
+}
+.cart-item-del:hover { color:#e05a5a; }
+
+.cart-footer {
+  padding:20px 24px 28px;
+  border-top:1px solid var(--border);
+}
+.cart-total {
+  display:flex; justify-content:space-between; align-items:baseline;
+  margin-bottom:16px;
+}
+.cart-total-label { font-size:0.72em; letter-spacing:2px; text-transform:uppercase; color:var(--muted); }
+.cart-total-val { font-family:'Playfair Display',serif; font-size:1.3em; color:var(--gold); }
+.checkout-btn {
+  width:100%; background:var(--gold); border:none; color:#fff;
+  font-family:'Jost',sans-serif; font-size:0.75em; letter-spacing:2px;
+  text-transform:uppercase; padding:14px; cursor:pointer;
+  transition:background 0.2s; font-weight:400; border-radius:var(--radius);
+}
+.checkout-btn:hover { background:var(--gold-lt); }
+
+/* ══════════════════════ TOAST ══════════════════════ */
+#toast {
+  position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(20px);
+  background:var(--gold); color:#fff;
+  font-family:'Jost',sans-serif; font-size:0.78em; letter-spacing:1.5px;
+  padding:10px 24px; opacity:0; transition:all 0.4s ease;
+  pointer-events:none; z-index:500; border-radius:var(--radius);
+}
+#toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ══════════════════════ OVERLAY ══════════════════════ */
+#overlay {
+  position:fixed; inset:0; background:rgba(0,0,0,0.4);
+  z-index:150; opacity:0; pointer-events:none; transition:opacity 0.3s;
+}
+#overlay.visible { opacity:1; pointer-events:all; }
+
+/* ══════════════════════ FOOTER ══════════════════════ */
+.site-footer {
+  border-top:1px solid var(--border);
+  text-align:center; padding:32px;
+  font-size:0.7em; color:var(--muted); letter-spacing:2px;
+  text-transform:uppercase; font-weight:300;
+  background:var(--surface);
+}
+
+/* ══════════════════════ MOBILE FILTER DRAWER ══════════════════════ */
+.filter-drawer-overlay {
+  display:none; position:fixed; inset:0;
+  background:rgba(0,0,0,0.45); z-index:300;
+  opacity:0; transition:opacity 0.3s;
+}
+.filter-drawer-overlay.open { opacity:1; }
+
+.filter-drawer {
+  position:fixed; bottom:0; left:0; right:0;
+  background:var(--surface); z-index:310;
+  border-top:1px solid var(--border);
+  border-radius:16px 16px 0 0;
+  padding:0 0 env(safe-area-inset-bottom,0);
+  transform:translateY(100%);
+  transition:transform 0.4s cubic-bezier(0.4,0,0.2,1);
+  max-height:80vh; overflow-y:auto;
+}
+.filter-drawer.open { transform:none; }
+
+.filter-drawer-handle {
+  width:40px; height:4px; background:var(--border);
+  border-radius:2px; margin:12px auto 0;
+}
+.filter-drawer-header {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:16px 20px 12px;
+  border-bottom:1px solid var(--border);
+  position:sticky; top:0; background:var(--surface); z-index:1;
+}
+.filter-drawer-title {
+  font-family:'Playfair Display',serif;
+  font-size:1.1em; font-weight:400; color:var(--text);
+}
+.filter-drawer-close {
+  background:none; border:none; color:var(--muted);
+  font-size:1.2em; cursor:pointer; padding:4px;
+}
+.filter-drawer-body { padding:16px 20px 24px; }
+.filter-drawer-section { margin-bottom:24px; }
+.filter-drawer-section .sidebar-title { font-size:0.65em; }
+
+/* Horizontal filter chips for drawer */
+.filter-chips {
+  display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;
+}
+.filter-chip {
+  background:var(--bg2); border:1px solid var(--border);
+  color:var(--text2); cursor:pointer; padding:7px 14px;
+  font-family:'Jost',sans-serif; font-size:0.78em;
+  font-weight:300; letter-spacing:0.5px;
+  border-radius:20px; transition:all 0.15s;
+}
+.filter-chip:hover { border-color:var(--gold); color:var(--gold); }
+.filter-chip.active {
+  background:rgba(139,101,50,0.12); color:var(--gold);
+  border-color:var(--gold); font-weight:400;
+}
+
+/* Mobile filter bar (shows when sidebar is hidden) */
+.mobile-filter-bar {
+  display:none;
+  align-items:center; gap:8px;
+  padding:10px 16px;
+  border-bottom:1px solid var(--border);
+  overflow-x:auto; scrollbar-width:none;
+  background:var(--surface);
+}
+.mobile-filter-bar::-webkit-scrollbar { display:none; }
+
+.mfb-btn {
+  flex-shrink:0; background:var(--bg2); border:1px solid var(--border);
+  color:var(--text2); cursor:pointer; padding:6px 14px;
+  font-family:'Jost',sans-serif; font-size:0.72em;
+  font-weight:300; letter-spacing:0.5px;
+  border-radius:20px; transition:all 0.15s; white-space:nowrap;
+}
+.mfb-btn:hover { border-color:var(--gold); color:var(--gold); }
+.mfb-btn.active { background:rgba(139,101,50,0.12); color:var(--gold); border-color:var(--gold); }
+.mfb-btn.filter-open-btn {
+  display:flex; align-items:center; gap:5px;
+  background:var(--gold); color:#fff; border-color:var(--gold);
+}
+
+/* ══════════════════════ RESPONSIVE ══════════════════════ */
+
+/* ── TABLET 768–1023 ── */
+@media (max-width:1023px) {
+  .sidebar { display:none; }
+  .mobile-filter-bar { display:flex; }
+
+  .page { padding:0; flex-direction:column; gap:0; min-height:auto; }
+  .products-area { padding:18px 18px 48px; }
+  .products-header { margin-bottom:14px; }
+  .products-header h2 { font-size:1.25em; }
+
+  .grid-view { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap:14px; }
+
+  .header-row1 { padding:0 18px; }
+  .header-row2 { padding:0 18px; }
+  .cat-nav { padding:0 14px; }
+
+  #cartPanel { width:310px; }
+}
+
+/* ── MOBILE 480–767 ── */
+@media (max-width:767px) {
+  /* Row 1 */
+  .header-row1 { padding:0 10px; height:50px; gap:8px; }
+  .logo-city { display:none; }
+  .logo-name { font-size:1em; letter-spacing:1.5px; }
+
+  /* Row 2 compact */
+  .header-row2 { padding:0 10px; height:36px; gap:6px; }
+
+  /* Hide theme text on small screens */
+  #themeTxt { display:none; }
+
+  /* Search fills remaining space */
+  .search-wrap input { font-size:0.76em; padding:6px 10px 6px 30px; }
+  .search-wrap .s-icon { left:9px; }
+
+  /* Category nav */
+  .cat-nav { padding:0 10px; }
+  .cat-tab { padding:8px 10px; font-size:0.65em; letter-spacing:1px; gap:4px; }
+
+  /* Page & products */
+  .page { padding:0; }
+  .products-area { padding:12px 12px 80px; }
+  .products-header { margin-bottom:10px; }
+  .products-header h2 { font-size:1.1em; }
+  .products-count { font-size:0.68em; }
+
+  /* Grid: 2 columns */
+  .grid-view { grid-template-columns: repeat(2,1fr); gap:10px; }
+  .card-body { padding:10px; }
+  .card-name { font-size:0.85em; }
+  .card-desc { display:none; }
+  .card-price { font-size:1em; }
+  .add-btn { padding:5px 8px; font-size:0.6em; letter-spacing:1px; }
+
+  /* List: compact rows */
+  .list-item { padding:11px 12px; gap:10px; }
+  .list-num { display:none; }
+  .list-name { font-size:0.88em; }
+  .list-desc { font-size:0.8em; }
+  .list-right { gap:10px; }
+  .list-detail { display:none; }
+  .list-price { font-size:0.95em; min-width:auto; }
+  .list-add { padding:5px 10px; font-size:0.62em; }
+
+  /* Cart full-width */
+  #cartPanel { width:100%; border-left:none; border-top:1px solid var(--border); }
+
+  /* Filter bar */
+  .mobile-filter-bar { padding:7px 10px; gap:6px; }
+
+  #toast { bottom:16px; font-size:0.7em; padding:8px 16px; }
+}
+
+/* ── SMALL MOBILE <400px ── */
+@media (max-width:399px) {
+  .logo-name { font-size:0.9em; letter-spacing:1px; }
+  .cat-tab .cat-emoji { display:none; }
+  .cat-tab { padding:8px 9px; font-size:0.62em; letter-spacing:0.8px; }
+  .grid-view { grid-template-columns: repeat(2,1fr); gap:8px; }
+  .header-row1 { gap:6px; }
+  .header-row2 { gap:4px; }
+  .ctrl-btn { padding:4px 7px; font-size:0.6em; letter-spacing:0.8px; }
+  .view-btn { padding:4px 7px; }
+}
+
+/* ── LARGE DESKTOP 1400+ ── */
+@media (min-width:1400px) {
+  .grid-view { grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); }
+  .page { padding:32px 40px 80px; }
+  .header-row1 { padding:0 40px; height:62px; }
+  .header-row2 { padding:0 40px; }
+  .cat-nav { padding:0 40px; }
+}
+</style>
+</head>
+
+<body>
+<!-- ═══════════════════════ LANGUAGE MODAL ═══════════════════════ -->
+<div id="langModal">
+  <div class="modal-box">
+    <div class="modal-ornament">
+      <div class="line"></div><div class="diamond"></div><div class="line"></div>
+    </div>
+    <div class="modal-title">MAISON SELECT</div>
+    <div class="modal-sub">Choose your language</div>
+    <div class="lang-options">
+      <div class="lang-option" onclick="initLang('es')">
+        <div class="flag">🇪🇸</div>
+        <div class="lname">Español</div>
+        <div class="city">Ferrol</div>
+      </div>
+      <div class="lang-option" onclick="initLang('pt')">
+        <div class="flag">🇵🇹</div>
+        <div class="lname">Português</div>
+        <div class="city">Barcelos</div>
+      </div>
+      <div class="lang-option" onclick="initLang('en')">
+        <div class="flag">🇬🇧</div>
+        <div class="lname">English</div>
+        <div class="city">London</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ HEADER ═══════════════════════ -->
+<header>
+  <!-- Row 1: Logo + Search + Cart -->
+  <div class="header-row1">
+    <div class="logo-area">
+      <div class="logo-name">Maison Select</div>
+      <div class="logo-city" id="logoCity">—</div>
+    </div>
+
+    <div class="search-wrap">
+      <svg class="s-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="searchInput" placeholder="Search…" oninput="onSearch()">
+    </div>
+
+    <button class="cart-btn" onclick="toggleCart()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      <span id="cartCount" class="cart-count">0</span>
+    </button>
+  </div>
+
+  <!-- Row 2: View toggles + Theme + Lang -->
+  <div class="header-row2">
+    <div class="header-row2-left">
+      <div class="view-btns">
+        <button class="view-btn" id="btnGrid" onclick="setView('grid')" title="Cuadrícula">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        </button>
+        <button class="view-btn active" id="btnList" onclick="setView('list')" title="Lista">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        </button>
+      </div>
+
+      <button class="ctrl-btn" id="themeBtn" onclick="toggleTheme()">
+        <svg id="themeIcon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <span id="themeTxt">Dark</span>
+      </button>
+    </div>
+
+    <div class="header-row2-right lang-btns-wrap">
+      <button class="ctrl-btn" onclick="setLang('es')" id="langEs">🇪🇸 ES</button>
+      <button class="ctrl-btn" onclick="setLang('pt')" id="langPt">🇵🇹 PT</button>
+      <button class="ctrl-btn" onclick="setLang('en')" id="langEn">🇬🇧 EN</button>
+    </div>
+  </div>
+
+  <!-- Category Tabs -->
+  <nav class="cat-nav" id="catNav"></nav>
+
+  <!-- Mobile filter bar (hidden on desktop) -->
+  <div class="mobile-filter-bar" id="mobileFilterBar"></div>
+</header>
+
+<!-- ═══════════════════════ FILTER DRAWER ═══════════════════════ -->
+<div class="filter-drawer-overlay" id="filterDrawerOverlay" onclick="closeFilterDrawer()"></div>
+<div class="filter-drawer" id="filterDrawer">
+  <div class="filter-drawer-handle"></div>
+  <div class="filter-drawer-header">
+    <div class="filter-drawer-title" id="fdTitle">Filtros</div>
+    <button class="filter-drawer-close" onclick="closeFilterDrawer()">✕</button>
+  </div>
+  <div class="filter-drawer-body">
+    <div class="filter-drawer-section">
+      <div class="sidebar-title" id="fdSubTitle">Categoría</div>
+      <div class="filter-chips" id="fdSubChips"></div>
+    </div>
+    <div class="filter-drawer-section">
+      <div class="sidebar-title" id="fdPriceTitle">Precio</div>
+      <div class="price-range" style="padding:4px 0;">
+        <label id="fdPriceLabel">Hasta</label>
+        <input type="range" id="priceRange2" min="0" max="2000" value="2000" oninput="onPriceChange2()">
+        <div class="price-val" id="priceVal2">Todo</div>
+      </div>
+    </div>
+    <div class="filter-drawer-section">
+      <div class="sidebar-title" style="margin-bottom:12px;">Idioma</div>
+      <div style="display:flex;gap:8px;">
+        <button class="filter-chip" onclick="setLang('es');closeFilterDrawer()">🇪🇸 ES</button>
+        <button class="filter-chip" onclick="setLang('pt');closeFilterDrawer()">🇵🇹 PT</button>
+        <button class="filter-chip" onclick="setLang('en');closeFilterDrawer()">🇬🇧 EN</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ MAIN ═══════════════════════ -->
+<div class="page">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title" id="filterTitle">Filters</div>
+      <div id="subFilters"></div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title" id="priceTitle">Price</div>
+      <div class="price-range">
+        <label id="priceLabel">Up to</label>
+        <input type="range" id="priceRange" min="0" max="2000" value="2000" oninput="onPriceChange()">
+        <div class="price-val" id="priceVal">All</div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="products-area">
+    <div class="products-header">
+      <h2 id="catTitle">—</h2>
+      <span class="products-count" id="prodCount"></span>
+    </div>
+    <div id="productsContainer"></div>
+  </main>
+</div>
+
+<!-- ═══════════════════════ CART PANEL ═══════════════════════ -->
+<div id="overlay" onclick="closeCart()"></div>
+<div id="cartPanel">
+  <div class="cart-panel-header">
+    <div class="cart-panel-title" id="cartTitle">Your Cart</div>
+    <button class="cart-close" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer">
+    <div class="cart-total">
+      <span class="cart-total-label" id="totalLabel">Total</span>
+      <span class="cart-total-val" id="cartTotal">0,00 €</span>
+    </div>
+    <button class="checkout-btn" id="checkoutBtn">Checkout →</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<footer class="site-footer">
+  <span>© Maison Select — </span><span id="footerCity">—</span>
+</footer>
+
+<!-- ═══════════════════════ JAVASCRIPT ═══════════════════════ -->
+<script>
+/* ════════════════════ TRANSLATIONS ════════════════════ */
+const T = {
+  es: {
+    city:'Ferrol', search:'Buscar…', dark:'Oscuro', light:'Claro',
+    filters:'Filtros', price:'Precio', upTo:'Hasta',
+    all:'Todos', allPrices:'Todo', addCart:'Añadir',
+    cart:'Carrito', total:'Total', checkout:'Finalizar compra →',
+    added:'Añadido al carrito', empty:'Tu carrito está vacío',
+    results:'resultados', noResults:'No se encontraron productos',
+    cats:{
+      delicatessen:'Delicatessen', ropa:'Ropa',
+      calzado:'Calzado', hogar:'Hogar', electronica:'Electrónica'
+    },
+    subs:{
+      delicatessen:['Todos','Embutidos','Quesos','Conservas','Aceites','Dulces'],
+      ropa:['Todos','Camisas','Pantalones','Abrigos','Accesorios'],
+      calzado:['Todos','Botas','Deportivo','Formal','Casual'],
+      hogar:['Todos','Cocina','Decoración','Textil','Iluminación'],
+      electronica:['Todos','Audio','Móviles','Ordenadores','Accesorios']
+    }
+  },
+  pt: {
+    city:'Barcelos', search:'Pesquisar…', dark:'Escuro', light:'Claro',
+    filters:'Filtros', price:'Preço', upTo:'Até',
+    all:'Todos', allPrices:'Tudo', addCart:'Adicionar',
+    cart:'Carrinho', total:'Total', checkout:'Finalizar compra →',
+    added:'Adicionado ao carrinho', empty:'O seu carrinho está vazio',
+    results:'resultados', noResults:'Nenhum produto encontrado',
+    cats:{
+      delicatessen:'Delicatessen', ropa:'Roupa',
+      calzado:'Calçado', hogar:'Casa', electronica:'Electrónica'
+    },
+    subs:{
+      delicatessen:['Todos','Enchidos','Queijos','Conservas','Azeites','Doces'],
+      ropa:['Todos','Camisas','Calças','Casacos','Acessórios'],
+      calzado:['Todos','Botas','Desportivo','Formal','Casual'],
+      hogar:['Todos','Cozinha','Decoração','Têxtil','Iluminação'],
+      electronica:['Todos','Áudio','Telemóveis','Computadores','Acessórios']
+    }
+  },
+  en: {
+    city:'London', search:'Search…', dark:'Dark', light:'Light',
+    filters:'Filters', price:'Price', upTo:'Up to',
+    all:'All', allPrices:'All', addCart:'Add',
+    cart:'Cart', total:'Total', checkout:'Checkout →',
+    added:'Added to cart', empty:'Your cart is empty',
+    results:'results', noResults:'No products found',
+    cats:{
+      delicatessen:'Delicatessen', ropa:'Clothing',
+      calzado:'Footwear', hogar:'Home', electronica:'Electronics'
+    },
+    subs:{
+      delicatessen:['All','Charcuterie','Cheeses','Preserves','Oils','Sweets'],
+      ropa:['All','Shirts','Trousers','Coats','Accessories'],
+      calzado:['All','Boots','Trainers','Formal','Casual'],
+      hogar:['All','Kitchen','Decor','Textiles','Lighting'],
+      electronica:['All','Audio','Phones','Computers','Accessories']
+    }
+  }
+};
+
+/* ════════════════════ PRODUCT DATA ════════════════════ */
+const PRODUCTS = [
+  /* ── DELICATESSEN ── */
+  {id:'del-001',cat:'delicatessen',sub:'Embutidos',price:16.90,detail:'100g',
+   name:{es:'Jamón Ibérico de Bellota 5J',pt:'Presunto Ibérico de Bellota 5J',en:'Iberian Acorn Ham 5J'},
+   desc:{es:'Crianza en dehesas de Extremadura, curación 36 meses',pt:'Criado em montados do Extremadura, cura 36 meses',en:'Free-range Extremadura, 36-month curing'}},
+  {id:'del-002',cat:'delicatessen',sub:'Quesos',price:8.90,detail:'250g',
+   name:{es:'Manchego DOP Curado 12 Meses',pt:'Manchego DOP Curado 12 Meses',en:'Manchego DOP Aged 12 Months'},
+   desc:{es:'Queso de oveja manchega con sello DOP, textura firme',pt:'Queijo de ovelha manchega com selo DOP, textura firme',en:'Manchegan ewe cheese, DOP certified, firm texture'}},
+  {id:'del-003',cat:'delicatessen',sub:'Aceites',price:18.50,detail:'500ml',
+   name:{es:'AOVE Arbequina Ecológico',pt:'Azeite Arbequina Ecológico',en:'Organic Arbequina EVOO'},
+   desc:{es:'Aceite de oliva virgen extra ecológico de cosecha temprana',pt:'Azeite virgem extra ecológico de colheita precoce',en:'Early harvest organic extra virgin olive oil'}},
+  {id:'del-004',cat:'delicatessen',sub:'Conservas',price:18.50,detail:'120g',
+   name:{es:'Berberechos Rías Gallegas',pt:'Berbigão Rías Gallegas',en:'Galician Cockles'},
+   desc:{es:'Berberechos al natural de las Rías Gallegas, talla 60/80',pt:'Berbigão natural das Rías Gallegas, calibre 60/80',en:'Natural Galician Rias cockles, grade 60/80'}},
+  {id:'del-005',cat:'delicatessen',sub:'Dulces',price:18.50,detail:'250g',
+   name:{es:'Bombones Belgas Assortment',pt:'Bombons Belgas Sortidos',en:'Belgian Chocolates Assortment'},
+   desc:{es:'Selección premium de bombones artesanales de Bruselas',pt:'Seleção premium de bombons artesanais de Bruxelas',en:'Premium selection of artisan Brussels chocolates'}},
+  {id:'del-006',cat:'delicatessen',sub:'Quesos',price:7.50,detail:'200g',
+   name:{es:'Parmigiano Reggiano DOP 24M',pt:'Parmigiano Reggiano DOP 24M',en:'Parmigiano Reggiano DOP 24M'},
+   desc:{es:'El rey de los quesos italianos, maduración 24 meses',pt:'O rei dos queijos italianos, maturação 24 meses',en:'The king of Italian cheeses, 24-month maturation'}},
+
+  /* ── ROPA ── */
+  {id:'ropa-001',cat:'ropa',sub:'Camisas',price:89.00,detail:'S-XXL',
+   name:{es:'Camisa Oxford Premium',pt:'Camisa Oxford Premium',en:'Premium Oxford Shirt'},
+   desc:{es:'100% algodón egipcio, corte slim, disponible en 8 colores',pt:'100% algodão egípcio, corte slim, disponível em 8 cores',en:'100% Egyptian cotton, slim fit, 8 colours available'}},
+  {id:'ropa-002',cat:'ropa',sub:'Abrigos',price:320.00,detail:'S-XL',
+   name:{es:'Abrigo Lana Merino',pt:'Casaco Lã Merino',en:'Merino Wool Coat'},
+   desc:{es:'Lana merino italiana, forro de seda, corte clásico elegante',pt:'Lã merino italiana, forro de seda, corte clássico elegante',en:'Italian merino wool, silk-lined, classic elegant cut'}},
+  {id:'ropa-003',cat:'ropa',sub:'Pantalones',price:145.00,detail:'28-38',
+   name:{es:'Pantalón Chino Premium',pt:'Calça Chino Premium',en:'Premium Chino Trousers'},
+   desc:{es:'Sarga de algodón italiano, cintura elástica parcial, slim fit',pt:'Sarja de algodão italiano, cós elástico parcial, slim fit',en:'Italian cotton twill, partial elastic waist, slim fit'}},
+  {id:'ropa-004',cat:'ropa',sub:'Accesorios',price:75.00,detail:'OS',
+   name:{es:'Bufanda Cachemira',pt:'Cachecol Caxemira',en:'Cashmere Scarf'},
+   desc:{es:'Cachemira pura de Mongolia, tejida a mano, 200×70cm',pt:'Caxemira pura da Mongólia, tecida à mão, 200×70cm',en:'Pure Mongolian cashmere, hand-woven, 200×70cm'}},
+  {id:'ropa-005',cat:'ropa',sub:'Camisas',price:62.00,detail:'S-XXL',
+   name:{es:'Polo Piqué Algodón',pt:'Polo Piqué Algodão',en:'Cotton Piqué Polo'},
+   desc:{es:'Piqué de algodón peinado, ribetes en contraste, corte regular',pt:'Piqué de algodão penteado, ribetes em contraste, corte regular',en:'Combed cotton piqué, contrast trims, regular fit'}},
+  {id:'ropa-006',cat:'ropa',sub:'Abrigos',price:195.00,detail:'S-XL',
+   name:{es:'Blazer Lino Verano',pt:'Blazer Linho Verão',en:'Summer Linen Blazer'},
+   desc:{es:'Lino irlandés sin forro, solapa clásica, dos botones',pt:'Linho irlandês sem forro, lapela clássica, dois botões',en:'Unlined Irish linen, classic lapel, two-button'}},
+
+  /* ── CALZADO ── */
+  {id:'cal-001',cat:'calzado',sub:'Deportivo',price:129.00,detail:'38-46',
+   name:{es:'Sneaker Cuero Premium',pt:'Sneaker Couro Premium',en:'Premium Leather Sneaker'},
+   desc:{es:'Piel de becerro, suela de goma vulcanizada, fabricación italiana',pt:'Pele de vitela, sola de borracha vulcanizada, fabrico italiano',en:'Calf leather, vulcanized rubber sole, Italian-made'}},
+  {id:'cal-002',cat:'calzado',sub:'Botas',price:285.00,detail:'38-45',
+   name:{es:'Bota Chelsea Cuero',pt:'Bota Chelsea Couro',en:'Chelsea Leather Boot'},
+   desc:{es:'Cuero vacuno curtido vegetalmente, elásticos laterales, piso Goodyear',pt:'Couro bovino curtido vegetalmente, elásticos laterais, sola Goodyear',en:'Vegetable-tanned bovine leather, side elastics, Goodyear welt'}},
+  {id:'cal-003',cat:'calzado',sub:'Formal',price:215.00,detail:'38-45',
+   name:{es:'Oxford Brogue Inglés',pt:'Oxford Brogue Inglês',en:'English Brogue Oxford'},
+   desc:{es:'Piel de becerro perforada, piso de cuero, horma anatómica',pt:'Pele de vitela perfurada, sola de couro, fôrma anatómica',en:'Perforated calf leather, leather sole, anatomic last'}},
+  {id:'cal-004',cat:'calzado',sub:'Casual',price:89.00,detail:'36-45',
+   name:{es:'Mocasín Ante Italiano',pt:'Mocassim Camurça Italiano',en:'Italian Suede Loafer'},
+   desc:{es:'Ante genuino, forro de piel, suela de goma flexible',pt:'Camurça genuína, forro de pele, sola de borracha flexível',en:'Genuine suede, leather lining, flexible rubber sole'}},
+  {id:'cal-005',cat:'calzado',sub:'Botas',price:340.00,detail:'36-44',
+   name:{es:'Bota Militar Cuero Full-Grain',pt:'Bota Militar Couro Full-Grain',en:'Full-Grain Military Boot'},
+   desc:{es:'Cuero full-grain waterproof, cordones de algodón encerado, Vibram',pt:'Couro full-grain impermeável, atacadores de algodão encerado, Vibram',en:'Waterproof full-grain leather, waxed cotton laces, Vibram sole'}},
+  {id:'cal-006',cat:'calzado',sub:'Formal',price:165.00,detail:'38-45',
+   name:{es:'Derby Cuero Clásico',pt:'Derby Couro Clássico',en:'Classic Leather Derby'},
+   desc:{es:'Piel lisa en varios tonos, suela de cuero doble, ojales metálicos',pt:'Pele lisa em vários tons, sola de couro dupla, ilhoses metálicos',en:'Smooth leather in multiple shades, double leather sole, metal eyelets'}},
+
+  /* ── HOGAR ── */
+  {id:'hog-001',cat:'hogar',sub:'Cocina',price:89.00,detail:'28cm',
+   name:{es:'Sartén Hierro Fundido',pt:'Frigideira Ferro Fundido',en:'Cast Iron Skillet'},
+   desc:{es:'Hierro fundido esmaltado Le Creuset, apta horno y vitro',pt:'Ferro fundido esmaltado Le Creuset, apta forno e vitrocerâmica',en:'Le Creuset enamelled cast iron, oven and hob safe'}},
+  {id:'hog-002',cat:'hogar',sub:'Textil',price:145.00,detail:'240×260',
+   name:{es:'Manta Lana Cashmere',pt:'Manta Lã Caxemira',en:'Cashmere Wool Throw'},
+   desc:{es:'Mezcla cachemira-lana merino, tejido espiga, bordes flecos',pt:'Mistura caxemira-lã merino, tecido espinha, bordas com franja',en:'Cashmere-merino blend, herringbone weave, fringe edges'}},
+  {id:'hog-003',cat:'hogar',sub:'Decoración',price:320.00,detail:'H 45cm',
+   name:{es:'Lámpara Artesanal Cerámica',pt:'Candeeiro Artesanal Cerâmica',en:'Artisan Ceramic Lamp'},
+   desc:{es:'Cerámica esmaltada a mano, pie de madera de roble, pantalla lino',pt:'Cerâmica esmaltada à mão, pé de carvalho, abajur de linho',en:'Hand-enamelled ceramic, oak base, linen shade'}},
+  {id:'hog-004',cat:'hogar',sub:'Cocina',price:55.00,detail:'Set x6',
+   name:{es:'Copas Cristal Riedel',pt:'Copos Cristal Riedel',en:'Riedel Crystal Glasses'},
+   desc:{es:'Cristal sin plomo soplado a máquina, forma optimizada vino tinto',pt:'Cristal sem chumbo soprado à máquina, forma otimizada vinho tinto',en:'Lead-free machine-blown crystal, optimised for red wine'}},
+  {id:'hog-005',cat:'hogar',sub:'Iluminación',price:185.00,detail:'Ø 40cm',
+   name:{es:'Lámpara Techo Rattan',pt:'Candeeiro Tecto Rotim',en:'Rattan Ceiling Pendant'},
+   desc:{es:'Rattan natural tejido a mano en Bali, casquillo E27, cable textil',pt:'Rotim natural tecido à mão no Bali, casquilho E27, cabo têxtil',en:'Hand-woven Balinese rattan, E27 fitting, textile cable'}},
+  {id:'hog-006',cat:'hogar',sub:'Textil',price:68.00,detail:'50×70cm / Pair',
+   name:{es:'Almohadas Algodón Egipcio 800TC',pt:'Almofadas Algodão Egípcio 800TC',en:'800TC Egyptian Cotton Pillows'},
+   desc:{es:'Funda percal 800 hilos, relleno plumón canadiense, medio',pt:'Capa percal 800 fios, enchimento plumão canadiano, médio',en:'800-thread percale cover, Canadian down fill, medium firmness'}},
+
+  /* ── ELECTRÓNICA ── */
+  {id:'elec-001',cat:'electronica',sub:'Audio',price:349.00,detail:'Wireless',
+   name:{es:'Auriculares Noise-Cancelling Pro',pt:'Auscultadores Noise-Cancelling Pro',en:'Pro Noise-Cancelling Headphones'},
+   desc:{es:'ANC híbrido 40dB, 30h batería, drivers 40mm, Bluetooth 5.3',pt:'ANC híbrido 40dB, 30h bateria, drivers 40mm, Bluetooth 5.3',en:'40dB hybrid ANC, 30h battery, 40mm drivers, Bluetooth 5.3'}},
+  {id:'elec-002',cat:'electronica',sub:'Audio',price:229.00,detail:'True Wireless',
+   name:{es:'Auriculares In-Ear Premium',pt:'Auscultadores In-Ear Premium',en:'Premium In-Ear Earbuds'},
+   desc:{es:'Drivers dinámicos 10mm, IPX5, 28h total con estuche, LDAC',pt:'Drivers dinâmicos 10mm, IPX5, 28h total com estojo, LDAC',en:'10mm dynamic drivers, IPX5, 28h total with case, LDAC'}},
+  {id:'elec-003',cat:'electronica',sub:'Ordenadores',price:1899.00,detail:'15" OLED',
+   name:{es:'Laptop Ultraligero OLED',pt:'Laptop Ultraleve OLED',en:'Ultralight OLED Laptop'},
+   desc:{es:'Panel OLED 2.8K 120Hz, 1.2kg, batería 20h, USB-C 140W',pt:'Painel OLED 2.8K 120Hz, 1.2kg, bateria 20h, USB-C 140W',en:'2.8K 120Hz OLED panel, 1.2kg, 20h battery, USB-C 140W'}},
+  {id:'elec-004',cat:'electronica',sub:'Móviles',price:1199.00,detail:'6.7" ProRAW',
+   name:{es:'Smartphone Flagship Pro',pt:'Smartphone Flagship Pro',en:'Flagship Pro Smartphone'},
+   desc:{es:'Cámara 200MP, pantalla 6.7" 144Hz, 5000mAh carga 120W',pt:'Câmara 200MP, ecrã 6.7" 144Hz, 5000mAh carga 120W',en:'200MP camera, 6.7" 144Hz display, 5000mAh 120W charge'}},
+  {id:'elec-005',cat:'electronica',sub:'Accesorios',price:89.00,detail:'100W GaN',
+   name:{es:'Cargador GaN 100W 4 Puertos',pt:'Carregador GaN 100W 4 Portas',en:'100W GaN 4-Port Charger'},
+   desc:{es:'Tecnología GaN III, 2×USB-C + 2×USB-A, protección inteligente',pt:'Tecnologia GaN III, 2×USB-C + 2×USB-A, proteção inteligente',en:'GaN III technology, 2×USB-C + 2×USB-A, smart protection'}},
+  {id:'elec-006',cat:'electronica',sub:'Móviles',price:549.00,detail:'6.1" AMOLED',
+   name:{es:'Smartwatch Ultra Titanio',pt:'Smartwatch Ultra Titânio',en:'Titanium Ultra Smartwatch'},
+   desc:{es:'Caja de titanio, GPS + altímetro, 18 días batería, AMOLED',pt:'Caixa de titânio, GPS + altímetro, 18 dias bateria, AMOLED',en:'Titanium case, GPS + altimeter, 18-day battery, AMOLED'}},
+];
+
+/* ════════════════════ STATE ════════════════════ */
+let lang = 'es';
+let category = 'delicatessen';
+let subFilter = 'Todos';
+let viewMode = 'list';
+let isDark = false;
+let searchQ = '';
+let maxPrice = 9999;
+let cart = [];
+
+const CATS = ['delicatessen','ropa','calzado','hogar','electronica'];
+const CAT_ICONS = {delicatessen:'🧀',ropa:'👔',calzado:'👞',hogar:'🏠',electronica:'💻'};
+
+/* ════════════════════ INIT ════════════════════ */
+function initLang(l) {
+  lang = l;
+  document.getElementById('langModal').style.display = 'none';
+  applyLang();
+  renderAll();
+}
+
+function applyLang() {
+  const t = T[lang];
+  document.documentElement.lang = lang;
+  document.getElementById('logoCity').textContent = t.city;
+  document.getElementById('footerCity').textContent = t.city;
+  document.getElementById('searchInput').placeholder = t.search;
+  document.getElementById('filterTitle').textContent = t.filters;
+  document.getElementById('priceTitle').textContent = t.price;
+  document.getElementById('priceLabel').textContent = t.upTo;
+  document.getElementById('cartTitle').textContent = t.cart;
+  document.getElementById('totalLabel').textContent = t.total;
+  document.getElementById('checkoutBtn').textContent = t.checkout;
+  document.getElementById('themeTxt').textContent = isDark ? t.light : t.dark;
+
+  // Lang buttons active state
+  ['es','pt','en'].forEach(l2 => {
+    document.getElementById('lang'+l2.charAt(0).toUpperCase()+l2.slice(1))
+      .classList.toggle('active', l2 === lang);
+  });
+
+  renderCatNav();
+  renderFilters();
+  updatePriceDisplay();
+  renderCartPanel();
+}
+
+function setLang(l) {
+  lang = l;
+  // Reset sub filter label but keep filter logic
+  const t = T[lang];
+  const subs = t.subs[category];
+  const curIdx = T['es'].subs[category].indexOf(subFilter);
+  subFilter = subs[curIdx] !== undefined ? subs[curIdx] : subs[0];
+  applyLang();
+  renderProducts();
+}
+
+/* ════════════════════ MOBILE FILTER DRAWER ════════════════════ */
+function openFilterDrawer() {
+  document.getElementById('filterDrawer').classList.add('open');
+  document.getElementById('filterDrawerOverlay').style.display = 'block';
+  setTimeout(() => document.getElementById('filterDrawerOverlay').classList.add('open'), 10);
+}
+function closeFilterDrawer() {
+  document.getElementById('filterDrawer').classList.remove('open');
+  document.getElementById('filterDrawerOverlay').classList.remove('open');
+  setTimeout(() => document.getElementById('filterDrawerOverlay').style.display = 'none', 300);
+}
+
+function onPriceChange2() {
+  const v = parseInt(document.getElementById('priceRange2').value);
+  document.getElementById('priceRange').value = v;
+  maxPrice = v >= 2000 ? 9999 : v;
+  const t = T[lang];
+  document.getElementById('priceVal2').textContent = v >= 2000 ? t.allPrices : v.toLocaleString('es-ES') + ' €';
+  updatePriceDisplay();
+  renderProducts();
+}
+
+function syncDrawer() {
+  const t = T[lang];
+  document.getElementById('fdTitle').textContent = t.filters;
+  document.getElementById('fdPriceTitle').textContent = t.price;
+  document.getElementById('fdPriceLabel').textContent = t.upTo;
+  const v = parseInt(document.getElementById('priceRange').value);
+  document.getElementById('priceRange2').value = v;
+  document.getElementById('priceVal2').textContent = v >= 2000 ? t.allPrices : v.toLocaleString('es-ES') + ' €';
+
+  // Sub chips in drawer
+  const subs = t.subs[category];
+  document.getElementById('fdSubChips').innerHTML = subs.map(s =>
+    `<button class="filter-chip ${s===subFilter?'active':''}" onclick="setSubFilter('${s}',this);syncMobileFilterBar();closeFilterDrawer()">${s}</button>`
+  ).join('');
+}
+
+function renderMobileFilterBar() {
+  const t = T[lang];
+  const subs = t.subs[category];
+  const bar = document.getElementById('mobileFilterBar');
+  let html = `<button class="mfb-btn filter-open-btn" onclick="syncDrawer();openFilterDrawer()">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+    ${t.filters}
+  </button>`;
+  html += subs.map(s =>
+    `<button class="mfb-btn ${s===subFilter?'active':''}" onclick="setSubFilter('${s}',this);syncMobileFilterBar()">${s}</button>`
+  ).join('');
+  bar.innerHTML = html;
+}
+
+function syncMobileFilterBar() {
+  document.querySelectorAll('.mfb-btn:not(.filter-open-btn)').forEach((b,i) => {
+    const t = T[lang];
+    b.classList.toggle('active', b.textContent.trim() === subFilter);
+  });
+}
+
+/* ════════════════════ CATEGORY NAV ════════════════════ */
+function renderCatNav() {
+  const t = T[lang];
+  const nav = document.getElementById('catNav');
+  nav.innerHTML = CATS.map(c => `
+    <button class="cat-tab ${c===category?'active':''}" onclick="setCategory('${c}')">
+      <span class="cat-emoji">${CAT_ICONS[c]}</span>
+      ${t.cats[c]}
+    </button>`).join('');
+}
+
+function setCategory(c) {
+  category = c;
+  subFilter = T[lang].subs[c][0]; // "Todos"/"All"
+  searchQ = ''; document.getElementById('searchInput').value = '';
+  maxPrice = 9999; document.getElementById('priceRange').value = 2000;
+  updatePriceDisplay();
+  renderCatNav();
+  renderFilters();
+  renderProducts();
+  updateCatTitle();
+}
+
+function updateCatTitle() {
+  document.getElementById('catTitle').textContent = T[lang].cats[category];
+}
+
+/* ════════════════════ FILTERS ════════════════════ */
+function renderFilters() {
+  const t = T[lang];
+  const subs = t.subs[category];
+  const container = document.getElementById('subFilters');
+  container.innerHTML = subs.map((s,i) => `
+    <button class="filter-btn ${s===subFilter||i===0&&subFilter===subs[0]?'active':''}"
+      onclick="setSubFilter('${s}',this)">${s}</button>`).join('');
+  markActiveFilter();
+  renderMobileFilterBar();
+}
+
+function markActiveFilter() {
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent.trim() === subFilter);
+  });
+}
+
+function setSubFilter(s, btn) {
+  subFilter = s;
+  markActiveFilter();
+  syncMobileFilterBar();
+  renderProducts();
+}
+
+function onPriceChange() {
+  maxPrice = parseInt(document.getElementById('priceRange').value);
+  updatePriceDisplay();
+  renderProducts();
+}
+
+function updatePriceDisplay() {
+  const v = parseInt(document.getElementById('priceRange').value);
+  const t = T[lang];
+  document.getElementById('priceVal').textContent =
+    v >= 2000 ? t.allPrices : v.toLocaleString('es-ES') + ' €';
+}
+
+/* ════════════════════ SEARCH ════════════════════ */
+function onSearch() {
+  searchQ = document.getElementById('searchInput').value.toLowerCase();
+  renderProducts();
+}
+
+/* ════════════════════ VIEW ════════════════════ */
+function setView(v) {
+  viewMode = v;
+  document.getElementById('btnGrid').classList.toggle('active', v==='grid');
+  document.getElementById('btnList').classList.toggle('active', v==='list');
+  renderProducts();
+}
+
+/* ════════════════════ THEME ════════════════════ */
+const sunSVG = `<path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/>`;
+const moonSVG = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>`;
+
+function toggleTheme() {
+  isDark = !isDark;
+  document.body.classList.toggle('dark', isDark);
+  document.getElementById('themeIcon').innerHTML = isDark ? sunSVG : moonSVG;
+  document.getElementById('themeTxt').textContent = isDark ? T[lang].light : T[lang].dark;
+}
+
+/* ════════════════════ RENDER PRODUCTS ════════════════════ */
+function getFiltered() {
+  const t = T[lang];
+  const allWord = t.subs[category][0];
+  return PRODUCTS.filter(p => {
+    if (p.cat !== category) return false;
+    // sub-filter: map display label back to English sub for data matching
+    if (subFilter !== allWord) {
+      const enSubs = T['es'].subs[category];
+      const langSubs = t.subs[category];
+      const idx = langSubs.indexOf(subFilter);
+      const enSub = idx > 0 ? enSubs[idx] : null;
+      if (enSub && p.sub !== enSub) return false;
+    }
+    if (maxPrice < 2000 && p.price > maxPrice) return false;
+    if (searchQ) {
+      const name = p.name[lang].toLowerCase();
+      const desc = p.desc[lang].toLowerCase();
+      if (!name.includes(searchQ) && !desc.includes(searchQ)) return false;
+    }
+    return true;
+  });
+}
+
+function fmtPrice(p) {
+  return p.toLocaleString('es-ES', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' €';
+}
+
+function renderProducts() {
+  const filtered = getFiltered();
+  const container = document.getElementById('productsContainer');
+  const t = T[lang];
+
+  updateCatTitle();
+  document.getElementById('prodCount').textContent =
+    filtered.length + ' ' + t.results;
+
+  if (!filtered.length) {
+    container.innerHTML = `<div class="empty-state">
+      <div class="empty-icon">🔍</div>
+      <p>${t.noResults}</p></div>`;
+    return;
+  }
+
+  if (viewMode === 'grid') {
+    container.innerHTML = `<div class="grid-view">${filtered.map((p,i) =>
+      gridCard(p, i)
+    ).join('')}</div>`;
+  } else {
+    container.innerHTML = `<div class="list-view">${filtered.map((p,i) =>
+      listItem(p, i)
+    ).join('')}</div>`;
+  }
+}
+
+function gridCard(p, i) {
+  const imgSrc = IMAGES[p.id] || '';
+  const imgHtml = imgSrc
+    ? `<img src="${imgSrc}" alt="${p.name[lang]}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=no-img>${CAT_ICONS[p.cat]}</div>'">`
+    : `<div class="no-img">${CAT_ICONS[p.cat]}</div>`;
+  return `
+  <div class="card" style="animation-delay:${i*0.05}s">
+    <div class="card-img">${imgHtml}</div>
+    <div class="card-body">
+      <div class="card-sub">${subLabel(p)}</div>
+      <div class="card-name">${p.name[lang]}</div>
+      <div class="card-desc">${p.desc[lang]}</div>
+      <div class="card-footer">
+        <div>
+          <div class="card-price">${fmtPrice(p.price)}</div>
+          <div class="card-detail">${p.detail}</div>
+        </div>
+        <button class="add-btn" onclick="addToCart('${p.id}')">${T[lang].addCart}</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function listItem(p, i) {
+  return `
+  <div class="list-item" style="animation-delay:${i*0.04}s">
+    <div class="list-num">${String(i+1).padStart(2,'0')}</div>
+    <div class="list-info">
+      <div class="list-sub">${subLabel(p)}</div>
+      <div class="list-name">${p.name[lang]}</div>
+      <div class="list-desc">${p.desc[lang]}</div>
+    </div>
+    <div class="list-right">
+      <div class="list-detail">${p.detail}</div>
+      <div class="list-price">${fmtPrice(p.price)}</div>
+      <button class="list-add" onclick="addToCart('${p.id}')">${T[lang].addCart}</button>
+    </div>
+  </div>`;
+}
+
+function subLabel(p) {
+  const t = T[lang];
+  const enSubs = T['es'].subs[p.cat];
+  const langSubs = t.subs[p.cat];
+  const idx = enSubs.indexOf(p.sub);
+  return idx >= 0 && langSubs[idx] ? langSubs[idx] : p.sub;
+}
+
+/* ════════════════════ CART ════════════════════ */
+function addToCart(id) {
+  const p = PRODUCTS.find(x => x.id === id);
+  if (!p) return;
+  const ex = cart.find(x => x.id === id);
+  if (ex) ex.qty++;
+  else cart.push({id, qty:1});
+  updateCartCount();
+  showToast(T[lang].added);
+  renderCartPanel();
+}
+
+function updateCartCount() {
+  const total = cart.reduce((s,x) => s+x.qty, 0);
+  document.getElementById('cartCount').textContent = total;
+}
+
+function renderCartPanel() {
+  const t = T[lang];
+  const itemsEl = document.getElementById('cartItems');
+  document.getElementById('checkoutBtn').textContent = t.checkout;
+  document.getElementById('cartTitle').textContent = t.cart;
+  document.getElementById('totalLabel').textContent = t.total;
+
+  if (!cart.length) {
+    itemsEl.innerHTML = `<div class="cart-empty-msg">${t.empty}</div>`;
+    document.getElementById('cartTotal').textContent = '0,00 €';
+    return;
+  }
+
+  let html = '';
+  let total = 0;
+  cart.forEach(ci => {
+    const p = PRODUCTS.find(x => x.id === ci.id);
+    if (!p) return;
+    total += p.price * ci.qty;
+    html += `
+    <div class="cart-item">
+      <div class="cart-item-info">
+        <div class="cart-item-name">${p.name[lang]}</div>
+        <div class="cart-item-price">${fmtPrice(p.price)}</div>
+        <div class="cart-item-qty">
+          <button class="qty-btn" onclick="changeQty('${ci.id}',-1)">−</button>
+          <span class="qty-num">${ci.qty}</span>
+          <button class="qty-btn" onclick="changeQty('${ci.id}',1)">+</button>
+        </div>
+      </div>
+      <button class="cart-item-del" onclick="removeFromCart('${ci.id}')">✕</button>
+    </div>`;
+  });
+  itemsEl.innerHTML = html;
+  document.getElementById('cartTotal').textContent = fmtPrice(total);
+}
+
+function changeQty(id, d) {
+  const item = cart.find(x => x.id === id);
+  if (!item) return;
+  item.qty = Math.max(0, item.qty + d);
+  if (item.qty === 0) cart = cart.filter(x => x.id !== id);
+  updateCartCount();
+  renderCartPanel();
+}
+
+function removeFromCart(id) {
+  cart = cart.filter(x => x.id !== id);
+  updateCartCount();
+  renderCartPanel();
+}
+
+function toggleCart() {
+  const panel = document.getElementById('cartPanel');
+  const ov = document.getElementById('overlay');
+  panel.classList.toggle('open');
+  ov.classList.toggle('visible');
+}
+
+function closeCart() {
+  document.getElementById('cartPanel').classList.remove('open');
+  document.getElementById('overlay').classList.remove('visible');
+}
+
+/* ════════════════════ TOAST ════════════════════ */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+/* ════════════════════ RENDER ALL ════════════════════ */
+function renderAll() {
+  applyLang();
+  renderProducts();
+}
+</script>
+</body>
+</html>
