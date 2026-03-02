@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Out of the Ordinary – Lyrics</title>
+  <style>
+    :root {
+      --bg:#0d0d0d;--surface:#1a1a1a;--surface2:#242424;
+      --accent:#c9a96e;--accent2:#e8c990;--text:#f0ece4;
+      --text-muted:#9a9080;--border:#2e2e2e;--shadow:rgba(0,0,0,.5);
+      --tag-bg:#2a2418;--tag-text:#c9a96e;
+    }
+    body.light {
+      --bg:#f5f0e8;--surface:#ffffff;--surface2:#ede8df;
+      --accent:#8b6914;--accent2:#b08d30;--text:#1a1410;
+      --text-muted:#6b5e4a;--border:#d4c9b5;--shadow:rgba(0,0,0,.12);
+      --tag-bg:#e8dfc8;--tag-text:#7a5c10;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--bg);color:var(--text);font-family:'Georgia',serif;min-height:100vh;transition:background .35s,color .35s}
+    header{position:sticky;top:0;z-index:100;background:var(--surface);border-bottom:1px solid var(--border);padding:.75rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;box-shadow:0 2px 20px var(--shadow)}
+    .song-title span:first-child{display:block;font-size:1rem;font-weight:700;letter-spacing:.04em;color:var(--accent);text-transform:uppercase}
+    .song-title span:last-child{display:block;font-size:.7rem;color:var(--text-muted);letter-spacing:.12em;text-transform:uppercase}
+    .controls{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+    .lang-group{display:flex;background:var(--surface2);border-radius:8px;overflow:hidden;border:1px solid var(--border)}
+    .lang-btn{background:none;border:none;cursor:pointer;color:var(--text-muted);padding:.4rem .75rem;font-size:.78rem;font-weight:700;letter-spacing:.08em;transition:background .2s,color .2s}
+    .lang-btn:hover{color:var(--accent)}
+    .lang-btn.active{background:var(--accent);color:#fff;border-radius:6px}
+    body.light .lang-btn.active{color:#1a1410}
+    .theme-btn{background:var(--surface2);border:1px solid var(--border);border-radius:8px;cursor:pointer;color:var(--text);padding:.4rem .75rem;font-size:.9rem;transition:transform .2s;display:flex;align-items:center;gap:.35rem}
+    .theme-btn:hover{transform:scale(1.08)}
+    .theme-btn .lbl{font-size:.7rem;font-weight:700;letter-spacing:.08em;color:var(--text-muted)}
+    .hero{text-align:center;padding:3.5rem 1.5rem 2rem;position:relative}
+    .hero::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:320px;height:220px;background:radial-gradient(ellipse at center,rgba(201,169,110,.13) 0%,transparent 70%);pointer-events:none}
+    .hero h1{font-size:clamp(1.6rem,4vw,2.6rem);font-weight:400;letter-spacing:.08em;color:var(--accent);text-transform:uppercase}
+    .hero h1 em{font-style:italic;color:var(--accent2)}
+    .hero p{margin-top:.5rem;color:var(--text-muted);font-size:.82rem;letter-spacing:.15em;text-transform:uppercase}
+    .divider{width:60px;height:1px;background:var(--accent);margin:1.5rem auto 0;opacity:.4}
+    .lyrics-wrap{max-width:700px;margin:0 auto;padding:1rem 1.5rem 5rem}
+    .section{margin-bottom:2.5rem;opacity:0;transform:translateY(18px);animation:fadeUp .5s ease forwards}
+    .section:nth-child(1){animation-delay:.05s}.section:nth-child(2){animation-delay:.10s}
+    .section:nth-child(3){animation-delay:.15s}.section:nth-child(4){animation-delay:.20s}
+    .section:nth-child(5){animation-delay:.25s}.section:nth-child(6){animation-delay:.30s}
+    .section:nth-child(7){animation-delay:.35s}
+    @keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+    .section-tag{display:inline-block;background:var(--tag-bg);color:var(--tag-text);font-size:.62rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;padding:.2rem .65rem;border-radius:4px;margin-bottom:.75rem;border:1px solid var(--accent);opacity:.85}
+    .section p{font-size:clamp(.95rem,2vw,1.07rem);line-height:1.9;color:var(--text)}
+    .chorus p{font-style:italic;padding-left:1rem;border-left:2px solid var(--accent);opacity:.95}
+    .bridge p{color:var(--accent2)}
+    footer{text-align:center;padding:2rem 1.5rem;border-top:1px solid var(--border);color:var(--text-muted);font-size:.78rem;letter-spacing:.08em}
+    @media(max-width:480px){header{padding:.6rem 1rem}.hero{padding:2rem 1rem 1.5rem}.lyrics-wrap{padding:.5rem 1rem 3rem}.lang-btn{padding:.35rem .55rem;font-size:.72rem}}
+    @media(min-width:768px){.lyrics-wrap{padding:1.5rem 2rem 5rem}}
+    @media(min-width:1024px){.lyrics-wrap{padding:2rem 0 5rem}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="song-title"><span>Out of the Ordinary</span><span>Alex Warren</span></div>
+  <div class="controls">
+    <div class="lang-group">
+      <button class="lang-btn active" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" onclick="setLang('es')">ES</button>
+      <button class="lang-btn" onclick="setLang('pt')">PT</button>
+    </div>
+    <button class="theme-btn" onclick="toggleTheme()">
+      <span id="ti">☀️</span><span class="lbl" id="tl">LIGHT</span>
+    </button>
+  </div>
+</header>
+<div class="hero">
+  <h1><em>Out of the</em> Ordinary</h1>
+  <p id="hs">Alex Warren</p>
+  <div class="divider"></div>
+</div>
+<div class="lyrics-wrap" id="lyrics"></div>
+<footer><p id="ft">For personal use only.</p></footer>
+<script>
+const D={
+  en:[
+    {tag:"Verse 1",type:"verse",lines:["They say the holy water's watered down and this town's lost its faith","Our colors will fade eventually","So if our time is running out day after day","We'll make the mundane our masterpiece"]},
+    {tag:"Pre-Chorus",type:"pre",lines:["Oh my, my — oh my, my","Love, I take one look at you"]},
+    {tag:"Chorus",type:"chorus",lines:["Taking me out of the ordinary","I want you laying me down 'til we're dead and buried","On the edge of your knife, staying drunk on your vine","The angels up in the clouds are jealous","Knowing we found something so out of the ordinary","You got me kissing the ground of your sanctuary","Shatter me with your touch — oh Lord, return me to dust","The angels up in the clouds are jealous knowing we found"]},
+    {tag:"Verse 2",type:"verse",lines:["Hopeless hallelujah","Oh, this side of heaven's gates","On my life — how do ya breathe and take my breath away?","At your altar I will pray","You're the sculptor, I'm the clay","Oh my, my"]},
+    {tag:"Chorus",type:"chorus",lines:["You're taking me out of the ordinary","I want you laying me down 'til we're dead and buried","On the edge of your knife, staying drunk on your vine","The angels up in the clouds are jealous","Knowing we found something so out of the ordinary","You got me kissing the ground of your sanctuary","Shatter me with your touch — oh Lord, return me to dust","The angels up in the clouds are jealous knowing we found"]},
+    {tag:"Bridge",type:"bridge",lines:["Something so heavenly","Higher than ecstasy whenever you're next to me","Oh my, my — my world was in black and white until I saw your light","I thought you had to die to find something so out…"]},
+    {tag:"Chorus",type:"chorus",lines:["…of the ordinary","I want you laying me down 'til we're dead and buried","On the edge of your knife, staying drunk on your vine","The angels up in the clouds are jealous","Knowing we found something so out of the ordinary","You got me kissing the ground of your sanctuary","Shatter me with your touch — oh Lord, return me to dust","The angels up in the clouds are jealous knowing we found"]}
+  ],
+  es:[
+    {tag:"Verso 1",type:"verse",lines:["Dicen que el agua bendita está diluida y este pueblo ha perdido la fe","Nuestros colores se irán desvaneciendo con el tiempo","Así que si el tiempo se nos acaba, día tras día","Haremos de lo cotidiano nuestra obra maestra"]},
+    {tag:"Pre-Estribillo",type:"pre",lines:["Oh, oh — oh, oh","Amor, con solo mirarte…"]},
+    {tag:"Estribillo",type:"chorus",lines:["Me sacas de lo ordinario","Te quiero echándome hasta que estemos muertos y enterrados","Al filo de tu cuchillo, borracho de tu vid","Los ángeles en las nubes están celosos","Sabiendo que encontramos algo tan fuera de lo ordinario","Me tienes besando el suelo de tu santuario","Hazme añicos con tu toque — Dios mío, devuélveme al polvo","Los ángeles en las nubes están celosos sabiendo que encontramos"]},
+    {tag:"Verso 2",type:"verse",lines:["Aleluya desesperada","Oh, a este lado de las puertas del cielo","Por mi vida — ¿cómo respiras y me quitas el aliento?","En tu altar rezaré","Tú eres el escultor, yo soy la arcilla","Oh, oh"]},
+    {tag:"Estribillo",type:"chorus",lines:["Me estás sacando de lo ordinario","Te quiero echándome hasta que estemos muertos y enterrados","Al filo de tu cuchillo, borracho de tu vid","Los ángeles en las nubes están celosos","Sabiendo que encontramos algo tan fuera de lo ordinario","Me tienes besando el suelo de tu santuario","Hazme añicos con tu toque — Dios mío, devuélveme al polvo","Los ángeles en las nubes están celosos sabiendo que encontramos"]},
+    {tag:"Puente",type:"bridge",lines:["Algo tan celestial","Más alto que el éxtasis cuando estás a mi lado","Oh, oh — mi mundo era en blanco y negro hasta que vi tu luz","Pensé que tenías que morir para encontrar algo tan fuera de…"]},
+    {tag:"Estribillo",type:"chorus",lines:["…lo ordinario","Te quiero echándome hasta que estemos muertos y enterrados","Al filo de tu cuchillo, borracho de tu vid","Los ángeles en las nubes están celosos","Sabiendo que encontramos algo tan fuera de lo ordinario","Me tienes besando el suelo de tu santuario","Hazme añicos con tu toque — Dios mío, devuélveme al polvo","Los ángeles en las nubes están celosos sabiendo que encontramos"]}
+  ],
+  pt:[
+    {tag:"Verso 1",type:"verse",lines:["Dizem que a água benta está diluída e esta cidade perdeu a fé","Nossas cores vão desaparecer com o tempo","Então se o tempo está se esgotando, dia após dia","Vamos fazer do mundano a nossa obra-prima"]},
+    {tag:"Pré-Refrão",type:"pre",lines:["Oh, oh — oh, oh","Amor, só de olhar para você…"]},
+    {tag:"Refrão",type:"chorus",lines:["Me tira do comum","Quero você me deitando até estarmos mortos e enterrados","Na beira da sua faca, embriagado da sua videira","Os anjos lá nas nuvens estão com inveja","Sabendo que encontramos algo tão fora do comum","Você me faz beijar o chão do seu santuário","Me despedace com seu toque — Senhor, me devolva ao pó","Os anjos lá nas nuvens estão com inveja sabendo que encontramos"]},
+    {tag:"Verso 2",type:"verse",lines:["Aleluia sem esperança","Oh, deste lado dos portões do paraíso","Pela minha vida — como você respira e me tira o fôlego?","No seu altar vou rezar","Você é o escultor, eu sou a argila","Oh, oh"]},
+    {tag:"Refrão",type:"chorus",lines:["Você está me tirando do comum","Quero você me deitando até estarmos mortos e enterrados","Na beira da sua faca, embriagado da sua videira","Os anjos lá nas nuvens estão com inveja","Sabendo que encontramos algo tão fora do comum","Você me faz beijar o chão do seu santuário","Me despedace com seu toque — Senhor, me devolva ao pó","Os anjos lá nas nuvens estão com inveja sabendo que encontramos"]},
+    {tag:"Ponte",type:"bridge",lines:["Algo tão celestial","Mais alto que o êxtase quando você está do meu lado","Oh, oh — meu mundo era em preto e branco até eu ver sua luz","Achei que tinha que morrer para encontrar algo tão fora de…"]},
+    {tag:"Refrão",type:"chorus",lines:["…do comum","Quero você me deitando até estarmos mortos e enterrados","Na beira da sua faca, embriagado da sua videira","Os anjos lá nas nuvens estão com inveja","Sabendo que encontramos algo tão fora do comum","Você me faz beijar o chão do seu santuário","Me despedace com seu toque — Senhor, me devolva ao pó","Os anjos lá nas nuvens estão com inveja sabendo que encontramos"]}
+  ]
+};
+const HS={en:"Alex Warren",es:"Alex Warren — Traducción al Español",pt:"Alex Warren — Tradução em Português"};
+const FT={en:"For personal use only.",es:"Solo para uso personal.",pt:"Apenas para uso pessoal."};
+function render(l){
+  const c=document.getElementById('lyrics');c.innerHTML='';
+  D[l].forEach(s=>{const d=document.createElement('div');d.className=`section ${s.type}`;d.innerHTML=`<span class="section-tag">${s.tag}</span><p>${s.lines.join('<br>')}</p>`;c.appendChild(d)});
+  document.getElementById('hs').textContent=HS[l];
+  document.getElementById('ft').textContent=FT[l];
+}
+function setLang(l){document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent.toLowerCase()===l));render(l)}
+let light=false;
+function toggleTheme(){light=!light;document.body.classList.toggle('light',light);document.getElementById('ti').textContent=light?'🌙':'☀️';document.getElementById('tl').textContent=light?'DARK':'LIGHT'}
+render('en');
+</script>
+</body>
+</html>
