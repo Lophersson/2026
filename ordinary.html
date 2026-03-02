@@ -42,14 +42,185 @@
     .hero p{margin-top:.5rem;color:var(--text-muted);font-size:.82rem;letter-spacing:.15em;text-transform:uppercase}
     .divider{width:60px;height:1px;background:var(--accent);margin:1.5rem auto 0;opacity:.4}
 
-    /* VIDEO */
-    .video-wrap{max-width:700px;margin:0 auto 2rem;padding:0 1.5rem}
-    .video-thumb{display:block;position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--border);box-shadow:0 8px 40px var(--shadow);text-decoration:none;cursor:pointer}
+    /* MEDIA WRAP */
+    .media-wrap{max-width:700px;margin:0 auto;padding:0 1.5rem;display:flex;flex-direction:column;gap:1.25rem;margin-bottom:2.5rem}
+
+    /* VIDEO THUMBNAIL */
+    .video-thumb{display:block;position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--border);box-shadow:0 8px 40px var(--shadow);text-decoration:none;cursor:pointer}
     .video-thumb img{width:100%;display:block;aspect-ratio:16/9;object-fit:cover;transition:transform .4s,filter .4s;filter:brightness(.85)}
     .video-thumb:hover img{transform:scale(1.03);filter:brightness(.65)}
     .play-btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);filter:drop-shadow(0 2px 8px rgba(0,0,0,.6));transition:transform .2s;pointer-events:none}
     .video-thumb:hover .play-btn{transform:translate(-50%,-50%) scale(1.12)}
     .video-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.75));color:#fff;text-align:center;padding:.75rem 1rem .6rem;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;pointer-events:none}
+
+    /* ═══ AUDIO PLAYER (rediseñado) ═══ */
+    .audio-section {
+      background: linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 8px 40px var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+    /* Franja decorativa superior */
+    .audio-section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent));
+    }
+    /* Brillo ambiental */
+    .audio-section::after {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(201,169,110,.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .audio-body {
+      display: flex;
+      align-items: center;
+      gap: 1.1rem;
+      padding: 1.1rem 1.25rem .85rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Álbum art simulado */
+    .audio-art {
+      width: 54px;
+      height: 54px;
+      flex-shrink: 0;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #1a1200 0%, #3a2a00 40%, var(--accent) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.06);
+      border: 1px solid rgba(201,169,110,.25);
+      position: relative;
+      overflow: hidden;
+    }
+    .audio-art::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 30% 30%, rgba(232,201,144,.18), transparent 60%);
+    }
+    .audio-art svg {
+      position: relative;
+      z-index: 1;
+      opacity: .9;
+    }
+
+    .audio-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .audio-info .track-title {
+      font-size: .9rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: .02em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .audio-info .track-artist {
+      font-size: .72rem;
+      color: var(--accent);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-top: .15rem;
+    }
+    .audio-info .track-source {
+      font-size: .65rem;
+      color: var(--text-muted);
+      letter-spacing: .08em;
+      margin-top: .2rem;
+    }
+
+    /* Ecualizador animado (decorativo) */
+    .audio-eq {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 24px;
+      flex-shrink: 0;
+      opacity: 0;
+      transition: opacity .3s;
+    }
+    .audio-section.playing .audio-eq { opacity: 1; }
+    .audio-eq span {
+      width: 3px;
+      border-radius: 2px;
+      background: var(--accent);
+      animation: eq 0s ease-in-out infinite alternate;
+    }
+    .audio-eq span:nth-child(1){height:8px; animation-duration:.45s}
+    .audio-eq span:nth-child(2){height:18px;animation-duration:.6s}
+    .audio-eq span:nth-child(3){height:12px;animation-duration:.38s}
+    .audio-eq span:nth-child(4){height:20px;animation-duration:.5s}
+    .audio-eq span:nth-child(5){height:10px;animation-duration:.42s}
+    @keyframes eq {
+      from { transform: scaleY(.3); opacity:.5; }
+      to   { transform: scaleY(1);  opacity:1;  }
+    }
+    .audio-section.playing .audio-eq span { animation-play-state: running; }
+    .audio-section:not(.playing) .audio-eq span { animation-play-state: paused; }
+
+    /* Separador */
+    .audio-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border) 20%, var(--border) 80%, transparent);
+      margin: 0 1.25rem;
+    }
+
+    /* Controles nativos — envueltos */
+    .audio-controls {
+      padding: .85rem 1.25rem 1.1rem;
+      position: relative;
+      z-index: 1;
+    }
+    .audio-controls audio {
+      width: 100%;
+      height: 36px;
+      outline: none;
+    }
+    /* Estilos del elemento <audio> */
+    audio {
+      accent-color: var(--accent);
+      border-radius: 6px;
+    }
+    /* Chrome/Edge/Safari */
+    audio::-webkit-media-controls-panel {
+      background: var(--surface2);
+      border-radius: 8px;
+    }
+
+    /* Badge inferior */
+    .audio-badge {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 1.25rem .75rem;
+      gap: .3rem;
+    }
+    .audio-badge span {
+      font-size: .6rem;
+      color: var(--text-muted);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .audio-badge .dot {
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: .5;
+    }
 
     /* LYRICS */
     .lyrics-wrap{max-width:700px;margin:0 auto;padding:1rem 1.5rem 5rem}
@@ -71,16 +242,18 @@
     @media(max-width:480px){
       header{padding:.6rem 1rem}
       .hero{padding:2rem 1rem 1.5rem}
-      .video-wrap{padding:0 1rem}
+      .media-wrap{padding:0 1rem}
       .lyrics-wrap{padding:.5rem 1rem 3rem}
       .lang-btn{padding:.35rem .55rem;font-size:.72rem}
+      .audio-art{width:44px;height:44px}
+      .audio-info .track-title{font-size:.82rem}
     }
     @media(min-width:768px){
-      .video-wrap{padding:0 2rem}
+      .media-wrap{padding:0 2rem}
       .lyrics-wrap{padding:1.5rem 2rem 5rem}
     }
     @media(min-width:1024px){
-      .video-wrap{padding:0}
+      .media-wrap{padding:0}
       .lyrics-wrap{padding:2rem 0 5rem}
     }
   </style>
@@ -107,7 +280,9 @@
   <div class="divider"></div>
 </div>
 
-<div class="video-wrap">
+<div class="media-wrap">
+
+  <!-- VIDEO THUMBNAIL -->
   <a class="video-thumb" href="https://youtu.be/u2ah9tWTkmk?si=VfEsgKC11ONa0Hjx" target="_blank" rel="noopener">
     <img src="https://img.youtube.com/vi/u2ah9tWTkmk/maxresdefault.jpg" alt="Out of the Ordinary – Alex Warren"/>
     <div class="play-btn">
@@ -118,6 +293,54 @@
     </div>
     <div class="video-label" id="vl">▶ Watch on YouTube</div>
   </a>
+
+  <!-- AUDIO PLAYER -->
+  <div class="audio-section" id="audioSection">
+
+    <div class="audio-body">
+      <!-- Álbum art -->
+      <div class="audio-art">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="10" stroke="#c9a96e" stroke-width="1.2"/>
+          <circle cx="12" cy="12" r="3"  fill="#c9a96e"/>
+          <path d="M9 3.5C9 3.5 6 6 6 12s3 8.5 3 8.5" stroke="#c9a96e" stroke-width="1" stroke-linecap="round" opacity=".5"/>
+          <path d="M15 3.5C15 3.5 18 6 18 12s-3 8.5-3 8.5" stroke="#c9a96e" stroke-width="1" stroke-linecap="round" opacity=".5"/>
+        </svg>
+      </div>
+
+      <!-- Info -->
+      <div class="audio-info">
+        <div class="track-title">Out of the Ordinary</div>
+        <div class="track-artist">Alex Warren</div>
+        <div class="track-source" id="al">🎧 Listen now</div>
+      </div>
+
+      <!-- EQ animado -->
+      <div class="audio-eq">
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+
+    <div class="audio-divider"></div>
+
+    <div class="audio-controls">
+      <audio
+        id="audioPlayer"
+        controls
+        preload="metadata"
+        src="https://lophersson.github.io/2026/Alex%20Warren%20-%20Ordinary%20(Official%20Video).mp3"
+      >
+        Your browser does not support the audio element.
+      </audio>
+    </div>
+
+    <div class="audio-badge">
+      <div class="dot"></div>
+      <span id="audioSrc">audio source</span>
+    </div>
+
+  </div>
+
 </div>
 
 <div class="lyrics-wrap" id="lyrics"></div>
@@ -125,6 +348,14 @@
 <footer><p id="ft">For personal use only.</p></footer>
 
 <script>
+/* ── Audio EQ animation on play/pause ── */
+const player  = document.getElementById('audioPlayer');
+const section = document.getElementById('audioSection');
+player.addEventListener('play',  () => section.classList.add('playing'));
+player.addEventListener('pause', () => section.classList.remove('playing'));
+player.addEventListener('ended', () => section.classList.remove('playing'));
+
+/* ── Lyrics data ── */
 const D={
   en:[
     {tag:"Verse 1",type:"verse",lines:["They say the holy water's watered down and this town's lost its faith","Our colors will fade eventually","So if our time is running out day after day","We'll make the mundane our masterpiece"]},
@@ -158,6 +389,8 @@ const D={
 const HS={en:"Alex Warren",es:"Alex Warren — Traducción al Español",pt:"Alex Warren — Tradução em Português"};
 const FT={en:"For personal use only.",es:"Solo para uso personal.",pt:"Apenas para uso pessoal."};
 const VL={en:"▶ Watch on YouTube",es:"▶ Ver en YouTube",pt:"▶ Assistir no YouTube"};
+const AL={en:"🎧 Listen now",es:"🎧 Escuchar ahora",pt:"🎧 Ouvir agora"};
+const AS={en:"@lophersson",es:"@lophersson",pt:"@lophersson"};
 
 function render(l){
   const c=document.getElementById('lyrics');
@@ -171,6 +404,8 @@ function render(l){
   document.getElementById('hs').textContent=HS[l];
   document.getElementById('ft').textContent=FT[l];
   document.getElementById('vl').textContent=VL[l];
+  document.getElementById('al').textContent=AL[l];
+  document.getElementById('audioSrc').textContent=AS[l];
 }
 
 function setLang(l){
