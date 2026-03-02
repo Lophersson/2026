@@ -19,6 +19,8 @@
     }
     *{box-sizing:border-box;margin:0;padding:0}
     body{background:var(--bg);color:var(--text);font-family:'Georgia',serif;min-height:100vh;transition:background .35s,color .35s}
+
+    /* HEADER */
     header{position:sticky;top:0;z-index:100;background:var(--surface);border-bottom:1px solid var(--border);padding:.75rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;box-shadow:0 2px 20px var(--shadow)}
     .song-title span:first-child{display:block;font-size:1rem;font-weight:700;letter-spacing:.04em;color:var(--accent);text-transform:uppercase}
     .song-title span:last-child{display:block;font-size:.7rem;color:var(--text-muted);letter-spacing:.12em;text-transform:uppercase}
@@ -31,12 +33,25 @@
     .theme-btn{background:var(--surface2);border:1px solid var(--border);border-radius:8px;cursor:pointer;color:var(--text);padding:.4rem .75rem;font-size:.9rem;transition:transform .2s;display:flex;align-items:center;gap:.35rem}
     .theme-btn:hover{transform:scale(1.08)}
     .theme-btn .lbl{font-size:.7rem;font-weight:700;letter-spacing:.08em;color:var(--text-muted)}
+
+    /* HERO */
     .hero{text-align:center;padding:3.5rem 1.5rem 2rem;position:relative}
     .hero::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:320px;height:220px;background:radial-gradient(ellipse at center,rgba(201,169,110,.13) 0%,transparent 70%);pointer-events:none}
     .hero h1{font-size:clamp(1.6rem,4vw,2.6rem);font-weight:400;letter-spacing:.08em;color:var(--accent);text-transform:uppercase}
     .hero h1 em{font-style:italic;color:var(--accent2)}
     .hero p{margin-top:.5rem;color:var(--text-muted);font-size:.82rem;letter-spacing:.15em;text-transform:uppercase}
     .divider{width:60px;height:1px;background:var(--accent);margin:1.5rem auto 0;opacity:.4}
+
+    /* VIDEO */
+    .video-wrap{max-width:700px;margin:0 auto 2rem;padding:0 1.5rem}
+    .video-thumb{display:block;position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--border);box-shadow:0 8px 40px var(--shadow);text-decoration:none;cursor:pointer}
+    .video-thumb img{width:100%;display:block;aspect-ratio:16/9;object-fit:cover;transition:transform .4s,filter .4s;filter:brightness(.85)}
+    .video-thumb:hover img{transform:scale(1.03);filter:brightness(.65)}
+    .play-btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);filter:drop-shadow(0 2px 8px rgba(0,0,0,.6));transition:transform .2s;pointer-events:none}
+    .video-thumb:hover .play-btn{transform:translate(-50%,-50%) scale(1.12)}
+    .video-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.75));color:#fff;text-align:center;padding:.75rem 1rem .6rem;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;pointer-events:none}
+
+    /* LYRICS */
     .lyrics-wrap{max-width:700px;margin:0 auto;padding:1rem 1.5rem 5rem}
     .section{margin-bottom:2.5rem;opacity:0;transform:translateY(18px);animation:fadeUp .5s ease forwards}
     .section:nth-child(1){animation-delay:.05s}.section:nth-child(2){animation-delay:.10s}
@@ -48,13 +63,30 @@
     .section p{font-size:clamp(.95rem,2vw,1.07rem);line-height:1.9;color:var(--text)}
     .chorus p{font-style:italic;padding-left:1rem;border-left:2px solid var(--accent);opacity:.95}
     .bridge p{color:var(--accent2)}
+
+    /* FOOTER */
     footer{text-align:center;padding:2rem 1.5rem;border-top:1px solid var(--border);color:var(--text-muted);font-size:.78rem;letter-spacing:.08em}
-    @media(max-width:480px){header{padding:.6rem 1rem}.hero{padding:2rem 1rem 1.5rem}.lyrics-wrap{padding:.5rem 1rem 3rem}.lang-btn{padding:.35rem .55rem;font-size:.72rem}}
-    @media(min-width:768px){.lyrics-wrap{padding:1.5rem 2rem 5rem}}
-    @media(min-width:1024px){.lyrics-wrap{padding:2rem 0 5rem}}
+
+    /* RESPONSIVE */
+    @media(max-width:480px){
+      header{padding:.6rem 1rem}
+      .hero{padding:2rem 1rem 1.5rem}
+      .video-wrap{padding:0 1rem}
+      .lyrics-wrap{padding:.5rem 1rem 3rem}
+      .lang-btn{padding:.35rem .55rem;font-size:.72rem}
+    }
+    @media(min-width:768px){
+      .video-wrap{padding:0 2rem}
+      .lyrics-wrap{padding:1.5rem 2rem 5rem}
+    }
+    @media(min-width:1024px){
+      .video-wrap{padding:0}
+      .lyrics-wrap{padding:2rem 0 5rem}
+    }
   </style>
 </head>
 <body>
+
 <header>
   <div class="song-title"><span>Out of the Ordinary</span><span>Alex Warren</span></div>
   <div class="controls">
@@ -68,13 +100,30 @@
     </button>
   </div>
 </header>
+
 <div class="hero">
   <h1><em>Out of the</em> Ordinary</h1>
   <p id="hs">Alex Warren</p>
   <div class="divider"></div>
 </div>
+
+<div class="video-wrap">
+  <a class="video-thumb" href="https://youtu.be/u2ah9tWTkmk?si=VfEsgKC11ONa0Hjx" target="_blank" rel="noopener">
+    <img src="https://img.youtube.com/vi/u2ah9tWTkmk/maxresdefault.jpg" alt="Out of the Ordinary – Alex Warren"/>
+    <div class="play-btn">
+      <svg viewBox="0 0 68 48" width="68" height="48">
+        <path d="M66.5 7.8C65.7 4.8 63.3 2.4 60.3 1.6 55 0 34 0 34 0S13 0 7.7 1.6C4.7 2.4 2.3 4.8 1.5 7.8 0 13.1 0 24 0 24s0 10.9 1.5 16.2c.8 3 3.2 5.4 6.2 6.2C13 48 34 48 34 48s21 0 26.3-1.6c3-.8 5.4-3.2 6.2-6.2C68 34.9 68 24 68 24s0-10.9-1.5-16.2z" fill="#ff0000"/>
+        <path d="M27 34l18-10-18-10v20z" fill="#fff"/>
+      </svg>
+    </div>
+    <div class="video-label" id="vl">▶ Watch on YouTube</div>
+  </a>
+</div>
+
 <div class="lyrics-wrap" id="lyrics"></div>
+
 <footer><p id="ft">For personal use only.</p></footer>
+
 <script>
 const D={
   en:[
@@ -105,17 +154,38 @@ const D={
     {tag:"Refrão",type:"chorus",lines:["…do comum","Quero você me deitando até estarmos mortos e enterrados","Na beira da sua faca, embriagado da sua videira","Os anjos lá nas nuvens estão com inveja","Sabendo que encontramos algo tão fora do comum","Você me faz beijar o chão do seu santuário","Me despedace com seu toque — Senhor, me devolva ao pó","Os anjos lá nas nuvens estão com inveja sabendo que encontramos"]}
   ]
 };
+
 const HS={en:"Alex Warren",es:"Alex Warren — Traducción al Español",pt:"Alex Warren — Tradução em Português"};
 const FT={en:"For personal use only.",es:"Solo para uso personal.",pt:"Apenas para uso pessoal."};
+const VL={en:"▶ Watch on YouTube",es:"▶ Ver en YouTube",pt:"▶ Assistir no YouTube"};
+
 function render(l){
-  const c=document.getElementById('lyrics');c.innerHTML='';
-  D[l].forEach(s=>{const d=document.createElement('div');d.className=`section ${s.type}`;d.innerHTML=`<span class="section-tag">${s.tag}</span><p>${s.lines.join('<br>')}</p>`;c.appendChild(d)});
+  const c=document.getElementById('lyrics');
+  c.innerHTML='';
+  D[l].forEach(s=>{
+    const d=document.createElement('div');
+    d.className=`section ${s.type}`;
+    d.innerHTML=`<span class="section-tag">${s.tag}</span><p>${s.lines.join('<br>')}</p>`;
+    c.appendChild(d);
+  });
   document.getElementById('hs').textContent=HS[l];
   document.getElementById('ft').textContent=FT[l];
+  document.getElementById('vl').textContent=VL[l];
 }
-function setLang(l){document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent.toLowerCase()===l));render(l)}
+
+function setLang(l){
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent.toLowerCase()===l));
+  render(l);
+}
+
 let light=false;
-function toggleTheme(){light=!light;document.body.classList.toggle('light',light);document.getElementById('ti').textContent=light?'🌙':'☀️';document.getElementById('tl').textContent=light?'DARK':'LIGHT'}
+function toggleTheme(){
+  light=!light;
+  document.body.classList.toggle('light',light);
+  document.getElementById('ti').textContent=light?'🌙':'☀️';
+  document.getElementById('tl').textContent=light?'DARK':'LIGHT';
+}
+
 render('en');
 </script>
 </body>
