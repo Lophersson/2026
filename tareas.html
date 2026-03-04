@@ -3,97 +3,686 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selector de Tareas - Cards</title>
+    <title>Selector de Tareas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,500;0,700;1,500;1,700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 10px; min-height: 100vh; }
-        .container { max-width: 100%; margin: 0 auto; background: #2d3748; border-radius: 16px; padding: 15px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        h1 { color: #cbd5e0; font-size: 20px; font-weight: 700; }
-        .task-counter { position: relative; cursor: pointer; font-size: 32px; transition: transform 0.3s; }
-        .task-counter:hover { transform: scale(1.1); }
-        .badge { position: absolute; top: -10px; right: -10px; background: #ef4444; color: white; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 16px; font-style: italic; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.5); }
-        .stats { color: #a0aec0; margin-bottom: 12px; font-weight: 600; font-size: 11px; }
-        .selectors { display: flex; flex-direction: column; gap: 8px; }
-        .selector-header { padding: 3px 6px 6px 16px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); }
-        .selector-header:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3); }
-        .selector-label { font-weight: 750; font-style: italic; color: white; font-size: 24px; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); letter-spacing: -1.5px; }
-        .selector-arrow { font-size: 18px; transition: transform 0.3s ease; color: white; font-weight: 700; }
-        .selector-arrow.open { transform: rotate(180deg); }
-        .selector-content { display: none; background: #1f2937; border-radius: 8px; padding: 10px; margin-top: 0; gap: 12px; flex-direction: column; }
-        .selector-content.show { display: flex; }
-        .subcategory { background: #374151; border-radius: 6px; padding: 12px; border-left: 4px solid; }
-        .subcategory-header { font-weight: 700; font-style: italic; font-size: 14px; color: #cbd5e0; margin-bottom: 10px; padding-left: 4px; }
-        .subcategory-tasks { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
-        .task-card { position: relative; padding: 16px 12px; border: 2px solid #4a5568; border-radius: 10px; background: #2d3748; cursor: pointer; transition: all 0.3s ease; color: #cbd5e0; text-align: center; min-height: 80px; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); }
-        .task-card:hover { transform: translateY(-4px); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3); border-color: #718096; }
-        .task-card-name { font-weight: 700; font-style: italic; font-size: 12px; line-height: 1.4; word-wrap: break-word; overflow-wrap: break-word; }
-        .task-card.selected { background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: white; border-color: #16a34a; box-shadow: 0 6px 20px rgba(22, 163, 74, 0.5); }
-        .task-card.selected::before { content: '✓'; position: absolute; top: 4px; right: 4px; width: 20px; height: 20px; background: white; color: #16a34a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 12px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); }
-        .task-card.selected:hover { transform: translateY(-4px) scale(1.02); }
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); }
-        .modal.active { display: flex; align-items: center; justify-content: center; }
-        .modal-content { background: #2d3748; border-radius: 12px; padding: 20px; max-width: 95%; width: 100%; max-height: 80vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); }
-        .modal-header { font-size: 18px; font-weight: 700; color: #cbd5e0; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
-        .close-btn { background: none; border: none; font-size: 20px; cursor: pointer; color: #718096; }
-        .close-btn:hover { color: #cbd5e0; }
-        .selected-tasks-list { display: grid; gap: 8px; margin-bottom: 15px; }
-        .selected-task-item { padding: 12px; background: #374151; border-left: 4px solid; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
-        .task-info { flex: 1; }
-        .task-name { font-weight: 700; font-style: italic; color: #cbd5e0; margin-bottom: 3px; font-size: 12px; }
-        .task-category { font-size: 10px; color: #718096; font-weight: 600; font-style: italic; }
-        .remove-btn { background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 11px; transition: all 0.3s; }
-        .remove-btn:hover { background: #dc2626; }
-        .modal-actions { display: flex; gap: 8px; margin-top: 15px; }
-        .print-btn, .close-modal-btn { flex: 1; padding: 10px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 12px; }
-        .print-btn { background: #4299e1; color: white; }
-        .print-btn:hover { background: #3182ce; }
-        .close-modal-btn { background: #4a5568; color: #cbd5e0; }
-        .close-modal-btn:hover { background: #718096; }
-        .empty-state { text-align: center; padding: 30px 15px; color: #718096; }
-        .empty-state-icon { font-size: 36px; margin-bottom: 8px; }
-        .empty-state p { font-size: 12px; }
+        :root {
+            --bg: #0a0b0e;
+            --surface: #111318;
+            --surface2: #181b22;
+            --border: rgba(255,255,255,0.07);
+            --text: #e2e8f0;
+            --muted: #4a5568;
+            --accent: #ffffff;
+            --green: #22d97a;
+            --green-glow: rgba(34,217,122,0.25);
+        }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--muted); border-radius: 2px; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            min-height: 100vh;
+            padding: 20px 16px 40px;
+            color: var(--text);
+            background-image:
+                radial-gradient(ellipse 60% 50% at 80% 10%, rgba(99,102,241,0.06) 0%, transparent 60%),
+                radial-gradient(ellipse 40% 30% at 10% 90%, rgba(34,217,122,0.04) 0%, transparent 50%);
+        }
+
+        /* ─── HEADER ─── */
+        .app-wrapper { max-width: 680px; margin: 0 auto; }
+
+        .header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-left h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 48px;
+            letter-spacing: 3px;
+            line-height: 1;
+            color: var(--accent);
+        }
+        .header-left .subtitle {
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+
+        .counter-btn {
+            position: relative;
+            cursor: pointer;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 10px 18px 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.25s;
+            text-decoration: none;
+        }
+        .counter-btn:hover {
+            border-color: rgba(255,255,255,0.2);
+            background: #1e2230;
+            transform: translateY(-1px);
+        }
+        .counter-icon { font-size: 20px; line-height: 1; }
+        .counter-num {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 28px;
+            letter-spacing: 1px;
+            color: var(--green);
+            line-height: 1;
+            min-width: 24px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+        .counter-btn:hover .counter-num { transform: scale(1.15); }
+        .counter-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); }
+
+        .stats-bar {
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin: 10px 0 20px;
+            height: 14px;
+            transition: all 0.3s;
+        }
+        .stats-bar span { color: rgba(255,255,255,0.35); margin: 0 6px; }
+
+        /* ─── CATEGORY BLOCKS ─── */
+        .selectors { display: flex; flex-direction: column; gap: 6px; }
+
+        .cat-wrapper { border-radius: 10px; overflow: hidden; }
+
+        .cat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px 0 0;
+            cursor: pointer;
+            transition: filter 0.2s, opacity 0.2s;
+            user-select: none;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        .cat-header::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.25);
+            pointer-events: none;
+        }
+        .cat-header:hover { filter: brightness(1.1); }
+
+        .cat-label-box {
+            padding: 10px 20px;
+            flex: 1;
+        }
+        .cat-label {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 22px;
+            letter-spacing: 2px;
+            color: white;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            line-height: 1;
+        }
+
+        .cat-arrow {
+            width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 6px;
+            background: rgba(0,0,0,0.3);
+            color: white;
+            font-size: 11px;
+            transition: transform 0.35s cubic-bezier(.4,0,.2,1), background 0.2s;
+            position: relative;
+            z-index: 1;
+            flex-shrink: 0;
+        }
+        .cat-arrow.open { transform: rotate(180deg); }
+
+        /* content panel */
+        .cat-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.45s cubic-bezier(.4,0,.2,1);
+            background: var(--surface);
+            border-radius: 0 0 10px 10px;
+        }
+        .cat-content.show { max-height: 2000px; }
+
+        .cat-inner { padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+
+        /* ─── SUBCATEGORIES ─── */
+        .subcategory {
+            border-radius: 8px;
+            background: var(--surface2);
+            overflow: hidden;
+        }
+        .subcategory-label {
+            font-size: 9px;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--muted);
+            padding: 10px 14px 6px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .subcategory-label::before {
+            content: '';
+            display: inline-block;
+            width: 8px; height: 8px;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        /* ─── TASK CARDS ─── */
+        .tasks-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 10px 10px 10px;
+        }
+
+        .task-card {
+            position: relative;
+            padding: 8px 13px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: rgba(255,255,255,0.03);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 11.5px;
+            font-weight: 500;
+            font-style: italic;
+            color: #94a3b8;
+            white-space: nowrap;
+            line-height: 1;
+        }
+        .task-card:hover {
+            color: var(--text);
+            border-color: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.07);
+            transform: translateY(-1px);
+        }
+        .task-card.selected {
+            background: rgba(34,217,122,0.12);
+            border-color: var(--green);
+            color: var(--green);
+            box-shadow: 0 0 12px var(--green-glow), inset 0 0 12px rgba(34,217,122,0.05);
+        }
+        .task-card.selected::after {
+            content: '✓';
+            position: absolute;
+            top: -5px; right: -5px;
+            width: 14px; height: 14px;
+            border-radius: 50%;
+            background: var(--green);
+            color: #000;
+            font-size: 8px;
+            font-weight: 900;
+            font-style: normal;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 14px;
+            text-align: center;
+        }
+
+        /* ─── MODAL ─── */
+        .modal {
+            display: none;
+            position: fixed; inset: 0; z-index: 1000;
+            background: rgba(0,0,0,0.75);
+            backdrop-filter: blur(6px);
+            align-items: flex-end;
+            justify-content: center;
+            padding: 0;
+        }
+        .modal.active { display: flex; animation: fadeIn 0.2s; }
+
+        @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+        .modal-panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-bottom: none;
+            border-radius: 16px 16px 0 0;
+            width: 100%;
+            max-width: 680px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            animation: slideUp 0.3s cubic-bezier(.4,0,.2,1);
+        }
+        @keyframes slideUp { from { transform: translateY(60px); opacity:0; } to { transform: translateY(0); opacity:1; } }
+
+        .modal-handle {
+            width: 36px; height: 4px;
+            background: var(--muted);
+            border-radius: 2px;
+            margin: 12px auto 0;
+            flex-shrink: 0;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+        .modal-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 22px;
+            letter-spacing: 2px;
+            color: var(--accent);
+        }
+        .modal-count {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 20px;
+            color: var(--green);
+            margin-left: 8px;
+        }
+        .close-btn {
+            width: 28px; height: 28px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--muted);
+            cursor: pointer;
+            font-size: 16px;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s;
+        }
+        .close-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+        .modal-body { overflow-y: auto; padding: 14px; flex: 1; }
+
+        .empty-state {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 40px 20px; color: var(--muted); gap: 8px;
+        }
+        .empty-icon { font-size: 32px; opacity: 0.5; }
+        .empty-text { font-size: 12px; letter-spacing: 1px; text-transform: uppercase; }
+
+        .task-items { display: flex; flex-direction: column; gap: 5px; }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            background: var(--surface2);
+            border-radius: 7px;
+            border-left: 3px solid;
+            transition: all 0.2s;
+        }
+        .task-item:hover { background: #1e2230; }
+        .ti-name {
+            font-size: 12px; font-weight: 700; font-style: italic;
+            color: var(--text); flex: 1;
+        }
+        .ti-cat {
+            font-size: 10px; letter-spacing: 1px; text-transform: uppercase;
+            color: var(--muted);
+        }
+        .ti-remove {
+            width: 24px; height: 24px;
+            background: transparent;
+            border: 1px solid rgba(239,68,68,0.3);
+            border-radius: 5px;
+            color: #ef4444;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s; flex-shrink: 0;
+        }
+        .ti-remove:hover { background: rgba(239,68,68,0.15); border-color: #ef4444; }
+
+        .modal-footer {
+            display: flex; gap: 8px;
+            padding: 12px 14px 20px;
+            border-top: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+        .btn {
+            flex: 1; padding: 11px;
+            border: none; border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 12px; font-weight: 700;
+            letter-spacing: 1px; text-transform: uppercase;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .btn-pdf {
+            background: var(--green);
+            color: #000;
+        }
+        .btn-pdf:hover { filter: brightness(1.1); transform: translateY(-1px); }
+        .btn-close {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--muted);
+        }
+        .btn-close:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+        /* ─── PRINT ─── */
+        @media print {
+            body { background: white; color: black; }
+            .app-wrapper > *:not(.modal) { display: none; }
+            .modal { position: static; background: none; }
+            .modal-panel { border: none; max-height: none; }
+            .modal-footer, .modal-handle, .close-btn { display: none; }
+        }
+
         @media (max-width: 480px) {
-            .subcategory-tasks { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
-            .task-card { min-height: 70px; padding: 12px 8px; }
-            .task-card-name { font-size: 11px; }
+            .header-left h1 { font-size: 36px; }
+            .task-card { font-size: 10.5px; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>📋 Tareas</h1>
-            <div class="task-counter" onclick="openModal()">✅<div class="badge" id="counter">0</div></div>
+<div class="app-wrapper">
+
+    <div class="header">
+        <div class="header-left">
+            <h1>Tareas</h1>
+            <div class="subtitle">Selector de actividades</div>
         </div>
-        <div class="stats" id="stats"></div>
-        <div class="selectors" id="selectorsContainer"></div>
-    </div>
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header"><span>✅ Seleccionadas</span><button class="close-btn" onclick="closeModal()">×</button></div>
-            <div id="selectedTasksList" class="selected-tasks-list"></div>
-            <div class="modal-actions">
-                <button class="print-btn" onclick="printTasks()">🖨️ Imprimir</button>
-                <button class="close-modal-btn" onclick="closeModal()">Cerrar</button>
+        <div class="counter-btn" onclick="openModal()">
+            <span class="counter-icon">✅</span>
+            <div>
+                <div class="counter-num" id="counter">0</div>
+                <div class="counter-label">seleccionadas</div>
             </div>
         </div>
     </div>
-    <script>
-const categories={"tareas_casa":{color:"#ef4444",label:"Tareas en Casa",subcategories:{"limpieza_orden":{color:"#dc2626",label:"Limpieza y Orden",tasks:["hacer la cama","limpiar suelo y muebles","limpiar la cocina","limpiar baños y terraza","lavar y ordenar la vajilla","lavar la ropa en la lavadora","tender la ropa","planchar camisas y camisetas","cambiar sábanas cama","limpiar el colchón"]},"organizacion_hogar":{color:"#f97316",label:"Organización del Hogar",tasks:["ordenar pertenencias en el armario","doblar y ordenar ropa en cajones y armario","ordenar el calzado","ordenar pertenencias en cajones y estanterías","ordenar y revisar pertenencias","buscar documentos en estanterías","buscar pertenencias en cajones y armario","preparar ropa y pertenencias para salir de casa"]},"trastero":{color:"#fb923c",label:"Gestión de Trastero",tasks:["trastero subir cosas","trastero ordenar cosas","trastero vender cosas","trastero eliminar cosas","buscar pertenencias en el trastero"]},"cocina_alimentacion":{color:"#fbbf24",label:"Cocina y Alimentación",tasks:["cocinar algo rico","desayunar","comer","merendar","cenar"]},"mantenimiento":{color:"#f59e0b",label:"Mantenimiento y Reparaciones",tasks:["bricolaje y reparaciones en casa","limpieza y reparación de calzado","revisar material de oficina y estudio"]},"compras_hogar":{color:"#d97706",label:"Compras para el Hogar",tasks:["compra en el supermercado","comprar pilas","comprar recambios hogar","comprar higiene personal y limpieza hogar","comprar en papelería","llevar ropa a la lavandería"]}}},"trabajo":{color:"#3b82f6",label:"Trabajo",tasks:["asistencia a clases","tiempo de trabajo","actualizar mi currículum","enviar mi currículum","buscar empleos en infojobs/linkedin","actualizar mi web profesional","actualizar archivos de mi github"]},"organizacion_personal":{color:"#8b5cf6",label:"Organización Personal",subcategories:{"gestion_financiera":{color:"#7c3aed",label:"Gestión Financiera",tasks:["contabilidad diaria","presupuestos listas categorías y meses","finanzas","sueldos y capital"]},"planificacion":{color:"#9333ea",label:"Planificación",tasks:["programación","listas de coches","actualizar listas de compras"]},"gestion_digital":{color:"#a855f7",label:"Gestión Digital",tasks:["guardar archivos del móvil en el disco duro externo","guardar archivos de la tablet en el disco duro externo","guardar archivos del portátil a discos duros externos","guardar chats de whatsapp al disco duro externo","guardar mails en el disco duro externo","guardar archivos de nubes al disco duro externo","buscar archivos digitales en discos duros","actualizar registros web, apps y contraseñas", "grabar música en cd para el coche"]},"documentacion":{color:"#c084fc",label:"Documentación",tasks:["ordenar y preparar documentación","elaborar documentos en el portátil","hacer fotocopias"]},"compras_general":{color:"#d8b4fe",label:"Compras",tasks:["comprar en tiendas","comprar online","buscar información y productos online"]}}},"ocio_entretenimiento":{color:"#ec4899",label:"Ocio y Entretenimiento",subcategories:{"tecnologia_digital":{color:"#db2777",label:"Tecnología Digital",tasks:["móvil","tablet","internet","televisión","videojuegos","electrónica"]},"cultura":{color:"#f472b6",label:"Cultura",tasks:["escuchar música","lectura","asistir a eventos culturales y deportivos con amigos/familia","asistir a exposiciones","asistir a ferias"]},"intereses_personales":{color:"#f9a8d4",label:"Intereses Personales",tasks:["coches","moda","zapatos","relojes","gafas","decoración","viviendas","arquitectura","ciudades","pueblos","viajes","perfumes","restaurantes","paisajes","gastronomía y nutrición"]}}},"coche":{color:"#22c55e",label:"Coche",subcategories:{"mantenimiento_coche":{color:"#16a34a",label:"Mantenimiento",tasks:["repostar gasoil","neumáticos","revisión taller","accesorios","recambios"]},"limpieza_coche":{color:"#15803d",label:"Limpieza",tasks:["limpieza interior","limpieza exterior","quitar cosas del maletero","ambientador"]},"gestiones_coche":{color:"#65a30d",label:"Gestiones",tasks:["pasar y pagar la ITV","pagar impuesto municipal","parking","peajes"]},"desplazamientos":{color:"#84cc16",label:"Desplazamientos",tasks:["trayectos a pie y en coche"]}}},"cuidado_salud":{color:"#06b6d4",label:"Cuidado y Salud",subcategories:{"higiene_personal":{color:"#0891b2",label:"Higiene Personal",tasks:["aseo personal","ducha","lavar el cabello","lavar los dientes","vestirse y calzarse","cambiarse de ropa"]},"cuidado_corporal":{color:"#0e7490",label:"Cuidado Corporal",tasks:["cortar las uñas de las manos","crema de manos","cortar las uñas de los pies","echar crema nivea en los pies","afeitado","echar crema nivea en la cara","desodorante","perfume","bálsamo de labios"]},"salud_bienestar":{color:"#155e75",label:"Salud y Bienestar",tasks:["dormir","pasear","ejercicio físico","practicar deportes","medicación y tratamientos","comprar en la farmacia","médicos"]}}},"relaciones_interpersonales":{color:"#eab308",label:"Relaciones Interpersonales",subcategories:{"comunicacion":{color:"#ca8a04",label:"Comunicación",tasks:["actualizar los contactos de teléfono","enviar mensajes por whatsapp","interaccionar en redes sociales"]},"eventos_sociales":{color:"#a16207",label:"Eventos Sociales",tasks:["felicitar y/o asistir a cumpleaños","cafés con amigos/familia","comida/cena con amigos/familia","ir al cine con amigos"]},"tiempo_compartido":{color:"#854d0e",label:"Tiempo Compartido",tasks:["visitar a un amigo o familiar","tareas con amigos/familiares"]}}},"administraciones_publicas":{color:"#f97316",label:"Administraciones Públicas",tasks:["concello","xunta","administración central","gestiones burocráticas online","gestiones burocráticas presencialmente"]}};
-let selectedTasks=[],expandedCategories={};
-function init(){renderSelectors();updateCounter()}
-function renderSelectors(){const c=document.getElementById("selectorsContainer");c.innerHTML="";Object.entries(categories).forEach(([k,cat])=>{const w=document.createElement("div"),h=document.createElement("div");h.className="selector-header";h.style.background=cat.color;h.onclick=()=>toggleCategory(k);const l=document.createElement("div");l.className="selector-label";l.textContent=cat.label;const a=document.createElement("div");a.className="selector-arrow";a.textContent="▲";a.id=`arrow-${k}`;h.appendChild(l);h.appendChild(a);const content=document.createElement("div");content.className="selector-content";content.id=`content-${k}`;if(cat.subcategories){Object.entries(cat.subcategories).forEach(([sk,sub])=>{const sd=document.createElement("div");sd.className="subcategory";sd.style.borderLeftColor=sub.color;const sh=document.createElement("div");sh.className="subcategory-header";sh.textContent=sub.label;const st=document.createElement("div");st.className="subcategory-tasks";sub.tasks.forEach(t=>{st.appendChild(createTaskCard(t,sub))});sd.appendChild(sh);sd.appendChild(st);content.appendChild(sd)})}else{const td=document.createElement("div");td.className="subcategory-tasks";td.style.padding="0";cat.tasks.forEach(t=>{td.appendChild(createTaskCard(t,cat))});content.appendChild(td)}if(expandedCategories[k]){content.classList.add("show");a.classList.add("open")}w.appendChild(h);w.appendChild(content);c.appendChild(w)})}
-function createTaskCard(n,cat){const c=document.createElement("div");c.className="task-card";const tn=document.createElement("div");tn.className="task-card-name";tn.textContent=n;c.appendChild(tn);if(selectedTasks.some(t=>t.name===n&&t.category===cat.label))c.classList.add("selected");c.onclick=e=>{e.stopPropagation();selectTask(n,cat)};return c}
-function toggleCategory(k){const c=document.getElementById(`content-${k}`),a=document.getElementById(`arrow-${k}`);expandedCategories[k]=!expandedCategories[k];if(expandedCategories[k]){c.classList.add("show");a.classList.add("open")}else{c.classList.remove("show");a.classList.remove("open")}}
-function selectTask(n,cat){const e=selectedTasks.some(t=>t.name===n&&t.category===cat.label);if(e)selectedTasks=selectedTasks.filter(t=>!(t.name===n&&t.category===cat.label));else selectedTasks.push({name:n,category:cat.label,color:cat.color,id:Date.now()+Math.random()});updateCounter();renderSelectors()}
-function updateCounter(){document.getElementById("counter").textContent=selectedTasks.length;const cc={};selectedTasks.forEach(t=>{cc[t.category]=(cc[t.category]||0)+1});const counts=Object.entries(cc).map(([c,n])=>`${n} ${c.toLowerCase()}`).join(" • ");document.getElementById("stats").textContent=selectedTasks.length>0?`${selectedTasks.length} tarea${selectedTasks.length!==1?"s":""} • ${counts}`:""}
-function openModal(){const m=document.getElementById("modal"),l=document.getElementById("selectedTasksList");if(selectedTasks.length===0)l.innerHTML='<div class="empty-state"><div class="empty-state-icon">📭</div><p>No hay tareas seleccionadas</p></div>';else l.innerHTML=selectedTasks.map((t,i)=>`<div class="selected-task-item" style="border-left-color:${t.color}"><div class="task-info"><div class="task-name">${t.name}</div><div class="task-category">${t.category}</div></div><button class="remove-btn" onclick="removeTask(${i})">✕</button></div>`).join("");m.classList.add("active")}
-function closeModal(){document.getElementById("modal").classList.remove("active")}
-function removeTask(i){selectedTasks.splice(i,1);updateCounter();renderSelectors();openModal()}
-function printTasks(){window.print()}
-window.onclick=e=>{if(e.target===document.getElementById("modal"))closeModal()};
+
+    <div class="stats-bar" id="stats"></div>
+
+    <div class="selectors" id="selectorsContainer"></div>
+</div>
+
+<!-- MODAL -->
+<div id="modal" class="modal">
+    <div class="modal-panel">
+        <div class="modal-handle"></div>
+        <div class="modal-header">
+            <div>
+                <span class="modal-title">Seleccionadas</span>
+                <span class="modal-count" id="modal-count">0</span>
+            </div>
+            <button class="close-btn" onclick="closeModal()">✕</button>
+        </div>
+        <div class="modal-body">
+            <div id="selectedTasksList"></div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-pdf" onclick="exportPDF()">⬇ Descargar PDF</button>
+            <button class="btn btn-close" onclick="closeModal()">Cerrar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const categories={
+    "tareas_casa":{color:"#ef4444",label:"Tareas en Casa",subcategories:{
+        "limpieza_orden":{color:"#dc2626",label:"Limpieza y Orden",tasks:["hacer la cama","limpiar suelo y muebles","limpiar la cocina","limpiar baños y terraza","lavar y ordenar la vajilla","lavar la ropa en la lavadora","tender la ropa","planchar camisas y camisetas","cambiar sábanas cama","limpiar el colchón"]},
+        "organizacion_hogar":{color:"#f97316",label:"Organización del Hogar",tasks:["ordenar pertenencias en el armario","doblar y ordenar ropa en cajones y armario","ordenar el calzado","ordenar pertenencias en cajones y estanterías","ordenar y revisar pertenencias","buscar documentos en estanterías","buscar pertenencias en cajones y armario","preparar ropa y pertenencias para salir de casa"]},
+        "trastero":{color:"#fb923c",label:"Gestión de Trastero",tasks:["trastero subir cosas","trastero ordenar cosas","trastero vender cosas","trastero eliminar cosas","buscar pertenencias en el trastero"]},
+        "cocina_alimentacion":{color:"#fbbf24",label:"Cocina y Alimentación",tasks:["cocinar algo rico","desayunar","comer","merendar","cenar"]},
+        "mantenimiento":{color:"#f59e0b",label:"Mantenimiento y Reparaciones",tasks:["bricolaje y reparaciones en casa","limpieza y reparación de calzado","revisar material de oficina y estudio"]},
+        "compras_hogar":{color:"#d97706",label:"Compras para el Hogar",tasks:["compra en el supermercado","comprar pilas","comprar recambios hogar","comprar higiene personal y limpieza hogar","comprar en papelería","llevar ropa a la lavandería"]}
+    }},
+    "trabajo":{color:"#3b82f6",label:"Trabajo",tasks:["asistencia a clases","tiempo de trabajo","actualizar mi currículum","enviar mi currículum","buscar empleos en infojobs/linkedin","actualizar mi web profesional","actualizar archivos de mi github"]},
+    "organizacion_personal":{color:"#8b5cf6",label:"Organización Personal",subcategories:{
+        "gestion_financiera":{color:"#7c3aed",label:"Gestión Financiera",tasks:["contabilidad diaria","presupuestos listas categorías y meses","finanzas","sueldos y capital"]},
+        "planificacion":{color:"#9333ea",label:"Planificación",tasks:["programación","listas de coches","actualizar listas de compras"]},
+        "gestion_digital":{color:"#a855f7",label:"Gestión Digital",tasks:["guardar archivos del móvil en el disco duro externo","guardar archivos de la tablet en el disco duro externo","guardar archivos del portátil a discos duros externos","guardar chats de whatsapp al disco duro externo","guardar mails en el disco duro externo","guardar archivos de nubes al disco duro externo","buscar archivos digitales en discos duros","actualizar registros web, apps y contraseñas","grabar música en cd para el coche"]},
+        "documentacion":{color:"#c084fc",label:"Documentación",tasks:["ordenar y preparar documentación","elaborar documentos en el portátil","hacer fotocopias"]},
+        "compras_general":{color:"#d8b4fe",label:"Compras",tasks:["comprar en tiendas","comprar online","buscar información y productos online"]}
+    }},
+    "ocio_entretenimiento":{color:"#ec4899",label:"Ocio y Entretenimiento",subcategories:{
+        "tecnologia_digital":{color:"#db2777",label:"Tecnología Digital",tasks:["móvil","tablet","internet","televisión","videojuegos","electrónica"]},
+        "cultura":{color:"#f472b6",label:"Cultura",tasks:["escuchar música","lectura","asistir a eventos culturales y deportivos con amigos/familia","asistir a exposiciones","asistir a ferias"]},
+        "intereses_personales":{color:"#f9a8d4",label:"Intereses Personales",tasks:["coches","moda","zapatos","relojes","gafas","decoración","viviendas","arquitectura","ciudades","pueblos","viajes","perfumes","restaurantes","paisajes","gastronomía y nutrición"]}
+    }},
+    "coche":{color:"#22c55e",label:"Coche",subcategories:{
+        "mantenimiento_coche":{color:"#16a34a",label:"Mantenimiento",tasks:["repostar gasoil","neumáticos","revisión taller","accesorios","recambios"]},
+        "limpieza_coche":{color:"#15803d",label:"Limpieza",tasks:["limpieza interior","limpieza exterior","quitar cosas del maletero","ambientador"]},
+        "gestiones_coche":{color:"#65a30d",label:"Gestiones",tasks:["pasar y pagar la ITV","pagar impuesto municipal","parking","peajes"]},
+        "desplazamientos":{color:"#84cc16",label:"Desplazamientos",tasks:["trayectos a pie y en coche"]}
+    }},
+    "cuidado_salud":{color:"#06b6d4",label:"Cuidado y Salud",subcategories:{
+        "higiene_personal":{color:"#0891b2",label:"Higiene Personal",tasks:["aseo personal","ducha","lavar el cabello","lavar los dientes","vestirse y calzarse","cambiarse de ropa"]},
+        "cuidado_corporal":{color:"#0e7490",label:"Cuidado Corporal",tasks:["cortar las uñas de las manos","crema de manos","cortar las uñas de los pies","echar crema nivea en los pies","afeitado","echar crema nivea en la cara","desodorante","perfume","bálsamo de labios"]},
+        "salud_bienestar":{color:"#155e75",label:"Salud y Bienestar",tasks:["dormir","pasear","ejercicio físico","practicar deportes","medicación y tratamientos","comprar en la farmacia","médicos"]}
+    }},
+    "relaciones_interpersonales":{color:"#eab308",label:"Relaciones Interpersonales",subcategories:{
+        "comunicacion":{color:"#ca8a04",label:"Comunicación",tasks:["actualizar los contactos de teléfono","enviar mensajes por whatsapp","interaccionar en redes sociales"]},
+        "eventos_sociales":{color:"#a16207",label:"Eventos Sociales",tasks:["felicitar y/o asistir a cumpleaños","cafés con amigos/familia","comida/cena con amigos/familia","ir al cine con amigos"]},
+        "tiempo_compartido":{color:"#854d0e",label:"Tiempo Compartido",tasks:["visitar a un amigo o familiar","tareas con amigos/familiares"]}
+    }},
+    "administraciones_publicas":{color:"#f97316",label:"Administraciones Públicas",tasks:["concello","xunta","administración central","gestiones burocráticas online","gestiones burocráticas presencialmente"]}
+};
+
+let selectedTasks=[], expandedCategories={};
+
+function init(){ renderSelectors(); updateCounter(); }
+
+function renderSelectors(){
+    const c=document.getElementById("selectorsContainer");
+    c.innerHTML="";
+    Object.entries(categories).forEach(([k,cat])=>{
+        const w=document.createElement("div");
+        w.className="cat-wrapper";
+
+        // header
+        const h=document.createElement("div");
+        h.className="cat-header";
+        h.style.background=`linear-gradient(135deg, ${cat.color}cc 0%, ${cat.color}88 100%)`;
+        h.onclick=()=>toggleCategory(k);
+
+        const lb=document.createElement("div"); lb.className="cat-label-box";
+        const l=document.createElement("div"); l.className="cat-label"; l.textContent=cat.label;
+        lb.appendChild(l); h.appendChild(lb);
+
+        const arr=document.createElement("div");
+        arr.className="cat-arrow"; arr.id=`arrow-${k}`; arr.textContent="▾";
+        if(expandedCategories[k]) arr.classList.add("open");
+        h.appendChild(arr);
+
+        // content
+        const content=document.createElement("div");
+        content.className="cat-content"; content.id=`content-${k}`;
+        if(expandedCategories[k]) content.classList.add("show");
+
+        const inner=document.createElement("div"); inner.className="cat-inner";
+
+        if(cat.subcategories){
+            Object.entries(cat.subcategories).forEach(([sk,sub])=>{
+                const sd=document.createElement("div"); sd.className="subcategory";
+                const sl=document.createElement("div"); sl.className="subcategory-label";
+                sl.querySelector=undefined;
+                sl.innerHTML=`<span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:${sub.color};flex-shrink:0"></span> ${sub.label}`;
+                const tg=document.createElement("div"); tg.className="tasks-grid";
+                sub.tasks.forEach(t=>tg.appendChild(createTaskCard(t,sub)));
+                sd.appendChild(sl); sd.appendChild(tg);
+                inner.appendChild(sd);
+            });
+        } else {
+            const sd=document.createElement("div"); sd.className="subcategory";
+            const tg=document.createElement("div"); tg.className="tasks-grid"; tg.style.paddingTop="10px";
+            cat.tasks.forEach(t=>tg.appendChild(createTaskCard(t,cat)));
+            sd.appendChild(tg); inner.appendChild(sd);
+        }
+
+        content.appendChild(inner);
+        w.appendChild(h); w.appendChild(content);
+        c.appendChild(w);
+    });
+}
+
+function createTaskCard(n,cat){
+    const c=document.createElement("div");
+    c.className="task-card";
+    c.textContent=n;
+    if(selectedTasks.some(t=>t.name===n&&t.category===cat.label)) c.classList.add("selected");
+    c.onclick=e=>{ e.stopPropagation(); selectTask(n,cat); };
+    return c;
+}
+
+function toggleCategory(k){
+    const c=document.getElementById(`content-${k}`);
+    const a=document.getElementById(`arrow-${k}`);
+    expandedCategories[k]=!expandedCategories[k];
+    if(expandedCategories[k]){ c.classList.add("show"); a.classList.add("open"); }
+    else { c.classList.remove("show"); a.classList.remove("open"); }
+}
+
+function selectTask(n,cat){
+    const exists=selectedTasks.some(t=>t.name===n&&t.category===cat.label);
+    if(exists) selectedTasks=selectedTasks.filter(t=>!(t.name===n&&t.category===cat.label));
+    else selectedTasks.push({name:n,category:cat.label,color:cat.color});
+    updateCounter(); renderSelectors();
+}
+
+function updateCounter(){
+    document.getElementById("counter").textContent=selectedTasks.length;
+    document.getElementById("modal-count").textContent=selectedTasks.length;
+    if(selectedTasks.length===0){ document.getElementById("stats").innerHTML=""; return; }
+    const cc={};
+    selectedTasks.forEach(t=>{ cc[t.category]=(cc[t.category]||0)+1; });
+    const parts=Object.entries(cc).map(([c,n])=>`${n} ${c}`).join('<span>·</span>');
+    document.getElementById("stats").innerHTML=`${selectedTasks.length} tarea${selectedTasks.length!==1?"s":""} &nbsp;<span>·</span>&nbsp; ${parts}`;
+}
+
+function openModal(){
+    const l=document.getElementById("selectedTasksList");
+    if(selectedTasks.length===0){
+        l.innerHTML=`<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Sin tareas seleccionadas</div></div>`;
+    } else {
+        const items=selectedTasks.map((t,i)=>`
+            <div class="task-item" style="border-left-color:${t.color}">
+                <div style="flex:1">
+                    <div class="ti-name">${t.name}</div>
+                    <div class="ti-cat">${t.category}</div>
+                </div>
+                <button class="ti-remove" onclick="removeTask(${i})">✕</button>
+            </div>`).join("");
+        l.innerHTML=`<div class="task-items">${items}</div>`;
+    }
+    document.getElementById("modal").classList.add("active");
+}
+
+function closeModal(){ document.getElementById("modal").classList.remove("active"); }
+function removeTask(i){ selectedTasks.splice(i,1); updateCounter(); renderSelectors(); openModal(); }
+function exportPDF(){
+    if(selectedTasks.length===0) return;
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit:'mm', format:'a4' });
+    const W=210, margin=18, contentW=W-margin*2;
+    let y=margin;
+
+    // ── helpers ──
+    function hexToRgb(hex){
+        const r=parseInt(hex.slice(1,3),16);
+        const g=parseInt(hex.slice(3,5),16);
+        const b=parseInt(hex.slice(5,7),16);
+        return [r,g,b];
+    }
+    function darken([r,g,b],f=0.6){ return [Math.round(r*f),Math.round(g*f),Math.round(b*f)]; }
+
+    // ── Title block ──
+    doc.setFillColor(15,17,24);
+    doc.rect(0,0,W,297,'F');
+
+    doc.setFillColor(20,23,32);
+    doc.roundedRect(margin-4, y-4, contentW+8, 22, 3, 3, 'F');
+    doc.setTextColor(255,255,255);
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(22);
+    doc.text('TAREAS SELECCIONADAS', margin, y+10);
+    const today=new Date().toLocaleDateString('es-ES',{day:'2-digit',month:'long',year:'numeric'});
+    doc.setFontSize(8); doc.setTextColor(100,116,139);
+    doc.text(today, W-margin, y+10, {align:'right'});
+    y += 30;
+
+    // ── Group by category ──
+    const grouped={};
+    selectedTasks.forEach(t=>{
+        if(!grouped[t.category]) grouped[t.category]={color:t.color,tasks:[]};
+        grouped[t.category].tasks.push(t.name);
+    });
+
+    Object.entries(grouped).forEach(([cat,{color,tasks}])=>{
+        const rgb=hexToRgb(color.length===7?color:'#8b5cf6');
+        const dark=darken(rgb);
+
+        // Check page space
+        const blockH=12+tasks.length*9+6;
+        if(y+blockH>280){ doc.addPage(); doc.setFillColor(15,17,24); doc.rect(0,0,W,297,'F'); y=margin; }
+
+        // Category header pill
+        doc.setFillColor(...dark);
+        doc.roundedRect(margin-4, y-1, contentW+8, 11, 2, 2, 'F');
+        doc.setFillColor(...rgb);
+        doc.roundedRect(margin-4, y-1, 5, 11, 1, 1, 'F');
+        doc.setTextColor(255,255,255);
+        doc.setFont('helvetica','bold'); doc.setFontSize(10);
+        doc.text(cat.toUpperCase(), margin+5, y+7);
+        y+=14;
+
+        // Tasks as pills
+        tasks.forEach(t=>{
+            if(y>280){ doc.addPage(); doc.setFillColor(15,17,24); doc.rect(0,0,W,297,'F'); y=margin+10; }
+            doc.setFillColor(24,27,34);
+            doc.roundedRect(margin, y-1, contentW, 8, 2, 2, 'F');
+            // accent dot
+            doc.setFillColor(...rgb);
+            doc.circle(margin+4, y+3, 1.5, 'F');
+            doc.setTextColor(200,210,220);
+            doc.setFont('helvetica','normal'); doc.setFontSize(9);
+            doc.text(t, margin+10, y+5.5);
+            y+=10;
+        });
+        y+=5;
+    });
+
+    // ── Footer ──
+    const totalStr=`${selectedTasks.length} tarea${selectedTasks.length!==1?'s':''} · ${Object.keys(grouped).length} categoría${Object.keys(grouped).length!==1?'s':''}`;
+    doc.setFillColor(20,23,32);
+    doc.rect(0,285,W,12,'F');
+    doc.setTextColor(60,75,95); doc.setFont('helvetica','normal'); doc.setFontSize(8);
+    doc.text(totalStr, W/2, 292, {align:'center'});
+
+    doc.save(`tareas_${new Date().toISOString().slice(0,10)}.pdf`);
+}
+
+document.getElementById("modal").addEventListener("click", e=>{ if(e.target===document.getElementById("modal")) closeModal(); });
+
 init();
-    </script>
+</script>
 </body>
 </html>
