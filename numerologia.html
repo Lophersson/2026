@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Numerología · Compatibilidad</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #07070f;
+    --bg2: #0d0d1a;
+    --surface: rgba(255,255,255,0.03);
+    --border: rgba(197,166,100,0.18);
+    --gold: #c5a664;
+    --gold2: #e2c98a;
+    --gold-dim: rgba(197,166,100,0.12);
+    --text: #e8e0d0;
+    --text-soft: rgba(232,224,208,0.55);
+    --text-dim: rgba(232,224,208,0.35);
+    --accent: #9b7e3f;
+    --card-bg: rgba(255,255,255,0.035);
+    --glow: rgba(197,166,100,0.08);
+    --star: #f5d98b;
+  }
+  [data-theme="light"] {
+    --bg: #f5f0e8;
+    --bg2: #ede8dd;
+    --surface: rgba(0,0,0,0.025);
+    --border: rgba(139,105,40,0.22);
+    --gold: #7a5c1e;
+    --gold2: #5a420e;
+    --gold-dim: rgba(139,105,40,0.1);
+    --text: #1a1408;
+    --text-soft: rgba(26,20,8,0.6);
+    --text-dim: rgba(26,20,8,0.38);
+    --accent: #9b7e3f;
+    --card-bg: rgba(0,0,0,0.03);
+    --glow: rgba(139,105,40,0.06);
+    --star: #9b6e00;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.7;
+    transition: background 0.4s, color 0.4s;
+    overflow-x: hidden;
+  }
+
+  /* ─── GRAIN OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: 0.4;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ─── AMBIENT ORBS ─── */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(90px);
+    pointer-events: none;
+    z-index: 0;
+    animation: orbFloat 18s ease-in-out infinite;
+  }
+  .orb-1 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(197,166,100,0.06), transparent 70%); top: -100px; left: -100px; animation-delay: 0s; }
+  .orb-2 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(120,80,160,0.05), transparent 70%); bottom: 10%; right: -80px; animation-delay: -7s; }
+  .orb-3 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(197,166,100,0.04), transparent 70%); top: 50%; left: 40%; animation-delay: -12s; }
+  @keyframes orbFloat {
+    0%, 100% { transform: translate(0,0) scale(1); }
+    33% { transform: translate(30px,-20px) scale(1.05); }
+    66% { transform: translate(-20px,30px) scale(0.97); }
+  }
+
+  /* ─── CONTROLS BAR ─── */
+  .controls-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 32px;
+    background: rgba(7,7,15,0.82);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--border);
+    transition: background 0.4s;
+  }
+  [data-theme="light"] .controls-bar { background: rgba(245,240,232,0.88); }
+
+  .lang-btn, .theme-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    padding: 5px 13px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-soft);
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+  .lang-btn:hover, .theme-btn:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: var(--gold-dim);
+  }
+  .lang-btn.active {
+    background: var(--gold-dim);
+    border-color: var(--gold);
+    color: var(--gold2);
+    font-weight: 500;
+  }
+  .theme-btn { padding: 5px 11px; font-size: 14px; }
+  .sep { width: 1px; height: 20px; background: var(--border); margin: 0 4px; }
+
+  /* ─── WRAPPER ─── */
+  .wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 60px 28px 100px;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    text-align: center;
+    margin-bottom: 72px;
+    animation: fadeUp 0.9s ease both;
+  }
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    opacity: 0.8;
+  }
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.8rem, 7vw, 4.8rem);
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--text);
+    letter-spacing: -0.01em;
+    margin-bottom: 16px;
+  }
+  .hero h1 em { font-style: italic; color: var(--gold2); }
+  .hero-sub {
+    font-size: 14px;
+    color: var(--text-soft);
+    max-width: 480px;
+    margin: 0 auto;
+    font-weight: 300;
+  }
+  .divider-hero {
+    width: 60px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 28px auto 0;
+  }
+
+  /* ─── SECTION TITLE ─── */
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.7;
+    margin-bottom: 10px;
+  }
+  h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 400;
+    color: var(--text);
+    line-height: 1.2;
+    margin-bottom: 24px;
+  }
+  h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: var(--gold2);
+    margin-bottom: 12px;
+  }
+
+  /* ─── CARDS ─── */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px 36px;
+    margin-bottom: 20px;
+    transition: border-color 0.3s, background 0.3s;
+    animation: fadeUp 0.7s ease both;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0.4;
+  }
+  .card:hover { border-color: rgba(197,166,100,0.35); background: rgba(255,255,255,0.05); }
+
+  .card-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+  @media (max-width: 600px) { .card-pair { grid-template-columns: 1fr; } }
+
+  /* ─── NUMBER BADGE ─── */
+  .num-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 2.8rem;
+    color: var(--gold);
+    font-weight: 300;
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+  .num-badge span {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--text-soft);
+    text-transform: uppercase;
+    font-weight: 400;
+    align-self: flex-end;
+    padding-bottom: 4px;
+  }
+
+  /* ─── CALC BOX ─── */
+  .calc-box {
+    background: var(--gold-dim);
+    border-left: 2px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--text-soft);
+    margin-bottom: 24px;
+    letter-spacing: 0.05em;
+  }
+  .calc-box .result {
+    margin-top: 6px;
+    font-size: 14px;
+    color: var(--gold2);
+    font-weight: 400;
+  }
+
+  /* ─── TRAITS LIST ─── */
+  .traits { list-style: none; padding: 0; margin-bottom: 20px; }
+  .traits li {
+    padding: 6px 0;
+    font-size: 14px;
+    color: var(--text-soft);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .traits li::before {
+    content: '◇';
+    color: var(--gold);
+    font-size: 9px;
+    flex-shrink: 0;
+    margin-top: 6px;
+    opacity: 0.7;
+  }
+
+  /* ─── SCORE ─── */
+  .score-block {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 24px 0 8px;
+  }
+  .score-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+  .score-bar-outer {
+    flex: 1;
+    height: 3px;
+    background: rgba(197,166,100,0.12);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .score-bar-inner {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--gold2));
+    border-radius: 2px;
+    transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .score-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 18px;
+    color: var(--gold2);
+    font-weight: 300;
+    flex-shrink: 0;
+    min-width: 48px;
+    text-align: right;
+  }
+
+  /* ─── HIGHLIGHT BOX ─── */
+  .highlight {
+    background: linear-gradient(135deg, rgba(197,166,100,0.08), rgba(197,166,100,0.04));
+    border: 1px solid rgba(197,166,100,0.25);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 20px 0;
+  }
+  .highlight p {
+    font-size: 14px;
+    color: var(--text-soft);
+    margin: 0;
+  }
+  .highlight strong { color: var(--gold2); font-weight: 500; }
+
+  /* ─── DYNAMIC BLOCK ─── */
+  .dynamic-grid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 12px;
+    align-items: center;
+    margin: 20px 0;
+  }
+  .dyn-item {
+    background: var(--gold-dim);
+    border-radius: 10px;
+    padding: 14px 16px;
+    text-align: center;
+  }
+  .dyn-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 1.6rem;
+    color: var(--gold);
+    display: block;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .dyn-label { font-size: 11px; color: var(--text-dim); letter-spacing: 0.05em; }
+  .dyn-arrow { text-align: center; color: var(--gold); font-size: 1.2rem; opacity: 0.5; }
+
+  /* ─── TABLE ─── */
+  .result-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 13.5px;
+  }
+  .result-table th {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    padding: 8px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  .result-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(197,166,100,0.07);
+    color: var(--text-soft);
+    vertical-align: middle;
+  }
+  .result-table td:last-child { color: var(--gold2); font-weight: 500; }
+  .result-table tr:last-child td { border-bottom: none; }
+  .result-table tr:hover td { background: var(--gold-dim); }
+
+  /* ─── SECTION SPACER ─── */
+  .section { margin-bottom: 60px; animation: fadeUp 0.7s ease both; }
+
+  /* ─── STARS ─── */
+  .stars {
+    color: var(--star);
+    font-size: 18px;
+    letter-spacing: 3px;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  /* ─── FOOTER ─── */
+  .footer {
+    text-align: center;
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--text-dim);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.1em;
+  }
+
+  /* ─── TAG ─── */
+  .tag {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid rgba(197,166,100,0.3);
+    border-radius: 20px;
+    padding: 2px 10px;
+    margin-right: 6px;
+    margin-bottom: 6px;
+  }
+
+  /* ─── WARN / NOTE ─── */
+  .note {
+    font-size: 13px;
+    color: var(--text-dim);
+    font-style: italic;
+    padding: 12px 16px;
+    border-left: 2px solid rgba(197,166,100,0.2);
+    margin: 16px 0;
+  }
+
+  /* ─── ANIMS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(22px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .card:nth-child(2) { animation-delay: 0.1s; }
+  .card:nth-child(3) { animation-delay: 0.2s; }
+  .section:nth-child(2) { animation-delay: 0.15s; }
+  .section:nth-child(3) { animation-delay: 0.25s; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 500px) {
+    .wrapper { padding: 40px 18px 80px; }
+    .card { padding: 24px 20px; }
+    .controls-bar { padding: 10px 16px; gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<!-- CONTROLS -->
+<div class="controls-bar">
+  <button class="lang-btn active" onclick="setLang('es')">ES</button>
+  <button class="lang-btn" onclick="setLang('pt')">PT</button>
+  <button class="lang-btn" onclick="setLang('en')">EN</button>
+  <div class="sep"></div>
+  <button class="theme-btn" onclick="toggleTheme()" title="Cambiar tema" id="themeBtn">☽</button>
+</div>
+
+<!-- MAIN -->
+<div class="wrapper">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-eyebrow" data-i18n="eyebrow">Análisis Numerológico · 2025</div>
+    <h1><em data-i18n="h1a">Compatibilidad</em><br><span data-i18n="h1b">Numerológica</span></h1>
+    <p class="hero-sub" data-i18n="herosub">01 · 02 · 1980 &amp; 07 · 06 · 1981</p>
+    <div class="divider-hero"></div>
+  </header>
+
+  <!-- INTRO -->
+  <section class="section">
+    <div class="section-label" data-i18n="intro_label">Metodología</div>
+    <h2 data-i18n="intro_h2">El Número de Camino de Vida</h2>
+    <p style="font-size:15px; color:var(--text-soft); margin-bottom:16px" data-i18n="intro_p">
+      En numerología se analiza principalmente el <strong style="color:var(--gold2)">Número de Camino de Vida</strong>, que se obtiene sumando todos los dígitos de la fecha de nacimiento hasta reducirlos a un solo número.
+    </p>
+  </section>
+
+  <!-- PERSONAS -->
+  <section class="section">
+    <div class="section-label" data-i18n="personas_label">Perfiles individuales</div>
+    <h2 data-i18n="personas_h2">Las dos personas</h2>
+    <div class="card-pair">
+      <!-- PERSONA 1 -->
+      <div class="card">
+        <div class="section-label" data-i18n="persona1_label">Persona 1 · 1 Feb 1980</div>
+        <div class="calc-box">
+          1 + 2 + 1 + 9 + 8 + 0 = 21
+          <div class="result">2 + 1 = <strong>3</strong></div>
+        </div>
+        <div class="num-badge">3 <span data-i18n="vida">de vida</span></div>
+        <ul class="traits">
+          <li data-i18n="p1t1">Creativo y comunicativo</li>
+          <li data-i18n="p1t2">Optimista y expresivo</li>
+          <li data-i18n="p1t3">Humor, conversación y sociabilidad</li>
+          <li data-i18n="p1t4">Busca alegría y experiencias emocionales positivas</li>
+        </ul>
+        <div class="tags-row">
+          <span class="tag" data-i18n="tag_entusiasmo">entusiasmo</span>
+          <span class="tag" data-i18n="tag_romanticismo">romanticismo</span>
+          <span class="tag" data-i18n="tag_espontaneidad">espontaneidad</span>
+        </div>
+      </div>
+      <!-- PERSONA 2 -->
+      <div class="card">
+        <div class="section-label" data-i18n="persona2_label">Persona 2 · 7 Jun 1981</div>
+        <div class="calc-box">
+          7 + 6 + 1 + 9 + 8 + 1 = 32
+          <div class="result">3 + 2 = <strong>5</strong></div>
+        </div>
+        <div class="num-badge">5 <span data-i18n="vida">de vida</span></div>
+        <ul class="traits">
+          <li data-i18n="p2t1">Amante de la libertad</li>
+          <li data-i18n="p2t2">Curioso e intelectual</li>
+          <li data-i18n="p2t3">Le gustan los cambios y las nuevas experiencias</li>
+          <li data-i18n="p2t4">Independiente y aventurero</li>
+        </ul>
+        <div class="tags-row">
+          <span class="tag" data-i18n="tag_dinamismo">dinamismo</span>
+          <span class="tag" data-i18n="tag_pasion">pasión</span>
+          <span class="tag" data-i18n="tag_espacio">espacio personal</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPATIBILIDAD 3-5 -->
+  <section class="section">
+    <div class="section-label" data-i18n="comp_label">Compatibilidad de camino de vida</div>
+    <h2>❤️ <span data-i18n="comp_h2">Compatibilidad 3 y 5</span></h2>
+    <p style="font-size:14px;color:var(--text-soft);margin-bottom:24px" data-i18n="comp_intro">Esta combinación suele considerarse <strong style="color:var(--gold2)">muy compatible</strong>. Ambos pertenecen a la tríada creativa (3-5-7), lo que genera conexión inmediata.</p>
+    <div class="card">
+      <h3>💫 <span data-i18n="puntos_fuertes">Puntos fuertes</span></h3>
+      <ul class="traits">
+        <li data-i18n="pf1">Ambos son energéticos y sociables</li>
+        <li data-i18n="pf2">Les gusta divertirse y experimentar cosas nuevas</li>
+        <li data-i18n="pf3">Conversaciones fluidas y conexión mental</li>
+        <li data-i18n="pf4">Relación poco rutinaria</li>
+      </ul>
+      <div class="dynamic-grid">
+        <div class="dyn-item"><span class="dyn-num">3</span><span class="dyn-label" data-i18n="dyn3">alegría · emoción</span></div>
+        <div class="dyn-arrow">⟷</div>
+        <div class="dyn-item"><span class="dyn-num">5</span><span class="dyn-label" data-i18n="dyn5">aventura · cambio</span></div>
+      </div>
+      <h3 style="margin-top:20px">⚖️ <span data-i18n="desafios">Posibles desafíos</span></h3>
+      <ul class="traits">
+        <li data-i18n="des1">El 5 necesita mucha libertad</li>
+        <li data-i18n="des2">El 3 puede necesitar más atención emocional</li>
+      </ul>
+      <div class="score-block">
+        <span class="score-label" data-i18n="compatibilidad">Compatibilidad</span>
+        <div class="score-bar-outer"><div class="score-bar-inner" style="width:80%"></div></div>
+        <span class="score-val">8/10</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- DÍA DE NACIMIENTO -->
+  <section class="section">
+    <div class="section-label" data-i18n="dias_label">Números del día de nacimiento</div>
+    <h2>1️⃣ <span data-i18n="dias_h2">Día 1 y Día 7</span></h2>
+    <div class="card-pair">
+      <div class="card">
+        <div class="num-badge">1 <span data-i18n="dia">del día</span></div>
+        <ul class="traits">
+          <li data-i18n="d1t1">Liderazgo e iniciativa</li>
+          <li data-i18n="d1t2">Personalidad fuerte</li>
+          <li data-i18n="d1t3">Protector en relaciones</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="num-badge">7 <span data-i18n="dia">del día</span></div>
+        <ul class="traits">
+          <li data-i18n="d7t1">Introspectivo y profundo</li>
+          <li data-i18n="d7t2">Espiritual o analítico</li>
+          <li data-i18n="d7t3">Necesita espacio emocional</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <h3 data-i18n="comp17_h">Dinámica 1 y 7</h3>
+      <p style="font-size:14px;color:var(--text-soft);margin-bottom:16px" data-i18n="comp17_p">Combinación muy interesante, frecuente en parejas duraderas. El 7 admira la seguridad del 1, y el 1 se siente intrigado por el misterio del 7.</p>
+      <div class="dynamic-grid">
+        <div class="dyn-item"><span class="dyn-num">1</span><span class="dyn-label" data-i18n="dyn1">impulsa · protege</span></div>
+        <div class="dyn-arrow">⟷</div>
+        <div class="dyn-item"><span class="dyn-num">7</span><span class="dyn-label" data-i18n="dyn7">reflexiona · profundidad</span></div>
+      </div>
+      <div class="note" data-i18n="note17">⚠️ El 1 quiere acción; el 7 necesita tiempo para pensar. Cuando se equilibran, se complementan profundamente.</div>
+      <div class="score-block">
+        <span class="score-label" data-i18n="compatibilidad">Compatibilidad</span>
+        <div class="score-bar-outer"><div class="score-bar-inner" style="width:75%"></div></div>
+        <span class="score-val">7.5/10</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- DESTINO DE PAREJA -->
+  <section class="section">
+    <div class="section-label" data-i18n="destino_label">Número de destino de la pareja</div>
+    <h2>2️⃣ <span data-i18n="destino_h2">La energía del 8</span></h2>
+    <div class="card">
+      <div class="calc-box" data-i18n="calc8">
+        3 (Camino de vida 1) + 5 (Camino de vida 2) = <strong>8</strong>
+        <div class="result" data-i18n="num_pareja">Número de pareja: 8</div>
+      </div>
+      <div class="num-badge">8 <span data-i18n="pareja">de pareja</span></div>
+      <ul class="traits">
+        <li data-i18n="n8t1">Construcción de vida material y ambición</li>
+        <li data-i18n="n8t2">Logros y estabilidad económica</li>
+        <li data-i18n="n8t3">Proyectos conjuntos e intensidad</li>
+        <li data-i18n="n8t4">Capacidad de construir patrimonio</li>
+      </ul>
+      <div class="note" data-i18n="n8_note">⚠️ Puede haber luchas de poder. Si se equilibran, es una pareja muy potente para construir vida juntos.</div>
+      <div class="score-block">
+        <span class="score-label" data-i18n="destino_compat">Destino</span>
+        <div class="score-bar-outer"><div class="score-bar-inner" style="width:90%"></div></div>
+        <span class="score-val" data-i18n="alta">Alta</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- KARMA -->
+  <section class="section">
+    <div class="section-label" data-i18n="karma_label">Sincronía kármica</div>
+    <h2>3️⃣ <span data-i18n="karma_h2">Lectura kármica</span></h2>
+    <div class="card">
+      <p style="font-size:14px;color:var(--text-soft);margin-bottom:20px" data-i18n="karma_p">Ambas fechas comparten números impares dominantes (1, 3, 5, 7) → personas mentales y dinámicas, con energía fuerte de cambio.</p>
+      <div class="highlight">
+        <p data-i18n="karma_highlight">La diferencia de edad de <strong>1 año y 4 meses</strong> suele indicar en numerología <strong>aprendizaje mutuo</strong>, sin relación maestro-alumno marcada. No es una relación kármica pesada de deuda, sino <strong>evolutiva</strong>: uno impulsa el crecimiento del otro.</p>
+      </div>
+      <div class="calc-box">
+        1+2+1+9+8+0 + 7+6+1+9+8+1 = 53
+        <div class="result">5 + 3 = <strong>8 — Número kármico</strong></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ATRACCIÓN -->
+  <section class="section">
+    <div class="section-label" data-i18n="atrac_label">Análisis adicional</div>
+    <h2 data-i18n="atrac_h2">Atracción, duración y karma oculto</h2>
+    <div class="card">
+      <h3 data-i18n="atrac_h3">🔥 Nivel de atracción inicial</h3>
+      <p style="font-size:14px;color:var(--text-soft);margin-bottom:16px" data-i18n="atrac_p">La combinación 3–5 es una de las más magnéticas al principio. Generan conexión rápida, diversión, interés mutuo casi inmediato y facilidad para reír.</p>
+      <div class="score-block">
+        <span class="score-label" data-i18n="atraccion">Atracción</span>
+        <div class="score-bar-outer"><div class="score-bar-inner" style="width:85%"></div></div>
+        <span class="score-val">8.5/10</span>
+      </div>
+    </div>
+    <div class="card" style="margin-top:0">
+      <h3 data-i18n="dur_h3">⏳ Probabilidad de estabilidad</h3>
+      <ul class="traits">
+        <li data-i18n="dur1">Estímulo intelectual constante</li>
+        <li data-i18n="dur2">Sin riesgo habitual de aburrimiento</li>
+        <li data-i18n="dur3">Aprendizaje mutuo sostenido</li>
+      </ul>
+      <div class="note" data-i18n="dur_note">La estabilidad requiere que el 5 no se sienta limitado y el 3 no se sienta ignorado.</div>
+      <div class="score-block">
+        <span class="score-label" data-i18n="estabilidad">Estabilidad</span>
+        <div class="score-bar-outer"><div class="score-bar-inner" style="width:75%"></div></div>
+        <span class="score-val">7.5/10</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESUMEN -->
+  <section class="section">
+    <div class="section-label" data-i18n="resumen_label">Conclusión global</div>
+    <h2>🔮 <span data-i18n="resumen_h2">Compatibilidad total</span></h2>
+    <div class="card">
+      <table class="result-table">
+        <thead>
+          <tr>
+            <th data-i18n="th_aspecto">Aspecto</th>
+            <th data-i18n="th_resultado">Resultado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td data-i18n="row1a">Camino de vida (3 y 5)</td>
+            <td data-i18n="row1b">Muy dinámico</td>
+          </tr>
+          <tr>
+            <td data-i18n="row2a">Día de nacimiento (1 y 7)</td>
+            <td data-i18n="row2b">Complementario</td>
+          </tr>
+          <tr>
+            <td data-i18n="row3a">Destino de pareja (8)</td>
+            <td data-i18n="row3b">Potente y constructivo</td>
+          </tr>
+          <tr>
+            <td data-i18n="row4a">Karma</td>
+            <td data-i18n="row4b">Evolutivo</td>
+          </tr>
+          <tr>
+            <td data-i18n="row5a">Atracción inicial</td>
+            <td data-i18n="row5b">Muy alta</td>
+          </tr>
+          <tr>
+            <td data-i18n="row6a">Número kármico de pareja</td>
+            <td data-i18n="row6b">8 — intensa y constructiva</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="score-block" style="margin-top:28px">
+        <span class="score-label" data-i18n="total">Total</span>
+        <div class="score-bar-outer"><div class="score-bar-inner" style="width:80%"></div></div>
+        <span class="score-val">8/10</span>
+      </div>
+      <div class="highlight" style="margin-top:20px">
+        <p data-i18n="conclusion">⭐ Combinación que suele dar <strong>química mental</strong>, <strong>atracción sostenida</strong> y potencial para construir <strong>proyectos importantes juntos</strong>. Dinámica, estimulante y nunca aburrida.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p data-i18n="footer">Numerología interpretativa · Con fines exploratorios · No determinista</p>
+  </footer>
+
+</div>
+
+<script>
+const i18n = {
+  es: {
+    eyebrow: "Análisis Numerológico · 2025",
+    h1a: "Compatibilidad", h1b: "Numerológica",
+    herosub: "01 · 02 · 1980 &amp; 07 · 06 · 1981",
+    intro_label: "Metodología", intro_h2: "El Número de Camino de Vida",
+    intro_p: `En numerología se analiza principalmente el <strong style="color:var(--gold2)">Número de Camino de Vida</strong>, que se obtiene sumando todos los dígitos de la fecha de nacimiento hasta reducirlos a un solo número.`,
+    personas_label: "Perfiles individuales", personas_h2: "Las dos personas",
+    persona1_label: "Persona 1 · 1 Feb 1980",
+    persona2_label: "Persona 2 · 7 Jun 1981",
+    vida: "de vida", dia: "del día", pareja: "de pareja",
+    p1t1: "Creativo y comunicativo", p1t2: "Optimista y expresivo",
+    p1t3: "Humor, conversación y sociabilidad", p1t4: "Busca alegría y experiencias emocionales positivas",
+    tag_entusiasmo: "entusiasmo", tag_romanticismo: "romanticismo", tag_espontaneidad: "espontaneidad",
+    p2t1: "Amante de la libertad", p2t2: "Curioso e intelectual",
+    p2t3: "Le gustan los cambios y las nuevas experiencias", p2t4: "Independiente y aventurero",
+    tag_dinamismo: "dinamismo", tag_pasion: "pasión", tag_espacio: "espacio personal",
+    comp_label: "Compatibilidad de camino de vida", comp_h2: "Compatibilidad 3 y 5",
+    comp_intro: `Esta combinación suele considerarse <strong style="color:var(--gold2)">muy compatible</strong>. Ambos pertenecen a la tríada creativa (3-5-7), lo que genera conexión inmediata.`,
+    puntos_fuertes: "Puntos fuertes",
+    pf1: "Ambos son energéticos y sociables", pf2: "Les gusta divertirse y experimentar cosas nuevas",
+    pf3: "Conversaciones fluidas y conexión mental", pf4: "Relación poco rutinaria",
+    dyn3: "alegría · emoción", dyn5: "aventura · cambio",
+    desafios: "Posibles desafíos",
+    des1: "El 5 necesita mucha libertad", des2: "El 3 puede necesitar más atención emocional",
+    compatibilidad: "Compatibilidad",
+    dias_label: "Números del día de nacimiento", dias_h2: "Día 1 y Día 7",
+    d1t1: "Liderazgo e iniciativa", d1t2: "Personalidad fuerte", d1t3: "Protector en relaciones",
+    d7t1: "Introspectivo y profundo", d7t2: "Espiritual o analítico", d7t3: "Necesita espacio emocional",
+    comp17_h: "Dinámica 1 y 7",
+    comp17_p: "Combinación muy interesante, frecuente en parejas duraderas. El 7 admira la seguridad del 1, y el 1 se siente intrigado por el misterio del 7.",
+    dyn1: "impulsa · protege", dyn7: "reflexiona · profundidad",
+    note17: "⚠️ El 1 quiere acción; el 7 necesita tiempo para pensar. Cuando se equilibran, se complementan profundamente.",
+    destino_label: "Número de destino de la pareja", destino_h2: "La energía del 8",
+    calc8: `3 (Camino de vida 1) + 5 (Camino de vida 2) = <strong>8</strong>`,
+    num_pareja: "Número de pareja: 8",
+    n8t1: "Construcción de vida material y ambición", n8t2: "Logros y estabilidad económica",
+    n8t3: "Proyectos conjuntos e intensidad", n8t4: "Capacidad de construir patrimonio",
+    n8_note: "⚠️ Puede haber luchas de poder. Si se equilibran, es una pareja muy potente para construir vida juntos.",
+    destino_compat: "Destino", alta: "Alta",
+    karma_label: "Sincronía kármica", karma_h2: "Lectura kármica",
+    karma_p: "Ambas fechas comparten números impares dominantes (1, 3, 5, 7) → personas mentales y dinámicas, con energía fuerte de cambio.",
+    karma_highlight: `La diferencia de edad de <strong>1 año y 4 meses</strong> suele indicar en numerología <strong>aprendizaje mutuo</strong>, sin relación maestro-alumno marcada. No es una relación kármica pesada de deuda, sino <strong>evolutiva</strong>: uno impulsa el crecimiento del otro.`,
+    atrac_label: "Análisis adicional", atrac_h2: "Atracción, duración y karma oculto",
+    atrac_h3: "🔥 Nivel de atracción inicial",
+    atrac_p: "La combinación 3–5 es una de las más magnéticas al principio. Generan conexión rápida, diversión, interés mutuo casi inmediato y facilidad para reír.",
+    atraccion: "Atracción",
+    dur_h3: "⏳ Probabilidad de estabilidad",
+    dur1: "Estímulo intelectual constante", dur2: "Sin riesgo habitual de aburrimiento", dur3: "Aprendizaje mutuo sostenido",
+    dur_note: "La estabilidad requiere que el 5 no se sienta limitado y el 3 no se sienta ignorado.",
+    estabilidad: "Estabilidad",
+    resumen_label: "Conclusión global", resumen_h2: "Compatibilidad total",
+    th_aspecto: "Aspecto", th_resultado: "Resultado",
+    row1a: "Camino de vida (3 y 5)", row1b: "Muy dinámico",
+    row2a: "Día de nacimiento (1 y 7)", row2b: "Complementario",
+    row3a: "Destino de pareja (8)", row3b: "Potente y constructivo",
+    row4a: "Karma", row4b: "Evolutivo",
+    row5a: "Atracción inicial", row5b: "Muy alta",
+    row6a: "Número kármico de pareja", row6b: "8 — intensa y constructiva",
+    total: "Total",
+    conclusion: `⭐ Combinación que suele dar <strong>química mental</strong>, <strong>atracción sostenida</strong> y potencial para construir <strong>proyectos importantes juntos</strong>. Dinámica, estimulante y nunca aburrida.`,
+    footer: "Numerología interpretativa · Con fines exploratorios · No determinista"
+  },
+  pt: {
+    eyebrow: "Análise Numerológica · 2025",
+    h1a: "Compatibilidade", h1b: "Numerológica",
+    herosub: "01 · 02 · 1980 &amp; 07 · 06 · 1981",
+    intro_label: "Metodologia", intro_h2: "O Número do Caminho de Vida",
+    intro_p: `Em numerologia analisa-se principalmente o <strong style="color:var(--gold2)">Número do Caminho de Vida</strong>, obtido somando todos os dígitos da data de nascimento até reduzi-los a um único número.`,
+    personas_label: "Perfis individuais", personas_h2: "As duas pessoas",
+    persona1_label: "Pessoa 1 · 1 Fev 1980",
+    persona2_label: "Pessoa 2 · 7 Jun 1981",
+    vida: "de vida", dia: "do dia", pareja: "de casal",
+    p1t1: "Criativo e comunicativo", p1t2: "Optimista e expressivo",
+    p1t3: "Humor, conversação e sociabilidade", p1t4: "Procura alegria e experiências emocionais positivas",
+    tag_entusiasmo: "entusiasmo", tag_romanticismo: "romantismo", tag_espontaneidad: "espontaneidade",
+    p2t1: "Amante da liberdade", p2t2: "Curioso e intelectual",
+    p2t3: "Gosta de mudanças e novas experiências", p2t4: "Independente e aventureiro",
+    tag_dinamismo: "dinamismo", tag_pasion: "paixão", tag_espacio: "espaço pessoal",
+    comp_label: "Compatibilidade de caminho de vida", comp_h2: "Compatibilidade 3 e 5",
+    comp_intro: `Esta combinação é considerada <strong style="color:var(--gold2)">muito compatível</strong>. Ambos pertencem à tríade criativa (3-5-7), gerando ligação imediata.`,
+    puntos_fuertes: "Pontos fortes",
+    pf1: "Ambos são enérgicos e sociáveis", pf2: "Gostam de se divertir e experimentar coisas novas",
+    pf3: "Conversas fluidas e ligação mental", pf4: "Relação pouco rotineira",
+    dyn3: "alegria · emoção", dyn5: "aventura · mudança",
+    desafios: "Possíveis desafios",
+    des1: "O 5 precisa de muita liberdade", des2: "O 3 pode precisar de mais atenção emocional",
+    compatibilidad: "Compatibilidade",
+    dias_label: "Números do dia de nascimento", dias_h2: "Dia 1 e Dia 7",
+    d1t1: "Liderança e iniciativa", d1t2: "Personalidade forte", d1t3: "Protetor nas relações",
+    d7t1: "Introspectivo e profundo", d7t2: "Espiritual ou analítico", d7t3: "Precisa de espaço emocional",
+    comp17_h: "Dinâmica 1 e 7",
+    comp17_p: "Combinação muito interessante, frequente em casais duradouros. O 7 admira a segurança do 1, e o 1 sente-se intrigado pelo mistério do 7.",
+    dyn1: "impulsiona · protege", dyn7: "reflecte · profundidade",
+    note17: "⚠️ O 1 quer acção; o 7 precisa de tempo para pensar. Quando se equilibram, complementam-se profundamente.",
+    destino_label: "Número de destino do casal", destino_h2: "A energia do 8",
+    calc8: `3 (Caminho de vida 1) + 5 (Caminho de vida 2) = <strong>8</strong>`,
+    num_pareja: "Número do casal: 8",
+    n8t1: "Construção de vida material e ambição", n8t2: "Conquistas e estabilidade económica",
+    n8t3: "Projectos conjuntos e intensidade", n8t4: "Capacidade de construir património",
+    n8_note: "⚠️ Pode haver lutas de poder. Se se equilibrarem, é um casal muito potente para construir vida juntos.",
+    destino_compat: "Destino", alta: "Alta",
+    karma_label: "Sincronia kármica", karma_h2: "Leitura kármica",
+    karma_p: "Ambas as datas partilham números ímpares dominantes (1, 3, 5, 7) → pessoas mentais e dinâmicas, com energia forte de mudança.",
+    karma_highlight: `A diferença de idade de <strong>1 ano e 4 meses</strong> indica em numerologia <strong>aprendizagem mútua</strong>, sem relação mestre-aluno marcada. Não é uma relação kármica pesada, mas sim <strong>evolutiva</strong>: um impulsiona o crescimento do outro.`,
+    atrac_label: "Análise adicional", atrac_h2: "Atracção, duração e karma oculto",
+    atrac_h3: "🔥 Nível de atracção inicial",
+    atrac_p: "A combinação 3–5 é uma das mais magnéticas no início. Geram ligação rápida, diversão, interesse mútuo quase imediato e facilidade para rir.",
+    atraccion: "Atracção",
+    dur_h3: "⏳ Probabilidade de estabilidade",
+    dur1: "Estímulo intelectual constante", dur2: "Sem risco habitual de tédio", dur3: "Aprendizagem mútua sustentada",
+    dur_note: "A estabilidade requer que o 5 não se sinta limitado e o 3 não se sinta ignorado.",
+    estabilidad: "Estabilidade",
+    resumen_label: "Conclusão global", resumen_h2: "Compatibilidade total",
+    th_aspecto: "Aspecto", th_resultado: "Resultado",
+    row1a: "Caminho de vida (3 e 5)", row1b: "Muito dinâmico",
+    row2a: "Dia de nascimento (1 e 7)", row2b: "Complementar",
+    row3a: "Destino do casal (8)", row3b: "Potente e construtivo",
+    row4a: "Karma", row4b: "Evolutivo",
+    row5a: "Atracção inicial", row5b: "Muito alta",
+    row6a: "Número kármico do casal", row6b: "8 — intensa e construtiva",
+    total: "Total",
+    conclusion: `⭐ Combinação que costuma gerar <strong>química mental</strong>, <strong>atracção sustentada</strong> e potencial para construir <strong>projectos importantes juntos</strong>. Dinâmica, estimulante e nunca aborrecida.`,
+    footer: "Numerologia interpretativa · Para fins exploratórios · Não determinista"
+  },
+  en: {
+    eyebrow: "Numerological Analysis · 2025",
+    h1a: "Numerological", h1b: "Compatibility",
+    herosub: "01 · 02 · 1980 &amp; 07 · 06 · 1981",
+    intro_label: "Methodology", intro_h2: "The Life Path Number",
+    intro_p: `Numerology primarily analyses the <strong style="color:var(--gold2)">Life Path Number</strong>, obtained by summing all digits of the birth date until reduced to a single digit.`,
+    personas_label: "Individual profiles", personas_h2: "The two people",
+    persona1_label: "Person 1 · 1 Feb 1980",
+    persona2_label: "Person 2 · 7 Jun 1981",
+    vida: "life path", dia: "birth day", pareja: "couple",
+    p1t1: "Creative and communicative", p1t2: "Optimistic and expressive",
+    p1t3: "Humour, conversation and sociability", p1t4: "Seeks joy and positive emotional experiences",
+    tag_entusiasmo: "enthusiasm", tag_romanticismo: "romance", tag_espontaneidad: "spontaneity",
+    p2t1: "Freedom lover", p2t2: "Curious and intellectual",
+    p2t3: "Enjoys change and new experiences", p2t4: "Independent and adventurous",
+    tag_dinamismo: "dynamism", tag_pasion: "passion", tag_espacio: "personal space",
+    comp_label: "Life path compatibility", comp_h2: "Compatibility 3 and 5",
+    comp_intro: `This combination is considered <strong style="color:var(--gold2)">highly compatible</strong>. Both belong to the creative triad (3-5-7), generating immediate connection.`,
+    puntos_fuertes: "Strengths",
+    pf1: "Both are energetic and sociable", pf2: "They enjoy fun and new experiences",
+    pf3: "Fluid conversations and mental connection", pf4: "Non-routine relationship",
+    dyn3: "joy · emotion", dyn5: "adventure · change",
+    desafios: "Possible challenges",
+    des1: "The 5 needs a lot of freedom", des2: "The 3 may need more emotional attention",
+    compatibilidad: "Compatibility",
+    dias_label: "Birth day numbers", dias_h2: "Day 1 and Day 7",
+    d1t1: "Leadership and initiative", d1t2: "Strong personality", d1t3: "Protective in relationships",
+    d7t1: "Introspective and deep", d7t2: "Spiritual or analytical", d7t3: "Needs emotional space",
+    comp17_h: "Dynamic 1 and 7",
+    comp17_p: "Very interesting combination, common in lasting couples. The 7 admires the confidence of the 1, and the 1 is intrigued by the mystery of the 7.",
+    dyn1: "drives · protects", dyn7: "reflects · depth",
+    note17: "⚠️ The 1 wants action; the 7 needs time to think. When balanced, they complement each other deeply.",
+    destino_label: "Couple's destiny number", destino_h2: "The energy of 8",
+    calc8: `3 (Life path 1) + 5 (Life path 2) = <strong>8</strong>`,
+    num_pareja: "Couple number: 8",
+    n8t1: "Building material life and ambition", n8t2: "Achievements and financial stability",
+    n8t3: "Joint projects and intensity", n8t4: "Capacity to build wealth",
+    n8_note: "⚠️ There may be power struggles. When balanced, this is a very powerful couple for building a life together.",
+    destino_compat: "Destiny", alta: "High",
+    karma_label: "Karmic synchrony", karma_h2: "Karmic reading",
+    karma_p: "Both dates share dominant odd numbers (1, 3, 5, 7) → mental and dynamic people, with strong change energy.",
+    karma_highlight: `The age gap of <strong>1 year and 4 months</strong> suggests in numerology <strong>mutual learning</strong>, with no strong teacher-student dynamic. Not a heavy karmic debt relationship, but rather an <strong>evolutionary</strong> one: each drives the other's growth.`,
+    atrac_label: "Additional analysis", atrac_h2: "Attraction, longevity and hidden karma",
+    atrac_h3: "🔥 Initial attraction level",
+    atrac_p: "The 3–5 combination is one of the most magnetic at the start. They generate quick connection, fun, near-immediate mutual interest and an easy ability to laugh together.",
+    atraccion: "Attraction",
+    dur_h3: "⏳ Stability probability",
+    dur1: "Constant intellectual stimulation", dur2: "No typical risk of boredom", dur3: "Sustained mutual learning",
+    dur_note: "Stability requires the 5 not to feel limited and the 3 not to feel ignored.",
+    estabilidad: "Stability",
+    resumen_label: "Global conclusion", resumen_h2: "Overall compatibility",
+    th_aspecto: "Aspect", th_resultado: "Result",
+    row1a: "Life path (3 and 5)", row1b: "Very dynamic",
+    row2a: "Birth day (1 and 7)", row2b: "Complementary",
+    row3a: "Couple destiny (8)", row3b: "Powerful and constructive",
+    row4a: "Karma", row4b: "Evolutionary",
+    row5a: "Initial attraction", row5b: "Very high",
+    row6a: "Karmic couple number", row6b: "8 — intense and constructive",
+    total: "Total",
+    conclusion: `⭐ A combination that typically produces <strong>mental chemistry</strong>, <strong>sustained attraction</strong> and the potential to build <strong>important projects together</strong>. Dynamic, stimulating and never boring.`,
+    footer: "Interpretive numerology · For exploratory purposes · Non-deterministic"
+  }
+};
+
+let currentLang = 'es';
+
+function setLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
+  const t = i18n[lang];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (t[key] !== undefined) el.innerHTML = t[key];
+  });
+  document.documentElement.lang = lang;
+}
+
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('themeBtn').textContent = isDark ? '☀' : '☽';
+}
+
+// Animate score bars on load
+window.addEventListener('load', () => {
+  // Already set via inline style, just trigger reflow
+  document.querySelectorAll('.score-bar-inner').forEach(bar => {
+    const w = bar.style.width;
+    bar.style.width = '0';
+    setTimeout(() => { bar.style.width = w; }, 300);
+  });
+});
+</script>
+</body>
+</html>
