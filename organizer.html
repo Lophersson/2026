@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Tareas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0a0a0f; --surface: #111118; --card: #16161f;
+  --border: rgba(255,255,255,0.07); --text: #f0eee8; --muted: #6b6980;
+  --gold: #c8a35a; --radius-icon: 22px;
+  --ff-d: 'Playfair Display', serif;
+  --ff-b: 'DM Sans', sans-serif;
+  --ff-m: 'DM Mono', monospace;
+}
+html,body { height:100%; background:var(--bg); color:var(--text); font-family:var(--ff-b); overflow-x:hidden; }
+body::after {
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:9999;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-size:200px; opacity:0.5;
+}
+.ambient { position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
+.blob { position:absolute; border-radius:50%; filter:blur(80px); opacity:0.08; }
+.b1 { width:300px;height:300px;top:-60px;left:-60px;background:#c8a35a; }
+.b2 { width:250px;height:250px;bottom:20%;right:-80px;background:#7b6ef6; }
+.b3 { width:200px;height:200px;bottom:-40px;left:30%;background:#4ecdc4; }
+.app { position:relative;z-index:1;max-width:480px;margin:0 auto;padding:0 20px 90px; }
+header { padding:52px 0 28px; display:flex; align-items:flex-end; justify-content:space-between; }
+.hl h1 { font-family:var(--ff-d);font-size:30px;font-weight:700;line-height:1;letter-spacing:-0.01em; }
+.hl p { font-family:var(--ff-m);font-size:10px;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase;margin-top:6px; }
+.hr { text-align:right; }
+.hr .num { font-family:var(--ff-d);font-size:28px;color:var(--gold);font-weight:700;line-height:1; }
+.hr .lbl { font-family:var(--ff-m);font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-top:4px; }
+.icon-grid { display:grid;grid-template-columns:1fr 1fr;gap:14px; }
+.app-icon { display:flex;flex-direction:column;align-items:center;gap:9px;cursor:pointer;-webkit-tap-highlight-color:transparent;animation:iconPop 0.4s cubic-bezier(0.34,1.56,0.64,1) both; }
+@keyframes iconPop { from{opacity:0;transform:scale(0.7) translateY(10px)} to{opacity:1;transform:scale(1) translateY(0)} }
+.icon-face {
+  width:100%; aspect-ratio:1/1; border-radius:var(--radius-icon);
+  display:flex;align-items:center;justify-content:center;
+  font-size:clamp(36px,12vw,52px); position:relative; overflow:hidden;
+  transition:transform 0.18s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.18s ease;
+  box-shadow:0 4px 24px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.18);
+}
+.icon-face::before {
+  content:''; position:absolute; top:0;left:0;right:0;height:50%;
+  background:linear-gradient(180deg,rgba(255,255,255,0.22) 0%,rgba(255,255,255,0) 100%);
+  border-radius:var(--radius-icon) var(--radius-icon) 0 0; pointer-events:none;
+}
+.icon-face::after {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(circle at 35% 25%,rgba(255,255,255,0.28) 0%,transparent 65%);
+  pointer-events:none;
+}
+.app-icon:hover .icon-face { transform:scale(1.06) translateY(-3px); box-shadow:0 14px 44px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.2); }
+.app-icon:active .icon-face { transform:scale(0.91); transition-duration:0.08s; }
+.icon-badge {
+  position:absolute;top:-5px;right:-5px;min-width:22px;height:22px;
+  background:#ff3b30;color:#fff;font-family:var(--ff-m);font-size:11px;
+  border-radius:11px;display:flex;align-items:center;justify-content:center;
+  padding:0 5px;border:2px solid var(--bg);
+  opacity:0;transform:scale(0.4) translate(4px,-4px);
+  transition:opacity 0.2s ease,transform 0.3s cubic-bezier(0.34,1.56,0.64,1);z-index:2;
+}
+.app-icon.has-badge .icon-badge { opacity:1;transform:scale(1) translate(0,0); }
+.icon-label { font-size:clamp(11px,3vw,13px);color:var(--text);text-align:center;line-height:1.25;text-shadow:0 1px 6px rgba(0,0,0,0.9); }
+.results-wrap { margin-top:36px; }
+.results-top { display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px; }
+.results-h { font-family:var(--ff-d);font-size:19px;font-weight:700;color:var(--gold); }
+.btn-clear { font-family:var(--ff-m);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;padding:5px 11px;border:1px solid rgba(255,59,48,0.4);border-radius:6px;background:rgba(255,59,48,0.07);color:#ff6b6b;cursor:pointer;transition:all 0.15s ease;display:none; }
+.btn-clear:hover { background:rgba(255,59,48,0.15);border-color:#ff3b30; }
+.empty-msg { border:1px dashed var(--border);border-radius:14px;padding:28px 20px;text-align:center;color:var(--muted);font-size:13px;line-height:1.6; }
+.rgroup { background:var(--card);border:1px solid var(--border);border-radius:16px;margin-bottom:10px;overflow:hidden;animation:fadeUp 0.22s ease both; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+.rg-h { display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--border);background:rgba(255,255,255,0.025); }
+.rg-dot { width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0; }
+.rg-n { font-family:var(--ff-d);font-size:13px;font-weight:700;flex:1;color:var(--text); }
+.rg-c { font-family:var(--ff-m);font-size:9px;color:var(--muted);letter-spacing:0.1em; }
+.rg-t { display:flex;align-items:center;padding:10px 16px;gap:10px;border-bottom:1px solid rgba(255,255,255,0.03);font-size:13px;color:var(--text); }
+.rg-t:last-child { border-bottom:none; }
+.rg-dash { font-family:var(--ff-m);font-size:9px;color:var(--muted);flex-shrink:0; }
+.rg-txt { flex:1; }
+.rg-rm { background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;padding:2px 4px;border-radius:4px;opacity:0;transition:opacity 0.15s ease,color 0.15s ease; }
+.rg-t:hover .rg-rm { opacity:1; }
+.rg-rm:hover { color:#ff3b30; }
+.overlay { position:fixed;inset:0;background:rgba(6,6,12,0.87);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);z-index:200;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity 0.28s ease; }
+.overlay.open { opacity:1;pointer-events:all; }
+.sheet { width:100%;max-width:480px;margin:0 auto;background:var(--surface);border-radius:26px 26px 0 0;border:1px solid var(--border);border-bottom:none;max-height:88vh;display:flex;flex-direction:column;transform:translateY(100%);transition:transform 0.34s cubic-bezier(0.32,1.4,0.64,1);overflow:hidden; }
+.overlay.open .sheet { transform:translateY(0); }
+.s-notch { width:34px;height:4px;background:var(--border);border-radius:2px;margin:10px auto 0;flex-shrink:0; }
+.s-head { padding:16px 22px 14px;border-bottom:1px solid var(--border);flex-shrink:0; }
+.s-cr { display:flex;align-items:center;gap:12px;margin-bottom:12px; }
+.s-ci { width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;box-shadow:0 2px 12px rgba(0,0,0,0.3),inset 0 1px 0 rgba(255,255,255,0.15); }
+.s-title { font-family:var(--ff-d);font-size:20px;font-weight:700;color:var(--text);line-height:1.1; }
+.s-sub { font-family:var(--ff-m);font-size:9px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-top:2px; }
+.s-btns { display:flex;gap:8px; }
+.btn-pill { font-family:var(--ff-m);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;padding:7px 14px;border-radius:20px;border:1px solid var(--border);background:rgba(255,255,255,0.04);color:var(--muted);cursor:pointer;transition:all 0.15s ease; }
+.btn-pill:hover { color:var(--text);border-color:rgba(255,255,255,0.2);background:rgba(255,255,255,0.08); }
+.s-list { flex:1;overflow-y:auto;padding:4px 0;overscroll-behavior:contain;-webkit-overflow-scrolling:touch; }
+.s-list::-webkit-scrollbar { width:2px; }
+.s-list::-webkit-scrollbar-thumb { background:var(--border);border-radius:2px; }
+.task-row { display:flex;align-items:center;gap:14px;padding:14px 22px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background 0.12s ease;border-bottom:1px solid rgba(255,255,255,0.03); }
+.task-row:last-child { border-bottom:none; }
+.task-row:hover { background:rgba(255,255,255,0.03); }
+.task-row:active { background:rgba(255,255,255,0.06); }
+.t-chk { width:22px;height:22px;border-radius:6px;border:1.5px solid var(--border);background:transparent;flex-shrink:0;position:relative;transition:all 0.15s ease; }
+.task-row.sel .t-chk { border-color:var(--chk,#c8a35a);background:var(--chk,#c8a35a); }
+.task-row.sel .t-chk::after { content:'';position:absolute;top:3px;left:7px;width:5px;height:10px;border-right:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(45deg); }
+.t-txt { font-size:14px;color:var(--text);flex:1;line-height:1.35;transition:color 0.12s ease; }
+.task-row.sel .t-txt { color:rgba(240,238,232,0.65); }
+.s-foot { padding:14px 22px;border-top:1px solid var(--border);flex-shrink:0; }
+.btn-confirm { width:100%;padding:15px;border-radius:14px;border:none;font-family:var(--ff-m);font-size:11px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:opacity 0.15s ease,transform 0.12s ease;color:#fff; }
+.btn-confirm:active { transform:scale(0.97);opacity:0.85; }
+</style>
+</head>
+<body>
+<div class="ambient"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<div class="app">
+  <header>
+    <div class="hl"><h1>Tareas</h1><p>Gestor personal</p></div>
+    <div class="hr"><div class="num" id="hCount">0</div><div class="lbl">seleccionadas</div></div>
+  </header>
+  <div class="icon-grid" id="grid"></div>
+  <div class="results-wrap">
+    <div class="results-top">
+      <div class="results-h">Pendiente</div>
+      <button class="btn-clear" id="btnClear" onclick="clearAll()">Limpiar todo</button>
+    </div>
+    <div id="resList"><div class="empty-msg">Pulsa una categoría para añadir tareas.</div></div>
+  </div>
+</div>
+<div class="overlay" id="overlay" onclick="onOvClick(event)">
+  <div class="sheet">
+    <div class="s-notch"></div>
+    <div class="s-head">
+      <div class="s-cr">
+        <div class="s-ci" id="sIcon"></div>
+        <div><div class="s-title" id="sTitle"></div><div class="s-sub" id="sSub"></div></div>
+      </div>
+      <div class="s-btns">
+        <button class="btn-pill" onclick="pickAll()">Seleccionar todo</button>
+        <button class="btn-pill" onclick="pickNone()">Limpiar</button>
+      </div>
+    </div>
+    <div class="s-list" id="sList"></div>
+    <div class="s-foot"><button class="btn-confirm" id="btnConf" onclick="closeModal()">Confirmar</button></div>
+  </div>
+</div>
+<script>
+const PALETTES=[['#ff6b35','#f7c59f'],['#7b6ef6','#a8d8ea'],['#43b89c','#a8e6cf'],['#e84393','#ff9fd2'],['#f7931e','#ffd166'],['#56ccf2','#2f80ed'],['#eb5757','#ff9a9a'],['#c8a35a','#f0d080'],['#6fcf97','#219653'],['#9b51e0','#bb6bd9'],['#2d9cdb','#56ccf2'],['#f2994a','#f2c94c'],['#ff5f6d','#ffc371'],['#11998e','#38ef7d'],['#4776e6','#8e54e9'],['#fd746c','#ff9068']];
+
+const CATS=[
+  {id:'org',icon:'🗂️',name:'Organización\nPersonal',tasks:['Presupuestos — contabilidad','Archivos móvil','Archivos tablet','Archivos Watch 6','Archivos portátil Toshiba','Archivos portátil Samsung','Archivos pendrives y SD cards','Archivos mails y nubes','Registros webs y contraseñas','Registros apps y contraseñas','Guardado de chats de WhatsApp']},
+  {id:'hogar',icon:'🏠',name:'Hogar',tasks:['Revisar pertenencias en cajones','Revisar pertenencias en estanterías','Revisar pertenencias en cajas','Revisar pertenencias en cocina','Revisar pertenencias en terraza','Revisar pertenencias en cuarto de baño','Revisar pertenencias en trastero','Buscar camiseta blanca manga larga Lidl']},
+  {id:'salud',icon:'🩺',name:'Salud',tasks:['Revisión médica general','Solicitar historial clínico','Actualizar documentación sanitaria']},
+  {id:'prof',icon:'💼',name:'Profesional',tasks:['CV en HTML y PDF — ES','CV en HTML y PDF — PT','CV en HTML y PDF — EN','Actualizar varios HTMLs','Actualizar GitHub']},
+  {id:'pers',icon:'👥',name:'Personas',tasks:['Revisar contactos del móvil','Hacer copia de agenda','Actualizar contactos importantes']},
+  {id:'coche',icon:'🚗',name:'Coche',tasks:['Revisar documentación del vehículo','Gestionar re-matriculación en Portugal','Revisar ITV y seguro']},
+  {id:'ocio',icon:'🎭',name:'Ocio y\nCultura',tasks:['Lista de libros pendientes','Organizar lista de música','Backlog de series y películas']},
+  {id:'oficial',icon:'📋',name:'Oficial',tasks:['Lista de acciones para vivir en Portugal','Tramitar NIF portugués','Registro en SNS Portugal','Gestionar cambio de residencia fiscal','Tramitar documentación bancaria PT']}
+];
+
+const sel={};
+CATS.forEach(c=>sel[c.id]=new Set());
+let active=null;
+
+// Assign palettes (no repeats)
+const used=[];
+const catPal={};
+CATS.forEach(c=>{
+  const pool=PALETTES.map((_,i)=>i).filter(i=>!used.includes(i));
+  const idx=pool[Math.floor(Math.random()*pool.length)];
+  used.push(idx);
+  catPal[c.id]=PALETTES[idx];
+});
+
+// Build grid
+const grid=document.getElementById('grid');
+CATS.forEach((cat,i)=>{
+  const [c1,c2]=catPal[cat.id];
+  const el=document.createElement('div');
+  el.className='app-icon'; el.id='icon-'+cat.id;
+  el.style.animationDelay=(i*0.055)+'s';
+  el.innerHTML=`<div class="icon-face" id="face-${cat.id}" style="background:linear-gradient(145deg,${c1},${c2})"><div class="icon-badge" id="badge-${cat.id}">0</div>${cat.icon}</div><div class="icon-label">${cat.name.replace('\n','<br>')}</div>`;
+  el.addEventListener('click',()=>openM(cat.id));
+  grid.appendChild(el);
+});
+
+function openM(catId){
+  active=CATS.find(c=>c.id===catId);
+  const [c1,c2]=catPal[catId];
+  document.getElementById('sIcon').style.background=`linear-gradient(145deg,${c1},${c2})`;
+  document.getElementById('sIcon').textContent=active.icon;
+  document.getElementById('sTitle').textContent=active.name.replace('\n',' ');
+  document.getElementById('sSub').textContent=active.tasks.length+' tareas disponibles';
+  document.getElementById('btnConf').style.background=`linear-gradient(135deg,${c1},${c2})`;
+  document.querySelector('.sheet').style.setProperty('--chk',c1);
+  const list=document.getElementById('sList');
+  list.innerHTML='';
+  active.tasks.forEach((task,i)=>{
+    const row=document.createElement('div');
+    row.className='task-row'+(sel[catId].has(i)?' sel':'');
+    row.innerHTML=`<div class="t-chk"></div><div class="t-txt">${task}</div>`;
+    row.addEventListener('click',()=>{
+      row.classList.toggle('sel');
+      sel[catId].has(i)?sel[catId].delete(i):sel[catId].add(i);
+    });
+    list.appendChild(row);
+  });
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function pickAll(){active.tasks.forEach((_,i)=>sel[active.id].add(i));document.querySelectorAll('.task-row').forEach(r=>r.classList.add('sel'));}
+function pickNone(){sel[active.id].clear();document.querySelectorAll('.task-row').forEach(r=>r.classList.remove('sel'));}
+
+function closeModal(){
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow='';
+  refreshBadges(); renderRes(); active=null;
+}
+function onOvClick(e){if(e.target===document.getElementById('overlay'))closeModal();}
+
+function refreshBadges(){
+  let tot=0;
+  CATS.forEach(cat=>{
+    const n=sel[cat.id].size; tot+=n;
+    document.getElementById('badge-'+cat.id).textContent=n;
+    document.getElementById('icon-'+cat.id).classList.toggle('has-badge',n>0);
+  });
+  document.getElementById('hCount').textContent=tot;
+}
+
+function renderRes(){
+  const rl=document.getElementById('resList');
+  document.getElementById('btnClear').style.display='none';
+  let tot=0,html='';
+  CATS.forEach(cat=>{
+    const ids=[...sel[cat.id]].sort((a,b)=>a-b);
+    if(!ids.length)return;
+    tot+=ids.length;
+    const [c1,c2]=catPal[cat.id];
+    html+=`<div class="rgroup"><div class="rg-h"><div class="rg-dot" style="background:linear-gradient(135deg,${c1},${c2})">${cat.icon}</div><div class="rg-n">${cat.name.replace('\n',' ')}</div><div class="rg-c">${ids.length} tarea${ids.length>1?'s':''}</div></div>${ids.map(i=>`<div class="rg-t"><span class="rg-dash">—</span><span class="rg-txt">${cat.tasks[i]}</span><button class="rg-rm" onclick="rmTask('${cat.id}',${i})">✕</button></div>`).join('')}</div>`;
+  });
+  rl.innerHTML=html||'<div class="empty-msg">Pulsa una categoría para añadir tareas.</div>';
+  if(tot>0)document.getElementById('btnClear').style.display='';
+}
+
+function rmTask(catId,i){sel[catId].delete(i);refreshBadges();renderRes();}
+function clearAll(){CATS.forEach(c=>sel[c.id].clear());refreshBadges();renderRes();}
+</script>
+</body>
+</html>
