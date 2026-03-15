@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Humberto López Rodríguez – CV</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ─── CSS VARIABLES ─── */
+:root {
+  --bg: #0d1117;
+  --bg2: #161b24;
+  --bg3: #1e2635;
+  --surface: #232c3d;
+  --border: #2d3a50;
+  --accent: #c9a84c;
+  --accent2: #e8c96e;
+  --accent-soft: rgba(201,168,76,0.12);
+  --text: #e8edf5;
+  --text2: #a8b4c8;
+  --text3: #6b7a94;
+  --name-color: #f0e6c8;
+  --tag-bg: rgba(201,168,76,0.15);
+  --tag-border: rgba(201,168,76,0.35);
+  --bar-bg: #2d3a50;
+  --shadow: 0 4px 24px rgba(0,0,0,0.45);
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+  --radius: 12px;
+  --radius-sm: 6px;
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Outfit', sans-serif;
+}
+[data-theme="light"] {
+  --bg: #f5f0e8;
+  --bg2: #faf7f2;
+  --bg3: #ffffff;
+  --surface: #ffffff;
+  --border: #ddd4c0;
+  --accent: #8b6914;
+  --accent2: #a07820;
+  --accent-soft: rgba(139,105,20,0.08);
+  --text: #1a1a2e;
+  --text2: #3d4466;
+  --text3: #7a7a9a;
+  --name-color: #1a1a2e;
+  --tag-bg: rgba(139,105,20,0.1);
+  --tag-border: rgba(139,105,20,0.3);
+  --bar-bg: #e0d8cb;
+  --shadow: 0 4px 24px rgba(0,0,0,0.1);
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.07);
+}
+
+/* ─── RESET ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 15px; }
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  transition: background 0.35s, color 0.35s;
+  line-height: 1.6;
+}
+
+/* ─── TOP BAR ─── */
+#topbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 24px;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
+}
+.topbar-left, .topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.topbar-title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.03em;
+  margin-right: 10px;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 14px;
+  border-radius: 30px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text2);
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.btn:hover { border-color: var(--accent); color: var(--accent); }
+.btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #0d1117;
+  font-weight: 600;
+}
+.btn-icon {
+  padding: 6px 12px;
+}
+
+/* ─── MAIN WRAPPER ─── */
+#cv {
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: 32px 20px 60px;
+  animation: fadeIn 0.6s ease both;
+}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+
+/* ─── HERO ─── */
+.hero {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 28px;
+  align-items: center;
+  padding: 36px 40px 30px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-avatar {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--accent);
+  box-shadow: 0 0 0 6px var(--accent-soft), var(--shadow-sm);
+  flex-shrink: 0;
+  display: block;
+  transition: border-color 0.3s;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse at 80% 0%, var(--accent-soft) 0%, transparent 60%);
+  pointer-events: none;
+}
+.hero-name {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 700;
+  color: var(--name-color);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+}
+.hero-title {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--accent);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+.hero-contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.contact-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  background: var(--accent-soft);
+  border: 1px solid var(--tag-border);
+  border-radius: 20px;
+  font-size: 0.78rem;
+  color: var(--text2);
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.contact-item:hover { color: var(--accent); border-color: var(--accent); }
+.contact-item .icon { font-size: 0.85rem; }
+.hero-tags {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+}
+.hero-tag {
+  padding: 5px 14px;
+  background: var(--tag-bg);
+  border: 1px solid var(--tag-border);
+  border-radius: 20px;
+  font-size: 0.73rem;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ─── GRID LAYOUT ─── */
+.cv-grid {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 22px;
+  align-items: start;
+}
+
+/* ─── SECTION ─── */
+.section {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 28px;
+  margin-bottom: 22px;
+  transition: border-color 0.2s;
+}
+.section:hover { border-color: rgba(201,168,76,0.3); }
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  letter-spacing: 0.02em;
+}
+.section-title .hex { font-size: 1rem; opacity: 0.7; }
+
+/* ─── ABOUT ─── */
+.about-text {
+  font-size: 0.88rem;
+  color: var(--text2);
+  line-height: 1.75;
+}
+
+/* ─── EXPERIENCE ─── */
+.exp-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 14px;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.exp-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+.exp-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-top: 5px;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.exp-role {
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+.exp-company {
+  font-size: 0.82rem;
+  color: var(--accent);
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.exp-desc {
+  font-size: 0.8rem;
+  color: var(--text3);
+  margin-bottom: 4px;
+}
+.exp-year {
+  font-size: 0.73rem;
+  font-weight: 600;
+  color: var(--text3);
+  letter-spacing: 0.04em;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 8px;
+  display: inline-block;
+}
+
+/* ─── SKILL BARS ─── */
+.skill-bar-item {
+  margin-bottom: 14px;
+}
+.skill-bar-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+.skill-bar-name { font-size: 0.82rem; font-weight: 500; color: var(--text2); }
+.skill-bar-pct { font-size: 0.78rem; color: var(--accent); font-weight: 600; }
+.skill-bar-track {
+  height: 5px;
+  background: var(--bar-bg);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.skill-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 3px;
+  width: 0;
+  transition: width 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ─── SOFT SKILLS ─── */
+.soft-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.soft-tag {
+  padding: 5px 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-size: 0.78rem;
+  color: var(--text2);
+  font-weight: 400;
+}
+
+/* ─── EDUCATION ─── */
+.edu-item {
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+.edu-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+.edu-title { font-size: 0.88rem; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+.edu-sub { font-size: 0.78rem; color: var(--text2); margin-bottom: 4px; }
+.edu-badge {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+.badge-progress { background: rgb(253, 217, 116); color: #f72804; border: 1px solid rgba(255, 175, 2, 0.842); }
+.badge-unfinished { background: rgba(235, 96, 228, 0.13); color: #e624c5; border: 1px solid rgba(102, 14, 216, 0.719); }
+.badge-done { background: rgba(145, 245, 165, 0.87); color: #024913; border: 1px solid rgba(9, 252, 57, 0.918); }
+
+/* ─── CERTS ─── */
+.cert-item {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  margin-bottom: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+.cert-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+.cert-num {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #0d1117;
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.cert-name { font-size: 0.83rem; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+.cert-org { font-size: 0.75rem; color: var(--text2); margin-bottom: 3px; }
+.cert-hours {
+  font-size: 0.7rem; font-weight: 700; color: var(--accent);
+  background: var(--accent-soft);
+  padding: 1px 8px; border-radius: 4px; display: inline-block;
+}
+
+/* ─── TOOLS ─── */
+.tools-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.tool-chip {
+  padding: 5px 13px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.77rem;
+  font-weight: 500;
+  color: var(--text2);
+  transition: all 0.2s;
+}
+.tool-chip:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ─── LANGUAGES ─── */
+.lang-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+.lang-item:last-child { border-bottom: none; }
+.lang-name { font-size: 0.85rem; font-weight: 500; }
+.lang-level {
+  font-size: 0.75rem;
+  color: var(--text2);
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 2px 9px;
+}
+
+/* ─── RESOURCES ─── */
+.resource-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--text2);
+  font-size: 0.82rem;
+  font-weight: 500;
+  margin-bottom: 8px;
+  transition: all 0.2s;
+}
+.resource-link:last-child { margin-bottom: 0; }
+.resource-link:hover { border-color: var(--accent); color: var(--accent); }
+.resource-icon { font-size: 1.1rem; }
+
+/* ─── PROFILE BOX ─── */
+.profile-text {
+  font-size: 0.84rem;
+  color: var(--text2);
+  line-height: 1.7;
+}
+.profile-list {
+  margin-top: 10px;
+  padding-left: 0;
+  list-style: none;
+}
+.profile-list li {
+  padding: 4px 0;
+  font-size: 0.82rem;
+  color: var(--text2);
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.profile-list li::before {
+  content: '◆';
+  color: var(--accent);
+  font-size: 0.55rem;
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+
+/* ─── DIGITAL SECTION ─── */
+.digital-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.digital-card {
+  padding: 12px 14px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.digital-card-icon { font-size: 1.1rem; margin-bottom: 4px; }
+.digital-card-title { font-size: 0.8rem; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+.digital-card-desc { font-size: 0.73rem; color: var(--text3); line-height: 1.5; }
+
+/* ─── FOOTER ─── */
+.cv-footer {
+  text-align: center;
+  padding: 20px;
+  color: var(--text3);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 800px) {
+  .cv-grid { grid-template-columns: 1fr; }
+  .hero { grid-template-columns: 1fr; text-align: center; }
+  .hero-avatar { margin: 0 auto; }
+  .hero-contact { justify-content: center; }
+  .hero-tags { flex-direction: row; align-items: center; justify-content: center; flex-wrap: wrap; }
+  .section { padding: 20px; }
+  .digital-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 500px) {
+  #topbar { padding: 8px 12px; }
+  #cv { padding: 16px 12px 40px; }
+  .hero { padding: 22px 18px; }
+  .hero-name { font-size: 1.7rem; }
+}
+
+/* ─── PRINT ─── */
+@media print {
+  #topbar { display: none !important; }
+  body { background: #fff !important; color: #000 !important; }
+  .hero, .section {
+    background: #fff !important;
+    border: 1px solid #ccc !important;
+    break-inside: avoid;
+    box-shadow: none !important;
+  }
+  :root {
+    --bg: #fff; --bg2: #fff; --bg3: #f8f8f8;
+    --text: #111; --text2: #333; --text3: #666;
+    --accent: #8b6914; --accent2: #a07820;
+    --border: #ddd;
+    --bar-bg: #e0e0e0;
+    --shadow: none;
+    --tag-bg: #f0e8d0;
+    --tag-border: #c9a84c;
+    --name-color: #111;
+  }
+  #cv { max-width: 100%; padding: 10px; }
+  .cv-grid { grid-template-columns: 1fr 280px; }
+  .section { margin-bottom: 14px; padding: 16px; }
+  a { color: inherit; text-decoration: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div id="topbar">
+  <div class="topbar-left">
+    <span class="topbar-title">Humberto L.R.</span>
+    <button class="btn active" id="btn-es" onclick="setLang('es')">🇪🇸 ES</button>
+    <button class="btn" id="btn-en" onclick="setLang('en')">🇬🇧 EN</button>
+    <button class="btn" id="btn-pt" onclick="setLang('pt')">🇵🇹 PT</button>
+  </div>
+  <div class="topbar-right">
+    <button class="btn btn-icon" id="btn-theme" onclick="toggleTheme()" title="Toggle theme">☀️ <span id="theme-label">Modo claro</span></button>
+    <button class="btn btn-icon" onclick="window.print()">🖨️ <span id="pdf-label">PDF</span></button>
+  </div>
+</div>
+
+<!-- CV WRAPPER -->
+<div id="cv">
+
+  <!-- HERO -->
+  <div class="hero">
+    <img class="hero-avatar" src="https://pbs.twimg.com/profile_images/2012681173093216257/DOMH01O8_200x200.jpg" alt="Humberto López Rodríguez">
+    <div>
+      <div class="hero-name">Humberto López Rodríguez</div>
+      <div class="hero-title" id="hero-subtitle">Finanzas · Tecnología · Marketing Digital · Comercio Online</div>
+      <div class="hero-contact">
+        <a class="contact-item" href="https://www.google.com/maps/search/Ferrol,+A+Coruña" target="_blank"><span class="icon">📍</span> Ferrol – A Coruña</a>
+        <a class="contact-item" href="tel:658868490"><span class="icon">📞</span> 658 868 490</a>
+        <a class="contact-item" href="https://wa.me/34658868490" target="_blank"><span class="icon">💬</span> WhatsApp</a>
+        <a class="contact-item" href="mailto:negronoche50@outlook.com"><span class="icon">✉️</span> negronoche50@outlook.com</a>
+      </div>
+    </div>
+    <div class="hero-tags" id="hero-tags">
+      <span class="hero-tag">Finanzas</span>
+      <span class="hero-tag" id="tag-web">Prog. Web</span>
+      <span class="hero-tag" id="tag-sec">Ciberseguridad</span>
+      <span class="hero-tag" id="tag-mkt">Mkt Digital</span>
+      <span class="hero-tag" id="tag-ecom">E-Commerce</span>
+    </div>
+  </div>
+
+  <!-- MAIN GRID -->
+  <div class="cv-grid">
+
+    <!-- LEFT COLUMN -->
+    <div>
+
+      <!-- ABOUT -->
+      <div class="section">
+        <div class="section-title"><span class="hex">⬡</span> <span id="t-about">Perfil Profesional</span></div>
+        <p class="about-text" id="about-text">Profesional con formación en programación web y tecnologías aplicadas a la contabilidad, incluyendo BBDD, seguridad informática y sistemas de información. Experiencia en el área contable especializado en presupuestos, desviaciones, análisis de datos financieros, conciliaciones bancarias, tesorería e informes económicos. Competencias adicionales en marketing digital, comunicación online, diseño gráfico y comercio electrónico aplicado a sectores de moda, alimentación, inmobiliaria y automoción. Perfil responsable, proactivo y con actitud de aprendizaje continuo.</p>
+      </div>
+
+      <!-- EXPERIENCE -->
+      <div class="section">
+        <div class="section-title"><span class="hex">⬡</span> <span id="t-exp">Experiencia Relevante</span></div>
+        <div id="exp-list"></div>
+      </div>
+
+      <!-- DIGITAL COMPETENCES -->
+      <div class="section">
+        <div class="section-title"><span class="hex">⬡</span> <span id="t-digital">Competencias Digitales & Comercio Online</span></div>
+        <div class="digital-grid" id="digital-grid"></div>
+      </div>
+
+      <!-- SKILL BARS -->
+      <div class="section">
+        <div class="section-title"><span class="hex">⬡</span> <span id="t-skills">Competencias Técnicas</span></div>
+        <div id="skill-bars"></div>
+      </div>
+
+      <!-- EDUCATION -->
+      <div class="section">
+        <div class="section-title"><span class="hex">⬡</span> <span id="t-edu">Formación Académica</span></div>
+        <div id="edu-list"></div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div>
+
+      <!-- CERTS -->
+      <div class="section">
+        <div class="section-title"><span class="hex">⬡</span> <span id="t-certs">Certificados N3</span></div>
+        <div id="cert-list"></div>
+      </div>
+
+      <!-- TOOLS -->
+      <div class="section">
+        <div class="section-title"><span class="hex">⬡</span> <span id="t-tools">Herramientas & Tecnologías</span></div>
+        <div class="tools-grid" id="tools-list"></div>
+      </div>
+
+      <!-- SOFT SKILLS -->
+      <div class="section">
+        <div class="section-title"><span class="hex">⬡</span> <span id="t-soft">Habilidades Blandas</span></div>
+        <div class="soft-grid" id="soft-list"></div>
+      </div>
+
+      <!-- LANGUAGES -->
+      <div class="section">
+        <div class="section-title"><span class="hex">⬡</span> <span id="t-lang">Idiomas</span></div>
+        <div id="lang-list"></div>
+      </div>
+
+      <!-- PROFILE -->
+      <div class="section">
+        <div class="section-title"><span class="hex">⬡</span> <span id="t-profile">Objetivo Profesional</span></div>
+        <p class="profile-text" id="profile-intro"></p>
+        <ul class="profile-list" id="profile-list"></ul>
+      </div>
+
+      <!-- RESOURCES -->
+      <div class="section">
+        <div class="section-title"><span class="hex">⬡</span> <span id="t-resources">Recursos Complementarios</span></div>
+        <p style="font-size:0.78rem;color:var(--text3);margin-bottom:12px;" id="resources-desc"></p>
+        <a class="resource-link" href="https://lophersson.github.io/2026/financiero1.html" target="_blank">
+          <span class="resource-icon">📊</span><span id="r1">Analista FP&A · FinCore</span>
+        </a>
+        <a class="resource-link" href="https://lophersson.github.io/2026/financiero2.html" target="_blank">
+          <span class="resource-icon">🗂️</span><span id="r2">7 Roles Finance & Tech · FinCore</span>
+        </a>
+        <a class="resource-link" href="https://lophersson.github.io/2026/financiero3.html" target="_blank">
+          <span class="resource-icon">⚖️</span><span id="r3">FP&A vs Controller · FinCore</span>
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="cv-footer" id="cv-footer">negronoche50@outlook.com · Ferrol, A Coruña · 2025</div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════
+   TRANSLATION DATA
+═══════════════════════════════════════════ */
+const T = {
+  es: {
+    themeLabel: 'Modo claro', pdfLabel: 'PDF',
+    heroSubtitle: 'Finanzas · Tecnología · Marketing Digital · Comercio Online',
+    tagWeb: 'Prog. Web', tagSec: 'Ciberseguridad', tagMkt: 'Mkt Digital', tagEcom: 'E-Commerce',
+    about: 'Perfil Profesional',
+    aboutText: 'Profesional con formación en programación web y tecnologías aplicadas a la contabilidad, incluyendo BBDD, seguridad informática y sistemas de información. Experiencia en el área contable especializado en presupuestos, desviaciones, análisis de datos financieros, conciliaciones bancarias, tesorería e informes económicos. Competencias adicionales en marketing digital, comunicación online, diseño gráfico y comercio electrónico aplicado a sectores de moda, alimentación, inmobiliaria y automoción. Perfil responsable, proactivo y con actitud de aprendizaje continuo.',
+    tExp: 'Experiencia Relevante',
+    tDigital: 'Competencias Digitales & Comercio Online',
+    tSkills: 'Competencias Técnicas',
+    tEdu: 'Formación Académica',
+    tCerts: 'Certificados N3',
+    tTools: 'Herramientas & Tecnologías',
+    tSoft: 'Habilidades Blandas',
+    tLang: 'Idiomas',
+    tProfile: 'Objetivo Profesional',
+    tResources: 'Recursos Complementarios',
+    profileIntro: 'Buscando un rol técnico que combine finanzas y tecnología, o posiciones en comercio digital, marketing y gestión de clientes.',
+    profileItems: [
+      'Análisis financiero y FP&A en entornos FinTech',
+      'Optimización de procesos financieros y ERP',
+      'Desarrollo de soluciones tecnológicas escalables',
+      'Gestión de e-commerce y tiendas online',
+      'Campañas de marketing digital y redes sociales',
+      'Asesoría inmobiliaria y venta de vehículos online',
+      'Integración de sistemas corporativos y BBDD'
+    ],
+    resourcesDesc: 'Documentación de referencia sobre roles clave en finanzas y tecnología, desarrollada como material de apoyo profesional.',
+    r1: 'Analista FP&A · FinCore', r2: '7 Roles Finance & Tech · FinCore', r3: 'FP&A vs Controller · FinCore',
+    exp: [
+      { role: 'Técnico de Ciberseguridad', company: 'Escuela de Finanzas Business School – Oleiros', desc: 'Monitorización, análisis y respuesta a incidentes', year: '2024' },
+      { role: 'QA Tester', company: 'Editorial La Capital – A Coruña', desc: 'Pruebas funcionales y reporte de errores web', year: '2024' },
+      { role: 'Gestor de la Información', company: 'Libolis – A Coruña', desc: 'Gestión de información, BBDD y CRM', year: '2023' },
+      { role: 'Gestor de Operaciones', company: 'Abanca Servicios Financieros – A Coruña', desc: 'Créditos, back office y aplicativo oficina', year: '2020' },
+      { role: 'Administrativo Contable', company: 'Asesoría Serva – Ferrol', desc: 'Contabilidad, impuestos, laboral y tesorería', year: '2017' },
+      { role: 'Empleado de Banca en varios bancos', company: 'BNP Paribas Madrid<br>Bankinter Zaragoza<br>Ibercaja Zaragoza', desc: 'Operativa, financiación y declaraciones IRPF', year: '2005 - 2007' },
+    ],
+    digital: [
+      { icon: '📣', title: 'Marketing Digital & SEO', desc: 'Estrategia de contenidos, posicionamiento web, Google Ads, Meta Ads y analítica digital.' },
+      { icon: '🛍️', title: 'E-Commerce & Venta Online', desc: 'Gestión de tiendas online en plataformas como Shopify, WooCommerce y marketplaces.' },
+      { icon: '🎨', title: 'Diseño Gráfico & Contenido', desc: 'Creación de creatividades, banners y materiales visuales con Canva, GIMP y Figma.' },
+      { icon: '🏠', title: 'Inmobiliaria & Automoción Online', desc: 'Publicación y gestión de anuncios en portales de viviendas y plataformas de venta de coches.' },
+      { icon: '👗', title: 'Moda & Alimentación Online', desc: 'Operativa de catálogos, fichas de producto, precios y promociones en tiendas de moda y food.' },
+      { icon: '💬', title: 'Comunicación & Community Mgmt', desc: 'Gestión de redes sociales, atención al cliente online, embudos de conversión y CRM.' },
+    ],
+    skills: [
+      { name: 'Contabilidad', pct: 90 },
+      { name: 'Finanzas / FP&A', pct: 82 },
+      { name: 'Marketing Digital', pct: 72 },
+      { name: 'Excel / BBDD', pct: 80 },
+      { name: 'E-Commerce & SEO', pct: 70 },
+      { name: 'Programación Web', pct: 68 },
+      { name: 'Diseño Gráfico', pct: 62 },
+      { name: 'Power BI', pct: 72 },
+      { name: 'Ciberseguridad', pct: 65 },
+      { name: 'SQL / MySQL', pct: 70 },
+      { name: 'ERP SAP/NAV', pct: 75 },
+    ],
+    edu: [
+      { title: 'Desarrollo de Aplicaciones Web (DAW)', sub: 'CFGS · CIPF Rodolfo Ucha – Ferrol · 2025', badge: 'progress', badgeText: 'EN CURSO' },
+      { title: 'Ciencias Empresariales – 90/240 ECTS', sub: 'Grado · Universidad A Coruña · 2020 · 3 años', badge: 'unfinished', badgeText: 'NO FINALIZADO' },
+      { title: 'Administración y Finanzas', sub: 'CFGS · CIPF Rodolfo Ucha – Ferrol · 2018', badge: 'done', badgeText: 'FINALIZADO' },
+      { title: 'Inglés Nivel Preintermedio', sub: 'EOI Ferrol · 2010 · 3 años', badge: null },
+    ],
+    certs: [
+      { num: 1, name: 'Programación en Lenguajes Estructurados IFCD0111', org: 'London Institute – Ferrol · 2025', hours: '620h' },
+      { num: 2, name: 'Seguridad Informática IFCT0109', org: 'Informática A Coruña · 2024', hours: '500h' },
+      { num: 3, name: 'Desarrollo de Aplic. con Tecnologías Web IFCD0210', org: 'Academia Postal – A Coruña · 2023', hours: '590h' },
+      { num: 4, name: 'Sistemas de Gestión de la Información IFCT0211', org: 'nFOR – A Coruña · 2023', hours: '590h' },
+    ],
+    tools: ['Dynamics 365','SAP','Excel','Power BI','Odoo','Anfix','VS Code','GitHub','MySQL','HTML/CSS/JS','Canva','GIMP','Figma (básico)','Google Ads','Meta Ads','WordPress','WooCommerce','Shopify'],
+    soft: ['Resolución de problemas','Trabajo autónomo','Aprendizaje continuo','Orientación al detalle','Trabajo en equipo','Adaptabilidad','Proactividad','Comunicación efectiva','Negociación','Orientación al cliente'],
+    languages: [
+      { flag: '🇪🇸', name: 'Español', level: 'Nativo' },
+      { flag: '🇬🇧', name: 'Inglés', level: 'Preintermedio (B1)' },
+      { flag: '🇵🇹', name: 'Portugués', level: 'Iniciación' },
+    ],
+  },
+
+  en: {
+    themeLabel: 'Light mode', pdfLabel: 'PDF',
+    heroSubtitle: 'Finance · Technology · Digital Marketing · Online Commerce',
+    tagWeb: 'Web Dev', tagSec: 'Cybersecurity', tagMkt: 'Digital Mkt', tagEcom: 'E-Commerce',
+    about: 'Professional Profile',
+    aboutText: 'Finance and technology professional with training in web programming, accounting databases, information security, and management systems. Experienced in financial analysis, budgeting, variance analysis, bank reconciliations, treasury, and economic reporting. Additional skills in digital marketing, online communication, graphic design, and e-commerce across fashion, food, real estate, and automotive sectors. Responsible, proactive, and committed to continuous learning.',
+    tExp: 'Relevant Experience',
+    tDigital: 'Digital & Online Commerce Competencies',
+    tSkills: 'Technical Skills',
+    tEdu: 'Education',
+    tCerts: 'Level 3 Certificates',
+    tTools: 'Tools & Technologies',
+    tSoft: 'Soft Skills',
+    tLang: 'Languages',
+    tProfile: 'Professional Goal',
+    tResources: 'Complementary Resources',
+    profileIntro: 'Seeking a technical role combining finance and technology, or positions in digital commerce, marketing, and client management.',
+    profileItems: [
+      'Financial analysis and FP&A in FinTech environments',
+      'Financial process optimisation and ERP implementation',
+      'Development of scalable technological solutions',
+      'E-commerce and online store management',
+      'Digital marketing campaigns and social media',
+      'Online real estate and automotive sales advisory',
+      'Corporate systems integration and databases'
+    ],
+    resourcesDesc: 'Reference documentation on key finance and technology roles, developed as professional support material.',
+    r1: 'FP&A Analyst · FinCore', r2: '7 Finance & Tech Roles · FinCore', r3: 'FP&A vs Controller · FinCore',
+    exp: [
+      { role: 'Cybersecurity Technician', company: 'Escuela de Finanzas Business School – Oleiros', desc: 'Monitoring, analysis, and incident response', year: '2024' },
+      { role: 'QA Tester', company: 'Editorial La Capital – A Coruña', desc: 'Functional testing and web error reporting', year: '2024' },
+      { role: 'Information Manager', company: 'Libolis – A Coruña', desc: 'Information management, databases, and CRM', year: '2023' },
+      { role: 'Operations Manager', company: 'Abanca Servicios Financieros – A Coruña', desc: 'Loans, back office, and office applications', year: '2020' },
+      { role: 'Accounting Administrator', company: 'Asesoría Serva – Ferrol', desc: 'Accounting, taxes, payroll, and treasury', year: '2017' },
+      { role: 'Banking professional at various banks ', company: 'BNP Paribas Madrid<br>Bankinter Zaragoza<br>Ibercaja Zaragoza', desc: 'Operations, financing, and income tax returns', year: '2005 - 2007' },
+    ],
+    digital: [
+      { icon: '📣', title: 'Digital Marketing & SEO', desc: 'Content strategy, web positioning, Google Ads, Meta Ads, and digital analytics.' },
+      { icon: '🛍️', title: 'E-Commerce & Online Sales', desc: 'Online store management on Shopify, WooCommerce, and marketplace platforms.' },
+      { icon: '🎨', title: 'Graphic Design & Content', desc: 'Creation of visuals, banners, and marketing materials with Canva, GIMP, and Figma.' },
+      { icon: '🏠', title: 'Real Estate & Automotive Online', desc: 'Listing and managing adverts on property portals and car sales platforms.' },
+      { icon: '👗', title: 'Fashion & Food Online Retail', desc: 'Catalogue management, product sheets, pricing, and promotions in fashion and food stores.' },
+      { icon: '💬', title: 'Communication & Community Mgmt', desc: 'Social media management, online customer support, conversion funnels, and CRM.' },
+    ],
+    skills: [
+      { name: 'Accounting', pct: 90 },
+      { name: 'Finance / FP&A', pct: 82 },
+      { name: 'Digital Marketing', pct: 72 },
+      { name: 'Excel / Databases', pct: 80 },
+      { name: 'E-Commerce & SEO', pct: 70 },
+      { name: 'Web Development', pct: 68 },
+      { name: 'Graphic Design', pct: 62 },
+      { name: 'Power BI', pct: 72 },
+      { name: 'Cybersecurity', pct: 65 },
+      { name: 'SQL / MySQL', pct: 70 },
+      { name: 'ERP SAP/NAV', pct: 75 },
+    ],
+    edu: [
+      { title: 'Web Application Development (DAW)', sub: 'Higher Vocational · CIPF Rodolfo Ucha – Ferrol · 2025', badge: 'progress', badgeText: 'IN PROGRESS' },
+      { title: 'Business Studies – 90/240 ECTS', sub: 'Degree · University of A Coruña · 2020 · 3 years', badge: 'unfinished', badgeText: 'NOT FINISHED' },
+      { title: 'Administration and Finance', sub: 'Higher Vocational · CIPF Rodolfo Ucha – Ferrol · 2018', badge: 'done', badgeText: 'COMPLETED' },
+      { title: 'English – Pre-Intermediate', sub: 'EOI Ferrol · 2010 · 3 years', badge: null },
+    ],
+    certs: [
+      { num: 1, name: 'Structured Language Programming IFCD0111', org: 'London Institute – Ferrol · 2025', hours: '620h' },
+      { num: 2, name: 'IT Security IFCT0109', org: 'Informática A Coruña · 2024', hours: '500h' },
+      { num: 3, name: 'Web Technology Application Development IFCD0210', org: 'Academia Postal – A Coruña · 2023', hours: '590h' },
+      { num: 4, name: 'Information Management Systems IFCT0211', org: 'nFOR – A Coruña · 2023', hours: '590h' },
+    ],
+    tools: ['Dynamics 365','SAP','Excel','Power BI','Odoo','Anfix','VS Code','GitHub','MySQL','HTML/CSS/JS','Canva','GIMP','Figma (basic)','Google Ads','Meta Ads','WordPress','WooCommerce','Shopify'],
+    soft: ['Problem solving','Autonomous work','Continuous learning','Detail orientation','Teamwork','Adaptability','Proactiveness','Effective communication','Negotiation','Customer orientation'],
+    languages: [
+      { flag: '🇪🇸', name: 'Spanish', level: 'Native' },
+      { flag: '🇬🇧', name: 'English', level: 'Pre-Intermediate (B1)' },
+      { flag: '🇵🇹', name: 'Portuguese', level: 'Beginner (A1)' },
+    ],
+  },
+
+  pt: {
+    themeLabel: 'Modo claro', pdfLabel: 'PDF',
+    heroSubtitle: 'Finanças · Tecnologia · Marketing Digital · Comércio Online',
+    tagWeb: 'Prog. Web', tagSec: 'Cibersegurança', tagMkt: 'Mkt Digital', tagEcom: 'E-Commerce',
+    about: 'Perfil Profissional',
+    aboutText: 'Profissional com formação em programação web e tecnologias aplicadas à contabilidade, incluindo BBDD, segurança informática e sistemas de informação. Experiência na área contabilística especializado em orçamentos, desvios, análise de dados financeiros, conciliações bancárias, tesouraria e relatórios económicos. Competências adicionais em marketing digital, comunicação online, design gráfico e comércio eletrónico aplicado a setores de moda, alimentação, imobiliário e automóvel. Perfil responsável, proativo e com atitude de aprendizagem contínua.',
+    tExp: 'Experiência Relevante',
+    tDigital: 'Competências Digitais & Comércio Online',
+    tSkills: 'Competências Técnicas',
+    tEdu: 'Formação Académica',
+    tCerts: 'Certificados N3',
+    tTools: 'Ferramentas & Tecnologias',
+    tSoft: 'Competências Interpessoais',
+    tLang: 'Idiomas',
+    tProfile: 'Objetivo Profissional',
+    tResources: 'Recursos Complementares',
+    profileIntro: 'À procura de um cargo técnico que combine finanças e tecnologia, ou posições em comércio digital, marketing e gestão de clientes.',
+    profileItems: [
+      'Análise financeira e FP&A em ambientes FinTech',
+      'Otimização de processos financeiros e ERP',
+      'Desenvolvimento de soluções tecnológicas escaláveis',
+      'Gestão de e-commerce e lojas online',
+      'Campanhas de marketing digital e redes sociais',
+      'Consultoria imobiliária e venda de veículos online',
+      'Integração de sistemas corporativos e BBDD'
+    ],
+    resourcesDesc: 'Documentação de referência sobre funções-chave em finanças e tecnologia, desenvolvida como material de apoio profissional.',
+    r1: 'Analista FP&A · FinCore', r2: '7 Funções Finance & Tech · FinCore', r3: 'FP&A vs Controller · FinCore',
+    exp: [
+      { role: 'Técnico de Cibersegurança', company: 'Escuela de Finanzas Business School – Oleiros', desc: 'Monitorização, análise e resposta a incidentes', year: '2024' },
+      { role: 'QA Tester', company: 'Editorial La Capital – A Coruña', desc: 'Testes funcionais e reporte de erros web', year: '2024' },
+      { role: 'Gestor de Informação', company: 'Libolis – A Coruña', desc: 'Gestão de informação, BBDD e CRM', year: '2023' },
+      { role: 'Gestor de Operações', company: 'Abanca Servicios Financieros – A Coruña', desc: 'Créditos, back office e aplicativo de escritório', year: '2020' },
+      { role: 'Administrativo Contabilístico', company: 'Asesoría Serva – Ferrol', desc: 'Contabilidade, impostos, laboral e tesouraria', year: '2017' },
+      { role: 'Profissional bancário em vários bancos', company: 'BNP Paribas Madrid<br>Bankinter Zaragoza<br>Ibercaja Zaragoza', desc: 'Operativa, financiamento e declarações IRS', year: '2005 - 2007' },
+    ],
+    digital: [
+      { icon: '📣', title: 'Marketing Digital & SEO', desc: 'Estratégia de conteúdos, posicionamento web, Google Ads, Meta Ads e analítica digital.' },
+      { icon: '🛍️', title: 'E-Commerce & Vendas Online', desc: 'Gestão de lojas online em Shopify, WooCommerce e marketplaces.' },
+      { icon: '🎨', title: 'Design Gráfico & Conteúdo', desc: 'Criação de criativos, banners e materiais visuais com Canva, GIMP e Figma.' },
+      { icon: '🏠', title: 'Imobiliário & Automóvel Online', desc: 'Publicação e gestão de anúncios em portais imobiliários e plataformas de venda de automóveis.' },
+      { icon: '👗', title: 'Moda & Alimentação Online', desc: 'Gestão de catálogos, fichas de produto, preços e promoções em lojas de moda e alimentação.' },
+      { icon: '💬', title: 'Comunicação & Community Mgmt', desc: 'Gestão de redes sociais, atendimento ao cliente online, funis de conversão e CRM.' },
+    ],
+    skills: [
+      { name: 'Contabilidade', pct: 90 },
+      { name: 'Finanças / FP&A', pct: 82 },
+      { name: 'Marketing Digital', pct: 72 },
+      { name: 'Excel / BBDD', pct: 80 },
+      { name: 'E-Commerce & SEO', pct: 70 },
+      { name: 'Programação Web', pct: 68 },
+      { name: 'Design Gráfico', pct: 62 },
+      { name: 'Power BI', pct: 72 },
+      { name: 'Cibersegurança', pct: 65 },
+      { name: 'SQL / MySQL', pct: 70 },
+      { name: 'ERP SAP/NAV', pct: 75 },
+    ],
+    edu: [
+      { title: 'Desenvolvimento de Aplicações Web (DAW)', sub: 'CFGS · CIPF Rodolfo Ucha – Ferrol · 2025', badge: 'progress', badgeText: 'EM CURSO' },
+      { title: 'Ciências Empresariais – 90/240 ECTS', sub: 'Licenciatura · Universidade A Coruña · 2020 · 3 anos', badge: 'unfinished', badgeText: 'NÃO TERMINADO' },
+      { title: 'Administração e Finanças', sub: 'CFGS · CIPF Rodolfo Ucha – Ferrol · 2018', badge: 'done', badgeText: 'CONCLUÍDO' },
+      { title: 'Inglês Pré-Intermédio', sub: 'EOI Ferrol · 2010 · 3 anos', badge: null },
+    ],
+    certs: [
+      { num: 1, name: 'Programação em Linguagens Estruturadas IFCD0111', org: 'London Institute – Ferrol · 2025', hours: '620h' },
+      { num: 2, name: 'Segurança Informática IFCT0109', org: 'Informática A Coruña · 2024', hours: '500h' },
+      { num: 3, name: 'Desenvolvimento de Aplic. com Tecnologias Web IFCD0210', org: 'Academia Postal – A Coruña · 2023', hours: '590h' },
+      { num: 4, name: 'Sistemas de Gestão da Informação IFCT0211', org: 'nFOR – A Coruña · 2023', hours: '590h' },
+    ],
+    tools: ['Dynamics 365','SAP','Excel','Power BI','Odoo','Anfix','VS Code','GitHub','MySQL','HTML/CSS/JS','Canva','GIMP','Figma (básico)','Google Ads','Meta Ads','WordPress','WooCommerce','Shopify'],
+    soft: ['Resolução de problemas','Trabalho autónomo','Aprendizagem contínua','Orientação ao detalhe','Trabalho em equipa','Adaptabilidade','Proatividade','Comunicação eficaz','Negociação','Orientação ao cliente'],
+    languages: [
+      { flag: '🇪🇸', name: 'Espanhol', level: 'Nativo' },
+      { flag: '🇬🇧', name: 'Inglês', level: 'Pré-Intermédio (B1)' },
+      { flag: '🇵🇹', name: 'Português', level: 'Iniciação' },
+    ],
+  }
+};
+
+/* ═══════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════ */
+let currentLang = 'es';
+let isDark = true;
+
+/* ═══════════════════════════════════════════
+   RENDER
+═══════════════════════════════════════════ */
+function render(lang) {
+  const d = T[lang];
+  // Static labels
+  document.getElementById('theme-label').textContent = d.themeLabel;
+  document.getElementById('pdf-label').textContent = d.pdfLabel;
+  document.getElementById('hero-subtitle').textContent = d.heroSubtitle;
+  document.getElementById('tag-web').textContent = d.tagWeb;
+  document.getElementById('tag-sec').textContent = d.tagSec;
+  document.getElementById('tag-mkt').textContent = d.tagMkt;
+  document.getElementById('tag-ecom').textContent = d.tagEcom;
+  document.getElementById('t-about').textContent = d.about;
+  document.getElementById('about-text').textContent = d.aboutText;
+  document.getElementById('t-exp').textContent = d.tExp;
+  document.getElementById('t-digital').textContent = d.tDigital;
+  document.getElementById('t-skills').textContent = d.tSkills;
+  document.getElementById('t-edu').textContent = d.tEdu;
+  document.getElementById('t-certs').textContent = d.tCerts;
+  document.getElementById('t-tools').textContent = d.tTools;
+  document.getElementById('t-soft').textContent = d.tSoft;
+  document.getElementById('t-lang').textContent = d.tLang;
+  document.getElementById('t-profile').textContent = d.tProfile;
+  document.getElementById('t-resources').textContent = d.tResources;
+  document.getElementById('profile-intro').textContent = d.profileIntro;
+  document.getElementById('resources-desc').textContent = d.resourcesDesc;
+  document.getElementById('r1').textContent = d.r1;
+  document.getElementById('r2').textContent = d.r2;
+  document.getElementById('r3').textContent = d.r3;
+
+  // Experience
+  const expList = document.getElementById('exp-list');
+  expList.innerHTML = d.exp.map(e => `
+    <div class="exp-item">
+      <div class="exp-dot"></div>
+      <div>
+        <div class="exp-role">${e.role}</div>
+        <div class="exp-company">${e.company}</div>
+        <div class="exp-desc">${e.desc}</div>
+        <span class="exp-year">${e.year}</span>
+      </div>
+    </div>`).join('');
+
+  // Digital
+  const dgGrid = document.getElementById('digital-grid');
+  dgGrid.innerHTML = d.digital.map(c => `
+    <div class="digital-card">
+      <div class="digital-card-icon">${c.icon}</div>
+      <div class="digital-card-title">${c.title}</div>
+      <div class="digital-card-desc">${c.desc}</div>
+    </div>`).join('');
+
+  // Skill bars
+  const skillBars = document.getElementById('skill-bars');
+  skillBars.innerHTML = d.skills.map(s => `
+    <div class="skill-bar-item">
+      <div class="skill-bar-header">
+        <span class="skill-bar-name">${s.name}</span>
+        <span class="skill-bar-pct">${s.pct}%</span>
+      </div>
+      <div class="skill-bar-track">
+        <div class="skill-bar-fill" data-pct="${s.pct}" style="width:0"></div>
+      </div>
+    </div>`).join('');
+  // Animate after render
+  setTimeout(() => {
+    document.querySelectorAll('.skill-bar-fill').forEach(el => {
+      el.style.width = el.dataset.pct + '%';
+    });
+  }, 80);
+
+  // Education
+  const eduList = document.getElementById('edu-list');
+  eduList.innerHTML = d.edu.map(e => `
+    <div class="edu-item">
+      <div class="edu-title">${e.title}</div>
+      <div class="edu-sub">${e.sub}</div>
+      ${e.badge ? `<span class="edu-badge badge-${e.badge}">${e.badgeText}</span>` : ''}
+    </div>`).join('');
+
+  // Certs
+  const certList = document.getElementById('cert-list');
+  certList.innerHTML = d.certs.map(c => `
+    <div class="cert-item">
+      <div class="cert-num">${c.num}</div>
+      <div>
+        <div class="cert-name">${c.name}</div>
+        <div class="cert-org">${c.org}</div>
+        <span class="cert-hours">${c.hours}</span>
+      </div>
+    </div>`).join('');
+
+  // Tools
+  const toolsList = document.getElementById('tools-list');
+  toolsList.innerHTML = d.tools.map(t => `<span class="tool-chip">${t}</span>`).join('');
+
+  // Soft
+  const softList = document.getElementById('soft-list');
+  softList.innerHTML = d.soft.map(s => `<span class="soft-tag">${s}</span>`).join('');
+
+  // Languages
+  const langList = document.getElementById('lang-list');
+  langList.innerHTML = d.languages.map(l => `
+    <div class="lang-item">
+      <span class="lang-name">${l.flag} ${l.name}</span>
+      <span class="lang-level">${l.level}</span>
+    </div>`).join('');
+
+  // Profile list
+  const profileList = document.getElementById('profile-list');
+  profileList.innerHTML = d.profileItems.map(i => `<li>${i}</li>`).join('');
+
+  // Active btn
+  ['es','en','pt'].forEach(l => document.getElementById('btn-'+l).classList.toggle('active', l===lang));
+}
+
+/* ═══════════════════════════════════════════
+   CONTROLS
+═══════════════════════════════════════════ */
+function setLang(lang) {
+  currentLang = lang;
+  document.documentElement.lang = lang;
+  render(lang);
+}
+
+function toggleTheme() {
+  isDark = !isDark;
+  document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+  document.getElementById('btn-theme').querySelector('span') || null;
+  const btn = document.getElementById('btn-theme');
+  const d = T[currentLang];
+  btn.innerHTML = isDark ? `☀️ <span id="theme-label">${d.themeLabel}</span>` : `🌙 <span id="theme-label">${isDark ? d.themeLabel : (currentLang==='en' ? 'Dark mode' : 'Modo oscuro')}</span>`;
+  // Re-animate bars
+  setTimeout(() => {
+    document.querySelectorAll('.skill-bar-fill').forEach(el => {
+      el.style.width = '0';
+      setTimeout(() => el.style.width = el.dataset.pct + '%', 50);
+    });
+  }, 50);
+}
+
+/* ═══════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════ */
+render('es');
+
+// Intersection observer for skill bars on scroll
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.querySelectorAll('.skill-bar-fill').forEach(el => {
+        el.style.width = el.dataset.pct + '%';
+      });
+    }
+  });
+}, { threshold: 0.2 });
+
+document.querySelectorAll('#skill-bars').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
