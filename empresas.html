@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lophersson Group · Mis Empresas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:      #090909;
+      --surface: #131313;
+      --border:  rgba(255,255,255,0.06);
+      --gold:    #c9a84c;
+      --text:    #e8e0d0;
+      --muted:   rgba(232,224,208,0.4);
+      --r:       13px;
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* ── Header ── */
+    header {
+      width: 100%;
+      max-width: 700px;
+      padding: 32px 20px 18px;
+      text-align: center;
+    }
+    .eyebrow {
+      font-size: 0.6rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0.8;
+      margin-bottom: 8px;
+    }
+    header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      font-style: italic;
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      letter-spacing: 0.04em;
+    }
+    header h1 span { color: var(--gold); }
+    .divider {
+      width: 48px; height: 1px;
+      background: var(--gold);
+      margin: 12px auto 0;
+      opacity: 0.6;
+    }
+
+    /* ── Grid ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      padding: 20px 18px 28px;
+      width: 100%;
+      max-width: 700px;
+    }
+
+    /* ── Card ── */
+    .card {
+      position: relative;
+      border-radius: var(--r);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      aspect-ratio: 1 / 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform .26s cubic-bezier(.22,.68,0,1.2),
+                  border-color .2s, box-shadow .26s;
+      animation: fadeUp .45s both;
+    }
+    .card:hover {
+      transform: translateY(-4px) scale(1.04);
+      border-color: rgba(201,168,76,.55);
+      box-shadow: 0 14px 40px rgba(0,0,0,.55),
+                  0 0 0 1px rgba(201,168,76,.2);
+    }
+    .card img {
+      max-width: 85%; max-height: 85%;
+      object-fit: contain;
+      display: block;
+      filter: drop-shadow(0 2px 5px rgba(0,0,0,.5));
+      transition: filter .22s, transform .22s;
+    }
+    .card:hover img {
+      filter: drop-shadow(0 4px 14px rgba(201,168,76,.3));
+      transform: scale(1.05);
+    }
+    .card-label {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 22px 6px 7px;
+      background: linear-gradient(to top, rgba(0,0,0,.78) 0%, transparent 100%);
+      font-size: 0.54rem;
+      font-weight: 500;
+      text-align: center;
+      color: #fff;
+      opacity: 0;
+      transform: translateY(3px);
+      transition: opacity .22s, transform .22s;
+      pointer-events: none;
+    }
+    .card:hover .card-label { opacity:1; transform:translateY(0); }
+
+    /* empty slot */
+    .card.empty { cursor:default; opacity:.12; }
+    .card.empty:hover { transform:none; border-color:var(--border); box-shadow:none; }
+
+    /* stagger */
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(14px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    .card:nth-child(1)  { animation-delay:.03s }
+    .card:nth-child(2)  { animation-delay:.06s }
+    .card:nth-child(3)  { animation-delay:.09s }
+    .card:nth-child(4)  { animation-delay:.12s }
+    .card:nth-child(5)  { animation-delay:.15s }
+    .card:nth-child(6)  { animation-delay:.18s }
+    .card:nth-child(7)  { animation-delay:.21s }
+    .card:nth-child(8)  { animation-delay:.24s }
+    .card:nth-child(9)  { animation-delay:.27s }
+    .card:nth-child(10) { animation-delay:.30s }
+    .card:nth-child(11) { animation-delay:.33s }
+    .card:nth-child(12) { animation-delay:.36s }
+    .card:nth-child(13) { animation-delay:.39s }
+    .card:nth-child(14) { animation-delay:.42s }
+    .card:nth-child(15) { animation-delay:.45s }
+    .card:nth-child(16) { animation-delay:.48s }
+    .card:nth-child(17) { animation-delay:.51s }
+    .card:nth-child(18) { animation-delay:.54s }
+    .card:nth-child(19) { animation-delay:.57s }
+    .card:nth-child(20) { animation-delay:.60s }
+
+    /* ── Modal ── */
+    .modal-overlay {
+      position: fixed; inset:0;
+      background: rgba(0,0,0,.92);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      z-index: 200;
+      display: flex; align-items:center; justify-content:center;
+      opacity:0; pointer-events:none;
+      transition: opacity .28s;
+    }
+    .modal-overlay.open { opacity:1; pointer-events:all; }
+
+    .modal-box {
+      background: #151515;
+      border: 1px solid rgba(201,168,76,.25);
+      border-radius: 18px;
+      padding: 24px 24px 18px;
+      max-width: min(480px,90vw);
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 40px 100px rgba(0,0,0,.8);
+      transform: scale(.9) translateY(16px);
+      transition: transform .3s cubic-bezier(.22,.68,0,1.1);
+      position: relative;
+    }
+    .modal-overlay.open .modal-box { transform:scale(1) translateY(0); }
+
+    .modal-box img {
+      max-width:100%; max-height:52vh;
+      object-fit:contain; display:block;
+      margin:0 auto; border-radius:6px;
+    }
+    .modal-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-style:italic; font-size:1.2rem; font-weight:400;
+      color:var(--gold); margin-top:14px; letter-spacing:.04em;
+    }
+    .modal-close {
+      position:absolute; top:10px; right:14px;
+      background:none; border:none;
+      color:var(--muted); font-size:1.3rem;
+      cursor:pointer; transition:color .18s;
+      line-height:1; padding:4px 6px;
+    }
+    .modal-close:hover { color:var(--gold); }
+
+    /* ── Footer ── */
+    footer {
+      width:100%; max-width:700px;
+      padding:14px 20px 22px;
+      border-top:1px solid var(--border);
+      text-align:center;
+    }
+    footer p { font-size:.68rem; color:var(--muted); letter-spacing:.06em; }
+    footer a { color:var(--gold); text-decoration:none; }
+    footer a:hover { text-decoration:underline; }
+  </style>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow">Lophersson Group</p>
+  <h1>Mis <span>Empresas</span></h1>
+  <div class="divider"></div>
+</header>
+
+<main class="grid">
+
+  <!-- 1 -->
+  <div class="card" onclick="openModal(this)">
+    <img src="https://raw.githubusercontent.com/Lophersson/lophersson_group/refs/heads/main/Depayser.png" alt="Depayser Boulangerie" crossorigin="anonymous">
+    <div class="card-label">Depayser Boulangerie</div>
+  </div>
+
+  <!-- 2 -->
+  <div class="card" onclick="openModal(this)">
+    <img src="https://raw.githubusercontent.com/Lophersson/lophersson_group/refs/heads/main/Wheaton%20Coffee%20Jazz.png" alt="Wheaton Coffee Jazz" crossorigin="anonymous">
+    <div class="card-label">Wheaton Coffee Jazz</div>
+  </div>
+
+  <!-- 3 -->
+  <div class="card" onclick="openModal(this)">
+    <img src="https://raw.githubusercontent.com/Lophersson/lophersson_group/refs/heads/main/Logo%20Boutique%20de%20Ropa%20Moderno%20Rosa_20241228_174210_0000.png" alt="La Petite Nouvelle" crossorigin="anonymous">
+    <div class="card-label">La Petite Nouvelle</div>
+  </div>
+
+  <!-- 4 -->
+  <div class="card" onclick="openModal(this)">
+    <img src="https://raw.githubusercontent.com/Lophersson/lophersson_group/refs/heads/main/Coccolone.png" alt="Coccolone" crossorigin="anonymous">
+    <div class="card-label">Coccolone</div>
+  </div>
+
+  <!-- 5 -->
+  <div class="card" onclick="openModal(this)">
+    <img src="https://raw.githubusercontent.com/Lophersson/lophersson_group/refs/heads/main/_autoPlitz_241231.png" alt="autoPlitz Automobiles" crossorigin="anonymous">
+    <div class="card-label">autoPlitz Automobiles</div>
+  </div>
+
+  <!-- 6 -->
+  <div class="card" onclick="openModal(this)">
+    <img src="https://raw.githubusercontent.com/Lophersson/lophersson_group/refs/heads/main/Copia%20de%20Sparkle.png" alt="Lophersson Consulting" crossorigin="anonymous">
+    <div class="card-label">Lophersson Consulting</div>
+  </div>
+
+  <!-- 7 -->
+  <div class="card" onclick="openModal(this)">
+    <img src="https://raw.githubusercontent.com/Lophersson/lophersson_group/refs/heads/main/bluepirateship.png" alt="Blue Pirate Ship Delicattessen" crossorigin="anonymous">
+    <div class="card-label">Blue Pirate Ship Delicattessen</div>
+  </div>
+
+  <!-- 8 -->
+  <div class="card" onclick="openModal(this)">
+    <img src="https://raw.githubusercontent.com/Lophersson/lophersson_group/refs/heads/main/Gr%C3%B6no_20241222_180946_0000.png" alt="Gröno Chocolate" crossorigin="anonymous">
+    <div class="card-label">Gröno Chocolate</div>
+  </div>
+
+  <!-- 9 -->
+  <div class="card" onclick="openModal(this)">
+    <img src="https://raw.githubusercontent.com/Lophersson/lophersson_group/refs/heads/main/_insigne_241231.png" alt="Insigne Restaurant" crossorigin="anonymous">
+    <div class="card-label">Insigne Restaurant</div>
+  </div>
+
+  <!-- 10 -->
+  <div class="card" onclick="openModal(this)">
+    <img src="https://raw.githubusercontent.com/Lophersson/lophersson_group/refs/heads/main/Minimalist%20House%20Line%20Real%20Estate%20Logo_20241228_171001_0000.png" alt="Arvendium Inmobiliaria" crossorigin="anonymous">
+    <div class="card-label">Arvendium Inmobiliaria</div>
+  </div>
+
+  <!-- 11 -->
+  <div class="card" onclick="openModal(this)">
+    <img src="https://raw.githubusercontent.com/Lophersson/lophersson_group/refs/heads/main/20241228_181006.png" alt="Terra Mirai Casa Rural" crossorigin="anonymous">
+    <div class="card-label">Terra Mirai Casa Rural</div>
+  </div>
+
+  <!-- 12 -->
+  <div class="card" onclick="openModal(this)">
+    <img src="https://raw.githubusercontent.com/Lophersson/lophersson_group/refs/heads/main/_ursaeMajoris_241231.png" alt="Ursae Majoris Art &amp; Social" crossorigin="anonymous">
+    <div class="card-label">Ursae Majoris Art &amp; Social</div>
+  </div>
+
+  <!-- 13 -->
+  <div class="card" onclick="openModal(this)">
+    <img src="https://raw.githubusercontent.com/Lophersson/lophersson_group/refs/heads/main/bangalorelogooficialJPG.jpg" alt="Bangalore Coffee Ferrol" crossorigin="anonymous">
+    <div class="card-label">Bangalore Coffee Ferrol</div>
+  </div>
+
+  <!-- 14 -->
+  <div class="card" onclick="openModal(this)">
+    <img src="https://raw.githubusercontent.com/Lophersson/lophersson_group/refs/heads/main/_virtuosity_241231.png" alt="Virtuosity Night Club" crossorigin="anonymous">
+    <div class="card-label">Virtuosity Night Club</div>
+  </div>
+
+  <!-- 15 -->
+  <div class="card" onclick="openModal(this)">
+    <img src="https://raw.githubusercontent.com/Lophersson/lophersson_group/refs/heads/main/_eleganz_241231.png" alt="Elegance" crossorigin="anonymous">
+    <div class="card-label">Elegance</div>
+  </div>
+  
+  <!-- 16 -->
+  <div class="card" onclick="openModal(this)">
+    <img src="https://raw.githubusercontent.com/Lophersson/2026/refs/heads/main/exalithon.jpg" alt="Exalithon" crossorigin="anonymous">
+    <div class="card-label">Exalithon</div>
+  </div>
+
+  <!-- 17–20 empty slots -->
+  <!--<div class="card empty"></div>
+  <div class="card empty"></div>
+  <div class="card empty"></div>
+  <div class="card empty"></div>-->
+
+</main>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">&#x2715;</button>
+    <img id="modalImg" src="" alt="">
+    <p class="modal-name" id="modalName"></p>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2025 Lophersson Group &nbsp;|&nbsp; <a href="#">@Lophersson</a></p>
+</footer>
+
+<script>
+  const modal     = document.getElementById('modal');
+  const modalImg  = document.getElementById('modalImg');
+  const modalName = document.getElementById('modalName');
+
+  function openModal(card) {
+    const img = card.querySelector('img');
+    const lbl = card.querySelector('.card-label');
+    modalImg.src = img.src;
+    modalImg.alt = img.alt;
+    modalName.textContent = lbl.textContent;
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
+</body>
+</html>
