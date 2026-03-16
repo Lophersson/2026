@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>100 Puestos de Trabajo · Humberto L.R.</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #0a0a0f;
+    --surface: #111118;
+    --card: #16161f;
+    --border: #2a2a3a;
+    --gold: #c9a84c;
+    --gold-dim: #8a6f30;
+    --gold-glow: rgba(201,168,76,0.12);
+    --text: #e8e4d9;
+    --text-dim: #8a8880;
+    --text-muted: #4a4a5a;
+    --accent-green: #4caf79;
+    --accent-blue: #4c8ecf;
+    --accent-rose: #cf6b4c;
+    --accent-violet: #8b6bcf;
+    --accent-teal: #4cbfb5;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--void);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── GRAIN OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0; opacity: .6;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: relative; z-index: 10;
+    padding: 4rem 2rem 2rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(201,168,76,0.04) 0%, transparent 100%);
+  }
+
+  .header-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: .65rem;
+    letter-spacing: .25em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: .5rem;
+  }
+
+  header h1 span { color: var(--gold); font-style: italic; }
+
+  .header-sub {
+    font-size: .85rem;
+    color: var(--text-dim);
+    max-width: 520px;
+    margin: 1rem auto 0;
+    line-height: 1.7;
+  }
+
+  .counter-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    background: var(--gold-glow);
+    border: 1px solid var(--gold-dim);
+    border-radius: 2rem;
+    padding: .35rem 1rem;
+    font-family: 'DM Mono', monospace;
+    font-size: .7rem;
+    color: var(--gold);
+    margin-top: 1.5rem;
+    letter-spacing: .08em;
+  }
+
+  /* ── CONTROLES ── */
+  .controls {
+    position: sticky; top: 0; z-index: 20;
+    background: rgba(10,10,15,.92);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 2rem;
+  }
+
+  .controls-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .search-wrap {
+    flex: 1;
+    min-width: 200px;
+    position: relative;
+  }
+
+  .search-wrap input {
+    width: 100%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: .5rem;
+    padding: .6rem 1rem .6rem 2.4rem;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: .82rem;
+    outline: none;
+    transition: border-color .2s;
+  }
+
+  .search-wrap input:focus { border-color: var(--gold-dim); }
+  .search-wrap input::placeholder { color: var(--text-muted); }
+
+  .search-icon {
+    position: absolute; left: .75rem; top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: .8rem;
+    pointer-events: none;
+  }
+
+  .filters {
+    display: flex; gap: .5rem; flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 2rem;
+    padding: .35rem .85rem;
+    color: var(--text-dim);
+    font-family: 'DM Sans', sans-serif;
+    font-size: .72rem;
+    cursor: pointer;
+    transition: all .2s;
+    white-space: nowrap;
+  }
+
+  .filter-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
+  .filter-btn.active {
+    background: var(--gold-glow);
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  /* ── GRID ── */
+  .main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem 4rem;
+    position: relative; z-index: 5;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: .6rem;
+    letter-spacing: .2em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    margin: 2.5rem 0 1rem;
+    padding-bottom: .5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+  }
+
+  .section-label .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border-radius: .75rem;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    margin-bottom: .25rem;
+  }
+
+  .card {
+    background: var(--card);
+    padding: 1.1rem 1.25rem;
+    display: flex;
+    gap: .85rem;
+    align-items: flex-start;
+    cursor: default;
+    transition: background .2s;
+    position: relative;
+  }
+
+  .card:hover { background: #1c1c28; }
+
+  .card-num {
+    font-family: 'DM Mono', monospace;
+    font-size: .6rem;
+    color: var(--text-muted);
+    padding-top: .15rem;
+    min-width: 22px;
+    flex-shrink: 0;
+  }
+
+  .card-body { flex: 1; }
+
+  .card-title {
+    font-size: .85rem;
+    font-weight: 400;
+    color: var(--text);
+    line-height: 1.35;
+    margin-bottom: .3rem;
+  }
+
+  .card-meta {
+    font-size: .72rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .card-tag {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: .58rem;
+    padding: .15rem .5rem;
+    border-radius: 1rem;
+    margin-top: .4rem;
+    border: 1px solid;
+    letter-spacing: .05em;
+  }
+
+  .diff-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: .58rem;
+    padding: .1rem .45rem;
+    border-radius: 1rem;
+    border: 1px solid;
+    margin-left: auto;
+    flex-shrink: 0;
+    align-self: flex-start;
+    white-space: nowrap;
+  }
+
+  /* Dificultad */
+  .diff-easy  { color: var(--accent-green); border-color: rgba(76,175,121,.3); background: rgba(76,175,121,.06); }
+  .diff-mid   { color: var(--gold); border-color: rgba(201,168,76,.3); background: rgba(201,168,76,.06); }
+  .diff-reach { color: var(--accent-rose); border-color: rgba(207,107,76,.3); background: rgba(207,107,76,.06); }
+
+  /* Colores por categoría */
+  .cat-admin   { color: var(--accent-blue); border-color: rgba(76,142,207,.3); }
+  .cat-banca   { color: var(--gold); border-color: rgba(201,168,76,.3); }
+  .cat-cliente { color: var(--accent-teal); border-color: rgba(76,191,181,.3); }
+  .cat-ventas  { color: var(--accent-green); border-color: rgba(76,175,121,.3); }
+  .cat-digital { color: var(--accent-violet); border-color: rgba(139,107,207,.3); }
+  .cat-tech    { color: var(--accent-rose); border-color: rgba(207,107,76,.3); }
+  .cat-inmob   { color: #b0a080; border-color: rgba(176,160,128,.3); }
+  .cat-publico { color: #7bb0b0; border-color: rgba(123,176,176,.3); }
+  .cat-logist  { color: #b07b50; border-color: rgba(176,123,80,.3); }
+  .cat-libre   { color: var(--gold-dim); border-color: rgba(138,111,48,.3); }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    display: none;
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--text-muted);
+  }
+
+  .empty-state svg { margin-bottom: 1rem; opacity: .3; }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative; z-index: 5;
+    text-align: center;
+    padding: 2rem;
+    border-top: 1px solid var(--border);
+    font-family: 'DM Mono', monospace;
+    font-size: .62rem;
+    color: var(--text-muted);
+    letter-spacing: .08em;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card { animation: fadeIn .3s ease both; }
+
+  /* Stagger delay handled by JS */
+  .card.hidden { display: none; }
+
+  .result-count {
+    font-family: 'DM Mono', monospace;
+    font-size: .68rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    letter-spacing: .05em;
+  }
+
+  .result-count span { color: var(--gold); }
+
+  .section-group { margin-bottom: 0; }
+  .section-group.hidden { display: none; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-eyebrow">Análisis de empleabilidad · 2025–2026</div>
+  <h1>100 Puestos a tu<br><span>alcance real</span></h1>
+  <p class="header-sub">Selección honesta y realista de roles accesibles para tu perfil mixto de finanzas, administración y tecnología básica — sin sobrevalorar requisitos.</p>
+  <div class="counter-badge">
+    <span>◆</span>
+    <span id="liveCount">100 puestos · 10 categorías</span>
+  </div>
+</header>
+
+<div class="controls">
+  <div class="controls-inner">
+    <div class="search-wrap">
+      <span class="search-icon">⌕</span>
+      <input type="text" id="searchInput" placeholder="Buscar puesto...">
+    </div>
+    <div class="filters" id="filterButtons">
+      <button class="filter-btn active" data-cat="all">Todos</button>
+      <button class="filter-btn" data-cat="admin">Administración</button>
+      <button class="filter-btn" data-cat="banca">Banca</button>
+      <button class="filter-btn" data-cat="cliente">Atención al Cliente</button>
+      <button class="filter-btn" data-cat="ventas">Ventas</button>
+      <button class="filter-btn" data-cat="digital">Marketing Digital</button>
+      <button class="filter-btn" data-cat="tech">Tecnología</button>
+      <button class="filter-btn" data-cat="inmob">Inmobiliaria</button>
+      <button class="filter-btn" data-cat="publico">Sector Público</button>
+      <button class="filter-btn" data-cat="logist">Logística</button>
+      <button class="filter-btn" data-cat="libre">Freelance</button>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="result-count" id="resultCount"><span id="visibleCount">100</span> puestos mostrados</div>
+  <div id="jobContainer"></div>
+  <div class="empty-state" id="emptyState">
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <p>No se encontraron puestos con ese criterio.</p>
+  </div>
+</div>
+
+<footer>Humberto López Rodríguez · Ferrol, A Coruña · 2025 · Orientación profesional personal</footer>
+
+<script>
+const jobs = [
+  // ── ADMINISTRACIÓN Y GESTIÓN (1–15) ──
+  { id:1,  cat:'admin', title:'Auxiliar Administrativo/a', meta:'Gestión de documentos, archivo, atención a proveedores y soporte de oficina en general.', diff:'easy' },
+  { id:2,  cat:'admin', title:'Recepcionista de Oficina', meta:'Atención presencial y telefónica, control de visitas y coordinación de agenda.', diff:'easy' },
+  { id:3,  cat:'admin', title:'Operador/a de Entrada de Datos', meta:'Captura y validación de datos en sistemas ERP o bases de datos internas.', diff:'easy' },
+  { id:4,  cat:'admin', title:'Auxiliar de Archivo y Documentación', meta:'Clasificación, escaneo y gestión de documentación física y digital.', diff:'easy' },
+  { id:5,  cat:'admin', title:'Auxiliar de Facturación', meta:'Emisión de facturas, seguimiento de cobros y registro contable básico.', diff:'easy' },
+  { id:6,  cat:'admin', title:'Auxiliar Contable', meta:'Introducción de asientos, conciliaciones, apoyo al contable principal.', diff:'easy' },
+  { id:7,  cat:'admin', title:'Auxiliar de Tesorería', meta:'Control de pagos, cobros y posición de caja bajo supervisión.', diff:'easy' },
+  { id:8,  cat:'admin', title:'Administrativo/a de Gestión General', meta:'Tareas polivalentes de oficina, redacción de documentos y apoyo a distintos departamentos.', diff:'easy' },
+  { id:9,  cat:'admin', title:'Auxiliar de Recursos Humanos', meta:'Gestión de nóminas simples, altas/bajas, control de vacaciones y archivo de personal.', diff:'easy' },
+  { id:10, cat:'admin', title:'Operador/a de Backoffice', meta:'Tramitación interna de operaciones bancarias, de seguros o servicios financieros.', diff:'easy' },
+  { id:11, cat:'admin', title:'Auxiliar de Gestión de Cobros', meta:'Seguimiento de facturas impagadas, contacto telefónico y registro de acuerdos.', diff:'easy' },
+  { id:12, cat:'admin', title:'Técnico/a de Tramitación de Documentos', meta:'Revisión y tramitación de expedientes en gestoría, asesoría o administración pública.', diff:'easy' },
+  { id:13, cat:'admin', title:'Asistente de Dirección Junior', meta:'Apoyo organizativo y administrativo a un responsable o directivo de área.', diff:'mid' },
+  { id:14, cat:'admin', title:'Auxiliar de Compras y Proveedores', meta:'Gestión de pedidos, seguimiento de entregas y contacto con proveedores.', diff:'easy' },
+  { id:15, cat:'admin', title:'Gestor/a de Incidencias Administrativas', meta:'Resolución de problemas y errores en procesos administrativos internos.', diff:'easy' },
+
+  // ── BANCA Y FINANZAS BÁSICA (16–25) ──
+  { id:16, cat:'banca', title:'Cajero/a Bancario/a', meta:'Operaciones de ventanilla, cobros, pagos y atención básica a clientes en sucursal.', diff:'easy' },
+  { id:17, cat:'banca', title:'Auxiliar Bancario/a', meta:'Apoyo a gestores de oficina, tramitación de documentos y atención telefónica.', diff:'easy' },
+  { id:18, cat:'banca', title:'Agente de Atención en Sucursal Bancaria', meta:'Orientación a clientes, resolución de consultas básicas y derivación al gestor.', diff:'easy' },
+  { id:19, cat:'banca', title:'Técnico/a de Backoffice Bancario', meta:'Tramitación interna de créditos, seguros y operaciones con supervisión.', diff:'easy' },
+  { id:20, cat:'banca', title:'Gestor/a de Cobros y Pagos', meta:'Control de pagos a proveedores, cobros de clientes y cuadre de cuentas.', diff:'easy' },
+  { id:21, cat:'banca', title:'Auxiliar de Seguros', meta:'Tramitación de pólizas, atención a asegurados y gestión de siniestros simples.', diff:'easy' },
+  { id:22, cat:'banca', title:'Tramitador/a de Créditos Junior', meta:'Revisión de documentación, seguimiento de expedientes de financiación.', diff:'easy' },
+  { id:23, cat:'banca', title:'Auxiliar de Conciliaciones Bancarias', meta:'Verificación de movimientos y cuadre de extractos bancarios.', diff:'easy' },
+  { id:24, cat:'banca', title:'Asesor/a de Microcréditos y Préstamos', meta:'Información y tramitación de pequeños préstamos personales en entidad financiera o fintech.', diff:'mid' },
+  { id:25, cat:'banca', title:'Auxiliar de Cumplimiento Normativo', meta:'Apoyo en revisión de documentación KYC, LOPD y control básico de cumplimiento.', diff:'mid' },
+
+  // ── ATENCIÓN AL CLIENTE (26–36) ──
+  { id:26, cat:'cliente', title:'Agente de Contact Center / Call Center', meta:'Atención telefónica a clientes para consultas, incidencias o información de productos.', diff:'easy' },
+  { id:27, cat:'cliente', title:'Teleoperador/a de Atención al Cliente', meta:'Gestión de llamadas entrantes o salientes de soporte al cliente.', diff:'easy' },
+  { id:28, cat:'cliente', title:'Agente de Reclamaciones y Quejas', meta:'Gestión de reclamaciones, registro y seguimiento de resolución.', diff:'easy' },
+  { id:29, cat:'cliente', title:'Dependiente/a de Tienda', meta:'Atención al público, control de stock básico y cobro en caja.', diff:'easy' },
+  { id:30, cat:'cliente', title:'Cajero/a de Supermercado', meta:'Cobro en caja, control de efectivo y atención al cliente en línea de caja.', diff:'easy' },
+  { id:31, cat:'cliente', title:'Asistente de Punto de Venta', meta:'Reposición de producto, orden de lineal y atención a compradores.', diff:'easy' },
+  { id:32, cat:'cliente', title:'Promotor/a en Grandes Superficies', meta:'Presentación y degustación de productos en supermercados o centros comerciales.', diff:'easy' },
+  { id:33, cat:'cliente', title:'Recepcionista de Hotel o Alojamiento', meta:'Check-in/out, atención a huéspedes y gestión de reservas básica.', diff:'easy' },
+  { id:34, cat:'cliente', title:'Gestor/a de Pedidos Online', meta:'Atención de pedidos en plataformas e-commerce, resolución de incidencias de envío.', diff:'easy' },
+  { id:35, cat:'cliente', title:'Asistente de Atención al Cliente en E-Commerce', meta:'Chat, email y teléfono para dar soporte a compradores de tienda online.', diff:'easy' },
+  { id:36, cat:'cliente', title:'Agente de Información Turística', meta:'Atención a turistas, distribución de material informativo, información local.', diff:'easy' },
+
+  // ── VENTAS Y COMERCIAL (37–46) ──
+  { id:37, cat:'ventas', title:'Comercial de Productos Financieros Junior', meta:'Venta de seguros, préstamos o inversiones básicas con formación en empresa.', diff:'mid' },
+  { id:38, cat:'ventas', title:'Agente Comercial de Seguros', meta:'Captación y fidelización de asegurados para compañía o correduría.', diff:'mid' },
+  { id:39, cat:'ventas', title:'Vendedor/a en Concesionario de Coches Junior', meta:'Atención a compradores, gestión de test drives y apoyo en tramitación.', diff:'easy' },
+  { id:40, cat:'ventas', title:'Asesor/a Inmobiliario/a Junior', meta:'Captación de propiedades, atención a compradores/inquilinos y visitas.', diff:'mid' },
+  { id:41, cat:'ventas', title:'Televendedor/a', meta:'Venta telefónica de productos o servicios con guión facilitado por la empresa.', diff:'easy' },
+  { id:42, cat:'ventas', title:'Comercial de Energía (Luz/Gas)', meta:'Venta puerta a puerta o telefónica de tarifas energéticas.', diff:'easy' },
+  { id:43, cat:'ventas', title:'Promotor/a de Eventos y Ferias', meta:'Atención a visitantes de stands, reparto de material y captación de leads.', diff:'easy' },
+  { id:44, cat:'ventas', title:'Representante de Ventas a Pymes', meta:'Visita y asesoramiento a pequeños negocios sobre productos o servicios.', diff:'mid' },
+  { id:45, cat:'ventas', title:'Vendedor/a en Tienda de Electrónica', meta:'Asesoramiento técnico básico a clientes en tiendas de tecnología o electrónica de consumo.', diff:'easy' },
+  { id:46, cat:'ventas', title:'Agente de Venta Directa (Puerta a Puerta)', meta:'Presentación y venta directa de productos en hogares o negocios.', diff:'easy' },
+
+  // ── MARKETING DIGITAL Y E-COMMERCE (47–57) ──
+  { id:47, cat:'digital', title:'Community Manager Junior', meta:'Gestión de redes sociales (publicaciones, respuestas, métricas básicas) para pymes.', diff:'easy' },
+  { id:48, cat:'digital', title:'Auxiliar de Marketing Digital', meta:'Apoyo en campañas, creación de contenidos y análisis básico con herramientas digitales.', diff:'easy' },
+  { id:49, cat:'digital', title:'Asistente de Tienda Online', meta:'Mantenimiento de catálogo de productos, precios, descripciones y fotos.', diff:'easy' },
+  { id:50, cat:'digital', title:'Gestor/a de Catálogos de Productos Online', meta:'Alta y edición de fichas de producto en marketplaces (Amazon, Shopify, WooCommerce).', diff:'easy' },
+  { id:51, cat:'digital', title:'Técnico/a de SEO Básico', meta:'Optimización de palabras clave, meta etiquetas y estructura básica de URLs.', diff:'easy' },
+  { id:52, cat:'digital', title:'Auxiliar de Campañas de Publicidad Digital', meta:'Configuración y seguimiento básico de campañas en Google Ads o Meta Ads.', diff:'mid' },
+  { id:53, cat:'digital', title:'Gestor/a de Marketplaces', meta:'Publicación y actualización de anuncios en Wallapop, Vinted, Catawiki, eBay, Milanuncios.', diff:'easy' },
+  { id:54, cat:'digital', title:'Asistente de Email Marketing', meta:'Maquetación y envío de newsletters con Mailchimp o herramienta similar.', diff:'easy' },
+  { id:55, cat:'digital', title:'Creador/a de Contenidos para Redes Sociales', meta:'Diseño de posts con Canva, redacción de copies y programación de publicaciones.', diff:'easy' },
+  { id:56, cat:'digital', title:'Técnico/a de Analítica Web Básica', meta:'Lectura de dashboards en Google Analytics, informes de tráfico y conversiones.', diff:'easy' },
+  { id:57, cat:'digital', title:'Gestor/a de Reputación Online', meta:'Monitorización de reseñas, respuestas a comentarios y gestión de imagen digital.', diff:'easy' },
+
+  // ── TECNOLOGÍA E INFORMÁTICA (58–68) ──
+  { id:58, cat:'tech', title:'Técnico/a de Soporte Informático Nivel 1', meta:'Resolución de incidencias básicas de hardware/software por teléfono o presencialmente.', diff:'easy' },
+  { id:59, cat:'tech', title:'Técnico/a de Helpdesk', meta:'Atención de tickets de soporte IT, reseteo de contraseñas, instalación de software básico.', diff:'easy' },
+  { id:60, cat:'tech', title:'QA Tester / Probador de Software Junior', meta:'Ejecución de casos de prueba, reporte de bugs y validación de funcionalidades.', diff:'easy' },
+  { id:61, cat:'tech', title:'Auxiliar de Administración de Sistemas', meta:'Apoyo en mantenimiento de servidores, backups y documentación técnica básica.', diff:'mid' },
+  { id:62, cat:'tech', title:'Técnico/a de Mantenimiento IT Básico', meta:'Sustitución de componentes, configuración de redes locales y equipos de usuario.', diff:'easy' },
+  { id:63, cat:'tech', title:'Auxiliar de Ciberseguridad', meta:'Revisión de logs, control de accesos, soporte en auditorías básicas de seguridad.', diff:'mid' },
+  { id:64, cat:'tech', title:'Operador/a de Sistemas Informáticos', meta:'Supervisión de procesos batch, control de backups y monitorización básica de servidores.', diff:'easy' },
+  { id:65, cat:'tech', title:'Auxiliar de Base de Datos', meta:'Consultas SQL sencillas, generación de listados e informes básicos a partir de datos.', diff:'easy' },
+  { id:66, cat:'tech', title:'Técnico/a de Instalación y Configuración de Equipos', meta:'Montaje, configuración y entrega de equipos informáticos para usuarios finales.', diff:'easy' },
+  { id:67, cat:'tech', title:'Técnico/a en Control de Accesos y Seguridad IT', meta:'Gestión de usuarios, permisos y controles de acceso en Active Directory u otras plataformas.', diff:'mid' },
+  { id:68, cat:'tech', title:'Auxiliar de Desarrollo Web', meta:'Maquetación HTML/CSS, correcciones menores en WordPress o actualización de contenidos web.', diff:'easy' },
+
+  // ── SECTOR INMOBILIARIO Y AUTOMOCIÓN (69–75) ──
+  { id:69, cat:'inmob', title:'Auxiliar de Agencia Inmobiliaria', meta:'Captación de propiedades, atención telefónica a clientes y coordinación de visitas.', diff:'easy' },
+  { id:70, cat:'inmob', title:'Asesor/a de Alquileres', meta:'Gestión de contratos de arrendamiento, visitas y atención a inquilinos.', diff:'easy' },
+  { id:71, cat:'inmob', title:'Gestor/a de Portales Inmobiliarios Online', meta:'Publicación y actualización de anuncios en Idealista, Fotocasa, Habitaclia.', diff:'easy' },
+  { id:72, cat:'inmob', title:'Auxiliar de Concesionario de Vehículos', meta:'Atención a clientes, tramitación de documentación y coordinación con taller.', diff:'easy' },
+  { id:73, cat:'inmob', title:'Gestor/a de Anuncios de Coches Online', meta:'Publicación en Coches.net, Autoscout24, Milanuncios y gestión de contactos.', diff:'easy' },
+  { id:74, cat:'inmob', title:'Asesor/a de Tasación de Vehículos Usados', meta:'Valoración básica de coches usados con herramientas de tasación online.', diff:'mid' },
+  { id:75, cat:'inmob', title:'Coordinador/a de Visitas Inmobiliarias', meta:'Gestión de agenda de visitas, confirmaciones y apoyo logístico a agentes.', diff:'easy' },
+
+  // ── SECTOR PÚBLICO Y FORMACIÓN (76–84) ──
+  { id:76, cat:'publico', title:'Auxiliar de Administración Pública', meta:'Tramitación de expedientes, atención al ciudadano y tareas administrativas generales.', diff:'mid' },
+  { id:77, cat:'publico', title:'Auxiliar de Oficina del SEPE o Agencia Tributaria', meta:'Apoyo en atención a ciudadanos, cita previa y gestión de documentación.', diff:'mid' },
+  { id:78, cat:'publico', title:'Monitor/a de Informática para Adultos', meta:'Impartición de clases básicas de ofimática, internet y redes sociales.', diff:'easy' },
+  { id:79, cat:'publico', title:'Auxiliar de Biblioteca', meta:'Atención al usuario, gestión de préstamos y organización de fondos bibliográficos.', diff:'easy' },
+  { id:80, cat:'publico', title:'Formador/a de Ofimática Básica', meta:'Clases de Word, Excel y correo electrónico para adultos en academias o centros.', diff:'easy' },
+  { id:81, cat:'publico', title:'Auxiliar de Gestión en Organismos Locales', meta:'Apoyo a concejalías, mancomunidades o entes locales en tramitación administrativa.', diff:'mid' },
+  { id:82, cat:'publico', title:'Técnico/a Auxiliar de Empleo (Orientador)', meta:'Apoyo a orientadores laborales en entrevistas, recursos y búsqueda de empleo.', diff:'mid' },
+  { id:83, cat:'publico', title:'Auxiliar de Gestión Cultural', meta:'Apoyo organizativo en eventos, ferias y actividades culturales municipales.', diff:'easy' },
+  { id:84, cat:'publico', title:'Técnico/a en Digitalización de Archivos Públicos', meta:'Escaneo, indexación y subida de documentación histórica a sistemas digitales.', diff:'easy' },
+
+  // ── LOGÍSTICA Y OPERACIONES (85–91) ──
+  { id:85, cat:'logist', title:'Auxiliar de Logística', meta:'Coordinación básica de envíos, seguimiento de pedidos y contacto con transportistas.', diff:'easy' },
+  { id:86, cat:'logist', title:'Operario/a de Control de Stock', meta:'Gestión de inventario, recuento de existencias y registro en sistema.', diff:'easy' },
+  { id:87, cat:'logist', title:'Gestor/a de Pedidos y Envíos E-Commerce', meta:'Preparación, etiquetado y coordinación de envíos para tienda online.', diff:'easy' },
+  { id:88, cat:'logist', title:'Auxiliar de Almacén con Función Administrativa', meta:'Recepción de mercancía, entrada en sistema y apoyo en tareas de oficina.', diff:'easy' },
+  { id:89, cat:'logist', title:'Coordinador/a de Envíos en E-Commerce', meta:'Seguimiento de expediciones, atención a reclamaciones y gestión de devoluciones.', diff:'easy' },
+  { id:90, cat:'logist', title:'Gestor/a de Devoluciones y Logística Inversa', meta:'Tramitación de devoluciones, cambios y abonos a clientes en tiendas online.', diff:'easy' },
+  { id:91, cat:'logist', title:'Repartidor/a con Vehículo Propio', meta:'Reparto de paquetería, mercancía o documentación en zona local o comarcal.', diff:'easy' },
+
+  // ── FREELANCE Y EMPRENDIMIENTO (92–100) ──
+  { id:92,  cat:'libre', title:'Gestor/a Freelance de Redes Sociales para Pymes', meta:'Gestión autónoma de perfiles de negocios locales: publicaciones, atención y métricas.', diff:'easy' },
+  { id:93,  cat:'libre', title:'Consultor/a de Marketing Digital para Autónomos', meta:'Asesoramiento básico en presencia digital, Google My Business y redes sociales.', diff:'easy' },
+  { id:94,  cat:'libre', title:'Asesor/a Contable Freelance para Pequeñas Empresas', meta:'Llevanza de contabilidad simple y declaraciones básicas para autónomos.', diff:'mid' },
+  { id:95,  cat:'libre', title:'Técnico/a Freelance de Mantenimiento Web WordPress', meta:'Actualizaciones, copias de seguridad, pequeñas modificaciones de contenido en WP.', diff:'easy' },
+  { id:96,  cat:'libre', title:'Diseñador/a Gráfico/a Junior (Canva)', meta:'Creación de materiales visuales para pymes: flyers, banners, posts y presentaciones.', diff:'easy' },
+  { id:97,  cat:'libre', title:'Auxiliar de Digitalización para Pymes', meta:'Apoyo a negocios locales en la transición digital: correo, Google Drive, herramientas cloud.', diff:'easy' },
+  { id:98,  cat:'libre', title:'Técnico/a en Configuración de Google My Business', meta:'Alta, optimización y gestión de fichas de negocio en Google para comercios locales.', diff:'easy' },
+  { id:99,  cat:'libre', title:'Asesor/a de Presencia Digital para Comercios Locales', meta:'Consultoría básica de visibilidad online para tiendas, restaurantes y servicios locales.', diff:'easy' },
+  { id:100, cat:'libre', title:'Vendedor/a en Plataformas de Segunda Mano y Colección', meta:'Gestión profesional de ventas en Wallapop, Vinted, Catawiki, eBay como actividad económica.', diff:'easy' },
+];
+
+const catMeta = {
+  admin:   { label: 'Administración y Gestión', color: '#4c8ecf' },
+  banca:   { label: 'Banca y Finanzas Básica', color: '#c9a84c' },
+  cliente: { label: 'Atención al Cliente',       color: '#4cbfb5' },
+  ventas:  { label: 'Ventas y Comercial',         color: '#4caf79' },
+  digital: { label: 'Marketing Digital y E-Commerce', color: '#8b6bcf' },
+  tech:    { label: 'Tecnología e Informática',   color: '#cf6b4c' },
+  inmob:   { label: 'Inmobiliaria y Automoción',  color: '#b0a080' },
+  publico: { label: 'Sector Público y Formación', color: '#7bb0b0' },
+  logist:  { label: 'Logística y Operaciones',    color: '#b07b50' },
+  libre:   { label: 'Freelance y Emprendimiento', color: '#8a6f30' },
+};
+
+const diffLabel = { easy: 'Accesible', mid: 'Algo exigente', reach: 'Esfuerzo extra' };
+
+let activeCat = 'all';
+let searchTerm = '';
+
+function render() {
+  const container = document.getElementById('jobContainer');
+  container.innerHTML = '';
+
+  const grouped = {};
+  Object.keys(catMeta).forEach(k => grouped[k] = []);
+
+  jobs.forEach(j => {
+    const matchCat = activeCat === 'all' || j.cat === activeCat;
+    const matchSearch = j.title.toLowerCase().includes(searchTerm) || j.meta.toLowerCase().includes(searchTerm);
+    if (matchCat && matchSearch) grouped[j.cat].push(j);
+  });
+
+  let total = 0;
+  Object.keys(grouped).forEach(cat => {
+    const items = grouped[cat];
+    if (!items.length) return;
+    total += items.length;
+
+    const section = document.createElement('div');
+    section.className = 'section-group';
+
+    const label = document.createElement('div');
+    label.className = 'section-label';
+    label.innerHTML = `<span class="dot" style="background:${catMeta[cat].color}"></span>${catMeta[cat].label} <span style="color:var(--text-muted);margin-left:auto;font-size:.55rem">${items.length} puesto${items.length !== 1 ? 's' : ''}</span>`;
+    section.appendChild(label);
+
+    const grid = document.createElement('div');
+    grid.className = 'grid';
+
+    items.forEach((j, i) => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.style.animationDelay = `${i * 0.03}s`;
+      card.innerHTML = `
+        <div class="card-num">${String(j.id).padStart(2,'0')}</div>
+        <div class="card-body">
+          <div class="card-title">${j.title}</div>
+          <div class="card-meta">${j.meta}</div>
+          <span class="card-tag cat-${j.cat}">${catMeta[j.cat].label}</span>
+        </div>
+        <span class="diff-badge diff-${j.diff}">${diffLabel[j.diff]}</span>`;
+      grid.appendChild(card);
+    });
+
+    section.appendChild(grid);
+    container.appendChild(section);
+  });
+
+  document.getElementById('visibleCount').textContent = total;
+  document.getElementById('emptyState').style.display = total === 0 ? 'block' : 'none';
+}
+
+// Filtros
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeCat = btn.dataset.cat;
+    render();
+  });
+});
+
+// Búsqueda
+document.getElementById('searchInput').addEventListener('input', e => {
+  searchTerm = e.target.value.toLowerCase().trim();
+  render();
+});
+
+render();
+</script>
+</body>
+</html>
