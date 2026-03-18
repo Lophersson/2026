@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>100 Puestos · Solo Ordenador · Humberto L.R.</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #080b0f;
+    --surface: #0d1117;
+    --card: #111820;
+    --border: #1e2a36;
+    --gold: #c9a84c;
+    --gold-dim: #7a6330;
+    --gold-glow: rgba(201,168,76,0.10);
+    --text: #dde4ed;
+    --text-dim: #7a8899;
+    --text-muted: #3a4a5a;
+    --remote: #4caf79;
+    --remote-bg: rgba(76,175,121,0.07);
+    --c1: #4c8ecf;   /* datos */
+    --c2: #c9a84c;   /* finanzas */
+    --c3: #cf6b4c;   /* tech */
+    --c4: #8b6bcf;   /* digital */
+    --c5: #4cbfb5;   /* ecommerce */
+    --c6: #b07b50;   /* analítica */
+    --c7: #7b9fcf;   /* documental */
+    --c8: #8a6f30;   /* freelance */
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--void);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* grain */
+  body::before {
+    content:''; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.5;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  }
+
+  /* ── HERO ── */
+  header {
+    position:relative; z-index:10;
+    padding: 4.5rem 2rem 2.5rem;
+    text-align:center;
+    border-bottom:1px solid var(--border);
+  }
+
+  .eyebrow {
+    font-family:'DM Mono',monospace;
+    font-size:.62rem; letter-spacing:.28em; color:var(--gold-dim);
+    text-transform:uppercase; margin-bottom:1.2rem;
+  }
+
+  header h1 {
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(2.4rem,5vw,4rem);
+    font-weight:300; line-height:1.08;
+    margin-bottom:.6rem;
+  }
+
+  header h1 em { color:var(--gold); font-style:italic; }
+
+  .header-sub {
+    font-size:.82rem; color:var(--text-dim);
+    max-width:480px; margin:.8rem auto 0; line-height:1.8;
+  }
+
+  .pills-row {
+    display:flex; justify-content:center; flex-wrap:wrap;
+    gap:.5rem; margin-top:1.6rem;
+  }
+
+  .pill {
+    display:inline-flex; align-items:center; gap:.4rem;
+    padding:.3rem .9rem;
+    border-radius:2rem; font-size:.68rem;
+    font-family:'DM Mono',monospace; letter-spacing:.06em;
+    border:1px solid; pointer-events:none;
+  }
+  .pill-remote { color:var(--remote); border-color:rgba(76,175,121,.3); background:var(--remote-bg); }
+  .pill-screen { color:var(--c1); border-color:rgba(76,142,207,.25); background:rgba(76,142,207,.06); }
+  .pill-silent { color:#b0a0c0; border-color:rgba(176,160,192,.25); background:rgba(176,160,192,.05); }
+
+  /* ── CONTROLES ── */
+  .controls {
+    position:sticky; top:0; z-index:20;
+    background:rgba(8,11,15,.94);
+    backdrop-filter:blur(18px);
+    border-bottom:1px solid var(--border);
+    padding:.85rem 2rem;
+  }
+  .ctrl-inner {
+    max-width:1120px; margin:0 auto;
+    display:flex; gap:.8rem; flex-wrap:wrap; align-items:center;
+  }
+  .search-wrap { flex:1; min-width:200px; position:relative; }
+  .search-wrap input {
+    width:100%; background:var(--card);
+    border:1px solid var(--border); border-radius:.45rem;
+    padding:.55rem 1rem .55rem 2.2rem;
+    color:var(--text); font-family:'DM Sans',sans-serif;
+    font-size:.8rem; outline:none; transition:border-color .2s;
+  }
+  .search-wrap input:focus { border-color:var(--gold-dim); }
+  .search-wrap input::placeholder { color:var(--text-muted); }
+  .s-ico { position:absolute; left:.7rem; top:50%; transform:translateY(-50%); color:var(--text-muted); font-size:.8rem; pointer-events:none; }
+
+  .filters { display:flex; gap:.4rem; flex-wrap:wrap; }
+  .fbtn {
+    background:transparent; border:1px solid var(--border);
+    border-radius:2rem; padding:.3rem .8rem;
+    color:var(--text-dim); font-family:'DM Sans',sans-serif;
+    font-size:.7rem; cursor:pointer; transition:all .18s;
+    white-space:nowrap;
+  }
+  .fbtn:hover { border-color:var(--gold-dim); color:var(--gold); }
+  .fbtn.active { background:var(--gold-glow); border-color:var(--gold); color:var(--gold); }
+
+  /* ── MAIN ── */
+  .main {
+    max-width:1120px; margin:0 auto;
+    padding:2rem 2rem 4rem;
+    position:relative; z-index:5;
+  }
+
+  .rcount {
+    font-family:'DM Mono',monospace; font-size:.65rem;
+    color:var(--text-muted); margin-bottom:1.5rem; letter-spacing:.05em;
+  }
+  .rcount b { color:var(--gold); font-weight:400; }
+
+  .sec-label {
+    font-family:'DM Mono',monospace; font-size:.58rem;
+    letter-spacing:.2em; color:var(--text-muted);
+    text-transform:uppercase; margin:2.2rem 0 .9rem;
+    padding-bottom:.45rem; border-bottom:1px solid var(--border);
+    display:flex; align-items:center; gap:.65rem;
+  }
+  .sec-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+  .sec-n { color:var(--text-muted); margin-left:auto; font-size:.52rem; }
+
+  .grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(290px,1fr));
+    gap:1px; background:var(--border);
+    border-radius:.6rem; overflow:hidden;
+    border:1px solid var(--border);
+  }
+
+  .card {
+    background:var(--card); padding:1rem 1.1rem;
+    display:flex; gap:.8rem; align-items:flex-start;
+    transition:background .18s;
+    animation:fadeUp .28s ease both;
+  }
+  .card:hover { background:#161e28; }
+
+  .cnum {
+    font-family:'DM Mono',monospace; font-size:.58rem;
+    color:var(--text-muted); padding-top:.1rem;
+    min-width:20px; flex-shrink:0;
+  }
+
+  .cbody { flex:1; }
+  .ctitle {
+    font-size:.83rem; font-weight:400;
+    color:var(--text); line-height:1.35; margin-bottom:.28rem;
+  }
+  .cmeta { font-size:.7rem; color:var(--text-muted); line-height:1.55; }
+
+  .tag-row { display:flex; flex-wrap:wrap; gap:.3rem; margin-top:.45rem; }
+
+  .tag {
+    font-family:'DM Mono',monospace; font-size:.56rem;
+    padding:.12rem .45rem; border-radius:1rem; border:1px solid;
+    letter-spacing:.04em;
+  }
+
+  /* categoría tags */
+  .t-datos   { color:var(--c1); border-color:rgba(76,142,207,.3); }
+  .t-fin     { color:var(--c2); border-color:rgba(201,168,76,.3); }
+  .t-tech    { color:var(--c3); border-color:rgba(207,107,76,.3); }
+  .t-dig     { color:var(--c4); border-color:rgba(139,107,207,.3); }
+  .t-ecom    { color:var(--c5); border-color:rgba(76,191,181,.3); }
+  .t-anal    { color:var(--c6); border-color:rgba(176,123,80,.3); }
+  .t-doc     { color:var(--c7); border-color:rgba(123,159,207,.3); }
+  .t-free    { color:var(--c8); border-color:rgba(138,111,48,.3); }
+
+  /* remote badge */
+  .remote-tag {
+    color:var(--remote); border-color:rgba(76,175,121,.3);
+    background:var(--remote-bg);
+  }
+
+  .diff-badge {
+    font-family:'DM Mono',monospace; font-size:.56rem;
+    padding:.1rem .42rem; border-radius:1rem; border:1px solid;
+    margin-left:auto; flex-shrink:0; align-self:flex-start;
+    white-space:nowrap;
+  }
+  .d-easy  { color:var(--remote); border-color:rgba(76,175,121,.3); background:rgba(76,175,121,.06); }
+  .d-mid   { color:var(--gold); border-color:rgba(201,168,76,.3); background:rgba(201,168,76,.06); }
+
+  /* empty */
+  .empty { display:none; text-align:center; padding:4rem 2rem; color:var(--text-muted); }
+
+  footer {
+    position:relative; z-index:5; text-align:center;
+    padding:1.8rem 2rem; border-top:1px solid var(--border);
+    font-family:'DM Mono',monospace; font-size:.6rem;
+    color:var(--text-muted); letter-spacing:.08em;
+  }
+
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(6px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Empleabilidad · Solo Ordenador · 2025–2026</div>
+  <h1>Trabajar en silencio,<br><em>desde casa.</em></h1>
+  <p class="header-sub">100 puestos realistas para tu perfil — sin atención al cliente, sin llamadas, sin reuniones obligatorias. Solo tú, una pantalla y un café.</p>
+  <div class="pills-row">
+    <span class="pill pill-remote">💻 Teletrabajo compatible</span>
+    <span class="pill pill-screen">🖥️ Solo ordenador</span>
+    <span class="pill pill-silent">🔇 Sin hablar ni llamar</span>
+  </div>
+</header>
+
+<div class="controls">
+  <div class="ctrl-inner">
+    <div class="search-wrap">
+      <span class="s-ico">⌕</span>
+      <input type="text" id="searchInput" placeholder="Buscar puesto...">
+    </div>
+    <div class="filters" id="filterBtns">
+      <button class="fbtn active" data-cat="all">Todos</button>
+      <button class="fbtn" data-cat="datos">Datos & Digitaliz.</button>
+      <button class="fbtn" data-cat="fin">Finanzas Back-Office</button>
+      <button class="fbtn" data-cat="tech">Tecnología IT</button>
+      <button class="fbtn" data-cat="dig">Marketing Digital</button>
+      <button class="fbtn" data-cat="ecom">E-Commerce</button>
+      <button class="fbtn" data-cat="anal">Analítica & Reporting</button>
+      <button class="fbtn" data-cat="doc">Gestión Documental</button>
+      <button class="fbtn" data-cat="free">Freelance Digital</button>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="rcount" id="rcount"><b id="vc">100</b> puestos mostrados</div>
+  <div id="container"></div>
+  <div class="empty" id="empty">
+    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <p style="margin-top:.8rem">Sin resultados para esa búsqueda.</p>
+  </div>
+</div>
+
+<footer>Humberto López Rodríguez · Ferrol → Barcelos · 2025 · Orientación profesional personal</footer>
+
+<script>
+const cats = {
+  datos: { label:'Entrada de Datos & Digitalización', color:'#4c8ecf' },
+  fin:   { label:'Finanzas & Contabilidad Back-Office', color:'#c9a84c' },
+  tech:  { label:'Tecnología IT (en silencio)', color:'#cf6b4c' },
+  dig:   { label:'Marketing Digital & Contenidos', color:'#8b6bcf' },
+  ecom:  { label:'E-Commerce & Catálogos', color:'#4cbfb5' },
+  anal:  { label:'Analítica & Reporting', color:'#b07b50' },
+  doc:   { label:'Gestión Documental & Archivo', color:'#7b9fcf' },
+  free:  { label:'Freelance Digital', color:'#8a6f30' },
+};
+
+// remote: true = compatible teletrabajo total/parcial
+const jobs = [
+  // ── DATOS & DIGITALIZACIÓN (1–14) ──
+  { id:1,  cat:'datos', title:'Operador/a de Entrada de Datos', meta:'Captura manual de información en sistemas ERP, hojas de cálculo o bases de datos internas.', diff:'easy', remote:true },
+  { id:2,  cat:'datos', title:'Digitalizador/a de Documentos', meta:'Escaneo, indexación y archivo digital de documentación en papel.', diff:'easy', remote:true },
+  { id:3,  cat:'datos', title:'Técnico/a de Captura de Datos Financieros', meta:'Introducción de facturas, extractos y movimientos contables en el sistema.', diff:'easy', remote:true },
+  { id:4,  cat:'datos', title:'Validador/a de Datos en BBDD', meta:'Revisión, corrección y limpieza de registros en bases de datos SQL o Excel.', diff:'easy', remote:true },
+  { id:5,  cat:'datos', title:'Clasificador/a de Documentos Digitales', meta:'Categorización y etiquetado de archivos PDF, imágenes o formularios escaneados.', diff:'easy', remote:true },
+  { id:6,  cat:'datos', title:'Auxiliar de Migración de Datos', meta:'Apoyo en proyectos de traslado de datos entre sistemas o versiones de software.', diff:'easy', remote:true },
+  { id:7,  cat:'datos', title:'Técnico/a de OCR y Reconocimiento Documental', meta:'Uso de herramientas de reconocimiento óptico para digitalizar textos y tablas.', diff:'easy', remote:true },
+  { id:8,  cat:'datos', title:'Operador/a de CRM (solo introducción)', meta:'Alta y actualización de registros de clientes o proveedores en sistema CRM.', diff:'easy', remote:true },
+  { id:9,  cat:'datos', title:'Técnico/a de Indexación de Contenidos', meta:'Catalogación de archivos digitales, asignación de metadatos y palabras clave.', diff:'easy', remote:true },
+  { id:10, cat:'datos', title:'Asistente de Gestión de Bases de Datos', meta:'Consultas simples, exportación de listados y actualización periódica de registros.', diff:'easy', remote:true },
+  { id:11, cat:'datos', title:'Digitalizador/a de Formularios y Encuestas', meta:'Transcripción de respuestas físicas a plataformas digitales o Excel.', diff:'easy', remote:true },
+  { id:12, cat:'datos', title:'Técnico/a de Mantenimiento de Registros Maestros', meta:'Actualización de maestros de artículos, proveedores o clientes en ERP.', diff:'easy', remote:true },
+  { id:13, cat:'datos', title:'Auxiliar de Enriquecimiento de Datos', meta:'Búsqueda y adición de información adicional a registros existentes (web scraping manual).', diff:'easy', remote:true },
+  { id:14, cat:'datos', title:'Operador/a de Transcripción de Audio a Texto', meta:'Transcripción de grabaciones, entrevistas o reuniones a documento escrito.', diff:'easy', remote:true },
+
+  // ── FINANZAS & CONTABILIDAD BACK-OFFICE (15–28) ──
+  { id:15, cat:'fin', title:'Auxiliar de Facturación', meta:'Emisión, verificación y registro de facturas de clientes y proveedores.', diff:'easy', remote:true },
+  { id:16, cat:'fin', title:'Auxiliar Contable de Asientos', meta:'Introducción de asientos contables, conciliaciones básicas y cuadres mensuales.', diff:'easy', remote:true },
+  { id:17, cat:'fin', title:'Técnico/a de Conciliaciones Bancarias', meta:'Contraste de extractos bancarios con registros internos y reporte de diferencias.', diff:'easy', remote:true },
+  { id:18, cat:'fin', title:'Auxiliar de Tesorería (Back-Office)', meta:'Registro de pagos y cobros, cuadre de posición de caja sin contacto externo.', diff:'easy', remote:true },
+  { id:19, cat:'fin', title:'Tramitador/a de Expedientes de Crédito', meta:'Revisión de documentación crediticia, comprobación de datos y carga en sistema.', diff:'easy', remote:true },
+  { id:20, cat:'fin', title:'Auxiliar de Cierre Contable Mensual', meta:'Apoyo en el proceso de cierre: provisiones, periodificaciones y ajustes básicos.', diff:'mid', remote:true },
+  { id:21, cat:'fin', title:'Técnico/a de Procesamiento de Nóminas', meta:'Carga de incidencias, revisión de cálculos y generación de ficheros de nómina.', diff:'mid', remote:true },
+  { id:22, cat:'fin', title:'Auxiliar de Control de Gastos de Empresa', meta:'Revisión de tickets, notas de gasto y comparación con presupuesto asignado.', diff:'easy', remote:true },
+  { id:23, cat:'fin', title:'Tramitador/a de Declaraciones Fiscales Básicas', meta:'Preparación de modelos 303, 130, 111 con software fiscal bajo supervisión.', diff:'mid', remote:true },
+  { id:24, cat:'fin', title:'Auxiliar de Auditoría Interna Documental', meta:'Revisión de expedientes, comprobación de requisitos formales y elaboración de informes.', diff:'mid', remote:true },
+  { id:25, cat:'fin', title:'Técnico/a de Revisión de Extractos Financieros', meta:'Lectura y análisis básico de estados financieros para detectar anomalías.', diff:'mid', remote:true },
+  { id:26, cat:'fin', title:'Auxiliar de Presupuestos y Desviaciones', meta:'Carga de presupuesto, seguimiento mensual y cálculo de desviaciones en Excel.', diff:'mid', remote:true },
+  { id:27, cat:'fin', title:'Operador/a de Pago a Proveedores (Back-Office)', meta:'Verificación de facturas, generación de órdenes de pago y archivo documental.', diff:'easy', remote:true },
+  { id:28, cat:'fin', title:'Auxiliar de Cumplimiento Documental (KYC)', meta:'Revisión de documentación de clientes para cumplimiento normativo básico.', diff:'easy', remote:true },
+
+  // ── TECNOLOGÍA IT (29–41) ──
+  { id:29, cat:'tech', title:'QA Tester / Probador de Software', meta:'Ejecución de planes de prueba, detección de errores y reporte en sistema de tickets.', diff:'easy', remote:true },
+  { id:30, cat:'tech', title:'Técnico/a de Helpdesk por Ticket (sin llamadas)', meta:'Resolución de incidencias IT exclusivamente por sistema de tickets escritos.', diff:'easy', remote:true },
+  { id:31, cat:'tech', title:'Auxiliar de Administración de Sistemas', meta:'Gestión de usuarios, permisos y accesos en Active Directory o similar.', diff:'mid', remote:true },
+  { id:32, cat:'tech', title:'Técnico/a de Monitorización de Sistemas', meta:'Supervisión de alertas de servidores y redes mediante dashboards de monitorización.', diff:'mid', remote:true },
+  { id:33, cat:'tech', title:'Auxiliar de Ciberseguridad (revisión de logs)', meta:'Análisis de registros de eventos, detección de anomalías e informes de incidentes.', diff:'mid', remote:true },
+  { id:34, cat:'tech', title:'Operador/a de Backups y Recuperación', meta:'Programación, ejecución y verificación de copias de seguridad de sistemas.', diff:'easy', remote:true },
+  { id:35, cat:'tech', title:'Auxiliar de Bases de Datos SQL', meta:'Consultas SELECT, exportación de informes y mantenimiento de datos bajo supervisión.', diff:'easy', remote:true },
+  { id:36, cat:'tech', title:'Técnico/a de Mantenimiento de WordPress', meta:'Actualizaciones de plugins, corrección de errores menores y gestión de contenidos.', diff:'easy', remote:true },
+  { id:37, cat:'tech', title:'Maquetador/a HTML & CSS Junior', meta:'Codificación de páginas estáticas, emails HTML y componentes de interfaz básicos.', diff:'easy', remote:true },
+  { id:38, cat:'tech', title:'Técnico/a de Documentación Técnica', meta:'Redacción y actualización de manuales técnicos, guías de usuario y wikis internas.', diff:'easy', remote:true },
+  { id:39, cat:'tech', title:'Auxiliar de Control de Versiones (Git)', meta:'Gestión de repositorios, revisión de pull requests y documentación de cambios.', diff:'mid', remote:true },
+  { id:40, cat:'tech', title:'Técnico/a de Configuración de Herramientas SaaS', meta:'Alta, configuración básica y mantenimiento de plataformas cloud (Notion, Jira, Trello).', diff:'easy', remote:true },
+  { id:41, cat:'tech', title:'Auxiliar de Inventario IT y Activos Digitales', meta:'Control del parque informático, licencias de software y renovaciones programadas.', diff:'easy', remote:true },
+
+  // ── MARKETING DIGITAL & CONTENIDOS (42–54) ──
+  { id:42, cat:'dig', title:'Redactor/a de Contenidos Web (Copywriting Básico)', meta:'Redacción de artículos, fichas de producto y textos web con guía de estilo definida.', diff:'easy', remote:true },
+  { id:43, cat:'dig', title:'Técnico/a de SEO On-Page', meta:'Optimización de meta títulos, meta descripciones, H1/H2 y palabras clave en páginas web.', diff:'easy', remote:true },
+  { id:44, cat:'dig', title:'Asistente de Campañas Google Ads', meta:'Seguimiento de métricas, ajuste de pujas y generación de informes de rendimiento.', diff:'mid', remote:true },
+  { id:45, cat:'dig', title:'Asistente de Campañas Meta Ads', meta:'Supervisión de creatividades, revisión de resultados y ajuste de audiencias.', diff:'mid', remote:true },
+  { id:46, cat:'dig', title:'Diseñador/a Gráfico/a con Canva (Remoto)', meta:'Creación de posts, banners, stories e infografías para empresas que usan Canva.', diff:'easy', remote:true },
+  { id:47, cat:'dig', title:'Técnico/a de Email Marketing', meta:'Maquetación de newsletters, configuración de envíos y revisión de métricas de apertura.', diff:'easy', remote:true },
+  { id:48, cat:'dig', title:'Programador/a de Contenidos en Redes Sociales', meta:'Planificación y programación de publicaciones con herramientas como Buffer o Hootsuite.', diff:'easy', remote:true },
+  { id:49, cat:'dig', title:'Técnico/a de Reputación y Monitorización Online', meta:'Seguimiento de menciones de marca, alertas y recopilación de informes sin interacción directa.', diff:'easy', remote:true },
+  { id:50, cat:'dig', title:'Auxiliar de Posicionamiento Local (Google My Business)', meta:'Alta, optimización y actualización periódica de fichas de negocio en Google.', diff:'easy', remote:true },
+  { id:51, cat:'dig', title:'Técnico/a de Linkbuilding Básico', meta:'Búsqueda de oportunidades de enlazado, outreach por email y registro de resultados.', diff:'easy', remote:true },
+  { id:52, cat:'dig', title:'Creador/a de Contenido Escrito para Blogs', meta:'Producción de artículos optimizados SEO para blogs corporativos o clientes.', diff:'easy', remote:true },
+  { id:53, cat:'dig', title:'Técnico/a de Analytics y Tag Manager Básico', meta:'Revisión de métricas de tráfico, eventos y conversiones en Google Analytics 4.', diff:'mid', remote:true },
+  { id:54, cat:'dig', title:'Diseñador/a de Infografías y Material Visual', meta:'Elaboración de infografías, presentaciones y materiales visuales para web y redes.', diff:'easy', remote:true },
+
+  // ── E-COMMERCE & CATÁLOGOS (55–66) ──
+  { id:55, cat:'ecom', title:'Gestor/a de Catálogo de Productos Online', meta:'Alta y edición de fichas de producto: descripción, precio, stock y fotos.', diff:'easy', remote:true },
+  { id:56, cat:'ecom', title:'Técnico/a de Listings en Marketplaces', meta:'Publicación y optimización de anuncios en Amazon, eBay, Miravia, Zalando Seller.', diff:'easy', remote:true },
+  { id:57, cat:'ecom', title:'Auxiliar de Tienda WooCommerce o Shopify', meta:'Mantenimiento de tienda online, actualización de stock, precios y categorías.', diff:'easy', remote:true },
+  { id:58, cat:'ecom', title:'Gestor/a de Stock y Precios Online', meta:'Control de inventario online, actualización de tarifas y alertas de ruptura de stock.', diff:'easy', remote:true },
+  { id:59, cat:'ecom', title:'Técnico/a de Gestión de Pedidos y Devoluciones', meta:'Procesamiento de pedidos, generación de etiquetas de envío y tramitación de devoluciones por panel.', diff:'easy', remote:true },
+  { id:60, cat:'ecom', title:'Redactor/a de Fichas de Producto (E-Commerce)', meta:'Escritura de descripciones atractivas y optimizadas para SEO de productos de tienda online.', diff:'easy', remote:true },
+  { id:61, cat:'ecom', title:'Auxiliar de Pricing y Competencia Online', meta:'Monitorización de precios de competidores y actualización de tarifas propias.', diff:'easy', remote:true },
+  { id:62, cat:'ecom', title:'Técnico/a de Fotografía de Producto (Retoque)', meta:'Edición y optimización de imágenes de producto con GIMP, Canva o Photoshop.', diff:'easy', remote:true },
+  { id:63, cat:'ecom', title:'Gestor/a de Plataformas de Segunda Mano (Profesional)', meta:'Administración activa de cuentas en Wallapop, Vinted, Catawiki o Milanuncios como negocio.', diff:'easy', remote:true },
+  { id:64, cat:'ecom', title:'Auxiliar de Operaciones de Dropshipping', meta:'Gestión de pedidos a proveedores, seguimiento de envíos y actualización de estado.', diff:'easy', remote:true },
+  { id:65, cat:'ecom', title:'Técnico/a de Integración de Feeds de Productos', meta:'Gestión de feeds XML/CSV para comparadores de precios y Google Shopping.', diff:'mid', remote:true },
+  { id:66, cat:'ecom', title:'Gestor/a de Programa de Fidelización Online', meta:'Mantenimiento de puntos, descuentos y beneficios de clientes en panel de e-commerce.', diff:'easy', remote:true },
+
+  // ── ANALÍTICA & REPORTING (67–76) ──
+  { id:67, cat:'anal', title:'Auxiliar de Reporting Financiero en Excel', meta:'Elaboración de tablas dinámicas, gráficos y resúmenes financieros periódicos.', diff:'easy', remote:true },
+  { id:68, cat:'anal', title:'Técnico/a de Power BI (Usuario Básico)', meta:'Actualización de informes predefinidos, revisión de dashboards y exportación de datos.', diff:'easy', remote:true },
+  { id:69, cat:'anal', title:'Analista de Datos Junior (Excel / SQL)', meta:'Extracción, limpieza y análisis básico de datos para informes internos.', diff:'mid', remote:true },
+  { id:70, cat:'anal', title:'Técnico/a de Informes de Ventas y Márgenes', meta:'Seguimiento de KPIs comerciales, cálculo de márgenes y análisis de desviaciones.', diff:'mid', remote:true },
+  { id:71, cat:'anal', title:'Auxiliar de Control de Gestión', meta:'Apoyo en el seguimiento presupuestario y elaboración de cuadros de mando básicos.', diff:'mid', remote:true },
+  { id:72, cat:'anal', title:'Técnico/a de Seguimiento de KPIs Web y Digital', meta:'Revisión de métricas de tráfico, campañas y conversiones en dashboards digitales.', diff:'easy', remote:true },
+  { id:73, cat:'anal', title:'Auxiliar de Análisis de Rentabilidad de Productos', meta:'Cálculo de márgenes por SKU, análisis ABC y preparación de informes de catálogo.', diff:'mid', remote:true },
+  { id:74, cat:'anal', title:'Técnico/a de Cuadros de Mando en Google Sheets', meta:'Construcción y mantenimiento de dashboards de gestión en Google Sheets.', diff:'easy', remote:true },
+  { id:75, cat:'anal', title:'Auxiliar de Estadística Descriptiva para Informes', meta:'Elaboración de resúmenes estadísticos básicos (medias, tendencias, variaciones) para reportes.', diff:'easy', remote:true },
+  { id:76, cat:'anal', title:'Técnico/a de Análisis de Tráfico Web', meta:'Seguimiento de sesiones, fuentes de tráfico, rebote y páginas vistas en GA4.', diff:'easy', remote:true },
+
+  // ── GESTIÓN DOCUMENTAL & ARCHIVO (77–87) ──
+  { id:77, cat:'doc', title:'Técnico/a de Gestión de Archivo Digital', meta:'Organización, etiquetado y mantenimiento de repositorios documentales en la nube.', diff:'easy', remote:true },
+  { id:78, cat:'doc', title:'Auxiliar de Gestión Documental con SharePoint', meta:'Subida, clasificación y control de versiones de documentos en SharePoint o Google Drive.', diff:'easy', remote:true },
+  { id:79, cat:'doc', title:'Técnico/a de Revisión de Contratos (Checklist)', meta:'Comprobación formal de cláusulas, fechas y requisitos básicos en contratos tipo.', diff:'easy', remote:true },
+  { id:80, cat:'doc', title:'Auxiliar de Gestión de Expedientes Administrativos', meta:'Tramitación, seguimiento y cierre de expedientes en sistemas de gestión documental.', diff:'easy', remote:true },
+  { id:81, cat:'doc', title:'Técnico/a de Documentación de Procesos', meta:'Redacción y actualización de procedimientos internos, flujogramas y manuales.', diff:'easy', remote:true },
+  { id:82, cat:'doc', title:'Operador/a de Plataformas de Firma Digital', meta:'Envío, seguimiento y archivo de documentos firmados electrónicamente.', diff:'easy', remote:true },
+  { id:83, cat:'doc', title:'Auxiliar de LOPD y Protección de Datos (documental)', meta:'Revisión y actualización del registro de actividades de tratamiento y documentos RGPD.', diff:'mid', remote:true },
+  { id:84, cat:'doc', title:'Técnico/a de Gestión de Licencias de Software', meta:'Control del inventario de licencias, fechas de vencimiento y renovaciones automáticas.', diff:'easy', remote:true },
+  { id:85, cat:'doc', title:'Auxiliar de Gestión de Propiedades Intelectuales', meta:'Seguimiento documental de registros de marcas, patentes o dominios web.', diff:'easy', remote:true },
+  { id:86, cat:'doc', title:'Transcriptor/a de Documentos Legales Básicos', meta:'Transcripción y maquetación de escrituras, contratos y documentos notariales.', diff:'easy', remote:true },
+  { id:87, cat:'doc', title:'Técnico/a de Clasificación Normativa', meta:'Catalogación y actualización de normativa interna en repositorio documental de empresa.', diff:'easy', remote:true },
+
+  // ── FREELANCE DIGITAL (88–100) ──
+  { id:88,  cat:'free', title:'Contable Freelance para Autónomos (Online)', meta:'Llevanza de contabilidad simple y preparación de impuestos trimestrales por email.', diff:'mid', remote:true },
+  { id:89,  cat:'free', title:'Técnico/a Freelance de Mantenimiento WordPress', meta:'Actualizaciones, backups, correcciones menores y reportes mensuales a clientes.', diff:'easy', remote:true },
+  { id:90,  cat:'free', title:'Freelance de Entrada de Datos (Plataformas)', meta:'Proyectos de data entry en plataformas como Upwork, Freelancer o Fiverr.', diff:'easy', remote:true },
+  { id:91,  cat:'free', title:'Redactor/a Freelance de Contenidos SEO', meta:'Escritura de artículos por encargo para blogs, tiendas online y agencias digitales.', diff:'easy', remote:true },
+  { id:92,  cat:'free', title:'Diseñador/a Freelance con Canva / GIMP', meta:'Creación de materiales visuales para pymes: banners, posts, presentaciones y flyers.', diff:'easy', remote:true },
+  { id:93,  cat:'free', title:'Técnico/a Freelance de SEO Local', meta:'Auditorías SEO básicas y optimización de fichas de Google My Business para negocios.', diff:'easy', remote:true },
+  { id:94,  cat:'free', title:'Auxiliar Freelance de Analítica Web', meta:'Configuración de GA4, lectura de métricas e informes periódicos para pequeñas empresas.', diff:'mid', remote:true },
+  { id:95,  cat:'free', title:'Gestor/a Freelance de Tiendas WooCommerce', meta:'Mantenimiento de tiendas online: stock, productos, plugins y actualizaciones.', diff:'easy', remote:true },
+  { id:96,  cat:'free', title:'Técnico/a Freelance de Maquetación HTML/CSS', meta:'Correcciones visuales, maquetación de landing pages y emails HTML para agencias.', diff:'easy', remote:true },
+  { id:97,  cat:'free', title:'Asistente Virtual Administrativo (solo escrito)', meta:'Gestión de correo electrónico, agendas, reservas y tareas administrativas remotas.', diff:'easy', remote:true },
+  { id:98,  cat:'free', title:'Freelance de Gestión de Marketplaces', meta:'Administración de cuentas de venta en Amazon, eBay o Etsy para terceros.', diff:'easy', remote:true },
+  { id:99,  cat:'free', title:'Técnico/a Freelance de Power BI (Informes Básicos)', meta:'Construcción de dashboards básicos a partir de datos facilitados por el cliente.', diff:'mid', remote:true },
+  { id:100, cat:'free', title:'Asesor/a Freelance de Digitalización para Pymes', meta:'Consultoría por escrito para implantar herramientas cloud (Drive, Notion, Trello) en negocios.', diff:'easy', remote:true },
+];
+
+const dLabel = { easy:'Accesible', mid:'Algo exigente' };
+
+let activeCat = 'all', term = '';
+
+function render() {
+  const box = document.getElementById('container');
+  box.innerHTML = '';
+
+  const grouped = {};
+  Object.keys(cats).forEach(k => grouped[k] = []);
+
+  jobs.forEach(j => {
+    if ((activeCat === 'all' || j.cat === activeCat) &&
+        (j.title.toLowerCase().includes(term) || j.meta.toLowerCase().includes(term)))
+      grouped[j.cat].push(j);
+  });
+
+  let total = 0;
+  Object.keys(grouped).forEach(cat => {
+    const list = grouped[cat];
+    if (!list.length) return;
+    total += list.length;
+
+    const sec = document.createElement('div');
+
+    const lbl = document.createElement('div');
+    lbl.className = 'sec-label';
+    lbl.innerHTML = `<span class="sec-dot" style="background:${cats[cat].color}"></span>${cats[cat].label}<span class="sec-n">${list.length} puesto${list.length!==1?'s':''}</span>`;
+    sec.appendChild(lbl);
+
+    const grid = document.createElement('div');
+    grid.className = 'grid';
+
+    list.forEach((j, i) => {
+      const c = document.createElement('div');
+      c.className = 'card';
+      c.style.animationDelay = `${i*0.028}s`;
+      c.innerHTML = `
+        <div class="cnum">${String(j.id).padStart(2,'0')}</div>
+        <div class="cbody">
+          <div class="ctitle">${j.title}</div>
+          <div class="cmeta">${j.meta}</div>
+          <div class="tag-row">
+            <span class="tag t-${j.cat}">${cats[j.cat].label}</span>
+            ${j.remote ? '<span class="tag remote-tag">💻 Teletrabajo</span>' : ''}
+          </div>
+        </div>
+        <span class="diff-badge d-${j.diff}">${dLabel[j.diff]}</span>`;
+      grid.appendChild(c);
+    });
+
+    sec.appendChild(grid);
+    box.appendChild(sec);
+  });
+
+  document.getElementById('vc').textContent = total;
+  document.getElementById('empty').style.display = total === 0 ? 'block' : 'none';
+}
+
+document.querySelectorAll('.fbtn').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.fbtn').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    activeCat = b.dataset.cat;
+    render();
+  });
+});
+
+document.getElementById('searchInput').addEventListener('input', e => {
+  term = e.target.value.toLowerCase().trim();
+  render();
+});
+
+render();
+</script>
+</body>
+</html>
