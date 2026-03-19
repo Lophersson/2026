@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Love Bombing · Guia de Psicologia</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #080808;
+    --deep: #0f0f0f;
+    --surface: #161616;
+    --card: #1c1c1c;
+    --border: #2a2a2a;
+    --gold: #c9a84c;
+    --gold-light: #e2c97e;
+    --gold-dim: rgba(201,168,76,0.12);
+    --red: #b84c4c;
+    --red-dim: rgba(184,76,76,0.12);
+    --green: #4c9b6e;
+    --green-dim: rgba(76,155,110,0.12);
+    --text: #e8e0d0;
+    --muted: #8a8070;
+    --faint: #3a3530;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--void);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.75;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── BACKGROUND TEXTURE ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 10% 20%, rgba(201,168,76,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 90% 80%, rgba(184,76,76,0.03) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── LANG TOGGLE ── */
+  .lang-bar {
+    position: fixed;
+    top: 1.5rem;
+    right: 1.5rem;
+    z-index: 100;
+    display: flex;
+    gap: 0.4rem;
+    background: rgba(22,22,22,0.9);
+    border: 1px solid var(--border);
+    border-radius: 2rem;
+    padding: 0.3rem;
+    backdrop-filter: blur(12px);
+  }
+  .lang-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    padding: 0.35rem 0.85rem;
+    border-radius: 1.5rem;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+  .lang-btn.active {
+    background: var(--gold);
+    color: var(--void);
+    font-weight: 500;
+  }
+  .lang-btn:not(.active):hover { color: var(--gold-light); }
+
+  /* ── LAYOUT ── */
+  .wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 5rem 2rem 6rem;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    text-align: center;
+    margin-bottom: 4.5rem;
+    opacity: 0;
+    transform: translateY(24px);
+    animation: fadeUp 0.8s ease forwards 0.1s;
+  }
+  .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.2rem;
+  }
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.8rem, 7vw, 4.4rem);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.5rem;
+  }
+  h1 em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+  .header-rule {
+    width: 3rem;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 1.5rem auto 1.8rem;
+  }
+  .lead {
+    font-size: 1.05rem;
+    color: var(--muted);
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  /* ── SECTION ── */
+  .section {
+    margin-bottom: 3.2rem;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.7s ease forwards;
+  }
+  .section:nth-child(1) { animation-delay: 0.3s; }
+  .section:nth-child(2) { animation-delay: 0.45s; }
+  .section:nth-child(3) { animation-delay: 0.6s; }
+  .section:nth-child(4) { animation-delay: 0.75s; }
+  .section:nth-child(5) { animation-delay: 0.9s; }
+  .section:nth-child(6) { animation-delay: 1.05s; }
+
+  h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.75rem;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    margin-bottom: 1.4rem;
+    color: var(--gold-light);
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  h2::before {
+    content: '';
+    display: inline-block;
+    width: 1.8rem;
+    height: 1px;
+    background: var(--gold);
+    flex-shrink: 0;
+  }
+
+  p { margin-bottom: 1rem; color: var(--text); }
+  p:last-child { margin-bottom: 0; }
+
+  /* ── PHASES ── */
+  .phases {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .phase-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    border-radius: 0.5rem;
+    padding: 1.3rem 1.5rem;
+    position: relative;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .phase-card:hover { background: #202020; border-left-color: var(--gold-light); }
+  .phase-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.4rem;
+  }
+  .phase-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+  .phase-body { font-size: 0.93rem; color: #b0a898; margin: 0; }
+
+  /* ── SIGNALS LIST ── */
+  .signals { display: flex; flex-direction: column; gap: 0.75rem; }
+  .signal-item {
+    background: var(--red-dim);
+    border: 1px solid rgba(184,76,76,0.2);
+    border-radius: 0.4rem;
+    padding: 1rem 1.2rem 1rem 1rem;
+    display: grid;
+    grid-template-columns: 1.4rem 1fr;
+    gap: 0.6rem;
+    align-items: start;
+  }
+  .signal-dot {
+    width: 0.45rem;
+    height: 0.45rem;
+    background: var(--red);
+    border-radius: 50%;
+    margin-top: 0.55rem;
+    flex-shrink: 0;
+  }
+  .signal-label {
+    font-weight: 500;
+    font-size: 0.92rem;
+    color: #d8a0a0;
+    display: block;
+    margin-bottom: 0.2rem;
+  }
+  .signal-body { font-size: 0.9rem; color: #9a8a88; margin: 0; }
+
+  /* ── PROTECT LIST ── */
+  .protect { display: flex; flex-direction: column; gap: 0.75rem; }
+  .protect-item {
+    background: var(--gold-dim);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 0.4rem;
+    padding: 1rem 1.2rem;
+    display: grid;
+    grid-template-columns: 1.4rem 1fr;
+    gap: 0.6rem;
+    align-items: start;
+  }
+  .protect-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--gold);
+    margin-top: 0.15rem;
+  }
+  .protect-text { font-size: 0.92rem; color: #c8b888; margin: 0; }
+
+  /* ── DIVIDER ── */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin: 4rem 0;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 1.1s;
+  }
+  .divider-line { flex: 1; height: 1px; background: var(--faint); }
+  .divider-icon {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    color: var(--green);
+    flex-shrink: 0;
+  }
+
+  /* ── HEALTHY SECTION ── */
+  .healthy-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 1.2s;
+  }
+  .healthy-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 1rem;
+  }
+  .healthy-header h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 300;
+    color: var(--text);
+    margin-bottom: 0;
+    display: block;
+  }
+  .healthy-header h2::before { display: none; }
+  .healthy-header h2 em { color: #7ec49a; font-style: italic; }
+
+  .healthy-lead {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.97rem;
+    max-width: 560px;
+    margin: 0 auto 3rem;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 1.35s;
+  }
+
+  .healthy-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 1.5s;
+  }
+  @media (max-width: 560px) { .healthy-grid { grid-template-columns: 1fr; } }
+
+  .healthy-card {
+    background: var(--green-dim);
+    border: 1px solid rgba(76,155,110,0.2);
+    border-radius: 0.5rem;
+    padding: 1.3rem;
+    transition: background 0.3s;
+  }
+  .healthy-card:hover { background: rgba(76,155,110,0.18); }
+  .healthy-card-icon {
+    font-size: 1.3rem;
+    margin-bottom: 0.6rem;
+    display: block;
+  }
+  .healthy-card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #8ed4aa;
+    margin-bottom: 0.4rem;
+  }
+  .healthy-card-body { font-size: 0.88rem; color: #809a88; margin: 0; }
+
+  .healthy-story {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-top: 2px solid var(--green);
+    border-radius: 0.5rem;
+    padding: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 1.65s;
+  }
+  .healthy-story p { font-size: 0.95rem; color: #b0c0b0; }
+  .story-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 1rem;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    margin-top: 5rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    color: var(--faint);
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 1.8s;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── I18N ── */
+  [data-lang] { display: none; }
+  .lang-pt [data-lang="pt"],
+  .lang-es [data-lang="es"] { display: initial; }
+  .lang-pt [data-lang-block="pt"],
+  .lang-es [data-lang-block="es"] { display: block; }
+  [data-lang-block] { display: none; }
+</style>
+</head>
+<body class="lang-pt">
+
+<!-- LANG TOGGLE -->
+<div class="lang-bar">
+  <button class="lang-btn active" onclick="setLang('pt')" id="btn-pt">PT</button>
+  <button class="lang-btn" onclick="setLang('es')" id="btn-es">ES</button>
+</div>
+
+<div class="wrapper">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="eyebrow">
+      <span data-lang="pt">Psicologia · Relações</span>
+      <span data-lang="es">Psicología · Relaciones</span>
+    </div>
+    <h1>
+      <em>Love Bombing</em>
+    </h1>
+    <div class="header-rule"></div>
+    <p class="lead">
+      <span data-lang="pt">Uma análise sobre a manipulação emocional no início das relações e o contraste com o amor genuíno.</span>
+      <span data-lang="es">Un análisis sobre la manipulación emocional al inicio de las relaciones y el contraste con el amor genuino.</span>
+    </p>
+  </header>
+
+  <!-- INTRO -->
+  <div class="section">
+    <h2>
+      <span data-lang="pt">O que é?</span>
+      <span data-lang="es">¿Qué es?</span>
+    </h2>
+    <div data-lang-block="pt">
+      <p>O termo <strong>"love bombing"</strong> (ou "bombardeio de amor" em português) refere-se a uma tática de manipulação emocional em que uma pessoa inunda outra com atenção, afeto e presentes excessivos no início de uma relação, com o objetivo de ganhar rapidamente a sua confiança e controlá-la. Ao contrário do apaixonamento genuíno, esta intensidade é desproporcionada ao nível de conexão real e esconde intenções egoístas.</p>
+    </div>
+    <div data-lang-block="es">
+      <p>El término <strong>"love bombing"</strong> (o "bombardeo de amor" en español) se refiere a una táctica de manipulación emocional en la que una persona inunda a otra con atención, afecto y regalos excesivos al comienzo de una relación, con el objetivo de ganar rápidamente su confianza y controlarla. A diferencia del enamoramiento genuino, esta intensidad es desproporcionada al nivel de conexión real y esconde intenciones egoístas.</p>
+    </div>
+  </div>
+
+  <!-- PHASES -->
+  <div class="section">
+    <h2>
+      <span data-lang="pt">Fases do Love Bombing</span>
+      <span data-lang="es">Fases del Love Bombing</span>
+    </h2>
+    <p style="margin-bottom:1.5rem; font-size:0.93rem; color:var(--muted);">
+      <span data-lang="pt">O processo geralmente segue um ciclo de três fases:</span>
+      <span data-lang="es">El proceso generalmente sigue un ciclo de tres fases:</span>
+    </p>
+    <div class="phases">
+
+      <div class="phase-card">
+        <div class="phase-num">
+          <span data-lang="pt">Fase 01</span>
+          <span data-lang="es">Fase 01</span>
+        </div>
+        <div class="phase-title">
+          <span data-lang="pt">Idealização</span>
+          <span data-lang="es">Idealización</span>
+        </div>
+        <p class="phase-body">
+          <span data-lang="pt">A vítima é coberta de elogios, promessas de um futuro juntos, e uma atenção constante que a faz sentir única e especial. O objetivo é criar um vínculo emocional rápido e forte, fazendo com que a vítima baixe a guarda.</span>
+          <span data-lang="es">La víctima es colmada de halagos, promesas de un futuro juntos, y una atención constante que la hace sentir única y especial. El objetivo es crear un vínculo emocional rápido y fuerte, haciendo que la víctima baje la guardia.</span>
+        </p>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-num">
+          <span data-lang="pt">Fase 02</span>
+          <span data-lang="es">Fase 02</span>
+        </div>
+        <div class="phase-title">
+          <span data-lang="pt">Desvalorização</span>
+          <span data-lang="es">Devaluación</span>
+        </div>
+        <p class="phase-body">
+          <span data-lang="pt">Uma vez que a vítima está "presa", o manipulador começa a retirar o afeto e a criticar ou punir com frieza e silêncio quando a vítima não cumpre as suas expectativas ou tenta estabelecer limites. Isso gera confusão e ansiedade, e a vítima luta por recuperar a atenção inicial.</span>
+          <span data-lang="es">Una vez que la víctima está "enganchada", el manipulador comienza a retirar el afecto y a criticar o castigar con frialdad y silencio cuando la víctima no cumple con sus expectativas o intenta poner límites. Esto genera confusión y ansiedad, y la víctima lucha por recuperar la atención inicial.</span>
+        </p>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-num">
+          <span data-lang="pt">Fase 03</span>
+          <span data-lang="es">Fase 03</span>
+        </div>
+        <div class="phase-title">
+          <span data-lang="pt">Descarte</span>
+          <span data-lang="es">Descarte</span>
+        </div>
+        <p class="phase-body">
+          <span data-lang="pt">O manipulador pode abandonar abruptamente a vítima (fazendo ghosting), ou o ciclo de idealização e desvalorização pode repetir-se para manter a vítima num estado de confusão e dependência perpétua.</span>
+          <span data-lang="es">El manipulador puede abandonar abruptamente a la víctima (haciendo ghosting), o el ciclo de idealización y devaluación puede repetirse para mantener a la víctima en un estado de confusión y dependencia perpetua.</span>
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SIGNALS -->
+  <div class="section">
+    <h2>
+      <span data-lang="pt">Sinais de Alerta</span>
+      <span data-lang="es">Señales de Alerta</span>
+    </h2>
+    <p style="margin-bottom:1.5rem; font-size:0.93rem; color:var(--muted);">
+      <span data-lang="pt">É crucial prestar atenção a estes sinais para identificar um possível bombardeio de amor:</span>
+      <span data-lang="es">Es crucial prestar atención a estas señales para identificar un posible bombardeo de amor:</span>
+    </p>
+    <div class="signals">
+
+      <div class="signal-item">
+        <div class="signal-dot"></div>
+        <div>
+          <span class="signal-label">
+            <span data-lang="pt">Intensidade avassaladora</span>
+            <span data-lang="es">Intensidad abrumadora</span>
+          </span>
+          <p class="signal-body">
+            <span data-lang="pt">Tudo avança demasiado rápido, com declarações de amor prematuras ou planos de vida imediatos.</span>
+            <span data-lang="es">Todo avanza demasiado rápido, con declaraciones de amor prematuras o planes de vida inmediatos.</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="signal-item">
+        <div class="signal-dot"></div>
+        <div>
+          <span class="signal-label">
+            <span data-lang="pt">Falta de respeito pelos limites</span>
+            <span data-lang="es">Falta de respeto por los límites</span>
+          </span>
+          <p class="signal-body">
+            <span data-lang="pt">O manipulador ignora os teus pedidos de espaço ou tempo pessoal e fica irritado se não estiveres disponível constantemente.</span>
+            <span data-lang="es">El manipulador ignora tus peticiones de espacio o tiempo personal y se enfada si no estás disponible constantemente.</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="signal-item">
+        <div class="signal-dot"></div>
+        <div>
+          <span class="signal-label">
+            <span data-lang="pt">Elogios exagerados e inautênticos</span>
+            <span data-lang="es">Elogios exagerados e inauténticos</span>
+          </span>
+          <p class="signal-body">
+            <span data-lang="pt">Recebes cumprimentos excessivos sobre qualidades que mal tiveram tempo de conhecer.</span>
+            <span data-lang="es">Recibes cumplidos desmedidos sobre cualidades que apenas han tenido tiempo de conocer.</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="signal-item">
+        <div class="signal-dot"></div>
+        <div>
+          <span class="signal-label">
+            <span data-lang="pt">Isolamento progressivo</span>
+            <span data-lang="es">Aislamiento progresivo</span>
+          </span>
+          <p class="signal-body">
+            <span data-lang="pt">Tenta afastar-te dos teus amigos e familiares, criticando a tua rede de apoio para se tornar o teu único ponto de referência.</span>
+            <span data-lang="es">Intenta distanciarte de tus amigos y familiares, criticando a tu red de apoyo para convertirse en tu único punto de referencia.</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="signal-item">
+        <div class="signal-dot"></div>
+        <div>
+          <span class="signal-label">
+            <span data-lang="pt">Incoerência entre palavras e ações</span>
+            <span data-lang="es">Incoherencia entre palabras y acciones</span>
+          </span>
+          <p class="signal-body">
+            <span data-lang="pt">Diz que te adora, mas as suas ações não são consistentes, alternando entre grande afeto e frieza repentina.</span>
+            <span data-lang="es">Dice que te adora, pero sus acciones no son consistentes, alternando entre gran afecto y frialdad repentina.</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="signal-item">
+        <div class="signal-dot"></div>
+        <div>
+          <span class="signal-label">
+            <span data-lang="pt">Sentimento de ansiedade ou culpa</span>
+            <span data-lang="es">Sentimiento de ansiedad o culpa</span>
+          </span>
+          <p class="signal-body">
+            <span data-lang="pt">Uma relação saudável gera calma; se sentires ansiedade constante ou culpa por não estar à altura, é um sinal de alarme.</span>
+            <span data-lang="es">Una relación sana genera calma; si sientes ansiedad constante o culpa por no estar a la altura, es una señal de alarma.</span>
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PROTECT -->
+  <div class="section">
+    <h2>
+      <span data-lang="pt">Como Proteger-se</span>
+      <span data-lang="es">Cómo Protegerse</span>
+    </h2>
+    <p style="margin-bottom:1.5rem; font-size:0.93rem; color:var(--muted);">
+      <span data-lang="pt">Se suspeitas que estás a experienciar love bombing, os especialistas aconselham:</span>
+      <span data-lang="es">Si sospechas que estás experimentando love bombing, los expertos aconsejan:</span>
+    </p>
+    <div class="protect">
+
+      <div class="protect-item">
+        <span class="protect-num">01</span>
+        <p class="protect-text">
+          <span data-lang="pt"><strong style="color:var(--gold-light)">Estabelecer limites claros.</strong> Sê firme com as tuas necessidades de tempo e espaço.</span>
+          <span data-lang="es"><strong style="color:var(--gold-light)">Establecer límites claros.</strong> Sé firme con tus necesidades de tiempo y espacio.</span>
+        </p>
+      </div>
+
+      <div class="protect-item">
+        <span class="protect-num">02</span>
+        <p class="protect-text">
+          <span data-lang="pt"><strong style="color:var(--gold-light)">Observar a consistência.</strong> O amor verdadeiro constrói-se com o tempo e ações coerentes, não com gestos grandiosos e apressados.</span>
+          <span data-lang="es"><strong style="color:var(--gold-light)">Observar la consistencia.</strong> El amor verdadero se construye con el tiempo y acciones coherentes, no con gestos grandiosos y apresurados.</span>
+        </p>
+      </div>
+
+      <div class="protect-item">
+        <span class="protect-num">03</span>
+        <p class="protect-text">
+          <span data-lang="pt"><strong style="color:var(--gold-light)">Confiar na tua intuição.</strong> Se algo parece bom demais para ser verdade ou te gera desconforto, presta atenção a essa sensação.</span>
+          <span data-lang="es"><strong style="color:var(--gold-light)">Confiar en tu intuición.</strong> Si algo se siente demasiado bueno para ser verdad o te genera incomodidad, préstale atención a esa sensación.</span>
+        </p>
+      </div>
+
+      <div class="protect-item">
+        <span class="protect-num">04</span>
+        <p class="protect-text">
+          <span data-lang="pt"><strong style="color:var(--gold-light)">Procurar apoio profissional.</strong> Um terapeuta ou psicólogo pode dar-te ferramentas para gerir a situação e fortalecer a tua autoestima. Em Portugal, podes encontrar apoio através do SNS ou contactar a Ordem dos Psicólogos Portugueses (OPP) para obter mais recursos.</span>
+          <span data-lang="es"><strong style="color:var(--gold-light)">Buscar apoyo profesional.</strong> Un terapeuta o psicólogo puede darte herramientas para manejar la situación y fortalecer tu autoestima. En España, puedes encontrar apoyo a través de Vivofácil o contactar con la Asociación Española de Psicología Sanitaria (AEPSIS) para obtener más recursos.</span>
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DIVIDER -->
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-icon">✦</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <!-- HEALTHY LOVE HEADER -->
+  <div class="healthy-header">
+    <div class="healthy-eyebrow">
+      <span data-lang="pt">O outro caminho</span>
+      <span data-lang="es">El otro camino</span>
+    </div>
+    <h2>
+      <span data-lang="pt">O Início de um Amor <em>Saudável e Autêntico</em></span>
+      <span data-lang="es">El Inicio de un Amor <em>Sano y Auténtico</em></span>
+    </h2>
+  </div>
+
+  <p class="healthy-lead">
+    <span data-lang="pt">Sentir uma atração intensa e o desejo de viver juntos rapidamente não é sinónimo de manipulação. O que define um amor saudável não é a velocidade, mas a qualidade do vínculo que se constrói.</span>
+    <span data-lang="es">Sentir una atracción intensa y el deseo de vivir juntos rápidamente no es sinónimo de manipulación. Lo que define un amor sano no es la velocidad, sino la calidad del vínculo que se construye.</span>
+  </p>
+
+  <div class="healthy-grid">
+
+    <div class="healthy-card">
+      <span class="healthy-card-icon">🌱</span>
+      <div class="healthy-card-title">
+        <span data-lang="pt">Entusiasmo com raízes</span>
+        <span data-lang="es">Entusiasmo con raíces</span>
+      </div>
+      <p class="healthy-card-body">
+        <span data-lang="pt">Há euforia e desejo de estar juntos, mas também espaço para que cada um continue a ser ele próprio. A intensidade dos sentimentos coexiste com o respeito pelo mundo individual de cada um.</span>
+        <span data-lang="es">Hay euforia y deseo de estar juntos, pero también espacio para que cada uno siga siendo él mismo. La intensidad de los sentimientos coexiste con el respeto por el mundo individual de cada uno.</span>
+      </p>
+    </div>
+
+    <div class="healthy-card">
+      <span class="healthy-card-icon">💬</span>
+      <div class="healthy-card-title">
+        <span data-lang="pt">Conversas honestas</span>
+        <span data-lang="es">Conversaciones honestas</span>
+      </div>
+      <p class="healthy-card-body">
+        <span data-lang="pt">Falar sobre viver juntos surge de um diálogo aberto, não de pressão. Ambos expressam medos, dúvidas e expectativas sem sentir que isso os coloca em risco.</span>
+        <span data-lang="es">Hablar de vivir juntos surge de un diálogo abierto, no de presión. Ambos expresan miedos, dudas y expectativas sin sentir que eso los pone en riesgo.</span>
+      </p>
+    </div>
+
+    <div class="healthy-card">
+      <span class="healthy-card-icon">⚖️</span>
+      <div class="healthy-card-title">
+        <span data-lang="pt">Reciprocidade real</span>
+        <span data-lang="es">Reciprocidad real</span>
+      </div>
+      <p class="healthy-card-body">
+        <span data-lang="pt">O afeto flui nos dois sentidos sem que ninguém sinta que está a "dever" algo. Os gestos são espontâneos, não estratégicos.</span>
+        <span data-lang="es">El afecto fluye en ambas direcciones sin que nadie sienta que "debe" algo. Los gestos son espontáneos, no estratégicos.</span>
+      </p>
+    </div>
+
+    <div class="healthy-card">
+      <span class="healthy-card-icon">🧭</span>
+      <div class="healthy-card-title">
+        <span data-lang="pt">Ritmo negociado</span>
+        <span data-lang="es">Ritmo negociado</span>
+      </div>
+      <p class="healthy-card-body">
+        <span data-lang="pt">Mesmo querendo avançar rapidamente, há sensibilidade ao ritmo do outro. Se um precisa de mais tempo, o outro aguarda sem castigar nem retirar afeto.</span>
+        <span data-lang="es">Incluso queriendo avanzar rápido, hay sensibilidad al ritmo del otro. Si uno necesita más tiempo, el otro espera sin castigar ni retirar afecto.</span>
+      </p>
+    </div>
+
+    <div class="healthy-card">
+      <span class="healthy-card-icon">👥</span>
+      <div class="healthy-card-title">
+        <span data-lang="pt">As redes de apoio ficam</span>
+        <span data-lang="es">Las redes de apoyo se mantienen</span>
+      </div>
+      <p class="healthy-card-body">
+        <span data-lang="pt">Amigos e família continuam a fazer parte da vida de ambos. A relação enriquece o mundo de cada um, não o substitui.</span>
+        <span data-lang="es">Amigos y familia siguen formando parte de la vida de ambos. La relación enriquece el mundo de cada uno, no lo reemplaza.</span>
+      </p>
+    </div>
+
+    <div class="healthy-card">
+      <span class="healthy-card-icon">🔒</span>
+      <div class="healthy-card-title">
+        <span data-lang="pt">Limites são bem-vindos</span>
+        <span data-lang="es">Los límites son bienvenidos</span>
+      </div>
+      <p class="healthy-card-body">
+        <span data-lang="pt">Quando alguém pede espaço ou tempo, a resposta é compreensão, não punição. Estabelecer limites fortalece a relação em vez de a ameaçar.</span>
+        <span data-lang="es">Cuando alguien pide espacio o tiempo, la respuesta es comprensión, no castigo. Establecer límites fortalece la relación en lugar de amenazarla.</span>
+      </p>
+    </div>
+
+  </div>
+
+  <!-- HEALTHY STORY -->
+  <div class="healthy-story">
+    <div class="story-label">
+      <span data-lang="pt">Exemplo · Como pode parecer na prática</span>
+      <span data-lang="es">Ejemplo · Cómo puede verse en la práctica</span>
+    </div>
+    <div data-lang-block="pt">
+      <p>Dois adultos conhecem-se e sentem uma conexão forte desde o início. Em poucas semanas, surgem naturalmente conversas sobre o futuro: viver na mesma cidade, partilhar casa. Em vez de um deles pressionar o outro ou fazer promessas grandiosas como forma de "segurar" a relação, sentam-se a falar com honestidade. Um diz: <em>"Sinto que quero isto contigo, mas também tenho medos. Posso partilhá-los?"</em> O outro responde: <em>"Eu também. Vamos falar disso."</em></p>
+      <p>Decidem avançar — talvez mais depressa do que o habitual — mas a decisão nasce de conversas reais, não de pressão emocional. Cada um mantém os seus amigos, os seus projetos pessoais, e sente-se livre para discordar. Quando há desentendimentos, nenhum dos dois desaparece nem pune com silêncio. O afeto é constante, não um prémio que se ganha ou perde.</p>
+      <p style="margin-top:1rem; font-style:italic; color:#6a9a7a;">Velocidade não é o problema. A ausência de liberdade, respeito e honestidade é.</p>
+    </div>
+    <div data-lang-block="es">
+      <p>Dos adultos se conocen y sienten una conexión fuerte desde el principio. En pocas semanas, surgen naturalmente conversaciones sobre el futuro: vivir en la misma ciudad, compartir casa. En lugar de que uno presione al otro o haga promesas grandiosas como forma de "asegurar" la relación, se sientan a hablar con honestidad. Uno dice: <em>"Siento que quiero esto contigo, pero también tengo miedos. ¿Puedo compartirlos?"</em> El otro responde: <em>"Yo también. Hablemos de ello."</em></p>
+      <p>Deciden avanzar — quizás más rápido de lo habitual — pero la decisión nace de conversaciones reales, no de presión emocional. Cada uno mantiene sus amigos, sus proyectos personales, y se siente libre de discrepar. Cuando hay desacuerdos, ninguno desaparece ni castiga con silencio. El afecto es constante, no un premio que se gana o se pierde.</p>
+      <p style="margin-top:1rem; font-style:italic; color:#6a9a7a;">La velocidad no es el problema. La ausencia de libertad, respeto y honestidad sí lo es.</p>
+    </div>
+  </div>
+
+  <footer>
+    <span data-lang="pt">Psicologia · Relações Afetivas · Bem-Estar Emocional</span>
+    <span data-lang="es">Psicología · Relaciones Afectivas · Bienestar Emocional</span>
+  </footer>
+
+</div><!-- /wrapper -->
+
+<script>
+  function setLang(lang) {
+    document.body.className = 'lang-' + lang;
+    document.getElementById('btn-pt').classList.toggle('active', lang === 'pt');
+    document.getElementById('btn-es').classList.toggle('active', lang === 'es');
+    document.documentElement.lang = lang;
+  }
+</script>
+</body>
+</html>
