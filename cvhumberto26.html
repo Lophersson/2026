@@ -7,32 +7,23 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0d1117;--bg2:#161b24;--bg3:#1e2635;--surface:#232c3d;--border:#2d3a50;--accent:#c9a84c;--accent2:#e8c96e;--accent-soft:rgba(201,168,76,0.12);--text:#e8edf5;--text2:#a8b4c8;--text3:#6b7a94;--name-color:#f0e6c8;--tag-bg:rgba(201,168,76,0.15);--tag-border:rgba(201,168,76,0.35);--bar-bg:#2d3a50;--shadow:0 4px 24px rgba(0,0,0,0.45);--shadow-sm:0 2px 8px rgba(0,0,0,0.3);--radius:12px;--font-display:'Cormorant Garamond',Georgia,serif;--font-body:'Outfit',sans-serif}
-[data-theme="light"]{--bg:#f5f0e8;--bg2:#faf7f2;--bg3:#ffffff;--surface:#ffffff;--border:#ddd4c0;--accent:#8b6914;--accent2:#a07820;--accent-soft:rgba(139,105,20,0.08);--text:#1a1a2e;--text2:#3d4466;--text3:#7a7a9a;--name-color:#1a1a2e;--tag-bg:rgba(139,105,20,0.1);--tag-border:rgba(139,105,20,0.3);--bar-bg:#e0d8cb;--shadow:0 4px 24px rgba(0,0,0,0.1);--shadow-sm:0 2px 8px rgba(0,0,0,0.07)}
+:root{--bg:#0d1117;--bg2:#161b24;--bg3:#1e2635;--surface:#232c3d;--border:#2d3a50;--accent:#c9a84c;--accent2:#e8c96e;--accent-soft:rgba(201,168,76,0.12);--text:#e8edf5;--text2:#a8b4c8;--text3:#6b7a94;--name-color:#f0e6c8;--tag-bg:rgba(201,168,76,0.15);--tag-border:rgba(201,168,76,0.35);--shadow:0 4px 24px rgba(0,0,0,0.45);--shadow-sm:0 2px 8px rgba(0,0,0,0.3);--radius:12px;--font-display:'Cormorant Garamond',Georgia,serif;--font-body:'Outfit',sans-serif}
+[data-theme="light"]{--bg:#f5f0e8;--bg2:#faf7f2;--bg3:#ffffff;--surface:#ffffff;--border:#ddd4c0;--accent:#8b6914;--accent2:#a07820;--accent-soft:rgba(139,105,20,0.08);--text:#1a1a2e;--text2:#3d4466;--text3:#7a7a9a;--name-color:#1a1a2e;--tag-bg:rgba(139,105,20,0.1);--tag-border:rgba(139,105,20,0.3);--shadow:0 4px 24px rgba(0,0,0,0.1);--shadow-sm:0 2px 8px rgba(0,0,0,0.07)}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;font-size:15px}
 body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh;transition:background .35s,color .35s;line-height:1.6}
-
-/* FONT CONTROLS */
 #font-controls{position:fixed;bottom:28px;right:22px;z-index:200;display:flex;flex-direction:column;gap:6px}
 .font-btn{width:38px;height:38px;border-radius:50%;border:1px solid var(--border);background:var(--bg2);color:var(--accent);font-family:var(--font-body);font-weight:700;font-size:.95rem;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-sm);transition:all .2s;user-select:none;line-height:1}
 .font-btn:hover{border-color:var(--accent);background:var(--accent-soft);transform:scale(1.08)}
-.font-btn:active{transform:scale(.96)}
 .font-btn:disabled{opacity:.3;cursor:default;transform:none}
-
-/* TOPBAR */
 #topbar{position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 24px;background:var(--bg2);border-bottom:1px solid var(--border);backdrop-filter:blur(10px);box-shadow:var(--shadow-sm);flex-wrap:wrap}
 .topbar-left,.topbar-right{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .topbar-title{font-family:var(--font-display);font-size:1rem;font-weight:600;color:var(--accent);letter-spacing:.03em;margin-right:10px}
 .btn{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:30px;border:1px solid var(--border);background:transparent;color:var(--text2);font-family:var(--font-body);font-size:.78rem;font-weight:500;cursor:pointer;transition:all .2s;white-space:nowrap}
 .btn:hover{border-color:var(--accent);color:var(--accent)}
 .btn.active{background:var(--accent);border-color:var(--accent);color:#0d1117;font-weight:600}
-
-/* CV */
 #cv{max-width:1060px;margin:0 auto;padding:32px 20px 60px;animation:fadeIn .6s ease both}
 @keyframes fadeIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
-
-/* HERO */
 .hero{display:grid;grid-template-columns:auto 1fr auto;gap:28px;align-items:center;padding:36px 40px 30px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:28px;position:relative;overflow:hidden}
 .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 0%,var(--accent-soft) 0%,transparent 60%);pointer-events:none}
 .hero-avatar{width:110px;height:110px;border-radius:50%;object-fit:cover;border:3px solid var(--accent);box-shadow:0 0 0 6px var(--accent-soft),var(--shadow-sm);flex-shrink:0;display:block}
@@ -43,15 +34,11 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
 .contact-item:hover{color:var(--accent);border-color:var(--accent)}
 .hero-tags{display:flex;flex-direction:column;gap:8px;align-items:flex-end}
 .hero-tag{padding:5px 14px;background:var(--tag-bg);border:1px solid var(--tag-border);border-radius:20px;font-size:.73rem;font-weight:600;color:var(--accent);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
-
-/* GRID */
 .cv-grid{display:grid;grid-template-columns:1fr 320px;gap:22px;align-items:start}
 .section{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px 28px;margin-bottom:22px;transition:border-color .2s}
 .section:hover{border-color:rgba(201,168,76,.3)}
 .section-title{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-size:1.15rem;font-weight:600;color:var(--accent);margin-bottom:20px;padding-bottom:10px;border-bottom:1px solid var(--border);letter-spacing:.02em}
-
 .about-text{font-size:.88rem;color:var(--text2);line-height:1.75}
-
 .exp-item{display:grid;grid-template-columns:auto 1fr;gap:14px;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--border)}
 .exp-item:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
 .exp-dot{width:10px;height:10px;border-radius:50%;background:var(--accent);margin-top:5px;flex-shrink:0;box-shadow:0 0 0 3px var(--accent-soft)}
@@ -59,433 +46,345 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
 .exp-company{font-size:.82rem;color:var(--accent);font-weight:500;margin-bottom:4px}
 .exp-desc{font-size:.8rem;color:var(--text3);margin-bottom:4px}
 .exp-year{font-size:.73rem;font-weight:600;color:var(--text3);letter-spacing:.04em;background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:1px 8px;display:inline-block}
-
-/* SKILL CATEGORIES (replaces bars) */
 .skill-cat{margin-bottom:18px}
 .skill-cat:last-child{margin-bottom:0}
 .skill-cat-title{font-size:.72rem;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border)}
 .skill-cat-chips{display:flex;flex-wrap:wrap;gap:6px}
 .skill-chip{padding:4px 11px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;font-size:.76rem;font-weight:500;color:var(--text2);transition:all .2s}
 .skill-chip:hover{border-color:var(--accent);color:var(--accent)}
-
-/* PROJECTS */
-.project-card{display:flex;gap:14px;align-items:flex-start;padding:13px 15px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;margin-bottom:10px;text-decoration:none;color:inherit;transition:all .2s;cursor:default}
+.project-card{display:flex;gap:14px;align-items:flex-start;padding:13px 15px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;margin-bottom:10px;text-decoration:none;color:inherit;transition:all .2s}
 .project-card:last-child{margin-bottom:0}
-.project-card.linked{cursor:pointer}
-.project-card.linked:hover{border-color:var(--accent);transform:translateX(3px)}
+.project-card:hover{border-color:var(--accent);transform:translateX(3px)}
 .project-icon{font-size:1.5rem;flex-shrink:0;line-height:1.2}
 .project-name{font-size:.85rem;font-weight:600;color:var(--text);margin-bottom:3px}
 .project-desc{font-size:.75rem;color:var(--text3);line-height:1.5;margin-bottom:5px}
 .project-tag{font-size:.67rem;font-weight:700;color:var(--accent);background:var(--accent-soft);border:1px solid var(--tag-border);padding:2px 8px;border-radius:4px;display:inline-block}
-
 .soft-grid{display:flex;flex-wrap:wrap;gap:8px}
 .soft-tag{padding:6px 15px;background:var(--bg3);border:1px solid var(--accent);border-radius:20px;font-size:.79rem;font-weight:500;color:var(--accent)}
-
 .edu-item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border)}
 .edu-item:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
 .edu-title{font-size:.88rem;font-weight:600;color:var(--text);margin-bottom:3px}
 .edu-sub{font-size:.78rem;color:var(--text2);margin-bottom:4px}
 .edu-badge{display:inline-block;font-size:.68rem;font-weight:700;letter-spacing:.07em;padding:2px 8px;border-radius:4px;text-transform:uppercase}
-.badge-progress{background:rgb(253,217,116);color:#f72804;border:1px solid rgba(255,175,2,.842)}
-.badge-unfinished{background:rgba(235,96,228,.13);color:#e624c5;border:1px solid rgba(102,14,216,.719)}
-.badge-done{background:rgba(145,245,165,.87);color:#024913;border:1px solid rgba(9,252,57,.918)}
-
+.badge-progress{background:rgb(253,217,116);color:#f72804;border:1px solid rgba(255,175,2,.8)}
+.badge-unfinished{background:rgba(235,96,228,.13);color:#e624c5;border:1px solid rgba(102,14,216,.7)}
+.badge-done{background:rgba(145,245,165,.87);color:#024913;border:1px solid rgba(9,252,57,.9)}
 .cert-item{display:flex;gap:14px;align-items:flex-start;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border)}
 .cert-item:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
 .cert-num{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#0d1117;font-size:.72rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .cert-name{font-size:.83rem;font-weight:600;color:var(--text);margin-bottom:2px}
 .cert-org{font-size:.75rem;color:var(--text2);margin-bottom:3px}
 .cert-hours{font-size:.7rem;font-weight:700;color:var(--accent);background:var(--accent-soft);padding:1px 8px;border-radius:4px;display:inline-block}
-
 .tools-grid{display:flex;flex-wrap:wrap;gap:8px}
 .tool-chip{padding:5px 13px;background:var(--surface);border:1px solid var(--border);border-radius:6px;font-size:.77rem;font-weight:500;color:var(--text2);transition:all .2s}
 .tool-chip:hover{border-color:var(--accent);color:var(--accent)}
-
 .lang-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}
 .lang-item:last-child{border-bottom:none}
 .lang-name{font-size:.85rem;font-weight:500}
 .lang-level{font-size:.75rem;color:var(--text2);background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:2px 9px}
-
 .resource-link{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;text-decoration:none;color:var(--text2);font-size:.82rem;font-weight:500;margin-bottom:8px;transition:all .2s}
 .resource-link:last-child{margin-bottom:0}
 .resource-link:hover{border-color:var(--accent);color:var(--accent)}
 .resource-icon{font-size:1.1rem}
-
 .profile-text{font-size:.84rem;color:var(--text2);line-height:1.7;font-style:italic;border-left:2px solid var(--accent);padding-left:12px;margin-bottom:14px}
 .profile-list{padding-left:0;list-style:none}
 .profile-list li{padding:4px 0;font-size:.82rem;color:var(--text2);display:flex;align-items:flex-start;gap:8px}
 .profile-list li::before{content:'◆';color:var(--accent);font-size:.55rem;margin-top:5px;flex-shrink:0}
-
 .digital-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .digital-card{padding:13px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;transition:border-color .2s}
 .digital-card:hover{border-color:rgba(201,168,76,.4)}
 .digital-card-icon{font-size:1.1rem;margin-bottom:5px}
 .digital-card-title{font-size:.8rem;font-weight:600;color:var(--text);margin-bottom:4px}
 .digital-card-desc{font-size:.73rem;color:var(--text3);line-height:1.5}
-
 .cv-footer{text-align:center;padding:20px;color:var(--text3);font-size:.75rem;letter-spacing:.04em}
-
 @media(max-width:800px){.cv-grid{grid-template-columns:1fr}.hero{grid-template-columns:1fr;text-align:center}.hero-avatar{margin:0 auto}.hero-contact{justify-content:center}.hero-tags{flex-direction:row;align-items:center;justify-content:center;flex-wrap:wrap}.section{padding:20px}.digital-grid{grid-template-columns:1fr}}
 @media(max-width:500px){#topbar{padding:8px 12px}#cv{padding:16px 12px 40px}.hero{padding:22px 18px}.hero-name{font-size:1.7rem}#font-controls{bottom:18px;right:14px}}
-@media print{#topbar,#font-controls{display:none!important}body{background:#fff!important;color:#000!important}.hero,.section{background:#fff!important;border:1px solid #ccc!important;break-inside:avoid;box-shadow:none!important}:root{--bg:#fff;--bg2:#fff;--bg3:#f8f8f8;--text:#111;--text2:#333;--text3:#666;--accent:#8b6914;--accent2:#a07820;--border:#ddd;--shadow:none;--tag-bg:#f0e8d0;--tag-border:#c9a84c;--name-color:#111}#cv{max-width:100%;padding:10px}.cv-grid{grid-template-columns:1fr 280px}.section{margin-bottom:14px;padding:16px}a{color:inherit;text-decoration:none}}
+@media print{#topbar,#font-controls{display:none!important}body{background:#fff!important;color:#000!important}.hero,.section{background:#fff!important;border:1px solid #ccc!important;break-inside:avoid;box-shadow:none!important}:root{--bg:#fff;--bg2:#fff;--bg3:#f8f8f8;--text:#111;--text2:#333;--text3:#666;--accent:#8b6914;--border:#ddd;--shadow:none;--tag-bg:#f0e8d0;--tag-border:#c9a84c;--name-color:#111}#cv{max-width:100%;padding:10px}.cv-grid{grid-template-columns:1fr 280px}.section{margin-bottom:14px;padding:16px}a{color:inherit;text-decoration:none}}
 </style>
 </head>
 <body>
-
 <div id="font-controls">
-  <button class="font-btn" id="btn-font-up" onclick="changeFontSize(1)" title="Aumentar letra">A+</button>
-  <button class="font-btn" id="btn-font-down" onclick="changeFontSize(-1)" title="Reducir letra">A−</button>
+  <button class="font-btn" id="btn-font-up" onclick="changeFontSize(1)">A+</button>
+  <button class="font-btn" id="btn-font-down" onclick="changeFontSize(-1)">A-</button>
 </div>
-
 <div id="topbar">
   <div class="topbar-left">
     <span class="topbar-title">Humberto L.R.</span>
-    <button class="btn active" id="btn-es" onclick="setLang('es')">🇪🇸 ES</button>
-    <button class="btn" id="btn-en" onclick="setLang('en')">🇬🇧 EN</button>
-    <button class="btn" id="btn-pt" onclick="setLang('pt')">🇵🇹 PT</button>
+    <button class="btn active" id="btn-es" onclick="setLang('es')">ES</button>
+    <button class="btn" id="btn-en" onclick="setLang('en')">EN</button>
+    <button class="btn" id="btn-pt" onclick="setLang('pt')">PT</button>
   </div>
   <div class="topbar-right">
-    <button class="btn" id="btn-theme" onclick="toggleTheme()">☀️ <span id="theme-label">Modo claro</span></button>
-    <button class="btn" onclick="window.print()">🖨️ <span id="pdf-label">PDF</span></button>
+    <button class="btn" id="btn-theme" onclick="toggleTheme()">&#9728; <span id="theme-label">Modo claro</span></button>
+    <button class="btn" onclick="window.print()">&#128424; <span id="pdf-label">PDF</span></button>
   </div>
 </div>
-
 <div id="cv">
   <div class="hero">
-    <img class="hero-avatar" src="https://pbs.twimg.com/profile_images/2012681173093216257/DOMH01O8_200x200.jpg" alt="Humberto López Rodríguez">
+    <img class="hero-avatar" src="https://pbs.twimg.com/profile_images/2012681173093216257/DOMH01O8_200x200.jpg" alt="Humberto">
     <div>
-      <div class="hero-name">Humberto López Rodríguez</div>
-      <div class="hero-title" id="hero-subtitle">Financial Data Analyst · FinTech · Business Intelligence</div>
+      <div class="hero-name">Humberto L&#243;pez Rodr&#237;guez</div>
+      <div class="hero-title" id="hero-subtitle"></div>
       <div class="hero-contact">
-        <a class="contact-item" href="https://www.google.com/maps/search/Ferrol,+A+Coruña" target="_blank"><span>📍</span> Ferrol – A Coruña · SPAIN</a>
-        <a class="contact-item" href="tel:658868490"><span>📞</span> 658 868 490</a>
-        <a class="contact-item" href="https://wa.me/34658868490" target="_blank"><span>💬</span> WhatsApp</a>
-        <a class="contact-item" href="mailto:negronoche50@outlook.com"><span>✉️</span> negronoche50@outlook.com</a>
-        <a class="contact-item" href="https://lophersson.github.io/2026/" target="_blank"><span>🌐</span> Proyectos online</a>
+        <a class="contact-item" href="https://www.google.com/maps/search/Ferrol,+A+Coru%C3%B1a" target="_blank">&#128205; <span id="contact-location"></span></a>
+        <a class="contact-item" href="tel:658868490">&#128222; 658 868 490</a>
+        <a class="contact-item" href="https://wa.me/34658868490" target="_blank">&#128172; WhatsApp</a>
+        <a class="contact-item" href="mailto:negronoche50@outlook.com">&#9993; negronoche50@outlook.com</a>
+        <a class="contact-item" href="https://lophersson.github.io/2026/" target="_blank">&#127760; <span id="contact-projects"></span></a>
       </div>
     </div>
     <div class="hero-tags">
-      <span class="hero-tag">Finanzas</span>
-      <span class="hero-tag" id="tag-fpa">FP&amp;A</span>
-      <span class="hero-tag" id="tag-fintech">FinTech</span>
-      <span class="hero-tag" id="tag-sec">Ciberseg. Fin.</span>
-      <span class="hero-tag" id="tag-data">Data Analyst</span>
+      <span class="hero-tag" id="tag-finance"></span>
+      <span class="hero-tag" id="tag-fpa"></span>
+      <span class="hero-tag" id="tag-fintech"></span>
+      <span class="hero-tag" id="tag-sec"></span>
+      <span class="hero-tag" id="tag-data"></span>
     </div>
   </div>
-
   <div class="cv-grid">
-    <!-- LEFT COLUMN -->
     <div>
-      <div class="section">
-        <div class="section-title"><span>⬡</span> <span id="t-about">Perfil Profesional</span></div>
-        <p class="about-text" id="about-text"></p>
-      </div>
-
-      <div class="section">
-        <div class="section-title"><span>⬡</span> <span id="t-exp">Experiencia Relevante</span></div>
-        <div id="exp-list"></div>
-      </div>
-
-      <div class="section">
-        <div class="section-title"><span>⬡</span> <span id="t-fintech">FinTech · Análisis Financiero · Ciberseguridad</span></div>
-        <div class="digital-grid" id="digital-grid"></div>
-      </div>
-
-      <div class="section">
-        <div class="section-title"><span>⬡</span> <span id="t-projects">Proyectos Destacados</span></div>
-        <div id="projects-list"></div>
-      </div>
-
-      <div class="section">
-        <div class="section-title"><span>⬡</span> <span id="t-skills">Competencias Técnicas</span></div>
-        <div id="skill-cats"></div>
-      </div>
-
-      <div class="section">
-        <div class="section-title"><span>⬡</span> <span id="t-edu">Formación Académica</span></div>
-        <div id="edu-list"></div>
-      </div>
+      <div class="section"><div class="section-title">&#11041; <span id="t-about"></span></div><p class="about-text" id="about-text"></p></div>
+      <div class="section"><div class="section-title">&#11041; <span id="t-exp"></span></div><div id="exp-list"></div></div>
+      <div class="section"><div class="section-title">&#11041; <span id="t-fintech"></span></div><div class="digital-grid" id="digital-grid"></div></div>
+      <div class="section"><div class="section-title">&#11041; <span id="t-projects"></span></div><div id="projects-list"></div></div>
+      <div class="section"><div class="section-title">&#11041; <span id="t-skills"></span></div><div id="skill-cats"></div></div>
+      <div class="section"><div class="section-title">&#11041; <span id="t-edu"></span></div><div id="edu-list"></div></div>
     </div>
-
-    <!-- RIGHT COLUMN -->
     <div>
-      <div class="section">
-        <div class="section-title"><span>⬡</span> <span id="t-certs">Certificados N3</span></div>
-        <div id="cert-list"></div>
-      </div>
-
-      <div class="section">
-        <div class="section-title"><span>⬡</span> <span id="t-tools">Herramientas</span></div>
-        <div class="tools-grid" id="tools-list"></div>
-      </div>
-
-      <div class="section">
-        <div class="section-title"><span>⬡</span> <span id="t-soft">Habilidades Blandas</span></div>
-        <div class="soft-grid" id="soft-list"></div>
-      </div>
-
-      <div class="section">
-        <div class="section-title"><span>⬡</span> <span id="t-lang">Idiomas</span></div>
-        <div id="lang-list"></div>
-      </div>
-
-      <div class="section">
-        <div class="section-title"><span>⬡</span> <span id="t-profile">Objetivo Profesional</span></div>
-        <p class="profile-text" id="profile-intro"></p>
-        <ul class="profile-list" id="profile-list"></ul>
-      </div>
-
-      <div class="section">
-        <div class="section-title"><span>⬡</span> <span id="t-resources">Recursos</span></div>
-        <p style="font-size:.78rem;color:var(--text3);margin-bottom:12px" id="resources-desc"></p>
-        <a class="resource-link" href="https://lophersson.github.io/2026/financiero1.html" target="_blank"><span class="resource-icon">📊</span><span id="r1">Analista FP&A · FinCore</span></a>
-        <a class="resource-link" href="https://lophersson.github.io/2026/financiero2.html" target="_blank"><span class="resource-icon">🗂️</span><span id="r2">7 Roles Finance & Tech · FinCore</span></a>
-        <a class="resource-link" href="https://lophersson.github.io/2026/financiero3.html" target="_blank"><span class="resource-icon">⚖️</span><span id="r3">FP&A vs Controller · FinCore</span></a>
-      </div>
+      <div class="section"><div class="section-title">&#11041; <span id="t-certs"></span></div><div id="cert-list"></div></div>
+      <div class="section"><div class="section-title">&#11041; <span id="t-tools"></span></div><div class="tools-grid" id="tools-list"></div></div>
+      <div class="section"><div class="section-title">&#11041; <span id="t-soft"></span></div><div class="soft-grid" id="soft-list"></div></div>
+      <div class="section"><div class="section-title">&#11041; <span id="t-lang"></span></div><div id="lang-list"></div></div>
+      <div class="section"><div class="section-title">&#11041; <span id="t-profile"></span></div><p class="profile-text" id="profile-intro"></p><ul class="profile-list" id="profile-list"></ul></div>
+      <div class="section"><div class="section-title">&#11041; <span id="t-resources"></span></div><p style="font-size:.78rem;color:var(--text3);margin-bottom:12px" id="resources-desc"></p><a class="resource-link" href="https://lophersson.github.io/2026/financiero1.html" target="_blank"><span class="resource-icon">&#128202;</span><span id="r1"></span></a><a class="resource-link" href="https://lophersson.github.io/2026/financiero2.html" target="_blank"><span class="resource-icon">&#128193;</span><span id="r2"></span></a><a class="resource-link" href="https://lophersson.github.io/2026/financiero3.html" target="_blank"><span class="resource-icon">&#9878;</span><span id="r3"></span></a></div>
     </div>
   </div>
-
-  <div class="cv-footer">negronoche50@outlook.com · Ferrol, A Coruña · SPAIN · 2026</div>
+  <div class="cv-footer">negronoche50@outlook.com &middot; Ferrol, A Coru&#241;a &middot; <span id="footer-country">España</span> &middot; 2026</div>
 </div>
-
 <script>
-const FONT_MIN=13,FONT_MAX=19,FONT_STEP=1;
-let currentFontSize=15;
+var FONT_MIN=13,FONT_MAX=19,FONT_STEP=1,currentFontSize=15,currentLang='es',isDark=true;
 function changeFontSize(dir){
   currentFontSize=Math.min(FONT_MAX,Math.max(FONT_MIN,currentFontSize+dir*FONT_STEP));
   document.documentElement.style.fontSize=currentFontSize+'px';
   document.getElementById('btn-font-up').disabled=currentFontSize>=FONT_MAX;
   document.getElementById('btn-font-down').disabled=currentFontSize<=FONT_MIN;
 }
-
-const T={
-  es:{
-    themeLabel:'Modo claro',pdfLabel:'PDF',darkLabel:'Modo oscuro',
-    heroSubtitle:'Financial Data Analyst · FinTech · Business Intelligence',
-    tagFpa:'FP&A',tagFintech:'FinTech',tagSec:'Ciberseg. Fin.',tagData:'Data Analyst',
-    about:'Perfil Profesional',
-    aboutText:'Analista financiero con perfil tecnológico. Experiencia real en banca, back office financiero, contabilidad, tesorería y análisis de datos. Formación técnica sólida en ciberseguridad, sistemas de información, BBDD y desarrollo web. Especializado en FP&A, control de gestión, reporting ejecutivo y optimización de procesos financieros con herramientas como Power BI, Excel avanzado, SQL y ERP. Capaz de conectar finanzas y tecnología para aportar valor en entornos FinTech y de Business Intelligence.',
-    tExp:'Experiencia Relevante',
-    tFintech:'FinTech · Análisis Financiero · Ciberseguridad',
-    tProjects:'Proyectos Destacados',
-    tSkills:'Competencias Técnicas',
-    tEdu:'Formación Académica',
-    tCerts:'Certificados N3',
-    tTools:'Herramientas & Tecnologías',
-    tSoft:'Habilidades Blandas',
-    tLang:'Idiomas',
-    tProfile:'Objetivo Profesional',
-    tResources:'Recursos Complementarios',
-    profileIntro:'Busco posiciones como Financial Data Analyst, Business Analyst o Controller, donde pueda aplicar análisis financiero, tratamiento de datos y tecnología para optimizar la toma de decisiones en entornos digitales.',
-    profileItems:[
-      'Análisis financiero y FP&A en entornos FinTech',
-      'Control de gestión y reporting ejecutivo',
-      'Business Intelligence y dashboards con Power BI',
-      'Optimización de procesos financieros y ERP',
-      'Ciberseguridad aplicada a sistemas financieros',
-    ],
-    resourcesDesc:'Documentación de referencia sobre roles clave en finanzas y tecnología, desarrollada como material de apoyo profesional.',
-    r1:'Analista FP&A · FinCore',r2:'7 Roles Finance & Tech · FinCore',r3:'FP&A vs Controller · FinCore',
-    exp:[
-      {role:'Técnico de Ciberseguridad',company:'Escuela de Finanzas Business School – Oleiros',desc:'Monitorización, análisis y respuesta a incidentes en sistemas financieros',year:'2024'},
-      {role:'QA Tester',company:'Editorial La Capital – A Coruña',desc:'Pruebas funcionales, aseguramiento de calidad y reporte de errores web',year:'2024'},
-      {role:'Gestor de la Información',company:'Libolis – A Coruña',desc:'Gestión de datos, bases de datos y CRM corporativo',year:'2023'},
-      {role:'Gestor de Operaciones – Back Office',company:'Abanca Servicios Financieros – A Coruña',desc:'Créditos, back office bancario y aplicativo Oficina 2000',year:'2020'},
-      {role:'Administrativo Contable',company:'Asesoría Serva – Ferrol',desc:'Contabilidad analítica, impuestos, tesorería y conciliaciones bancarias',year:'2017'},
-      {role:'Empleado de Banca',company:'BNP Paribas · Bankinter · Ibercaja',desc:'Operativa bancaria, financiación y declaraciones de IRPF en distintas entidades',year:'2005–2007'},
-    ],
-    digital:[
-      {icon:'📊',title:'Análisis de Datos Financieros',desc:'Modelización, KPIs, dashboards interactivos, forecasting y análisis de desviaciones presupuestarias.'},
-      {icon:'🏦',title:'FinTech & Sistemas Digitales',desc:'ERP, banca digital, procesamiento de datos financieros, automatización e integración de APIs.'},
-      {icon:'🔐',title:'Ciberseguridad Financiera',desc:'Seguridad en sistemas financieros, RGPD, análisis de riesgos tecnológicos y prevención de fraude.'},
-      {icon:'🗃️',title:'Big Data & SQL',desc:'Análisis con SQL, gestión de bases de datos y tratamiento de grandes volúmenes de información.'},
-      {icon:'📈',title:'Reporting & Automatización',desc:'Informes ejecutivos automatizados con Excel avanzado, Python y Power BI para toma de decisiones.'},
-      {icon:'💻',title:'Desarrollo Web Aplicado',desc:'Herramientas financieras web: calculadoras, simuladores, dashboards y apps de análisis de datos.'},
-    ],
-    projects:[
-      {icon:'📊',name:'Dashboard CFO – Análisis Financiero',desc:'Panel ejecutivo con escenarios, KPIs e indicadores interactivos construido con Chart.js y JS.',tag:'Chart.js · HTML/JS · FP&A',link:'https://lophersson.github.io/2026/'},
-      {icon:'🏦',name:'Calculadora FinTech (Fintonic)',desc:'Calculadora de préstamos con parámetros financieros reales, desglose de cuotas y TAE.',tag:'Finanzas · JS · UX',link:'https://lophersson.github.io/2026/'},
-      {icon:'🇵🇹',name:'Simulador IRS Modelo 3 – Portugal',desc:'Simulador fiscal portugués multilingüe con tramos de renta y deducciones aplicadas.',tag:'Fiscal · Multilingüe · ES/PT/EN',link:'https://lophersson.github.io/2026/'},
-      {icon:'💳',name:'Suite Presupuestos & Gastos 2026',desc:'Dashboard de nómina, presupuesto y gastos con lógica de retenciones española (SS, IRPF).',tag:'Finanzas personales · localStorage',link:'https://lophersson.github.io/2026/'},
-    ],
-    skillCats:[
-      {cat:'💰 Finanzas & Control de Gestión',items:['Contabilidad analítica','FP&A','Presupuestación','Control de Gestión','Tesorería','Conciliaciones bancarias','Reporting financiero','Análisis de desviaciones','Forecasting']},
-      {cat:'📊 Datos & Business Intelligence',items:['Excel Avanzado','Power BI','SQL / MySQL','Python básico','Análisis de KPIs','Modelización financiera','Visualización de datos']},
-      {cat:'💻 Sistemas & ERP',items:['SAP','Dynamics 365','Odoo','Anfix','Banca digital','Integración de APIs','HTML/CSS/JS','GitHub']},
-      {cat:'🔐 Ciberseguridad Aplicada',items:['RGPD / Protección de Datos','Seguridad en sistemas financieros','Análisis de riesgos','Prevención de fraude digital','Seguridad informática']},
-    ],
-    edu:[
-      {title:'Desarrollo de Aplicaciones Web (DAW)',sub:'CFGS · CIFP Rodolfo Ucha – Ferrol · 2025',badge:'progress',badgeText:'EN CURSO'},
-      {title:'Ciencias Empresariales – 90/240 ECTS',sub:'Grado · Universidad A Coruña · 2020 · 3 años',badge:'unfinished',badgeText:'NO FINALIZADO'},
-      {title:'Administración y Finanzas',sub:'CFGS · CIFP Rodolfo Ucha – Ferrol · 2018',badge:'done',badgeText:'FINALIZADO'},
-      {title:'Inglés Nivel Preintermedio',sub:'EOI Ferrol · 2010 · 3 años',badge:null},
-    ],
-    certs:[
-      {num:1,name:'Programación en Lenguajes Estructurados IFCD0111',org:'London Institute – Ferrol · 2025',hours:'718h'},
-      {num:2,name:'Seguridad Informática IFCT0109',org:'Informática A Coruña · 2024',hours:'578h'},
-      {num:3,name:'Desarrollo de Aplic. con Tecnologías Web IFCD0210',org:'Academia Postal – A Coruña · 2023',hours:'668h'},
-      {num:4,name:'Sistemas de Gestión de la Información IFCT0211',org:'ntFOR – A Coruña · 2023',hours:'608h'},
-    ],
-    tools:['Dynamics 365','SAP','Excel','Power BI','Odoo','Anfix','SQL / MySQL','Python','VS Code','GitHub','HTML/CSS/JS','WordPress'],
-    soft:['Pensamiento analítico','Orientación a resultados','Resolución de problemas','Trabajo en equipo','Aprendizaje continuo'],
-    languages:[{flag:'🇪🇸',name:'Español',level:'Nativo'},{flag:'🇬🇧',name:'Inglés',level:'Preintermedio (B1)'},{flag:'🇵🇹',name:'Portugués',level:'Iniciación (A1)'}],
-  },
-  en:{
-    themeLabel:'Light mode',pdfLabel:'PDF',darkLabel:'Dark mode',
-    heroSubtitle:'Financial Data Analyst · FinTech · Business Intelligence',
-    tagFpa:'FP&A',tagFintech:'FinTech',tagSec:'Fin. Cybersec.',tagData:'Data Analyst',
-    about:'Professional Profile',
-    aboutText:'Financial analyst with a strong technology profile. Real experience in banking, financial back office, accounting, treasury, and data analysis. Solid technical background in cybersecurity, information systems, databases, and web development. Specialised in FP&A, management control, executive reporting, and financial process optimisation using Power BI, advanced Excel, SQL, and ERP systems. Able to bridge finance and technology to deliver value in FinTech and Business Intelligence environments.',
-    tExp:'Relevant Experience',
-    tFintech:'FinTech · Financial Analysis · Cybersecurity',
-    tProjects:'Featured Projects',
-    tSkills:'Technical Skills',
-    tEdu:'Education',
-    tCerts:'Level 3 Certificates',
-    tTools:'Tools & Technologies',
-    tSoft:'Soft Skills',
-    tLang:'Languages',
-    tProfile:'Professional Goal',
-    tResources:'Complementary Resources',
-    profileIntro:'Seeking positions as Financial Data Analyst, Business Analyst, or Controller, where I can apply financial analysis, data processing, and technology to optimise decision-making in digital environments.',
-    profileItems:[
-      'Financial analysis and FP&A in FinTech environments',
-      'Management control and executive reporting',
-      'Business Intelligence and dashboards with Power BI',
-      'Financial process optimisation and ERP implementation',
-      'Cybersecurity applied to financial systems',
-    ],
-    resourcesDesc:'Reference documentation on key finance and technology roles, developed as professional support material.',
-    r1:'FP&A Analyst · FinCore',r2:'7 Finance & Tech Roles · FinCore',r3:'FP&A vs Controller · FinCore',
-    exp:[
-      {role:'Cybersecurity Technician',company:'Escuela de Finanzas Business School – Oleiros',desc:'Monitoring, analysis and incident response in financial systems',year:'2024'},
-      {role:'QA Tester',company:'Editorial La Capital – A Coruña',desc:'Functional testing, quality assurance and web error reporting',year:'2024'},
-      {role:'Information Manager',company:'Libolis – A Coruña',desc:'Data management, corporate databases and CRM',year:'2023'},
-      {role:'Operations Manager – Back Office',company:'Abanca Servicios Financieros – A Coruña',desc:'Loans, banking back office and Oficina 2000 application',year:'2020'},
-      {role:'Accounting Administrator',company:'Asesoría Serva – Ferrol',desc:'Analytical accounting, taxation, treasury and bank reconciliations',year:'2017'},
-      {role:'Banking Professional',company:'BNP Paribas · Bankinter · Ibercaja',desc:'Banking operations, financing and income tax returns across multiple institutions',year:'2005–2007'},
-    ],
-    digital:[
-      {icon:'📊',title:'Financial Data Analysis',desc:'Modelling, KPIs, interactive dashboards, forecasting and budget variance analysis.'},
-      {icon:'🏦',title:'FinTech & Digital Systems',desc:'ERP, digital banking, financial data processing, automation and API integration.'},
-      {icon:'🔐',title:'Financial Cybersecurity',desc:'Security in financial systems, GDPR compliance, technology risk analysis and fraud prevention.'},
-      {icon:'🗃️',title:'Big Data & SQL',desc:'Data analysis with SQL, database management and large-scale data processing.'},
-      {icon:'📈',title:'Reporting & Automation',desc:'Automated executive reports with advanced Excel, Python and Power BI for decision-making.'},
-      {icon:'💻',title:'Applied Web Development',desc:'Financial web tools: calculators, simulators, dashboards and data analysis applications.'},
-    ],
-    projects:[
-      {icon:'📊',name:'CFO Dashboard – Financial Analysis',desc:'Executive panel with scenarios, KPIs and interactive indicators built with Chart.js and JS.',tag:'Chart.js · HTML/JS · FP&A',link:'https://lophersson.github.io/2026/'},
-      {icon:'🏦',name:'FinTech Loan Calculator (Fintonic)',desc:'Loan calculator with real financial parameters, instalment breakdown and APR.',tag:'Finance · JS · UX',link:'https://lophersson.github.io/2026/'},
-      {icon:'🇵🇹',name:'IRS Modelo 3 Simulator – Portugal',desc:'Multilingual Portuguese tax simulator with income brackets and applied deductions.',tag:'Tax · Multilingual · ES/PT/EN',link:'https://lophersson.github.io/2026/'},
-      {icon:'💳',name:'Budget & Expenses Suite 2026',desc:'Payroll, budget and expense dashboard with Spanish tax withholding logic (SS, IRPF).',tag:'Personal finance · localStorage',link:'https://lophersson.github.io/2026/'},
-    ],
-    skillCats:[
-      {cat:'💰 Finance & Management Control',items:['Analytical accounting','FP&A','Budgeting','Management control','Treasury','Bank reconciliations','Financial reporting','Variance analysis','Forecasting']},
-      {cat:'📊 Data & Business Intelligence',items:['Advanced Excel','Power BI','SQL / MySQL','Python (basic)','KPI analysis','Financial modelling','Data visualisation']},
-      {cat:'💻 Systems & ERP',items:['SAP','Dynamics 365','Odoo','Anfix','Digital banking','API integration','HTML/CSS/JS','GitHub']},
-      {cat:'🔐 Applied Cybersecurity',items:['GDPR / Data protection','Security in financial systems','Risk analysis','Digital fraud prevention','IT security']},
-    ],
-    edu:[
-      {title:'Web Application Development (DAW)',sub:'Higher Vocational · CIFP Rodolfo Ucha – Ferrol · 2025',badge:'progress',badgeText:'IN PROGRESS'},
-      {title:'Business Studies – 90/240 ECTS',sub:'Degree · University of A Coruña · 2020 · 3 years',badge:'unfinished',badgeText:'NOT COMPLETED'},
-      {title:'Administration and Finance',sub:'Higher Vocational · CIFP Rodolfo Ucha – Ferrol · 2018',badge:'done',badgeText:'COMPLETED'},
-      {title:'English – Pre-Intermediate',sub:'EOI Ferrol · 2010 · 3 years',badge:null},
-    ],
-    certs:[
-      {num:1,name:'Structured Language Programming IFCD0111',org:'London Institute – Ferrol · 2025',hours:'718h'},
-      {num:2,name:'IT Security IFCT0109',org:'Informática A Coruña · 2024',hours:'578h'},
-      {num:3,name:'Web Technology Application Development IFCD0210',org:'Academia Postal – A Coruña · 2023',hours:'668h'},
-      {num:4,name:'Information Management Systems IFCT0211',org:'ntFOR – A Coruña · 2023',hours:'608h'},
-    ],
-    tools:['Dynamics 365','SAP','Excel','Power BI','Odoo','Anfix','SQL / MySQL','Python','VS Code','GitHub','HTML/CSS/JS','WordPress'],
-    soft:['Analytical thinking','Results orientation','Problem solving','Teamwork','Continuous learning'],
-    languages:[{flag:'🇪🇸',name:'Spanish',level:'Native'},{flag:'🇬🇧',name:'English',level:'Pre-Intermediate (B1)'},{flag:'🇵🇹',name:'Portuguese',level:'Beginner (A1)'}],
-  },
-  pt:{
-    themeLabel:'Modo claro',pdfLabel:'PDF',darkLabel:'Modo escuro',
-    heroSubtitle:'Financial Data Analyst · FinTech · Business Intelligence',
-    tagFpa:'FP&A',tagFintech:'FinTech',tagSec:'Ciberseg. Fin.',tagData:'Data Analyst',
-    about:'Perfil Profissional',
-    aboutText:'Analista financeiro com perfil tecnológico. Experiência real em banca, back office financeiro, contabilidade, tesouraria e análise de dados. Formação técnica sólida em cibersegurança, sistemas de informação, bases de dados e desenvolvimento web. Especializado em FP&A, controlo de gestão, reporting executivo e otimização de processos financeiros com Power BI, Excel avançado, SQL e ERP. Capaz de conectar finanças e tecnologia para criar valor em ambientes FinTech e de Business Intelligence.',
-    tExp:'Experiência Relevante',
-    tFintech:'FinTech · Análise Financeira · Cibersegurança',
-    tProjects:'Projetos em Destaque',
-    tSkills:'Competências Técnicas',
-    tEdu:'Formação Académica',
-    tCerts:'Certificados N3',
-    tTools:'Ferramentas & Tecnologias',
-    tSoft:'Competências Interpessoais',
-    tLang:'Idiomas',
-    tProfile:'Objetivo Profissional',
-    tResources:'Recursos Complementares',
-    profileIntro:'Procuro posições como Financial Data Analyst, Business Analyst ou Controller, onde possa aplicar análise financeira, tratamento de dados e tecnologia para otimizar a tomada de decisões em ambientes digitais.',
-    profileItems:[
-      'Análise financeira e FP&A em ambientes FinTech',
-      'Controlo de gestão e reporting executivo',
-      'Business Intelligence e dashboards com Power BI',
-      'Otimização de processos financeiros e ERP',
-      'Cibersegurança aplicada a sistemas financeiros',
-    ],
-    resourcesDesc:'Documentação de referência sobre funções-chave em finanças e tecnologia, desenvolvida como material de apoio profissional.',
-    r1:'Analista FP&A · FinCore',r2:'7 Funções Finance & Tech · FinCore',r3:'FP&A vs Controller · FinCore',
-    exp:[
-      {role:'Técnico de Cibersegurança',company:'Escuela de Finanzas Business School – Oleiros',desc:'Monitorização, análise e resposta a incidentes em sistemas financeiros',year:'2024'},
-      {role:'QA Tester',company:'Editorial La Capital – A Coruña',desc:'Testes funcionais, garantia de qualidade e reporte de erros web',year:'2024'},
-      {role:'Gestor de Informação',company:'Libolis – A Coruña',desc:'Gestão de dados, bases de dados corporativas e CRM',year:'2023'},
-      {role:'Gestor de Operações – Back Office',company:'Abanca Servicios Financieros – A Coruña',desc:'Créditos, back office bancário e aplicativo Oficina 2000',year:'2020'},
-      {role:'Administrativo Contabilístico',company:'Asesoría Serva – Ferrol',desc:'Contabilidade analítica, impostos, tesouraria e conciliações bancárias',year:'2017'},
-      {role:'Profissional Bancário',company:'BNP Paribas · Bankinter · Ibercaja',desc:'Operativa bancária, financiamento e declarações fiscais em várias entidades',year:'2005–2007'},
-    ],
-    digital:[
-      {icon:'📊',title:'Análise de Dados Financeiros',desc:'Modelização, KPIs, dashboards interativos, forecasting e análise de desvios orçamentais.'},
-      {icon:'🏦',title:'FinTech & Sistemas Digitais',desc:'ERP, banca digital, processamento de dados financeiros, automatização e integração de APIs.'},
-      {icon:'🔐',title:'Cibersegurança Financeira',desc:'Segurança em sistemas financeiros, RGPD, análise de riscos tecnológicos e prevenção de fraude.'},
-      {icon:'🗃️',title:'Big Data & SQL',desc:'Análise com SQL, gestão de bases de dados e tratamento de grandes volumes de informação.'},
-      {icon:'📈',title:'Reporting & Automatização',desc:'Relatórios executivos automatizados com Excel avançado, Python e Power BI para decisão.'},
-      {icon:'💻',title:'Desenvolvimento Web Aplicado',desc:'Ferramentas financeiras web: calculadoras, simuladores, dashboards e apps de análise de dados.'},
-    ],
-    projects:[
-      {icon:'📊',name:'Dashboard CFO – Análise Financeira',desc:'Painel executivo com cenários, KPIs e indicadores interativos construído com Chart.js e JS.',tag:'Chart.js · HTML/JS · FP&A',link:'https://lophersson.github.io/2026/'},
-      {icon:'🏦',name:'Calculadora FinTech (Fintonic)',desc:'Calculadora de empréstimos com parâmetros financeiros reais, desdobramento de prestações e TAEG.',tag:'Finanças · JS · UX',link:'https://lophersson.github.io/2026/'},
-      {icon:'🇵🇹',name:'Simulador IRS Modelo 3 – Portugal',desc:'Simulador fiscal português multilingue com escalões de rendimento e deduções aplicadas.',tag:'Fiscal · Multilingue · ES/PT/EN',link:'https://lophersson.github.io/2026/'},
-      {icon:'💳',name:'Suite Orçamentos & Despesas 2026',desc:'Dashboard de vencimento, orçamento e despesas com lógica de retenções espanhola (SS, IRPF).',tag:'Finanças pessoais · localStorage',link:'https://lophersson.github.io/2026/'},
-    ],
-    skillCats:[
-      {cat:'💰 Finanças & Controlo de Gestão',items:['Contabilidade analítica','FP&A','Orçamentação','Controlo de gestão','Tesouraria','Conciliações bancárias','Reporting financeiro','Análise de desvios','Forecasting']},
-      {cat:'📊 Dados & Business Intelligence',items:['Excel Avançado','Power BI','SQL / MySQL','Python básico','Análise de KPIs','Modelização financeira','Visualização de dados']},
-      {cat:'💻 Sistemas & ERP',items:['SAP','Dynamics 365','Odoo','Anfix','Banca digital','Integração de APIs','HTML/CSS/JS','GitHub']},
-      {cat:'🔐 Cibersegurança Aplicada',items:['RGPD / Proteção de Dados','Segurança em sistemas financeiros','Análise de riscos','Prevenção de fraude digital','Segurança informática']},
-    ],
-    edu:[
-      {title:'Desenvolvimento de Aplicações Web (DAW)',sub:'CFGS · CIFP Rodolfo Ucha – Ferrol · 2025',badge:'progress',badgeText:'EM CURSO'},
-      {title:'Ciências Empresariais – 90/240 ECTS',sub:'Licenciatura · Universidade A Coruña · 2020 · 3 anos',badge:'unfinished',badgeText:'NÃO CONCLUÍDO'},
-      {title:'Administração e Finanças',sub:'CFGS · CIFP Rodolfo Ucha – Ferrol · 2018',badge:'done',badgeText:'CONCLUÍDO'},
-      {title:'Inglês Pré-Intermédio',sub:'EOI Ferrol · 2010 · 3 anos',badge:null},
-    ],
-    certs:[
-      {num:1,name:'Programação em Linguagens Estruturadas IFCD0111',org:'London Institute – Ferrol · 2025',hours:'718h'},
-      {num:2,name:'Segurança Informática IFCT0109',org:'Informática A Coruña · 2024',hours:'578h'},
-      {num:3,name:'Desenvolvimento de Aplic. com Tecnologias Web IFCD0210',org:'Academia Postal – A Coruña · 2023',hours:'668h'},
-      {num:4,name:'Sistemas de Gestão da Informação IFCT0211',org:'ntFOR – A Coruña · 2023',hours:'608h'},
-    ],
-    tools:['Dynamics 365','SAP','Excel','Power BI','Odoo','Anfix','SQL / MySQL','Python','VS Code','GitHub','HTML/CSS/JS','WordPress'],
-    soft:['Pensamento analítico','Orientação para resultados','Resolução de problemas','Trabalho em equipa','Aprendizagem contínua'],
-    languages:[{flag:'🇪🇸',name:'Espanhol',level:'Nativo'},{flag:'🇬🇧',name:'Inglês',level:'Pré-Intermédio (B1)'},{flag:'🇵🇹',name:'Português',level:'Iniciação (A1)'}],
-  }
+var T={
+es:{
+  themeLabel:'Modo claro',darkLabel:'Modo oscuro',pdfLabel:'PDF',
+  heroSubtitle:'Financial Data Analyst · FinTech · Business Intelligence',
+  contactLocation:'Ferrol - A Coruña · España',contactProjects:'Proyectos online',
+  tagFinance:'Finanzas',tagFpa:'FP&A',tagFintech:'FinTech',tagSec:'Ciberseg. Fin.',tagData:'Data Analyst',
+  footerCountry:'España',
+  tAbout:'Perfil Profesional',
+  aboutText:'Analista financiero con perfil tecnológico. Experiencia real en banca, back office financiero, contabilidad, tesorería y análisis de datos. Formación técnica en ciberseguridad, sistemas de información, BBDD y desarrollo web. Especializado en FP&A, control de gestión, reporting ejecutivo y optimización de procesos financieros con Power BI, Excel avanzado, SQL y ERP. Capaz de conectar finanzas y tecnología para aportar valor en entornos FinTech y Business Intelligence.',
+  tExp:'Experiencia Relevante',
+  tFintech:'FinTech · Análisis Financiero · Ciberseguridad',
+  tProjects:'Proyectos Destacados',
+  tSkills:'Competencias Técnicas',
+  tEdu:'Formación Académica',
+  tCerts:'Certificados N3',
+  tTools:'Herramientas',
+  tSoft:'Habilidades Blandas',
+  tLang:'Idiomas',
+  tProfile:'Objetivo Profesional',
+  tResources:'Recursos Complementarios',
+  profileIntro:'Busco posiciones como Financial Data Analyst, Business Analyst o Controller, donde pueda aplicar análisis financiero, tratamiento de datos y tecnología para optimizar la toma de decisiones en entornos digitales.',
+  profileItems:['Análisis financiero y FP&A en entornos FinTech','Control de gestión y reporting ejecutivo','Business Intelligence y dashboards con Power BI','Optimización de procesos financieros y ERP','Ciberseguridad aplicada a sistemas financieros'],
+  resourcesDesc:'Documentación de referencia sobre roles clave en finanzas y tecnología.',
+  r1:'Analista FP&A · FinCore',r2:'7 Roles Finance & Tech · FinCore',r3:'FP&A vs Controller · FinCore',
+  exp:[
+    {role:'Técnico de Ciberseguridad',company:'Escuela de Finanzas Business School – Oleiros',desc:'Monitorización, análisis y respuesta a incidentes en sistemas financieros',year:'2024'},
+    {role:'QA Tester',company:'Editorial La Capital – A Coruña',desc:'Pruebas funcionales, aseguramiento de calidad y reporte de errores web',year:'2024'},
+    {role:'Gestor de la Información',company:'Libolis – A Coruña',desc:'Gestión de datos, bases de datos y CRM corporativo',year:'2023'},
+    {role:'Gestor de Operaciones – Back Office',company:'Abanca Servicios Financieros – A Coruña',desc:'Créditos, back office bancario y aplicativo Oficina 2000',year:'2020'},
+    {role:'Administrativo Contable',company:'Asesoría Serva – Ferrol',desc:'Contabilidad analítica, impuestos, tesorería y conciliaciones bancarias',year:'2017'},
+    {role:'Empleado de Banca',company:'BNP Paribas · Bankinter · Ibercaja',desc:'Operativa bancaria, financiación y declaraciones IRPF en distintas entidades',year:'2005-2007'}
+  ],
+  digital:[
+    {icon:'📊',title:'Análisis de Datos Financieros',desc:'Modelización, KPIs, dashboards interactivos, forecasting y análisis de desviaciones.'},
+    {icon:'🏦',title:'FinTech & Sistemas Digitales',desc:'ERP, banca digital, procesamiento de datos, automatización e integración de APIs.'},
+    {icon:'🔐',title:'Ciberseguridad Financiera',desc:'Seguridad en sistemas financieros, RGPD, análisis de riesgos y prevención de fraude.'},
+    {icon:'🗃️',title:'Big Data & SQL',desc:'Análisis con SQL, gestión de bases de datos y tratamiento de grandes volúmenes.'},
+    {icon:'📈',title:'Reporting & Automatización',desc:'Informes ejecutivos con Excel avanzado, Python y Power BI para toma de decisiones.'},
+    {icon:'💻',title:'Desarrollo Web Aplicado',desc:'Herramientas financieras web: calculadoras, simuladores y dashboards de análisis.'}
+  ],
+  projects:[
+    {icon:'📊',name:'Dashboard CFO – Análisis Financiero',desc:'Panel ejecutivo con escenarios, KPIs e indicadores interactivos con Chart.js.',tag:'Chart.js · HTML/JS · FP&A',link:'https://lophersson.github.io/2026/'},
+    {icon:'🏦',name:'Calculadora FinTech (Fintonic)',desc:'Calculadora de préstamos con parámetros financieros reales, cuotas y TAE.',tag:'Finanzas · JS · UX',link:'https://lophersson.github.io/2026/'},
+    {icon:'🇵🇹',name:'Simulador IRS Modelo 3 – Portugal',desc:'Simulador fiscal portugués multilingüe con tramos de renta y deducciones.',tag:'Fiscal · ES/PT/EN',link:'https://lophersson.github.io/2026/'},
+    {icon:'💳',name:'Suite Presupuestos & Gastos 2026',desc:'Dashboard de nómina, presupuesto y gastos con lógica de retenciones (SS, IRPF).',tag:'Finanzas personales · localStorage',link:'https://lophersson.github.io/2026/'}
+  ],
+  skillCats:[
+    {cat:'💰 Finanzas & Control de Gestión',items:['Contabilidad analítica','FP&A','Presupuestación','Control de Gestión','Tesorería','Conciliaciones bancarias','Reporting financiero','Análisis de desviaciones','Forecasting']},
+    {cat:'📊 Datos & Business Intelligence',items:['Excel Avanzado','Power BI','SQL / MySQL','Python básico','Análisis de KPIs','Modelización financiera','Visualización de datos']},
+    {cat:'💻 Sistemas & ERP',items:['SAP','Dynamics 365','Odoo','Anfix','Banca digital','Integración de APIs','HTML/CSS/JS','GitHub']},
+    {cat:'🔐 Ciberseguridad Aplicada',items:['RGPD / Protección de Datos','Seguridad en sistemas financieros','Análisis de riesgos','Prevención de fraude digital']}
+  ],
+  edu:[
+    {title:'Desarrollo de Aplicaciones Web (DAW)',sub:'CFGS · CIFP Rodolfo Ucha – Ferrol · 2025',badge:'progress',badgeText:'EN CURSO'},
+    {title:'Ciencias Empresariales – 90/240 ECTS',sub:'Grado · Universidad A Coruña · 2020',badge:'unfinished',badgeText:'NO FINALIZADO'},
+    {title:'Administración y Finanzas',sub:'CFGS · CIFP Rodolfo Ucha – Ferrol · 2018',badge:'done',badgeText:'FINALIZADO'},
+    {title:'Inglés Nivel Preintermedio',sub:'EOI Ferrol · 2010 · 3 años',badge:null}
+  ],
+  certs:[
+    {num:1,name:'Programación en Lenguajes Estructurados IFCD0111',org:'London Institute – Ferrol · 2025',hours:'718h'},
+    {num:2,name:'Seguridad Informática IFCT0109',org:'Informática A Coruña · 2024',hours:'578h'},
+    {num:3,name:'Desarrollo de Aplic. con Tecnologías Web IFCD0210',org:'Academia Postal – A Coruña · 2023',hours:'668h'},
+    {num:4,name:'Sistemas de Gestión de la Información IFCT0211',org:'ntFOR – A Coruña · 2023',hours:'608h'}
+  ],
+  tools:['Dynamics 365','SAP','Excel','Power BI','Odoo','Anfix','SQL / MySQL','Python','VS Code','GitHub','HTML/CSS/JS','WordPress'],
+  soft:['Pensamiento analítico','Orientación a resultados','Resolución de problemas','Trabajo en equipo','Aprendizaje continuo'],
+  languages:[{flag:'🇪🇸',name:'Español',level:'Nativo'},{flag:'🇬🇧',name:'Inglés',level:'Preintermedio (B1)'},{flag:'🇵🇹',name:'Portugués',level:'Iniciación (A1)'}]
+},
+en:{
+  themeLabel:'Light mode',darkLabel:'Dark mode',pdfLabel:'PDF',
+  heroSubtitle:'Financial Data Analyst · FinTech · Business Intelligence',
+  contactLocation:'Ferrol - A Coruña · Spain',contactProjects:'Online projects',
+  tagFinance:'Finance',tagFpa:'FP&A',tagFintech:'FinTech',tagSec:'Fin. Cybersec.',tagData:'Data Analyst',
+  footerCountry:'Spain',
+  tAbout:'Professional Profile',
+  aboutText:'Financial analyst with a strong technology profile. Real experience in banking, financial back office, accounting, treasury, and data analysis. Solid technical background in cybersecurity, information systems, databases, and web development. Specialised in FP&A, management control, executive reporting, and financial process optimisation using Power BI, advanced Excel, SQL, and ERP. Able to bridge finance and technology to deliver value in FinTech and Business Intelligence environments.',
+  tExp:'Relevant Experience',
+  tFintech:'FinTech · Financial Analysis · Cybersecurity',
+  tProjects:'Featured Projects',
+  tSkills:'Technical Skills',
+  tEdu:'Education',
+  tCerts:'Level 3 Certificates',
+  tTools:'Tools',
+  tSoft:'Soft Skills',
+  tLang:'Languages',
+  tProfile:'Professional Goal',
+  tResources:'Complementary Resources',
+  profileIntro:'Seeking positions as Financial Data Analyst, Business Analyst, or Controller, where I can apply financial analysis, data processing, and technology to optimise decision-making in digital environments.',
+  profileItems:['Financial analysis and FP&A in FinTech environments','Management control and executive reporting','Business Intelligence and dashboards with Power BI','Financial process optimisation and ERP implementation','Cybersecurity applied to financial systems'],
+  resourcesDesc:'Reference documentation on key finance and technology roles, developed as professional support material.',
+  r1:'FP&A Analyst · FinCore',r2:'7 Finance & Tech Roles · FinCore',r3:'FP&A vs Controller · FinCore',
+  exp:[
+    {role:'Cybersecurity Technician',company:'Escuela de Finanzas Business School – Oleiros',desc:'Monitoring, analysis and incident response in financial systems',year:'2024'},
+    {role:'QA Tester',company:'Editorial La Capital – A Coruña',desc:'Functional testing, quality assurance and web error reporting',year:'2024'},
+    {role:'Information Manager',company:'Libolis – A Coruña',desc:'Data management, corporate databases and CRM',year:'2023'},
+    {role:'Operations Manager – Back Office',company:'Abanca Servicios Financieros – A Coruña',desc:'Loans, banking back office and Oficina 2000 application',year:'2020'},
+    {role:'Accounting Administrator',company:'Asesoría Serva – Ferrol',desc:'Analytical accounting, taxation, treasury and bank reconciliations',year:'2017'},
+    {role:'Banking Professional',company:'BNP Paribas · Bankinter · Ibercaja',desc:'Banking operations, financing and income tax returns across multiple institutions',year:'2005-2007'}
+  ],
+  digital:[
+    {icon:'📊',title:'Financial Data Analysis',desc:'Modelling, KPIs, interactive dashboards, forecasting and budget variance analysis.'},
+    {icon:'🏦',title:'FinTech & Digital Systems',desc:'ERP, digital banking, financial data processing, automation and API integration.'},
+    {icon:'🔐',title:'Financial Cybersecurity',desc:'Security in financial systems, GDPR, technology risk analysis and fraud prevention.'},
+    {icon:'🗃️',title:'Big Data & SQL',desc:'Data analysis with SQL, database management and large-scale data processing.'},
+    {icon:'📈',title:'Reporting & Automation',desc:'Automated executive reports with advanced Excel, Python and Power BI.'},
+    {icon:'💻',title:'Applied Web Development',desc:'Financial web tools: calculators, simulators, dashboards and data analysis apps.'}
+  ],
+  projects:[
+    {icon:'📊',name:'CFO Dashboard – Financial Analysis',desc:'Executive panel with scenarios, KPIs and interactive indicators built with Chart.js.',tag:'Chart.js · HTML/JS · FP&A',link:'https://lophersson.github.io/2026/'},
+    {icon:'🏦',name:'FinTech Loan Calculator (Fintonic)',desc:'Loan calculator with real financial parameters, instalment breakdown and APR.',tag:'Finance · JS · UX',link:'https://lophersson.github.io/2026/'},
+    {icon:'🇵🇹',name:'IRS Modelo 3 Simulator – Portugal',desc:'Multilingual Portuguese tax simulator with income brackets and deductions.',tag:'Tax · ES/PT/EN',link:'https://lophersson.github.io/2026/'},
+    {icon:'💳',name:'Budget & Expenses Suite 2026',desc:'Payroll, budget and expense dashboard with Spanish tax withholding logic.',tag:'Personal finance · localStorage',link:'https://lophersson.github.io/2026/'}
+  ],
+  skillCats:[
+    {cat:'💰 Finance & Management Control',items:['Analytical accounting','FP&A','Budgeting','Management control','Treasury','Bank reconciliations','Financial reporting','Variance analysis','Forecasting']},
+    {cat:'📊 Data & Business Intelligence',items:['Advanced Excel','Power BI','SQL / MySQL','Python (basic)','KPI analysis','Financial modelling','Data visualisation']},
+    {cat:'💻 Systems & ERP',items:['SAP','Dynamics 365','Odoo','Anfix','Digital banking','API integration','HTML/CSS/JS','GitHub']},
+    {cat:'🔐 Applied Cybersecurity',items:['GDPR / Data protection','Security in financial systems','Risk analysis','Digital fraud prevention']}
+  ],
+  edu:[
+    {title:'Web Application Development (DAW)',sub:'Higher Vocational · CIFP Rodolfo Ucha – Ferrol · 2025',badge:'progress',badgeText:'IN PROGRESS'},
+    {title:'Business Studies – 90/240 ECTS',sub:'Degree · University of A Coruña · 2020',badge:'unfinished',badgeText:'NOT COMPLETED'},
+    {title:'Administration and Finance',sub:'Higher Vocational · CIFP Rodolfo Ucha – Ferrol · 2018',badge:'done',badgeText:'COMPLETED'},
+    {title:'English – Pre-Intermediate',sub:'EOI Ferrol · 2010 · 3 years',badge:null}
+  ],
+  certs:[
+    {num:1,name:'Structured Language Programming IFCD0111',org:'London Institute – Ferrol · 2025',hours:'718h'},
+    {num:2,name:'IT Security IFCT0109',org:'Informatica A Coruña · 2024',hours:'578h'},
+    {num:3,name:'Web Technology Application Development IFCD0210',org:'Academia Postal – A Coruña · 2023',hours:'668h'},
+    {num:4,name:'Information Management Systems IFCT0211',org:'ntFOR – A Coruña · 2023',hours:'608h'}
+  ],
+  tools:['Dynamics 365','SAP','Excel','Power BI','Odoo','Anfix','SQL / MySQL','Python','VS Code','GitHub','HTML/CSS/JS','WordPress'],
+  soft:['Analytical thinking','Results orientation','Problem solving','Teamwork','Continuous learning'],
+  languages:[{flag:'🇪🇸',name:'Spanish',level:'Native'},{flag:'🇬🇧',name:'English',level:'Pre-Intermediate (B1)'},{flag:'🇵🇹',name:'Portuguese',level:'Beginner (A1)'}]
+},
+pt:{
+  themeLabel:'Modo claro',darkLabel:'Modo escuro',pdfLabel:'PDF',
+  heroSubtitle:'Financial Data Analyst · FinTech · Business Intelligence',
+  contactLocation:'Ferrol - A Coruña · Espanha',contactProjects:'Projetos online',
+  tagFinance:'Finanças',tagFpa:'FP&A',tagFintech:'FinTech',tagSec:'Ciberseg. Fin.',tagData:'Data Analyst',
+  footerCountry:'Espanha',
+  tAbout:'Perfil Profissional',
+  aboutText:'Analista financeiro com perfil tecnológico. Experiência real em banca, back office financeiro, contabilidade, tesouraria e análise de dados. Formação técnica em cibersegurança, sistemas de informação, bases de dados e desenvolvimento web. Especializado em FP&A, controlo de gestão, reporting executivo e otimização de processos financeiros com Power BI, Excel avançado, SQL e ERP. Capaz de conectar finanças e tecnologia para criar valor em ambientes FinTech e Business Intelligence.',
+  tExp:'Experiência Relevante',
+  tFintech:'FinTech · Análise Financeira · Cibersegurança',
+  tProjects:'Projetos em Destaque',
+  tSkills:'Competências Técnicas',
+  tEdu:'Formação Académica',
+  tCerts:'Certificados N3',
+  tTools:'Ferramentas',
+  tSoft:'Competências Interpessoais',
+  tLang:'Idiomas',
+  tProfile:'Objetivo Profissional',
+  tResources:'Recursos Complementares',
+  profileIntro:'Procuro posições como Financial Data Analyst, Business Analyst ou Controller, onde possa aplicar análise financeira, tratamento de dados e tecnologia para otimizar a tomada de decisões em ambientes digitais.',
+  profileItems:['Análise financeira e FP&A em ambientes FinTech','Controlo de gestão e reporting executivo','Business Intelligence e dashboards com Power BI','Otimização de processos financeiros e ERP','Cibersegurança aplicada a sistemas financeiros'],
+  resourcesDesc:'Documentação de referência sobre funções-chave em finanças e tecnologia.',
+  r1:'Analista FP&A · FinCore',r2:'7 Funções Finance & Tech · FinCore',r3:'FP&A vs Controller · FinCore',
+  exp:[
+    {role:'Técnico de Cibersegurança',company:'Escuela de Finanzas Business School – Oleiros',desc:'Monitorização, análise e resposta a incidentes em sistemas financeiros',year:'2024'},
+    {role:'QA Tester',company:'Editorial La Capital – A Coruña',desc:'Testes funcionais, garantia de qualidade e reporte de erros web',year:'2024'},
+    {role:'Gestor de Informação',company:'Libolis – A Coruña',desc:'Gestão de dados, bases de dados corporativas e CRM',year:'2023'},
+    {role:'Gestor de Operações – Back Office',company:'Abanca Servicios Financieros – A Coruña',desc:'Créditos, back office bancário e aplicativo Oficina 2000',year:'2020'},
+    {role:'Administrativo Contabilístico',company:'Asesoría Serva – Ferrol',desc:'Contabilidade analítica, impostos, tesouraria e conciliações bancárias',year:'2017'},
+    {role:'Profissional Bancário',company:'BNP Paribas · Bankinter · Ibercaja',desc:'Operativa bancária, financiamento e declarações fiscais em várias entidades',year:'2005-2007'}
+  ],
+  digital:[
+    {icon:'📊',title:'Análise de Dados Financeiros',desc:'Modelização, KPIs, dashboards interativos, forecasting e análise de desvios.'},
+    {icon:'🏦',title:'FinTech & Sistemas Digitais',desc:'ERP, banca digital, processamento de dados, automatização e integração de APIs.'},
+    {icon:'🔐',title:'Cibersegurança Financeira',desc:'Segurança em sistemas financeiros, RGPD, análise de riscos e prevenção de fraude.'},
+    {icon:'🗃️',title:'Big Data & SQL',desc:'Análise com SQL, gestão de bases de dados e tratamento de grandes volumes.'},
+    {icon:'📈',title:'Reporting & Automatização',desc:'Relatórios executivos com Excel avançado, Python e Power BI para decisão.'},
+    {icon:'💻',title:'Desenvolvimento Web Aplicado',desc:'Ferramentas financeiras web: calculadoras, simuladores e dashboards de análise.'}
+  ],
+  projects:[
+    {icon:'📊',name:'Dashboard CFO – Análise Financeira',desc:'Painel executivo com cenários, KPIs e indicadores interativos com Chart.js.',tag:'Chart.js · HTML/JS · FP&A',link:'https://lophersson.github.io/2026/'},
+    {icon:'🏦',name:'Calculadora FinTech (Fintonic)',desc:'Calculadora de empréstimos com parâmetros reais, prestações e TAEG.',tag:'Finanças · JS · UX',link:'https://lophersson.github.io/2026/'},
+    {icon:'🇵🇹',name:'Simulador IRS Modelo 3 – Portugal',desc:'Simulador fiscal português multilingue com escalões e deduções.',tag:'Fiscal · ES/PT/EN',link:'https://lophersson.github.io/2026/'},
+    {icon:'💳',name:'Suite Orçamentos & Despesas 2026',desc:'Dashboard de vencimento, orçamento e despesas com lógica de retenções.',tag:'Finanças pessoais · localStorage',link:'https://lophersson.github.io/2026/'}
+  ],
+  skillCats:[
+    {cat:'💰 Finanças & Controlo de Gestão',items:['Contabilidade analítica','FP&A','Orçamentação','Controlo de gestão','Tesouraria','Conciliações bancárias','Reporting financeiro','Análise de desvios','Forecasting']},
+    {cat:'📊 Dados & Business Intelligence',items:['Excel Avançado','Power BI','SQL / MySQL','Python básico','Análise de KPIs','Modelização financeira','Visualização de dados']},
+    {cat:'💻 Sistemas & ERP',items:['SAP','Dynamics 365','Odoo','Anfix','Banca digital','Integração de APIs','HTML/CSS/JS','GitHub']},
+    {cat:'🔐 Cibersegurança Aplicada',items:['RGPD / Proteção de Dados','Segurança em sistemas financeiros','Análise de riscos','Prevenção de fraude digital']}
+  ],
+  edu:[
+    {title:'Desenvolvimento de Aplicações Web (DAW)',sub:'CFGS · CIFP Rodolfo Ucha – Ferrol · 2025',badge:'progress',badgeText:'EM CURSO'},
+    {title:'Ciências Empresariais – 90/240 ECTS',sub:'Licenciatura · Universidade A Coruña · 2020',badge:'unfinished',badgeText:'NÃO CONCLUÍDO'},
+    {title:'Administração e Finanças',sub:'CFGS · CIFP Rodolfo Ucha – Ferrol · 2018',badge:'done',badgeText:'CONCLUÍDO'},
+    {title:'Inglês Pré-Intermédio',sub:'EOI Ferrol · 2010 · 3 anos',badge:null}
+  ],
+  certs:[
+    {num:1,name:'Programação em Linguagens Estruturadas IFCD0111',org:'London Institute – Ferrol · 2025',hours:'718h'},
+    {num:2,name:'Segurança Informática IFCT0109',org:'Informática A Coruña · 2024',hours:'578h'},
+    {num:3,name:'Desenvolvimento de Aplic. com Tecnologias Web IFCD0210',org:'Academia Postal – A Coruña · 2023',hours:'668h'},
+    {num:4,name:'Sistemas de Gestão da Informação IFCT0211',org:'ntFOR – A Coruña · 2023',hours:'608h'}
+  ],
+  tools:['Dynamics 365','SAP','Excel','Power BI','Odoo','Anfix','SQL / MySQL','Python','VS Code','GitHub','HTML/CSS/JS','WordPress'],
+  soft:['Pensamento analítico','Orientação para resultados','Resolução de problemas','Trabalho em equipa','Aprendizagem contínua'],
+  languages:[{flag:'🇪🇸',name:'Espanhol',level:'Nativo'},{flag:'🇬🇧',name:'Inglês',level:'Pré-Intermédio (B1)'},{flag:'🇵🇹',name:'Português',level:'Iniciação (A1)'}]
+}
 };
-
-let currentLang='es',isDark=true;
-
 function render(lang){
-  const d=T[lang];
+  var d=T[lang];
   document.getElementById('theme-label').textContent=isDark?d.themeLabel:d.darkLabel;
   document.getElementById('pdf-label').textContent=d.pdfLabel;
   document.getElementById('hero-subtitle').textContent=d.heroSubtitle;
+  document.getElementById('contact-location').textContent=d.contactLocation;
+  document.getElementById('contact-projects').textContent=d.contactProjects;
+  document.getElementById('tag-finance').textContent=d.tagFinance;
   document.getElementById('tag-fpa').textContent=d.tagFpa;
   document.getElementById('tag-fintech').textContent=d.tagFintech;
   document.getElementById('tag-sec').textContent=d.tagSec;
   document.getElementById('tag-data').textContent=d.tagData;
-  document.getElementById('t-about').textContent=d.about;
+  document.getElementById('t-about').textContent=d.tAbout;
   document.getElementById('about-text').textContent=d.aboutText;
   document.getElementById('t-exp').textContent=d.tExp;
   document.getElementById('t-fintech').textContent=d.tFintech;
@@ -503,95 +402,26 @@ function render(lang){
   document.getElementById('r1').textContent=d.r1;
   document.getElementById('r2').textContent=d.r2;
   document.getElementById('r3').textContent=d.r3;
-
-  // Experience
-  document.getElementById('exp-list').innerHTML=d.exp.map(e=>`
-    <div class="exp-item">
-      <div class="exp-dot"></div>
-      <div>
-        <div class="exp-role">${e.role}</div>
-        <div class="exp-company">${e.company}</div>
-        <div class="exp-desc">${e.desc}</div>
-        <span class="exp-year">${e.year}</span>
-      </div>
-    </div>`).join('');
-
-  // Digital / FinTech cards
-  document.getElementById('digital-grid').innerHTML=d.digital.map(c=>`
-    <div class="digital-card">
-      <div class="digital-card-icon">${c.icon}</div>
-      <div class="digital-card-title">${c.title}</div>
-      <div class="digital-card-desc">${c.desc}</div>
-    </div>`).join('');
-
-  // Projects
-  document.getElementById('projects-list').innerHTML=d.projects.map(p=>`
-    <a class="project-card linked" href="${p.link}" target="_blank">
-      <div class="project-icon">${p.icon}</div>
-      <div>
-        <div class="project-name">${p.name}</div>
-        <div class="project-desc">${p.desc}</div>
-        <span class="project-tag">${p.tag}</span>
-      </div>
-    </a>`).join('');
-
-  // Skill categories (no percentages)
-  document.getElementById('skill-cats').innerHTML=d.skillCats.map(sc=>`
-    <div class="skill-cat">
-      <div class="skill-cat-title">${sc.cat}</div>
-      <div class="skill-cat-chips">${sc.items.map(i=>`<span class="skill-chip">${i}</span>`).join('')}</div>
-    </div>`).join('');
-
-  // Education
-  document.getElementById('edu-list').innerHTML=d.edu.map(e=>`
-    <div class="edu-item">
-      <div class="edu-title">${e.title}</div>
-      <div class="edu-sub">${e.sub}</div>
-      ${e.badge?`<span class="edu-badge badge-${e.badge}">${e.badgeText}</span>`:''}
-    </div>`).join('');
-
-  // Certs
-  document.getElementById('cert-list').innerHTML=d.certs.map(c=>`
-    <div class="cert-item">
-      <div class="cert-num">${c.num}</div>
-      <div>
-        <div class="cert-name">${c.name}</div>
-        <div class="cert-org">${c.org}</div>
-        <span class="cert-hours">${c.hours}</span>
-      </div>
-    </div>`).join('');
-
-  // Tools
-  document.getElementById('tools-list').innerHTML=d.tools.map(t=>`<span class="tool-chip">${t}</span>`).join('');
-
-  // Soft skills
-  document.getElementById('soft-list').innerHTML=d.soft.map(s=>`<span class="soft-tag">${s}</span>`).join('');
-
-  // Languages
-  document.getElementById('lang-list').innerHTML=d.languages.map(l=>`
-    <div class="lang-item">
-      <span class="lang-name">${l.flag} ${l.name}</span>
-      <span class="lang-level">${l.level}</span>
-    </div>`).join('');
-
-  // Profile list
-  document.getElementById('profile-list').innerHTML=d.profileItems.map(i=>`<li>${i}</li>`).join('');
-
-  // Lang buttons
-  ['es','en','pt'].forEach(l=>document.getElementById('btn-'+l).classList.toggle('active',l===lang));
+  document.getElementById('footer-country').textContent=d.footerCountry;
+  document.getElementById('exp-list').innerHTML=d.exp.map(function(e){return '<div class="exp-item"><div class="exp-dot"></div><div><div class="exp-role">'+e.role+'</div><div class="exp-company">'+e.company+'</div><div class="exp-desc">'+e.desc+'</div><span class="exp-year">'+e.year+'</span></div></div>';}).join('');
+  document.getElementById('digital-grid').innerHTML=d.digital.map(function(c){return '<div class="digital-card"><div class="digital-card-icon">'+c.icon+'</div><div class="digital-card-title">'+c.title+'</div><div class="digital-card-desc">'+c.desc+'</div></div>';}).join('');
+  document.getElementById('projects-list').innerHTML=d.projects.map(function(p){return '<a class="project-card" href="'+p.link+'" target="_blank"><div class="project-icon">'+p.icon+'</div><div><div class="project-name">'+p.name+'</div><div class="project-desc">'+p.desc+'</div><span class="project-tag">'+p.tag+'</span></div></a>';}).join('');
+  document.getElementById('skill-cats').innerHTML=d.skillCats.map(function(sc){return '<div class="skill-cat"><div class="skill-cat-title">'+sc.cat+'</div><div class="skill-cat-chips">'+sc.items.map(function(i){return '<span class="skill-chip">'+i+'</span>';}).join('')+'</div></div>';}).join('');
+  document.getElementById('edu-list').innerHTML=d.edu.map(function(e){return '<div class="edu-item"><div class="edu-title">'+e.title+'</div><div class="edu-sub">'+e.sub+'</div>'+(e.badge?'<span class="edu-badge badge-'+e.badge+'">'+e.badgeText+'</span>':'')+'</div>';}).join('');
+  document.getElementById('cert-list').innerHTML=d.certs.map(function(c){return '<div class="cert-item"><div class="cert-num">'+c.num+'</div><div><div class="cert-name">'+c.name+'</div><div class="cert-org">'+c.org+'</div><span class="cert-hours">'+c.hours+'</span></div></div>';}).join('');
+  document.getElementById('tools-list').innerHTML=d.tools.map(function(t){return '<span class="tool-chip">'+t+'</span>';}).join('');
+  document.getElementById('soft-list').innerHTML=d.soft.map(function(s){return '<span class="soft-tag">'+s+'</span>';}).join('');
+  document.getElementById('lang-list').innerHTML=d.languages.map(function(l){return '<div class="lang-item"><span class="lang-name">'+l.flag+' '+l.name+'</span><span class="lang-level">'+l.level+'</span></div>';}).join('');
+  document.getElementById('profile-list').innerHTML=d.profileItems.map(function(i){return '<li>'+i+'</li>';}).join('');
+  ['es','en','pt'].forEach(function(l){document.getElementById('btn-'+l).classList.toggle('active',l===lang);});
 }
-
-function setLang(lang){currentLang=lang;document.documentElement.lang=lang;render(lang)}
-
+function setLang(lang){currentLang=lang;document.documentElement.lang=lang;render(lang);}
 function toggleTheme(){
   isDark=!isDark;
   document.documentElement.setAttribute('data-theme',isDark?'dark':'light');
-  const d=T[currentLang];
-  document.getElementById('btn-theme').innerHTML=isDark
-    ?`☀️ <span id="theme-label">${d.themeLabel}</span>`
-    :`🌙 <span id="theme-label">${d.darkLabel}</span>`;
+  var d=T[currentLang];
+  document.getElementById('btn-theme').innerHTML=isDark?'&#9728; <span id="theme-label">'+d.themeLabel+'</span>':'&#9790; <span id="theme-label">'+d.darkLabel+'</span>';
 }
-
 render('es');
 </script>
 </body>
