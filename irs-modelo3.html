@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Simulador IRS Modelo 3 – Portugal</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Outfit:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#060a10;--bg2:#0d1420;--bg3:#152030;--s:#1a2a3e;--b:#243550;--a:#c9a84c;--a2:#e8c96e;--as:rgba(201,168,76,.12);--ar:rgba(201,168,76,.06);--t:#e8edf5;--t2:#a8b4c8;--t3:#5a6a84;--r:14px;--ff:'Cormorant Garamond',serif;--fb:'Outfit',sans-serif;--fm:'DM Mono',monospace;--green:#4ade80;--red:#f87171;--blue:#60a5fa}
+[data-theme=light]{--bg:#ede8dc;--bg2:#f8f4ec;--bg3:#fff;--s:#fff;--b:#d8cfba;--a:#8b6914;--a2:#a07820;--as:rgba(139,105,20,.1);--ar:rgba(139,105,20,.05);--t:#1a1a2e;--t2:#3d4466;--t3:#8a8aaa}
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:15px}body{font-family:var(--fb);background:var(--bg);color:var(--t);min-height:100vh}
+#bar{display:flex;justify-content:space-between;align-items:center;padding:10px 28px;background:var(--bg2);border-bottom:1px solid var(--b);position:sticky;top:0;z-index:99;flex-wrap:wrap;gap:8px}
+.logo{font-family:var(--ff);font-size:1.2rem;font-weight:700;color:var(--a)}
+.logo span{font-size:.64rem;color:var(--t3);font-family:var(--fb);letter-spacing:.1em;text-transform:uppercase;display:block;margin-top:-3px}
+.btn{padding:5px 12px;border-radius:20px;border:1px solid var(--b);background:transparent;color:var(--t2);font-family:var(--fb);font-size:.74rem;cursor:pointer;transition:all .2s}
+.btn:hover,.btn.on{background:var(--a);border-color:var(--a);color:#060a10;font-weight:600}
+#wrap{max-width:1100px;margin:0 auto;padding:28px 20px 60px}
+.pg-flag{font-size:2rem;margin-bottom:8px}
+.pg-title{font-family:var(--ff);font-size:2.2rem;font-weight:700;color:var(--a);margin-bottom:4px}
+.pg-sub{font-size:.8rem;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:28px}
+.main-grid{display:grid;grid-template-columns:400px 1fr;gap:24px;align-items:start}
+.card{background:var(--bg2);border:1px solid var(--b);border-radius:var(--r);padding:24px}
+.card-title{font-family:var(--ff);font-size:1.05rem;font-weight:600;color:var(--a);margin-bottom:18px;padding-bottom:10px;border-bottom:1px solid var(--b)}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:.7rem;font-weight:600;color:var(--t3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:6px}
+.field input,.field select{width:100%;padding:9px 13px;background:var(--bg3);border:1px solid var(--b);border-radius:8px;color:var(--t);font-family:var(--fm);font-size:.86rem;outline:none;transition:border-color .2s}
+.field input:focus,.field select:focus{border-color:var(--a)}
+.field input[type=range]{padding:4px 0;background:transparent;border:none;accent-color:var(--a)}
+.range-row{display:flex;justify-content:space-between;font-size:.7rem;color:var(--t3);margin-top:3px}
+.toggle-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.tog-btn{padding:8px;border-radius:8px;border:1px solid var(--b);background:var(--bg3);color:var(--t2);font-size:.76rem;cursor:pointer;text-align:center;transition:all .2s}
+.tog-btn.on{background:var(--as);border-color:var(--a);color:var(--a);font-weight:600}
+.result-hero{background:linear-gradient(135deg,var(--as),var(--ar));border:1px solid var(--a);border-radius:var(--r);padding:22px;text-align:center;margin-bottom:16px}
+.rh-label{font-size:.72rem;font-weight:700;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+.rh-val{font-family:var(--fm);font-size:2.4rem;font-weight:500;color:var(--a);margin-bottom:4px}
+.rh-sub{font-size:.78rem;color:var(--t2)}
+.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.res-card{background:var(--bg3);border:1px solid var(--b);border-radius:10px;padding:14px;text-align:center}
+.res-lbl{font-size:.66rem;font-weight:700;color:var(--t3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:5px}
+.res-val{font-family:var(--fm);font-size:1.1rem;color:var(--a)}
+.bracket-table{width:100%;border-collapse:collapse;font-size:.78rem;margin-bottom:16px}
+.bracket-table th{font-size:.66rem;font-weight:700;color:var(--t3);letter-spacing:.06em;text-transform:uppercase;padding:7px 10px;border-bottom:1px solid var(--b);text-align:left}
+.bracket-table td{padding:7px 10px;border-bottom:1px solid var(--b);font-family:var(--fm);color:var(--t2)}
+.bracket-table tr.active td{background:var(--as);color:var(--a)}
+.progress-bar{height:6px;background:var(--bg3);border-radius:3px;overflow:hidden;margin-top:8px}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--a),var(--a2));border-radius:3px;transition:width .5s ease}
+.info-box{background:var(--bg3);border:1px solid var(--b);border-radius:8px;padding:12px 14px;font-size:.78rem;color:var(--t2);line-height:1.6}
+.info-box strong{color:var(--a)}
+.deduction-chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:var(--as);border:1px solid var(--a);border-radius:20px;font-size:.7rem;color:var(--a);font-weight:600;margin:3px}
+@media(max-width:800px){.main-grid{grid-template-columns:1fr}.result-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div id="bar">
+  <div>
+    <div class="logo">IRS Modelo 3 🇵🇹<span id="logo-sub">Simulador Fiscal Portugal</span></div>
+  </div>
+  <div style="display:flex;gap:6px;flex-wrap:wrap">
+    <button class="btn on" id="b-es" onclick="setL('es')">🇪🇸 ES</button>
+    <button class="btn" id="b-en" onclick="setL('en')">🇬🇧 EN</button>
+    <button class="btn" id="b-pt" onclick="setL('pt')">🇵🇹 PT</button>
+    <button class="btn" id="b-th" onclick="toggleTheme()">☀️ <span id="th-lbl">Claro</span></button>
+  </div>
+</div>
+<div id="wrap">
+  <div class="pg-flag">🇵🇹</div>
+  <div class="pg-title" id="pg-title">Simulador IRS – Modelo 3</div>
+  <div class="pg-sub" id="pg-sub">Fiscalidad portuguesa · Tramos de renta · Deducciones · 2024</div>
+  <div class="main-grid">
+    <div>
+      <div class="card">
+        <div class="card-title" id="ct1">Datos del Declarante</div>
+        <div class="field">
+          <label id="lbl-reg">Régimen Fiscal</label>
+          <div class="toggle-row">
+            <button class="tog-btn on" id="rg0" onclick="setReg(0)"><span id="rg0t">Trabajo por Cuenta Ajena</span></button>
+            <button class="tog-btn" id="rg1" onclick="setReg(1)"><span id="rg1t">Cuenta Propia (Cat. B)</span></button>
+          </div>
+        </div>
+        <div class="field">
+          <label id="lbl-est">Estado Civil</label>
+          <select id="inp-est" onchange="calc()">
+            <option id="ec0" value="single">Soltero/a</option>
+            <option id="ec1" value="married">Casado/a – Tributación conjunta</option>
+            <option id="ec2" value="sep">Casado/a – Tributación separada</option>
+          </select>
+        </div>
+        <div class="field">
+          <label id="lbl-ren">Rendimiento Bruto Anual (€)</label>
+          <input type="range" id="inp-ren" value="28000" min="5000" max="150000" step="500" oninput="syncRen(this.value);calc()">
+          <div class="range-row"><span>5.000 €</span><span id="ren-disp" style="color:var(--a);font-family:var(--fm);font-weight:600">28.000 €</span><span>150.000 €</span></div>
+        </div>
+        <div class="field">
+          <label id="lbl-dep">Núm. Dependientes</label>
+          <input type="number" id="inp-dep" value="0" min="0" max="8" oninput="calc()">
+        </div>
+        <div class="field">
+          <label id="lbl-ded">Deducciones Específicas (€)</label>
+          <input type="number" id="inp-ded" value="0" min="0" max="10000" step="100" oninput="calc()">
+        </div>
+        <div class="field" id="field-coef" style="display:none">
+          <label id="lbl-coef">Coeficiente Categoría B</label>
+          <select id="inp-coef" onchange="calc()">
+            <option value="0.35">35% – Prestación de servicios</option>
+            <option value="0.75">75% – Actividad comercial/industrial</option>
+            <option value="0.15">15% – Actividad hotelera/restautación</option>
+          </select>
+        </div>
+      </div>
+      <div class="card" style="margin-top:16px">
+        <div class="card-title" id="ct2">Deducciones Aplicadas</div>
+        <div id="ded-chips"></div>
+      </div>
+    </div>
+    <div>
+      <div class="result-hero">
+        <div class="rh-label" id="rh-lbl">RESULTADO FISCAL</div>
+        <div class="rh-val" id="rh-val">–</div>
+        <div class="rh-sub" id="rh-sub">–</div>
+      </div>
+      <div class="result-grid" id="res-grid"></div>
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-title" id="ct3">Tramos IRS Aplicados</div>
+        <table class="bracket-table"><thead><tr id="bt-hdr"></tr></thead><tbody id="bt-body"></tbody></table>
+        <div id="type-eff-row" style="font-size:.78rem;color:var(--t2);margin-top:8px">
+          <span id="tef-lbl">Tipo efectivo: </span><span id="tef-val" style="color:var(--a);font-family:var(--fm);font-weight:600"></span>
+          <div class="progress-bar"><div class="progress-fill" id="tef-bar"></div></div>
+        </div>
+      </div>
+      <div class="info-box" id="info-box"></div>
+    </div>
+  </div>
+</div>
+<script>
+var isDark=true,lang='es',regimen=0;
+var BRACKETS_2024=[
+  {min:0,max:7703,rate:13.25},{min:7703,max:11623,rate:18},{min:11623,max:16472,rate:23},
+  {min:16472,max:21321,rate:26},{min:21321,max:27146,rate:32.75},{min:27146,max:39791,rate:37},
+  {min:39791,max:51997,rate:43.5},{min:51997,max:81199,rate:45},{min:81199,max:Infinity,rate:48}
+];
+var TXT={
+  es:{logoSub:'Simulador Fiscal Portugal',pgTitle:'Simulador IRS – Modelo 3',pgSub:'Fiscalidad portuguesa · Tramos de renta · Deducciones · 2024',ct1:'Datos del Declarante',ct2:'Deducciones Aplicadas',ct3:'Tramos IRS Aplicados',lblReg:'Régimen Fiscal',reg:['Trabajo por Cuenta Ajena','Cuenta Propia (Cat. B)'],lblEst:'Estado Civil',ec:['Soltero/a','Casado/a – Tributación conjunta','Casado/a – Tributación separada'],lblRen:'Rendimiento Bruto Anual (€)',lblDep:'Núm. Dependientes',lblDed:'Deducciones Específicas (€)',lblCoef:'Coeficiente Categoría B',rhLbl:'RESULTADO FISCAL',res:['Renta Colectada','Base Imponible','Colecta IRS','Retenciones'],bth:['Tramo','Desde','Hasta','Tipo','Aplicado'],tefLbl:'Tipo efectivo: ',
+  chips:['Deducción personal 4.104€','Deducciones colectadas','IRS Municipal'],
+  info:'<strong>IRS 2024 Portugal:</strong> El Imposto sobre o Rendimento das Pessoas Singulares grava las rentas del trabajo, empresariales y de capital. La declaración Modelo 3 se presenta entre Abril y Junio. Las retenciones en fuente se descuentan de la colecta final.',
+  rhSub:function(v){return v>0?'A PAGAR al Estado':'A DEVOLVER por el Estado'},
+  thOn:'Oscuro',thOff:'Claro'},
+  en:{logoSub:'Portuguese Tax Simulator',pgTitle:'IRS Simulator – Modelo 3',pgSub:'Portuguese taxation · Tax brackets · Deductions · 2024',ct1:'Taxpayer Data',ct2:'Applied Deductions',ct3:'Applied IRS Brackets',lblReg:'Tax Regime',reg:['Employed (Category A)','Self-Employed (Category B)'],lblEst:'Marital Status',ec:['Single','Married – Joint filing','Married – Separate filing'],lblRen:'Gross Annual Income (€)',lblDep:'Number of Dependants',lblDed:'Specific Deductions (€)',lblCoef:'Category B Coefficient',rhLbl:'TAX RESULT',res:['Collected Income','Taxable Base','IRS Assessment','Withholdings'],bth:['Bracket','From','To','Rate','Applied'],tefLbl:'Effective rate: ',
+  chips:['Personal deduction 4,104€','Collected deductions','Municipal IRS'],
+  info:'<strong>IRS 2024 Portugal:</strong> The Personal Income Tax applies to employment, business and capital income. The Modelo 3 declaration is filed between April and June. Source withholdings are offset against the final assessment.',
+  rhSub:function(v){return v>0?'PAYABLE to the State':'REFUND from the State'},
+  thOn:'Dark',thOff:'Light'},
+  pt:{logoSub:'Simulador Fiscal Portugal',pgTitle:'Simulador IRS – Modelo 3',pgSub:'Fiscalidade portuguesa · Escalões de rendimento · Deduções · 2024',ct1:'Dados do Declarante',ct2:'Deduções Aplicadas',ct3:'Escalões IRS Aplicados',lblReg:'Regime Fiscal',reg:['Trabalho por Conta de Outrem','Conta Própria (Cat. B)'],lblEst:'Estado Civil',ec:['Solteiro/a','Casado/a – Tributação conjunta','Casado/a – Tributação separada'],lblRen:'Rendimento Bruto Anual (€)',lblDep:'N.º Dependentes',lblDed:'Deduções Específicas (€)',lblCoef:'Coeficiente Categoria B',rhLbl:'RESULTADO FISCAL',res:['Rendimento Coletável','Base Tributável','Coleta IRS','Retenções'],bth:['Escalão','De','Até','Taxa','Aplicado'],tefLbl:'Taxa efetiva: ',
+  chips:['Dedução pessoal 4.104€','Deduções à coleta','IRS Municipal'],
+  info:'<strong>IRS 2024 Portugal:</strong> O Imposto sobre o Rendimento das Pessoas Singulares tributa os rendimentos do trabalho, empresariais e de capital. A declaração Modelo 3 é entregue entre Abril e Junho. As retenções na fonte abatam à coleta final.',
+  rhSub:function(v){return v>0?'A PAGAR ao Estado':'A DEVOLVER pelo Estado'},
+  thOn:'Escuro',thOff:'Claro'}
+};
+function fmt(n){return n.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function setReg(n){regimen=n;[0,1].forEach(function(i){document.getElementById('rg'+i).classList.toggle('on',i===n);});document.getElementById('field-coef').style.display=n===1?'block':'none';calc();}
+function syncRen(v){document.getElementById('ren-disp').textContent=parseFloat(v).toLocaleString('es-ES',{minimumFractionDigits:0})+' €';}
+function calcIRS(base){
+  var tax=0;
+  BRACKETS_2024.forEach(function(b){
+    if(base>b.min){var inc=Math.min(base,b.max===Infinity?base:b.max)-b.min;tax+=inc*b.rate/100;}
+  });
+  return tax;
+}
+function calc(){
+  var t=TXT[lang];
+  var bruto=parseFloat(document.getElementById('inp-ren').value)||0;
+  var dep=parseInt(document.getElementById('inp-dep').value)||0;
+  var dedExtra=parseFloat(document.getElementById('inp-ded').value)||0;
+  var est=document.getElementById('inp-est').value;
+  var coef=regimen===1?parseFloat(document.getElementById('inp-coef').value):1;
+  var rendimento=regimen===1?bruto*coef:bruto;
+  var dedEspecifica=Math.min(rendimento*0.10+4.104,15000);
+  var dedPessoal=4104;
+  var dedDep=dep*600;
+  var base=Math.max(0,rendimento-dedEspecifica-dedDep-dedExtra);
+  if(est==='married')base=base*0.9;
+  var coleta=calcIRS(base);
+  var municipalTax=coleta*0.025;
+  var totalColeta=coleta+municipalTax;
+  var retencoes=rendimento*0.145;
+  var resultado=totalColeta-retencoes;
+  var tipoEfetivo=rendimento>0?totalColeta/rendimento*100:0;
+  document.getElementById('rh-val').textContent=(resultado<0?'- ':'')+fmt(Math.abs(resultado))+' €';
+  document.getElementById('rh-sub').textContent=t.rhSub(resultado);
+  document.getElementById('rh-lbl').textContent=t.rhLbl;
+  var rvals=[rendimento,base,totalColeta,retencoes];
+  document.getElementById('res-grid').innerHTML=t.res.map(function(r,i){return '<div class="res-card"><div class="res-lbl">'+r+'</div><div class="res-val">'+fmt(rvals[i])+' €</div></div>';}).join('');
+  document.getElementById('bt-hdr').innerHTML=t.bth.map(function(h){return '<th>'+h+'</th>';}).join('');
+  var btBody='';
+  BRACKETS_2024.forEach(function(b,i){
+    if(b.min>base)return;
+    var inc=Math.min(base,b.max===Infinity?base:b.max)-b.min;
+    var tax=inc*b.rate/100;
+    var isActive=base>b.min&&base<=(b.max===Infinity?Infinity:b.max);
+    btBody+='<tr'+(isActive?' class="active"':'')+'><td>'+(i+1)+'</td><td>'+fmt(b.min)+' €</td><td>'+(b.max===Infinity?'+∞':fmt(b.max)+' €')+'</td><td>'+b.rate+'%</td><td>'+fmt(tax)+' €</td></tr>';
+  });
+  document.getElementById('bt-body').innerHTML=btBody;
+  document.getElementById('tef-lbl').textContent=t.tefLbl;
+  document.getElementById('tef-val').textContent=tipoEfetivo.toFixed(2)+'%';
+  document.getElementById('tef-bar').style.width=Math.min(tipoEfetivo/50*100,100)+'%';
+  var chips=t.chips.slice();
+  chips.push(fmt(dedEspecifica)+' €');
+  document.getElementById('ded-chips').innerHTML=[fmt(dedPessoal)+' €',fmt(totalColeta)+' €',fmt(municipalTax)+' €'].map(function(v,i){return '<span class="deduction-chip">'+t.chips[i]+': '+v+'</span>';}).join('');
+  document.getElementById('info-box').innerHTML=t.info;
+}
+function setL(l){
+  lang=l;
+  ['es','en','pt'].forEach(function(x){document.getElementById('b-'+x).classList.toggle('on',x===l);});
+  var t=TXT[l];
+  document.getElementById('logo-sub').textContent=t.logoSub;
+  document.getElementById('pg-title').textContent=t.pgTitle;
+  document.getElementById('pg-sub').textContent=t.pgSub;
+  document.getElementById('ct1').textContent=t.ct1;
+  document.getElementById('ct2').textContent=t.ct2;
+  document.getElementById('ct3').textContent=t.ct3;
+  document.getElementById('lbl-reg').textContent=t.lblReg;
+  document.getElementById('rg0t').textContent=t.reg[0];
+  document.getElementById('rg1t').textContent=t.reg[1];
+  document.getElementById('lbl-est').textContent=t.lblEst;
+  [0,1,2].forEach(function(i){document.getElementById('ec'+i).textContent=t.ec[i];});
+  document.getElementById('lbl-ren').textContent=t.lblRen;
+  document.getElementById('lbl-dep').textContent=t.lblDep;
+  document.getElementById('lbl-ded').textContent=t.lblDed;
+  document.getElementById('lbl-coef').textContent=t.lblCoef;
+  calc();
+}
+function toggleTheme(){
+  isDark=!isDark;
+  document.documentElement.setAttribute('data-theme',isDark?'dark':'light');
+  var t=TXT[lang];
+  document.getElementById('b-th').innerHTML=(isDark?'☀️ ':'🌙 ')+'<span id="th-lbl">'+(isDark?t.thOff:t.thOn)+'</span>';
+}
+syncRen(28000);calc();
+</script>
+</body></html>
