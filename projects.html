@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lophersson · Portfolio Fintech 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  /* ── Tokens dark ── */
+  :root {
+    --void: #080808;
+    --surface: rgba(255,255,255,0.035);
+    --border: rgba(196,160,80,0.18);
+    --gold: #c4a050;
+    --gold-bright: #e8c06a;
+    --gold-dim: rgba(196,160,80,0.45);
+    --text: #e8e4dc;
+    --text-muted: #7a7570;
+    --card-bg: rgba(255,255,255,0.035);
+    --card-featured: linear-gradient(135deg,rgba(196,160,80,0.06) 0%,rgba(255,255,255,0.02) 100%);
+    --ctrl-bg: rgba(14,14,14,0.88);
+    --ctrl-border: rgba(196,160,80,0.2);
+    --ctrl-text: #a89880;
+    --ctrl-active-bg: rgba(196,160,80,0.14);
+    --ctrl-active-text: #e8c06a;
+    --orb1: rgba(196,160,80,0.08);
+    --orb2: rgba(80,160,180,0.06);
+    --footer-border: rgba(196,160,80,0.18);
+    --shadow-card: 0 24px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(196,160,80,0.12);
+  }
+
+  /* ── Tokens light ── */
+  [data-theme="light"] {
+    --void: #f4f1ea;
+    --surface: rgba(0,0,0,0.028);
+    --border: rgba(140,100,30,0.18);
+    --gold: #96680a;
+    --gold-bright: #b07c10;
+    --gold-dim: rgba(140,100,30,0.38);
+    --text: #1a1610;
+    --text-muted: #88796a;
+    --card-bg: rgba(255,255,255,0.75);
+    --card-featured: linear-gradient(135deg,rgba(196,160,80,0.08) 0%,rgba(255,255,255,0.65) 100%);
+    --ctrl-bg: rgba(244,241,234,0.94);
+    --ctrl-border: rgba(140,100,30,0.2);
+    --ctrl-text: #9a8870;
+    --ctrl-active-bg: rgba(140,100,30,0.1);
+    --ctrl-active-text: #96680a;
+    --orb1: rgba(196,160,80,0.1);
+    --orb2: rgba(80,160,180,0.07);
+    --footer-border: rgba(140,100,30,0.14);
+    --shadow-card: 0 16px 40px rgba(0,0,0,0.08), 0 0 0 1px rgba(140,100,30,0.1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--void);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+    transition: background 0.4s ease, color 0.4s ease;
+  }
+
+  /* ── Grain ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0; opacity: 0.55;
+  }
+
+  /* ── Orbs ── */
+  .orb {
+    position: fixed; border-radius: 50%; filter: blur(120px);
+    pointer-events: none; z-index: 0;
+    animation: drift 18s ease-in-out infinite alternate;
+    transition: background 0.5s ease;
+  }
+  .orb-1 { width:600px;height:600px;top:-200px;left:-200px;background:radial-gradient(circle,var(--orb1) 0%,transparent 70%); }
+  .orb-2 { width:500px;height:500px;bottom:-150px;right:-150px;background:radial-gradient(circle,var(--orb2) 0%,transparent 70%);animation-delay:-9s; }
+  @keyframes drift { from{transform:translate(0,0) scale(1);}to{transform:translate(40px,30px) scale(1.08);} }
+
+  /* ════════════════════════════
+     CONTROL BAR
+  ════════════════════════════ */
+  .controls {
+    position: fixed; top: 22px; right: 28px; z-index: 100;
+    display: flex; align-items: center; gap: 5px;
+    background: var(--ctrl-bg);
+    border: 1px solid var(--ctrl-border);
+    border-radius: 3px; padding: 5px 8px;
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+    transition: background 0.4s, border-color 0.4s;
+    animation: fadeUp 0.8s 0.5s ease both;
+  }
+  .ctrl-sep { width:1px;height:16px;background:var(--ctrl-border);margin:0 3px; }
+
+  .lang-btn {
+    font-family: 'DM Mono', monospace; font-size: 10px;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--ctrl-text); background: transparent; border: none;
+    cursor: pointer; padding: 4px 8px; border-radius: 2px;
+    transition: color 0.25s, background 0.25s;
+  }
+  .lang-btn:hover { color: var(--gold); }
+  .lang-btn.active { color: var(--ctrl-active-text); background: var(--ctrl-active-bg); }
+
+  .theme-btn {
+    width:28px;height:28px;border:none;background:transparent;
+    cursor:pointer;display:flex;align-items:center;justify-content:center;
+    border-radius:2px;padding:4px;transition:background 0.25s;
+  }
+  .theme-btn:hover { background: var(--ctrl-active-bg); }
+  .theme-btn svg {
+    width:14px;height:14px;stroke:var(--ctrl-text);fill:none;
+    stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;transition:stroke 0.3s;
+  }
+  .theme-btn:hover svg { stroke: var(--gold); }
+
+  /* sun = dark mode / moon = light mode */
+  .icon-moon { display: none; }
+  [data-theme="light"] .icon-sun  { display: none; }
+  [data-theme="light"] .icon-moon { display: block; }
+
+  /* ── Wrapper ── */
+  .wrapper { position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:80px 32px 100px; }
+
+  /* ── Header ── */
+  header { margin-bottom:80px;display:flex;flex-direction:column;gap:12px; }
+
+  .brand {
+    font-family:'DM Mono',monospace;font-size:11px;
+    letter-spacing:0.3em;text-transform:uppercase;
+    color:var(--gold);opacity:0.8;
+    animation:fadeUp 0.8s ease both;transition:color 0.4s;
+  }
+  h1 {
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(2.8rem,6vw,5rem);
+    font-weight:300;line-height:1.05;letter-spacing:-0.01em;
+    color:var(--text);animation:fadeUp 0.8s 0.1s ease both;transition:color 0.4s;
+  }
+  h1 em { font-style:italic;color:var(--gold-bright);transition:color 0.4s; }
+  .subtitle {
+    font-size:14px;color:var(--text-muted);letter-spacing:0.04em;
+    max-width:500px;line-height:1.6;
+    animation:fadeUp 0.8s 0.2s ease both;transition:color 0.4s;
+  }
+  .divider {
+    width:60px;height:1px;background:linear-gradient(90deg,var(--gold),transparent);
+    margin-top:8px;animation:expandLine 1s 0.4s ease both;transform-origin:left;
+    transition:background 0.4s;
+  }
+  @keyframes expandLine { from{transform:scaleX(0);opacity:0;}to{transform:scaleX(1);opacity:1;} }
+
+  /* ── Grid ── */
+  .grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px; }
+
+  /* ── Card ── */
+  .card {
+    position:relative;background:var(--card-bg);border:1px solid var(--border);
+    border-radius:2px;padding:36px 32px 30px;cursor:pointer;text-decoration:none;
+    display:flex;flex-direction:column;gap:16px;overflow:hidden;
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    transition:border-color 0.35s ease,transform 0.35s cubic-bezier(.22,1,.36,1),
+               box-shadow 0.35s ease,background 0.4s ease;
+    animation:fadeUp 0.7s ease both;
+  }
+  .card:hover { border-color:rgba(196,160,80,0.55);transform:translateY(-6px);box-shadow:var(--shadow-card); }
+
+  .card::before {
+    content:'';position:absolute;top:0;left:0;right:0;height:1px;
+    background:linear-gradient(90deg,transparent,var(--gold-dim),transparent);
+    opacity:0;transition:opacity 0.4s ease;
+  }
+  .card:hover::before { opacity:1; }
+  .card::after {
+    content:'';position:absolute;inset:0;
+    background:radial-gradient(ellipse at top left,rgba(196,160,80,0.04) 0%,transparent 70%);
+    opacity:0;transition:opacity 0.4s ease;pointer-events:none;
+  }
+  .card:hover::after { opacity:1; }
+
+  .card:nth-child(1){animation-delay:.05s}.card:nth-child(2){animation-delay:.12s}
+  .card:nth-child(3){animation-delay:.19s}.card:nth-child(4){animation-delay:.26s}
+  .card:nth-child(5){animation-delay:.33s}.card:nth-child(6){animation-delay:.40s}
+  .card:nth-child(7){animation-delay:.47s}.card:nth-child(8){animation-delay:.54s}
+
+  .tag {
+    font-family:'DM Mono',monospace;font-size:9.5px;letter-spacing:0.28em;
+    text-transform:uppercase;color:var(--gold);opacity:0.65;
+    position:relative;z-index:1;transition:color 0.4s;
+  }
+  .icon-wrap {
+    width:44px;height:44px;border:1px solid var(--border);border-radius:2px;
+    display:flex;align-items:center;justify-content:center;
+    position:relative;z-index:1;transition:border-color 0.3s,background 0.3s;
+  }
+  .card:hover .icon-wrap { border-color:rgba(196,160,80,0.4);background:rgba(196,160,80,0.06); }
+  .icon-wrap svg { width:20px;height:20px;stroke:var(--gold);fill:none;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;transition:stroke 0.3s; }
+  .card:hover .icon-wrap svg { stroke:var(--gold-bright); }
+
+  .card-title {
+    font-family:'Cormorant Garamond',serif;font-size:1.55rem;
+    font-weight:400;line-height:1.15;letter-spacing:-0.01em;
+    color:var(--text);position:relative;z-index:1;transition:color 0.4s;
+  }
+  .card-desc {
+    font-size:13px;color:var(--text-muted);line-height:1.65;
+    position:relative;z-index:1;flex:1;transition:color 0.4s;
+  }
+  .card-footer {
+    display:flex;align-items:center;justify-content:space-between;
+    position:relative;z-index:1;margin-top:4px;padding-top:16px;
+    border-top:1px solid rgba(196,160,80,0.1);
+  }
+  .card-url {
+    font-family:'DM Mono',monospace;font-size:10px;color:var(--text-muted);
+    letter-spacing:0.02em;opacity:0.5;white-space:nowrap;overflow:hidden;
+    text-overflow:ellipsis;max-width:200px;
+  }
+  .arrow {
+    width:28px;height:28px;border:1px solid var(--border);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+    transition:border-color 0.3s,transform 0.3s,background 0.3s;
+  }
+  .card:hover .arrow { border-color:var(--gold);transform:rotate(-45deg);background:rgba(196,160,80,0.1); }
+  .arrow svg { width:11px;height:11px;stroke:var(--gold);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round; }
+
+  .card.featured {
+    grid-column:span 2;
+    background:var(--card-featured);
+    border-color:rgba(196,160,80,0.28);
+  }
+
+  /* ── Footer ── */
+  footer { margin-top:80px;display:flex;align-items:center;gap:16px;animation:fadeUp 0.8s 0.7s ease both; }
+  .footer-line { flex:1;height:1px;background:linear-gradient(90deg,var(--footer-border),transparent); }
+  .footer-text { font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.25em;color:var(--text-muted);opacity:0.4;text-transform:uppercase; }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);} }
+
+  @media(max-width:720px){
+    .wrapper{padding:60px 20px 80px;}
+    .card.featured{grid-column:span 1;}
+    .grid{gap:14px;}
+    .controls{top:14px;right:14px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ CONTROL BAR ══ -->
+<div class="controls">
+  <button class="lang-btn active" data-lang="es">ES</button>
+  <button class="lang-btn" data-lang="en">EN</button>
+  <button class="lang-btn" data-lang="pt">PT</button>
+  <div class="ctrl-sep"></div>
+  <button class="theme-btn" id="themeToggle" title="Cambiar tema / Toggle theme / Alternar tema">
+    <svg class="icon-sun" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="4"/>
+      <line x1="12" y1="2"  x2="12" y2="5"/>  <line x1="12" y1="19" x2="12" y2="22"/>
+      <line x1="4.22" y1="4.22"  x2="6.34" y2="6.34"/>
+      <line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/>
+      <line x1="2" y1="12" x2="5" y2="12"/>  <line x1="19" y1="12" x2="22" y2="12"/>
+      <line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/>
+      <line x1="17.66" y1="6.34"  x2="19.78" y2="4.22"/>
+    </svg>
+    <svg class="icon-moon" viewBox="0 0 24 24">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+    </svg>
+  </button>
+</div>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<div class="wrapper">
+
+  <header>
+    <span class="brand">Lophersson · 2026</span>
+    <h1>Fintech<br><em data-i18n="h1em">Lab</em></h1>
+    <p class="subtitle" data-i18n="subtitle">Herramientas financieras construidas con HTML, CSS y JavaScript puro. Análisis, simulación y control patrimonial.</p>
+    <div class="divider"></div>
+  </header>
+
+  <div class="grid">
+
+    <!-- 1. IRS Modelo 3 -->
+    <a class="card featured" href="https://lophersson.github.io/2026/irs-modelo3.html" target="_blank" rel="noopener">
+      <span class="tag" data-i18n="c1tag">Fiscalidad PT</span>
+      <div class="icon-wrap"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
+      <div class="card-title" data-i18n="c1title">IRS · Modelo 3<br>Simulador Fiscal PT</div>
+      <div class="card-desc" data-i18n="c1desc">Declaración de IRS portuguesa interactiva. Calcula retenciones, desgravaciones, mínimos por dependiente y cuota líquida en tiempo real para residentes y no residentes.</div>
+      <div class="card-footer"><span class="card-url">/irs-modelo3.html</span><span class="arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span></div>
+    </a>
+
+    <!-- 2. Fintonic Cal -->
+    <a class="card" href="https://lophersson.github.io/2026/fintonic-cal.html" target="_blank" rel="noopener">
+      <span class="tag" data-i18n="c2tag">Financiación</span>
+      <div class="icon-wrap"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+      <div class="card-title" data-i18n="c2title">Fintonic<br>Calculadora</div>
+      <div class="card-desc" data-i18n="c2desc">Simulador de préstamos y financiación basado en parámetros reales de mercado. TAE, cuota mensual, amortización y coste total.</div>
+      <div class="card-footer"><span class="card-url">/fintonic-cal.html</span><span class="arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span></div>
+    </a>
+
+    <!-- 3. CFO Dashboard -->
+    <a class="card" href="https://lophersson.github.io/2026/cfo-dashborad.html" target="_blank" rel="noopener">
+      <span class="tag" data-i18n="c3tag">Ejecutivo</span>
+      <div class="icon-wrap"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+      <div class="card-title" data-i18n="c3title">CFO<br>Dashboard</div>
+      <div class="card-desc" data-i18n="c3desc">Panel de control financiero ejecutivo estilo Power BI. KPIs, márgenes, flujo de caja y variaciones vs presupuesto.</div>
+      <div class="card-footer"><span class="card-url">/cfo-dashborad.html</span><span class="arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span></div>
+    </a>
+
+    <!-- 4. Gastos 2026 -->
+    <a class="card" href="https://lophersson.github.io/2026/gastos-2026.html" target="_blank" rel="noopener">
+      <span class="tag" data-i18n="c4tag">Control · Personal</span>
+      <div class="icon-wrap"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+      <div class="card-title" data-i18n="c4title">Gastos<br>Corrientes 2026</div>
+      <div class="card-desc" data-i18n="c4desc">Tracker de gastos personales multi-pestaña con totales reactivos. Categorías, proveedores, fechas y balance mensual acumulado.</div>
+      <div class="card-footer"><span class="card-url">/gastos-2026.html</span><span class="arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span></div>
+    </a>
+
+    <!-- 5. ETF Simulator -->
+    <a class="card" href="https://lophersson.github.io/2026/etf-simulator.html" target="_blank" rel="noopener">
+      <span class="tag" data-i18n="c5tag">Inversión · ETF</span>
+      <div class="icon-wrap"><svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+      <div class="card-title" data-i18n="c5title">ETF<br>Simulator</div>
+      <div class="card-desc" data-i18n="c5desc">Simulador de cartera de ETFs con fluctuación de precios en tiempo real. Rendimiento histórico, diversificación geográfica y proyección a largo plazo.</div>
+      <div class="card-footer"><span class="card-url">/etf-simulator.html</span><span class="arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span></div>
+    </a>
+
+    <!-- 6. Crypto Portfolio -->
+    <a class="card" href="https://lophersson.github.io/2026/crypto-tracker.html" target="_blank" rel="noopener">
+      <span class="tag" data-i18n="c6tag">Crypto · DeFi</span>
+      <div class="icon-wrap"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.5 9.5s.5-1.5 2.5-1.5 2.5 1.5 2.5 1.5-1 1.5-2.5 1.5S9.5 9.5 9.5 9.5z"/><path d="M9.5 14.5s.5 1.5 2.5 1.5 2.5-1.5 2.5-1.5-1-1.5-2.5-1.5-2.5 1.5-2.5 1.5z"/><line x1="12" y1="6" x2="12" y2="8"/><line x1="12" y1="16" x2="12" y2="18"/></svg></div>
+      <div class="card-title" data-i18n="c6title">Crypto<br>Portfolio</div>
+      <div class="card-desc" data-i18n="c6desc">Dashboard de seguimiento de criptoactivos. Precio en vivo vía API pública, P&L por posición, distribución de cartera y alertas de variación.</div>
+      <div class="card-footer"><span class="card-url">/crypto-tracker.html</span><span class="arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span></div>
+    </a>
+
+    <!-- 7. Open Banking -->
+    <a class="card" href="https://lophersson.github.io/2026/open-banking.html" target="_blank" rel="noopener">
+      <span class="tag" data-i18n="c7tag">Open Banking · PSD2</span>
+      <div class="icon-wrap"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg></div>
+      <div class="card-title" data-i18n="c7title">Open Banking<br>Analyzer</div>
+      <div class="card-desc" data-i18n="c7desc">Análisis de movimientos bancarios bajo marco PSD2. Categorización automática, patrones de gasto y scorecards financieros personales.</div>
+      <div class="card-footer"><span class="card-url">/open-banking.html</span><span class="arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span></div>
+    </a>
+
+    <!-- 8. Wealth Rankings -->
+    <a class="card" href="https://lophersson.github.io/2026/wealth-rank.html" target="_blank" rel="noopener">
+      <span class="tag" data-i18n="c8tag">Patrimonio · Rankings</span>
+      <div class="icon-wrap"><svg viewBox="0 0 24 24"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg></div>
+      <div class="card-title" data-i18n="c8title">Wealth<br>Rankings</div>
+      <div class="card-desc" data-i18n="c8desc">Tablas ordenables de los mayores patrimonios de España y Portugal. Top 100 Forbes ES y top 50 familias PT con filtros y comparativas sectoriales.</div>
+      <div class="card-footer"><span class="card-url">/wealth-rank.html</span><span class="arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span></div>
+    </a>
+
+  </div><!-- /grid -->
+
+  <footer>
+    <div class="footer-line"></div>
+    <span class="footer-text">Lophersson · lophersson.github.io/2026</span>
+    <div class="footer-line" style="background:linear-gradient(270deg,var(--footer-border),transparent);"></div>
+  </footer>
+
+</div><!-- /wrapper -->
+
+<script>
+/* ═══════════════════════════════════
+   i18n DICTIONARY
+═══════════════════════════════════ */
+const i18n = {
+  es: {
+    h1em:    'Lab',
+    subtitle:'Herramientas financieras construidas con HTML, CSS y JavaScript puro. Análisis, simulación y control patrimonial.',
+    c1tag:'Fiscalidad PT',        c1title:'IRS · Modelo 3<br>Simulador Fiscal PT',
+    c1desc:'Declaración de IRS portuguesa interactiva. Calcula retenciones, desgravaciones, mínimos por dependiente y cuota líquida en tiempo real para residentes y no residentes.',
+    c2tag:'Financiación',         c2title:'Fintonic<br>Calculadora',
+    c2desc:'Simulador de préstamos y financiación basado en parámetros reales de mercado. TAE, cuota mensual, amortización y coste total.',
+    c3tag:'Ejecutivo',            c3title:'CFO<br>Dashboard',
+    c3desc:'Panel de control financiero ejecutivo estilo Power BI. KPIs, márgenes, flujo de caja y variaciones vs presupuesto.',
+    c4tag:'Control · Personal',   c4title:'Gastos<br>Corrientes 2026',
+    c4desc:'Tracker de gastos personales multi-pestaña con totales reactivos. Categorías, proveedores, fechas y balance mensual acumulado.',
+    c5tag:'Inversión · ETF',      c5title:'ETF<br>Simulator',
+    c5desc:'Simulador de cartera de ETFs con fluctuación de precios en tiempo real. Rendimiento histórico, diversificación geográfica y proyección a largo plazo.',
+    c6tag:'Crypto · DeFi',        c6title:'Crypto<br>Portfolio',
+    c6desc:'Dashboard de seguimiento de criptoactivos. Precio en vivo vía API pública, P&L por posición, distribución de cartera y alertas de variación.',
+    c7tag:'Open Banking · PSD2',  c7title:'Open Banking<br>Analyzer',
+    c7desc:'Análisis de movimientos bancarios bajo marco PSD2. Categorización automática, patrones de gasto y scorecards financieros personales.',
+    c8tag:'Patrimonio · Rankings', c8title:'Wealth<br>Rankings',
+    c8desc:'Tablas ordenables de los mayores patrimonios de España y Portugal. Top 100 Forbes ES y top 50 familias PT con filtros y comparativas sectoriales.',
+  },
+  en: {
+    h1em:    'Lab',
+    subtitle:'Financial tools built with pure HTML, CSS and JavaScript. Analysis, simulation and wealth management.',
+    c1tag:'PT Taxation',          c1title:'IRS · Model 3<br>PT Tax Simulator',
+    c1desc:'Interactive Portuguese IRS tax return. Calculates withholdings, deductions, dependent minimums and net tax liability in real time for residents and non-residents.',
+    c2tag:'Financing',            c2title:'Fintonic<br>Calculator',
+    c2desc:'Loan and financing simulator based on real market parameters. APR, monthly payment, amortisation schedule and total cost.',
+    c3tag:'Executive',            c3title:'CFO<br>Dashboard',
+    c3desc:'Power BI-style executive financial control panel. KPIs, margins, cash flow and budget variance analysis.',
+    c4tag:'Personal · Tracking',  c4title:'Current<br>Expenses 2026',
+    c4desc:'Multi-tab personal expense tracker with reactive totals. Categories, vendors, dates and cumulative monthly balance.',
+    c5tag:'Investment · ETF',     c5title:'ETF<br>Simulator',
+    c5desc:'ETF portfolio simulator with real-time price fluctuation. Historical returns, geographic diversification and long-term projection.',
+    c6tag:'Crypto · DeFi',        c6title:'Crypto<br>Portfolio',
+    c6desc:'Crypto asset tracking dashboard. Live prices via public API, P&L per position, portfolio allocation and variance alerts.',
+    c7tag:'Open Banking · PSD2',  c7title:'Open Banking<br>Analyzer',
+    c7desc:'Banking transaction analysis under the PSD2 framework. Automatic categorisation, spending patterns and personal financial scorecards.',
+    c8tag:'Wealth · Rankings',    c8title:'Wealth<br>Rankings',
+    c8desc:'Sortable tables of the largest fortunes in Spain and Portugal. Forbes ES Top 100 and PT top 50 families with sector filters and comparisons.',
+  },
+  pt: {
+    h1em:    'Lab',
+    subtitle:'Ferramentas financeiras criadas com HTML, CSS e JavaScript puro. Análise, simulação e controlo patrimonial.',
+    c1tag:'Fiscalidade PT',       c1title:'IRS · Modelo 3<br>Simulador Fiscal PT',
+    c1desc:'Declaração de IRS portuguesa interativa. Calcula retenções, deduções, mínimos por dependente e coleta líquida em tempo real para residentes e não residentes.',
+    c2tag:'Financiamento',        c2title:'Fintonic<br>Calculadora',
+    c2desc:'Simulador de empréstimos e financiamento com parâmetros reais de mercado. TAEG, prestação mensal, amortização e custo total.',
+    c3tag:'Executivo',            c3title:'CFO<br>Dashboard',
+    c3desc:'Painel de controlo financeiro executivo estilo Power BI. KPIs, margens, fluxo de caixa e variações face ao orçamento.',
+    c4tag:'Controlo · Pessoal',   c4title:'Despesas<br>Correntes 2026',
+    c4desc:'Tracker de despesas pessoais multi-separador com totais reativos. Categorias, fornecedores, datas e saldo mensal acumulado.',
+    c5tag:'Investimento · ETF',   c5title:'ETF<br>Simulator',
+    c5desc:'Simulador de carteira de ETFs com flutuação de preços em tempo real. Rendimento histórico, diversificação geográfica e projeção a longo prazo.',
+    c6tag:'Crypto · DeFi',        c6title:'Crypto<br>Portfolio',
+    c6desc:'Dashboard de acompanhamento de criptoativos. Preço ao vivo via API pública, P&L por posição, distribuição de carteira e alertas de variação.',
+    c7tag:'Open Banking · PSD2',  c7title:'Open Banking<br>Analyzer',
+    c7desc:'Análise de movimentos bancários no âmbito do PSD2. Categorização automática, padrões de despesa e scorecards financeiros pessoais.',
+    c8tag:'Património · Rankings', c8title:'Wealth<br>Rankings',
+    c8desc:'Tabelas ordenáveis dos maiores patrimónios de Espanha e Portugal. Top 100 Forbes ES e top 50 famílias PT com filtros e comparativas sectoriais.',
+  }
+};
+
+/* ═══════════════════════════════════
+   LANG SWITCHER
+═══════════════════════════════════ */
+function applyLang(lang) {
+  const dict = i18n[lang];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.getAttribute('data-i18n');
+    if (dict[k] !== undefined) el.innerHTML = dict[k];
+  });
+  document.documentElement.lang = lang;
+  document.querySelectorAll('.lang-btn').forEach(btn =>
+    btn.classList.toggle('active', btn.dataset.lang === lang)
+  );
+}
+
+document.querySelectorAll('.lang-btn').forEach(btn =>
+  btn.addEventListener('click', () => applyLang(btn.dataset.lang))
+);
+
+/* ═══════════════════════════════════
+   THEME TOGGLE
+═══════════════════════════════════ */
+document.getElementById('themeToggle').addEventListener('click', () => {
+  const html = document.documentElement;
+  html.setAttribute('data-theme', html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+});
+</script>
+</body>
+</html>
