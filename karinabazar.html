@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="pt" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bazar Select</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0B0B0B;--bg2:#131313;--surface:#1B1B1B;--surface2:#232323;
+  --border:#2A2A2A;--gold:#C9A96E;--gold-l:#E2C48E;
+  --text:#EDE9E2;--text2:#9A9590;--text3:#646260;
+  --card-bg:#161616;--card-brd:#272727;--filter-bg:#0F0F0F;
+  --shadow:0 10px 40px rgba(0,0,0,.55);--r:14px;--r-s:8px;
+  --font-base:15px;--ease:0.22s ease;
+}
+[data-theme="light"]{
+  --bg:#F5F2EC;--bg2:#EDEAE3;--surface:#FFFFFF;--surface2:#F3F0E9;
+  --border:#DDD8CE;--gold:#8A6830;--gold-l:#B8913E;
+  --text:#1C1814;--text2:#5C5650;--text3:#8C8880;
+  --card-bg:#FFFFFF;--card-brd:#E3DED5;--filter-bg:#EEE9DF;
+  --shadow:0 10px 40px rgba(0,0,0,.1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;font-size:var(--font-base);background:var(--bg);color:var(--text);min-height:100vh;transition:background var(--ease),color var(--ease);line-height:1.5}
+::-webkit-scrollbar{width:5px;height:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+/* HEADER */
+.header{position:sticky;top:0;z-index:200;background:var(--bg);border-bottom:1px solid var(--border);backdrop-filter:blur(14px)}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;gap:8px;flex-wrap:wrap}
+.logo{font-family:'Playfair Display',serif;font-size:1.3em;color:var(--gold);font-weight:700;letter-spacing:.04em;white-space:nowrap;flex-shrink:0}
+.logo em{font-style:italic;font-weight:400}
+.controls{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.lang-group{display:flex;border:1px solid var(--border);border-radius:var(--r-s);overflow:hidden}
+.btn-lang{background:var(--surface);border:none;border-right:1px solid var(--border);color:var(--text2);padding:5px 10px;cursor:pointer;font-family:'DM Mono',monospace;font-size:.72em;font-weight:500;letter-spacing:.06em;transition:all var(--ease)}
+.btn-lang:last-child{border-right:none}
+.btn-lang:hover{background:var(--surface2);color:var(--text)}
+.btn-lang.active{background:var(--gold);color:#0B0B0B;font-weight:700}
+.btn-ctrl{background:var(--surface);border:1px solid var(--border);color:var(--text2);padding:5px 10px;border-radius:var(--r-s);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.78em;font-weight:500;transition:all var(--ease);white-space:nowrap}
+.btn-ctrl:hover{background:var(--surface2);color:var(--text);border-color:var(--gold)}
+.font-btns{display:flex;border:1px solid var(--border);border-radius:var(--r-s);overflow:hidden}
+.btn-font{background:var(--surface);border:none;border-right:1px solid var(--border);color:var(--text2);padding:5px 10px;cursor:pointer;font-family:'DM Mono',monospace;font-size:.75em;font-weight:500;transition:all var(--ease)}
+.btn-font:last-child{border-right:none}
+.btn-font:hover{background:var(--surface2);color:var(--text)}
+
+/* TABS */
+.tabs-nav{display:flex;overflow-x:auto;scrollbar-width:none;border-top:1px solid var(--border);background:var(--bg2)}
+.tabs-nav::-webkit-scrollbar{display:none}
+.tab-btn{background:none;border:none;border-bottom:2px solid transparent;color:var(--text3);padding:9px 14px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.76em;font-weight:500;white-space:nowrap;transition:all var(--ease);text-transform:uppercase;letter-spacing:.07em}
+.tab-btn:hover{color:var(--gold)}
+.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold);font-weight:600}
+
+/* FILTERS */
+.filter-bar{background:var(--filter-bg);border-bottom:1px solid var(--border);padding:10px 16px}
+.filter-toggle{display:inline-flex;align-items:center;gap:7px;cursor:pointer;color:var(--text2);font-size:.82em;font-weight:500;user-select:none;transition:color var(--ease)}
+.filter-toggle:hover{color:var(--gold)}
+.filter-arrow{display:flex;transition:transform var(--ease)}
+.filter-toggle.open .filter-arrow{transform:rotate(180deg)}
+.filter-grid{display:none;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:8px;margin-top:10px}
+.filter-grid.open{display:grid}
+.filter-select{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:7px 26px 7px 10px;border-radius:var(--r-s);font-family:'DM Sans',sans-serif;font-size:.8em;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;transition:border-color var(--ease)}
+.filter-select:hover,.filter-select:focus{border-color:var(--gold);outline:none}
+.filter-select option{background:var(--surface);color:var(--text)}
+.filter-reset{background:none;border:1px solid var(--border);color:var(--text3);padding:7px 12px;border-radius:var(--r-s);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.8em;transition:all var(--ease)}
+.filter-reset:hover{border-color:var(--gold);color:var(--gold)}
+
+/* MAIN */
+.main{padding:14px 16px 60px;max-width:960px;margin:0 auto}
+.results-info{font-family:'DM Mono',monospace;font-size:.72em;color:var(--text3);margin-bottom:12px;letter-spacing:.02em}
+.section-hdr{grid-column:1/-1;font-family:'Playfair Display',serif;font-size:1.05em;color:var(--gold);padding:18px 0 10px;border-bottom:1px solid var(--border);font-weight:600;letter-spacing:.03em}
+.section-hdr:first-child{padding-top:2px}
+
+/* GRID */
+.products-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(min-width:600px){.products-grid{gap:16px}}
+@media(min-width:900px){.products-grid{gap:20px}}
+
+/* CARD */
+.product-card{background:var(--card-bg);border:1px solid var(--card-brd);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;transition:transform var(--ease),box-shadow var(--ease),border-color var(--ease)}
+.product-card:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:var(--gold)}
+.card-img{position:relative;width:100%;padding-top:100%;overflow:hidden;background:var(--surface);flex-shrink:0}
+.card-img img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease}
+.product-card:hover .card-img img{transform:scale(1.05)}
+.card-badge{position:absolute;top:8px;left:8px;background:rgba(11,11,11,.78);color:var(--gold);font-family:'DM Mono',monospace;font-size:.58em;padding:2px 6px;border-radius:4px;letter-spacing:.07em;text-transform:uppercase;backdrop-filter:blur(4px);pointer-events:none}
+.card-body{padding:10px 10px 6px;flex:1;display:flex;flex-direction:column;gap:3px}
+.card-brand{font-family:'DM Mono',monospace;font-size:.62em;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;font-weight:500}
+.card-name{font-family:'Playfair Display',serif;font-size:.87em;font-weight:600;color:var(--text);line-height:1.25}
+.card-model{font-size:.7em;color:var(--text2);font-weight:300}
+.card-tags{display:flex;gap:4px;flex-wrap:wrap;margin:2px 0}
+.tag{display:inline-block;background:var(--surface);border:1px solid var(--border);color:var(--text3);font-family:'DM Mono',monospace;font-size:.58em;padding:1px 5px;border-radius:3px;white-space:nowrap}
+.card-desc{font-size:.7em;color:var(--text3);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;flex:1}
+.card-ref{font-family:'DM Mono',monospace;font-size:.6em;color:var(--text3);opacity:.6;margin-top:3px}
+.card-foot{display:flex;flex-direction:column;gap:7px;padding:8px 10px;border-top:1px solid var(--card-brd)}
+.card-price{font-family:'DM Mono',monospace;font-size:.93em;font-weight:500;color:var(--gold)}
+.card-btns{display:flex;gap:5px;width:100%;box-sizing:border-box}
+.btn-order{display:inline-flex;align-items:center;justify-content:center;gap:3px;flex:1;min-width:0;border:none;padding:6px 4px;border-radius:6px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.65em;font-weight:600;text-decoration:none;transition:all var(--ease);white-space:nowrap;letter-spacing:.01em;overflow:hidden}
+.btn-messenger{background:var(--gold);color:#0B0B0B}
+.btn-messenger:hover{background:var(--gold-l);transform:scale(1.03)}
+.btn-whatsapp{background:#1DB954;color:#fff}
+.btn-whatsapp:hover{background:#22d460;transform:scale(1.03)}
+.empty-state{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text3);font-family:'Playfair Display',serif;font-size:1em;font-style:italic}
+
+/* RESPONSIVE */
+@media(max-width:360px){.card-name{font-size:.8em}.card-body{padding:7px 7px 4px}.card-foot{padding:6px 7px}.btn-order{padding:5px 7px;font-size:.63em}.logo{font-size:1.1em}}
+@media(min-width:600px){.header-top{padding:12px 20px}.filter-bar{padding:12px 20px}.main{padding:16px 20px 60px}.card-name{font-size:.93em}.card-body{padding:12px 12px 8px}.card-foot{padding:10px 12px}}
+@media(min-width:900px){.header-top{padding:14px 24px}.filter-bar{padding:14px max(24px,calc((100% - 960px)/2 + 24px))}.main{padding:20px 24px 80px}}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-top">
+    <div class="logo">✦ Bazar <em>Select</em></div>
+    <div class="controls">
+      <div class="lang-group">
+        <button class="btn-lang active" onclick="setLang('pt')">PT</button>
+        <button class="btn-lang" onclick="setLang('es')">ES</button>
+        <button class="btn-lang" onclick="setLang('en')">EN</button>
+      </div>
+      <button class="btn-ctrl" id="theme-btn" onclick="toggleTheme()">☀ Claro</button>
+      <div class="font-btns">
+        <button class="btn-font" onclick="chgFont(-1)">A−</button>
+        <button class="btn-font" onclick="chgFont(1)">A+</button>
+      </div>
+    </div>
+  </div>
+  <nav class="tabs-nav" id="tabs-nav"></nav>
+</header>
+
+<div class="filter-bar">
+  <div class="filter-toggle" id="filter-toggle" onclick="toggleFilters()">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+    <span id="filter-label">Filtros</span>
+    <span class="filter-arrow"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></span>
+  </div>
+  <div class="filter-grid" id="filter-grid">
+    <select class="filter-select" id="f-brand"  onchange="renderProducts()"></select>
+    <select class="filter-select" id="f-color"  onchange="renderProducts()"></select>
+    <select class="filter-select" id="f-size"   onchange="renderProducts()"></select>
+    <select class="filter-select" id="f-tipo"   onchange="renderProducts()"></select>
+    <select class="filter-select" id="f-gender" onchange="renderProducts()"></select>
+    <select class="filter-select" id="f-sort"   onchange="renderProducts()"></select>
+    <button class="filter-reset" id="f-reset" onclick="resetFilters()">✕ Limpar filtros</button>
+  </div>
+</div>
+
+<main class="main">
+  <div class="results-info" id="results-info"></div>
+  <div class="products-grid" id="products-grid"></div>
+</main>
+
+<script>
+/* ══════════════════════════════════════════════════════════
+   CONFIG
+   ══════════════════════════════════════════════════════════ */
+const FACEBOOK_ID   = 'karina.francisco.3367';       // username ou ID da página Facebook
+const WHATSAPP_NUM  = '351967401340';          // número internacional SEM + nem espaços
+
+/* ══════════════════════════════════════════════════════════
+   TRANSLATIONS
+   ══════════════════════════════════════════════════════════ */
+const T = {
+  pt:{
+    tabs:{todo:'Tudo',ropa:'Roupa',calzado:'Calçado',alimentacion:'Alimentação',perfumeria:'Perfumaria',cosmetica:'Cosmética',belleza:'Beleza',hogar:'Lar'},
+    filt:{toggle:'Filtros',brand:'Marca',color:'Cor',size:'Tamanho',tipo:'Tipo',gender:'Género',sort:'Preço',all:'Todos',reset:'✕ Limpar filtros'},
+    sort:{def:'Preço: padrão',asc:'Menor → Maior',desc:'Maior → Menor'},
+    gen:{mujer:'Mulher',hombre:'Homem','teen-mujer':'Teen Rapariga','teen-hombre':'Teen Rapaz',nina:'Rapariga',nino:'Rapaz','bebe-nina':'Bebé Menina','bebe-nino':'Bebé Menino'},
+    card:{ref:'Ref',size:'Tam',order:'Messenger',orderWa:'WhatsApp',none:'Nenhum produto encontrado com estes filtros.'},
+    results:n=>`${n} produto${n!==1?'s':''}`,
+    dark:'🌙 Escuro',light:'☀ Claro',
+    msg:(p)=>`Olá, quero este produto:\n\n📦 ${p.name.pt}\n🏷️ Marca: ${p.brand}\n🔖 Modelo: ${p.model}`+(p.size?`\n📐 Tamanho: ${p.size}`:'')+( p.color?`\n🎨 Cor: ${p.color}`:'')+`\n🔢 Ref: ${p.ref}\n💶 Preço: ${fmtPrice(p.price,'pt')}\n\nSou: [escreva o seu nome] e o meu endereço é: [escreva a sua morada]`
+  },
+  es:{
+    tabs:{todo:'Todo',ropa:'Ropa',calzado:'Calzado',alimentacion:'Alimentación',perfumeria:'Perfumería',cosmetica:'Cosmética',belleza:'Belleza',hogar:'Hogar'},
+    filt:{toggle:'Filtros',brand:'Marca',color:'Color',size:'Talla',tipo:'Tipo',gender:'Género',sort:'Precio',all:'Todos',reset:'✕ Limpiar filtros'},
+    sort:{def:'Precio: predeterminado',asc:'Menor → Mayor',desc:'Mayor → Menor'},
+    gen:{mujer:'Mujer',hombre:'Hombre','teen-mujer':'Teen Mujer','teen-hombre':'Teen Hombre',nina:'Niña',nino:'Niño','bebe-nina':'Bebé Niña','bebe-nino':'Bebé Niño'},
+    card:{ref:'Ref',size:'Talla',order:'Messenger',orderWa:'WhatsApp',none:'No se encontraron productos con estos filtros.'},
+    results:n=>`${n} producto${n!==1?'s':''}`,
+    dark:'🌙 Oscuro',light:'☀ Claro',
+    msg:(p)=>`Hola, quiero este producto:\n\n📦 ${p.name.es}\n🏷️ Marca: ${p.brand}\n🔖 Modelo: ${p.model}`+(p.size?`\n📐 Talla: ${p.size}`:'')+( p.color?`\n🎨 Color: ${p.color}`:'')+`\n🔢 Ref: ${p.ref}\n💶 Precio: ${fmtPrice(p.price,'es')}\n\nSoy: [escribe tu nombre] y mi dirección es: [escribe tu dirección]`
+  },
+  en:{
+    tabs:{todo:'All',ropa:'Clothing',calzado:'Footwear',alimentacion:'Food & Drink',perfumeria:'Perfumery',cosmetica:'Skincare',belleza:'Beauty',hogar:'Home'},
+    filt:{toggle:'Filters',brand:'Brand',color:'Colour',size:'Size',tipo:'Type',gender:'Gender',sort:'Price',all:'All',reset:'✕ Clear filters'},
+    sort:{def:'Price: default',asc:'Low → High',desc:'High → Low'},
+    gen:{mujer:'Woman',hombre:'Man','teen-mujer':'Teen Girl','teen-hombre':'Teen Boy',nina:'Girl',nino:'Boy','bebe-nina':'Baby Girl','bebe-nino':'Baby Boy'},
+    card:{ref:'Ref',size:'Size',order:'Messenger',orderWa:'WhatsApp',none:'No products found with these filters.'},
+    results:n=>`${n} product${n!==1?'s':''}`,
+    dark:'🌙 Dark',light:'☀ Light',
+    msg:(p)=>`Hello, I want this product:\n\n📦 ${p.name.en}\n🏷️ Brand: ${p.brand}\n🔖 Model: ${p.model}`+(p.size?`\n📐 Size: ${p.size}`:'')+( p.color?`\n🎨 Colour: ${p.color}`:'')+`\n🔢 Ref: ${p.ref}\n💷 Price: ${fmtPrice(p.price,'en')}\n\nI am: [write your name] and my address is: [write your address]`
+  }
+};
+
+function fmtPrice(p,l){const lc={pt:'pt-PT',es:'es-ES',en:'en-GB'};return p.toLocaleString(lc[l],{style:'currency',currency:'EUR'});}
+
+/* ══════════════════════════════════════════════════════════
+   PRODUCTS
+   ══════════════════════════════════════════════════════════ */
+const PRODUCTS = [
+  /* ROUPA */
+  {id:'R001',section:'ropa',name:{pt:'T-Shirt Básica Branca',es:'Camiseta Básica Blanca',en:'Basic White T-Shirt'},brand:'Zara',model:'Essential',size:'M',color:'Branco',gender:'mujer',tipo:{pt:'T-Shirt',es:'Camiseta',en:'T-Shirt'},desc:{pt:'Algodão 100% orgânico, corte regular, respirável e suave ao toque, ideal para o dia a dia.',es:'Algodón 100% orgánico, corte regular, transpirable y suave, ideal para el día a día.',en:'100% organic cotton, regular fit, breathable and soft, ideal for everyday wear.'},ref:'ZAR-R001-M',price:19.99,image:'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&q=80'},
+  {id:'R002',section:'ropa',name:{pt:'Calças Slim Fit Denim',es:'Vaqueros Slim Fit',en:'Slim Fit Jeans'},brand:"Levi's",model:'511 Slim',size:'32',color:'Azul',gender:'hombre',tipo:{pt:'Calças',es:'Pantalón',en:'Trousers'},desc:{pt:'Jeans slim fit 99% algodão, corte moderno e durável que se adapta perfeitamente à silhueta.',es:'Vaqueros slim fit 99% algodón, corte moderno y duradero que se adapta a la silueta.',en:'99% cotton slim fit jeans, modern and durable cut that adapts perfectly to your silhouette.'},ref:'LEV-R002-32',price:89.99,image:'https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&q=80'},
+  {id:'R003',section:'ropa',name:{pt:'Vestido Floral Midi',es:'Vestido Floral Midi',en:'Midi Floral Dress'},brand:'Mango',model:'Bloom',size:'S',color:'Rosa',gender:'mujer',tipo:{pt:'Vestido',es:'Vestido',en:'Dress'},desc:{pt:'Vestido midi estampado floral, viscose leve, ideal para estação quente e passeios ao ar livre.',es:'Vestido midi estampado floral, viscosa ligera, ideal para la temporada cálida y paseos.',en:'Floral print midi dress, lightweight viscose, ideal for warm weather and outdoor outings.'},ref:'MNG-R003-S',price:49.99,image:'https://images.unsplash.com/photo-1495385794356-15371f348c31?w=600&q=80'},
+  {id:'R004',section:'ropa',name:{pt:'Sweatshirt com Capuz Fleece',es:'Sudadera con Capucha Fleece',en:'Fleece Hoodie'},brand:'Nike',model:'NSW Club Fleece',size:'L',color:'Cinzento',gender:'teen-hombre',tipo:{pt:'Sweatshirt',es:'Sudadera',en:'Sweatshirt'},desc:{pt:'Fleece premium com bolso canguru duplo e costuras reforçadas, conforto máximo para o dia a dia.',es:'Forro polar premium con bolsillo canguro doble y costuras reforzadas, comodidad total.',en:'Premium fleece with double kangaroo pocket and reinforced seams, maximum everyday comfort.'},ref:'NIK-R004-L',price:59.99,image:'https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=80'},
+  {id:'R005',section:'ropa',name:{pt:'Camisa de Linho Puro',es:'Camisa de Lino Puro',en:'Pure Linen Shirt'},brand:'Massimo Dutti',model:'Riviera',size:'M',color:'Bege',gender:'hombre',tipo:{pt:'Camisa',es:'Camisa',en:'Shirt'},desc:{pt:'Linho puro, botões de madrepérola, corte regular. Fresca e elegante para qualquer ocasião.',es:'Lino puro, botones de nácar, corte regular. Fresca y elegante para cualquier ocasión.',en:'Pure linen, mother-of-pearl buttons, regular fit. Cool and elegant for any occasion.'},ref:'MD-R005-M',price:79.99,image:'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=600&q=80'},
+  {id:'R006',section:'ropa',name:{pt:'Pijama Infantil Dinossauros',es:'Pijama Infantil Dinosaurios',en:'Kids Dinosaur Pyjamas'},brand:'H&M',model:'Dreamland',size:'4-5A',color:'Azul',gender:'nino',tipo:{pt:'Pijama',es:'Pijama',en:'Pyjamas'},desc:{pt:'Algodão super macio com estampado de dinossauros, elástico confortável, lavável a 40°C.',es:'Algodón super suave con estampado de dinosaurios, elástico cómodo, lavable a 40°C.',en:'Super soft cotton with dinosaur print, comfortable elastic, machine washable at 40°C.'},ref:'HM-R006-4A',price:24.99,image:'https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?w=600&q=80'},
+  {id:'R007',section:'ropa',name:{pt:'Blazer Estruturado Preto',es:'Blazer Estructurado Negro',en:'Structured Black Blazer'},brand:'Zara',model:'Power Suit',size:'38',color:'Preto',gender:'mujer',tipo:{pt:'Blazer',es:'Blazer',en:'Blazer'},desc:{pt:'Blazer com ombros estruturados, forro interior, botão único, perfeito para look profissional ou casual chic.',es:'Blazer con hombros estructurados, forro interior, botón único, perfecto para look profesional o casual chic.',en:'Structured shoulder blazer, inner lining, single button, perfect for professional or casual chic look.'},ref:'ZAR-R007-38',price:69.99,image:'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=80'},
+  {id:'R008',section:'ropa',name:{pt:'Leggings Desportivos',es:'Leggings Deportivos',en:'Sports Leggings'},brand:'Adidas',model:'Techfit',size:'S',color:'Preto',gender:'teen-mujer',tipo:{pt:'Leggings',es:'Leggings',en:'Leggings'},desc:{pt:'Tecido compressivo de alta performance, cintura alta com bolso lateral, secagem rápida e respirável.',es:'Tejido compresivo de alto rendimiento, cintura alta con bolsillo lateral, secado rápido y transpirable.',en:'High-performance compression fabric, high waist with side pocket, quick-dry and breathable.'},ref:'ADI-R008-S',price:39.99,image:'https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=600&q=80'},
+
+  /* CALÇADO */
+  {id:'C001',section:'calzado',name:{pt:'Ténis Air Max 90',es:'Zapatillas Air Max 90',en:'Air Max 90 Trainers'},brand:'Nike',model:'Air Max 90',size:'42',color:'Branco',gender:'hombre',tipo:{pt:'Ténis',es:'Zapatillas',en:'Trainers'},desc:{pt:'Amortecimento Air Max icónico, cabedal em malha respirável e couro, sola de borracha durável.',es:'Amortiguación Air Max icónica, parte superior en malla transpirable y cuero, suela de goma duradera.',en:'Iconic Air Max cushioning, breathable mesh and leather upper, durable rubber sole.'},ref:'NIK-C001-42',price:129.99,image:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80'},
+  {id:'C002',section:'calzado',name:{pt:'Botas de Couro Heritage',es:'Botas de Cuero Heritage',en:'Heritage Leather Boots'},brand:'Zara',model:'Heritage',size:'38',color:'Castanho',gender:'mujer',tipo:{pt:'Botas',es:'Botas',en:'Boots'},desc:{pt:'Couro genuíno, salto bloco 5 cm, cano médio com fecho zipper metálico lateral.',es:'Cuero genuino, tacón bloque 5 cm, caña media con cierre zipper metálico lateral.',en:'Genuine leather, 5 cm block heel, mid-calf with metal side zip closure.'},ref:'ZAR-C002-38',price:99.99,image:'https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=600&q=80'},
+  {id:'C003',section:'calzado',name:{pt:'Sandálias Havaianas Brasil',es:'Sandalias Havaianas Brasil',en:'Havaianas Brasil Sandals'},brand:'Havaianas',model:'Brasil',size:'37',color:'Azul',gender:'mujer',tipo:{pt:'Sandálias',es:'Sandalias',en:'Sandals'},desc:{pt:'Borracha natural brasileira, palmilha anatómica texturada, leves e duráveis para praia e piscina.',es:'Goma natural brasileña, plantilla anatómica texturizada, ligeras y duraderas para playa y piscina.',en:'Brazilian natural rubber, textured anatomical footbed, light and durable for beach and pool.'},ref:'HAV-C003-37',price:24.99,image:'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&q=80'},
+  {id:'C004',section:'calzado',name:{pt:'Sapatos Oxford Clássicos',es:'Zapatos Oxford Clásicos',en:'Classic Oxford Shoes'},brand:'Camper',model:'Brutus',size:'43',color:'Preto',gender:'hombre',tipo:{pt:'Sapatos',es:'Zapatos',en:'Shoes'},desc:{pt:'Couro liso premium, sola de borracha grossa, elegância atemporal para ocasiões formais ou casuais.',es:'Cuero liso premium, suela de goma gruesa, elegancia atemporal para ocasiones formales o casuales.',en:'Premium smooth leather, thick rubber sole, timeless elegance for formal or casual occasions.'},ref:'CAM-C004-43',price:149.99,image:'https://images.unsplash.com/photo-1614252369475-531eba835eb1?w=600&q=80'},
+  {id:'C005',section:'calzado',name:{pt:'Sapatilhas Stan Smith',es:'Deportivas Stan Smith',en:'Stan Smith Sneakers'},brand:'Adidas',model:'Stan Smith',size:'36',color:'Branco',gender:'teen-mujer',tipo:{pt:'Sapatilhas',es:'Deportivas',en:'Sneakers'},desc:{pt:'Couro vegano, sola canelada, design minimalista e versátil que nunca sai de moda.',es:'Cuero vegano, suela estriada, diseño minimalista y versátil que nunca pasa de moda.',en:'Vegan leather, ribbed sole, minimalist and versatile design that never goes out of style.'},ref:'ADI-C005-36',price:89.99,image:'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=600&q=80'},
+  {id:'C006',section:'calzado',name:{pt:'Sapatinhos Bebé Primeiros Passos',es:'Zapatitos Bebé Primeros Pasos',en:'Baby First Steps Shoes'},brand:'Chicco',model:'First Steps',size:'17',color:'Rosa',gender:'bebe-nina',tipo:{pt:'Sapatinhos',es:'Zapatitos',en:'Baby Shoes'},desc:{pt:'Algodão orgânico e couro natural, sola antiderrapante, fecho velcro ajustável para primeiros passos.',es:'Algodón orgánico y cuero natural, suela antideslizante, cierre velcro ajustable para primeros pasos.',en:'Organic cotton and natural leather, non-slip sole, adjustable velcro closure for first steps.'},ref:'CHI-C006-17',price:19.99,image:'https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=600&q=80'},
+
+  /* ALIMENTAÇÃO */
+  {id:'A001',section:'alimentacion',name:{pt:'Azeite Virgem Extra',es:'Aceite de Oliva Virgen Extra',en:'Extra Virgin Olive Oil'},brand:'Carbonell',model:'Clásico',size:'1 L',color:null,gender:null,tipo:{pt:'Azeite',es:'Aceite',en:'Oil'},desc:{pt:'Primeira prensagem a frio, acidez máx. 0,3%, notas frutadas intensas da região andaluza.',es:'Primera prensada en frío, acidez máx. 0,3%, notas afrutadas intensas de la región andaluza.',en:'First cold press, max 0.3% acidity, intense fruity notes from the Andalusian region.'},ref:'CAR-A001-1L',price:8.99,image:'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=600&q=80'},
+  {id:'A002',section:'alimentacion',name:{pt:'Vinho Tinto Rioja Reserva',es:'Vino Tinto Rioja Reserva',en:'Rioja Reserva Red Wine'},brand:'Marqués de Riscal',model:'Reserva 2019',size:'75 cl',color:null,gender:null,tipo:{pt:'Vinho',es:'Vino',en:'Wine'},desc:{pt:'Tempranillo 90%, crianza 24 meses em barricas de carvalho francês, notas de frutas vermelhas e especiarias.',es:'Tempranillo 90%, crianza 24 meses en barricas de roble francés, notas de frutas rojas y especias.',en:'90% Tempranillo, 24 months in French oak barrels, red fruit and spice notes.'},ref:'MR-A002-75',price:18.99,image:'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=600&q=80'},
+  {id:'A003',section:'alimentacion',name:{pt:'Chocolate Negro 85%',es:'Chocolate Negro 85%',en:'85% Dark Chocolate'},brand:'Lindt',model:'Excellence 85%',size:'100 g',color:null,gender:null,tipo:{pt:'Chocolate',es:'Chocolate',en:'Chocolate'},desc:{pt:'Cacau 85% origem, sem lactose, intenso e complexo com notas terrosas e frutadas.',es:'Cacao 85% origen, sin lactosa, intenso y complejo con notas terrosas y afrutadas.',en:'85% origin cocoa, lactose-free, intense and complex with earthy and fruity notes.'},ref:'LIN-A003-100',price:3.49,image:'https://images.unsplash.com/photo-1606312619070-d48b4c652a52?w=600&q=80'},
+  {id:'A004',section:'alimentacion',name:{pt:'Mel Puro de Lavanda',es:'Miel Pura de Lavanda',en:'Pure Lavender Honey'},brand:'Mielizia',model:'Lavanda Bio',size:'250 g',color:null,gender:null,tipo:{pt:'Mel',es:'Miel',en:'Honey'},desc:{pt:'Mel monofloral de lavanda ecológico, textura cremosa, sabor suave e aromático, certificado Bio.',es:'Miel monofloral de lavanda ecológica, textura cremosa, sabor suave y aromático, certificado Bio.',en:'Organic monofloral lavender honey, creamy texture, mild and aromatic flavour, Bio certified.'},ref:'MIE-A004-250',price:7.99,image:'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=600&q=80'},
+  {id:'A005',section:'alimentacion',name:{pt:'Quinoa Branca Premium',es:'Quinoa Blanca Premium',en:'Premium White Quinoa'},brand:'Quinua Real',model:'Premium Bio',size:'500 g',color:null,gender:null,tipo:{pt:'Cereal',es:'Cereal',en:'Cereal'},desc:{pt:'Quinoa real boliviana, origem ecológica certificada, rica em proteínas e aminoácidos essenciais.',es:'Quinoa real boliviana, origen ecológico certificado, rica en proteínas y aminoácidos esenciales.',en:'Bolivian royal quinoa, certified organic origin, rich in protein and essential amino acids.'},ref:'QR-A005-500',price:5.49,image:'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&q=80'},
+  {id:'A006',section:'alimentacion',name:{pt:'Café Especialidade Etiópia',es:'Café de Especialidad Etiopía',en:'Ethiopia Specialty Coffee'},brand:'Nespresso',model:'Ethiopia Origin',size:'10 cápsulas',color:null,gender:null,tipo:{pt:'Café',es:'Café',en:'Coffee'},desc:{pt:'Cápsulas Nespresso compatíveis, origem Etiópia, notas florais de jasmim e cítricos, torra média.',es:'Cápsulas Nespresso compatibles, origen Etiopía, notas florales de jazmín y cítricos, tueste medio.',en:'Compatible Nespresso capsules, Ethiopian origin, floral jasmine and citrus notes, medium roast.'},ref:'NES-A006-10',price:5.99,image:'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=600&q=80'},
+
+  /* PERFUMARIA */
+  {id:'P001',section:'perfumeria',name:{pt:'Eau de Parfum Floral',es:'Eau de Parfum Floral',en:'Floral Eau de Parfum'},brand:'Lancôme',model:'La Vie Est Belle',size:'50 ml',color:null,gender:'mujer',tipo:{pt:'Perfume',es:'Perfume',en:'Perfume'},desc:{pt:'Fragrância gourmand floral com notas de íris, pralinê e baunilha. Símbolo de felicidade e elegância.',es:'Fragancia gourmand floral con notas de iris, praliné y vainilla. Símbolo de felicidad y elegancia.',en:'Floral gourmand fragrance with iris, praline and vanilla notes. Symbol of happiness and elegance.'},ref:'LAN-P001-50',price:79.99,image:'https://images.unsplash.com/photo-1541643600914-78b084683702?w=600&q=80'},
+  {id:'P002',section:'perfumeria',name:{pt:'Eau de Toilette Aquática',es:'Eau de Toilette Acuática',en:'Aquatic Eau de Toilette'},brand:'Hugo Boss',model:'Bottled Tonic',size:'100 ml',color:null,gender:'hombre',tipo:{pt:'Perfume',es:'Perfume',en:'Perfume'},desc:{pt:'Frescura aquática e cítrica com notas de lima, menta e cedro. Ideal para homens activos e modernos.',es:'Frescura acuática y cítrica con notas de lima, menta y cedro. Ideal para hombres activos y modernos.',en:'Fresh aquatic and citrus notes of lime, mint and cedar. Ideal for active and modern men.'},ref:'HB-P002-100',price:59.99,image:'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=600&q=80'},
+  {id:'P003',section:'perfumeria',name:{pt:'Perfume Oud Oriental',es:'Perfume Oud Oriental',en:'Oriental Oud Perfume'},brand:'Zara',model:'Oud Collection',size:'80 ml',color:null,gender:'hombre',tipo:{pt:'Perfume',es:'Perfume',en:'Perfume'},desc:{pt:'Intensidade oriental com notas de oud, âmbar e sândaloo. Longa duração, ideal para a noite.',es:'Intensidad oriental con notas de oud, ámbar y sándalo. Larga duración, ideal para la noche.',en:'Oriental intensity with oud, amber and sandalwood notes. Long-lasting, ideal for evenings.'},ref:'ZAR-P003-80',price:29.99,image:'https://images.unsplash.com/photo-1616171033888-b9bd7b91b850?w=600&q=80'},
+  {id:'P004',section:'perfumeria',name:{pt:'Colónia Fresh Unisex',es:'Colonia Fresh Unisex',en:'Fresh Unisex Cologne'},brand:'Acqua di Parma',model:'Colonia',size:'50 ml',color:null,gender:'mujer',tipo:{pt:'Colónia',es:'Colonia',en:'Cologne'},desc:{pt:'Clássica colónia italiana com bergamota, lavanda e cedro. Refrescante, elegante e intemporal.',es:'Clásica colonia italiana con bergamota, lavanda y cedro. Refrescante, elegante e intemporal.',en:'Classic Italian cologne with bergamot, lavender and cedar. Refreshing, elegant and timeless.'},ref:'ADP-P004-50',price:99.99,image:'https://images.unsplash.com/photo-1563170351-be82bc888aa4?w=600&q=80'},
+
+  /* COSMÉTICA */
+  {id:'CO001',section:'cosmetica',name:{pt:'Sérum Vitamina C 20%',es:'Sérum Vitamina C 20%',en:'Vitamin C 20% Serum'},brand:'The Ordinary',model:'Ascorbic Acid 20%',size:'30 ml',color:null,gender:'mujer',tipo:{pt:'Sérum',es:'Sérum',en:'Serum'},desc:{pt:'Sérum de alta concentração para luminosidade, uniformização do tom e redução de manchas. pH 3.5.',es:'Sérum de alta concentración para luminosidad, unificación del tono y reducción de manchas. pH 3.5.',en:'High-concentration serum for radiance, tone evening and dark spot reduction. pH 3.5.'},ref:'TO-CO001-30',price:19.99,image:'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=600&q=80'},
+  {id:'CO002',section:'cosmetica',name:{pt:'Creme Hidratante SPF50',es:'Crema Hidratante SPF50',en:'Moisturiser SPF50'},brand:'La Roche-Posay',model:'Anthelios UV Mune',size:'50 ml',color:null,gender:'mujer',tipo:{pt:'Creme',es:'Crema',en:'Cream'},desc:{pt:'Proteção solar muito alta com filtro Mexoryl 400, textura fluida não oleosa, adequada para pele sensível.',es:'Protección solar muy alta con filtro Mexoryl 400, textura fluida no oleosa, adecuada para piel sensible.',en:'Very high sun protection with Mexoryl 400 filter, non-oily fluid texture, suitable for sensitive skin.'},ref:'LRP-CO002-50',price:24.99,image:'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=600&q=80'},
+  {id:'CO003',section:'cosmetica',name:{pt:'Máscara Hidratante Noturna',es:'Mascarilla Hidratante Nocturna',en:'Overnight Hydrating Mask'},brand:'Laneige',model:'Water Sleeping Mask',size:'70 ml',color:null,gender:'mujer',tipo:{pt:'Máscara',es:'Mascarilla',en:'Mask'},desc:{pt:'Máscara-gel noturna de sono, tecnologia Sleep-tox, hidratação intensa enquanto dorme. Textura gel-creme.',es:'Mascarilla-gel nocturna de sueño, tecnología Sleep-tox, hidratación intensa mientras duerme. Textura gel-crema.',en:'Overnight sleep gel mask, Sleep-tox technology, intense hydration while you sleep. Gel-cream texture.'},ref:'LAN-CO003-70',price:29.99,image:'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=600&q=80'},
+  {id:'CO004',section:'cosmetica',name:{pt:'Gel de Limpeza Facial',es:'Gel de Limpieza Facial',en:'Facial Cleansing Gel'},brand:'CeraVe',model:'Hydrating Cleanser',size:'236 ml',color:null,gender:'hombre',tipo:{pt:'Limpeza',es:'Limpieza',en:'Cleanser'},desc:{pt:'Limpeza suave sem sulfatos, com ceramidas e ácido hialurónico, não desequilibra a barreira cutânea.',es:'Limpieza suave sin sulfatos, con ceramidas y ácido hialurónico, no desequilibra la barrera cutánea.',en:'Gentle sulfate-free cleansing with ceramides and hyaluronic acid, does not disrupt the skin barrier.'},ref:'CVE-CO004-236',price:13.99,image:'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=600&q=80'},
+  {id:'CO005',section:'cosmetica',name:{pt:'Contorno dos Olhos Retinol',es:'Contorno de Ojos Retinol',en:'Retinol Eye Contour'},brand:'RoC',model:'Retinol Correxion',size:'15 ml',color:null,gender:'mujer',tipo:{pt:'Contorno Olhos',es:'Contorno Ojos',en:'Eye Cream'},desc:{pt:'Fórmula com retinol puro e minerais essenciais, reduz rugas e olheiras visíveis em 4 semanas.',es:'Fórmula con retinol puro y minerales esenciales, reduce arrugas y ojeras visibles en 4 semanas.',en:'Formula with pure retinol and essential minerals, visibly reduces wrinkles and dark circles in 4 weeks.'},ref:'ROC-CO005-15',price:22.99,image:'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=600&q=80'},
+
+  /* BELEZA */
+  {id:'B001',section:'belleza',name:{pt:'Máscara de Pestanas Volume',es:'Rímel de Volumen',en:'Volume Mascara'},brand:'Maybelline',model:'Lash Sensational',size:'9.5 ml',color:'Preto',gender:'mujer',tipo:{pt:'Maquilhagem',es:'Maquillaje',en:'Makeup'},desc:{pt:'Fórmula de volume extreme com fibras, escova em leque de 10 camadas, cílios visivelmente mais compridos.',es:'Fórmula de volumen extreme con fibras, cepillo en abanico de 10 capas, pestañas visiblemente más largas.',en:'Extreme volume formula with fibres, 10-layer fan brush, visibly longer and fuller lashes.'},ref:'MAY-B001-95',price:11.99,image:'https://images.unsplash.com/photo-1631214524020-3c69b8e7a5a0?w=600&q=80'},
+  {id:'B002',section:'belleza',name:{pt:'Batom Matte Líquido',es:'Labial Matte Líquido',en:'Liquid Matte Lipstick'},brand:'Charlotte Tilbury',model:'Matte Revolution',size:'3.5 g',color:'Vermelho',gender:'mujer',tipo:{pt:'Maquilhagem',es:'Maquillaje',en:'Makeup'},desc:{pt:'Textura cremosa de acabamento matte, pigmentação intensa duradoura, conforto durante 10 horas.',es:'Textura cremosa de acabado matte, pigmentación intensa duradera, comodidad durante 10 horas.',en:'Creamy matte finish texture, intense long-lasting pigmentation, comfort for 10 hours.'},ref:'CT-B002-35',price:34.99,image:'https://images.unsplash.com/photo-1586495777744-4e6232bf2f44?w=600&q=80'},
+  {id:'B003',section:'belleza',name:{pt:'Paleta de Sombras Nude',es:'Paleta de Sombras Nude',en:'Nude Eyeshadow Palette'},brand:'Urban Decay',model:'Naked Original',size:'12 sombras',color:null,gender:'mujer',tipo:{pt:'Maquilhagem',es:'Maquillaje',en:'Makeup'},desc:{pt:'12 sombras nude com acabamentos mate e shimmer, pigmentação premium, muito versátil para olho smokado.',es:'12 sombras nude con acabados mate y shimmer, pigmentación premium, muy versátil para ojo ahumado.',en:'12 nude shades with matte and shimmer finishes, premium pigmentation, very versatile for smoky eye.'},ref:'UD-B003-12',price:49.99,image:'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=600&q=80'},
+  {id:'B004',section:'belleza',name:{pt:'Base Fluida Alta Cobertura',es:'Base Fluida Alta Cobertura',en:'High Coverage Fluid Foundation'},brand:'MAC',model:'Studio Fix Fluid',size:'30 ml',color:'N4',gender:'mujer',tipo:{pt:'Maquilhagem',es:'Maquillaje',en:'Makeup'},desc:{pt:'Cobertura total buildable, SPF15 incorporado, acabamento mate, 24h de duração e longa resistência.',es:'Cobertura total buildable, SPF15 incorporado, acabado mate, 24h de duración y larga resistencia.',en:'Full buildable coverage, built-in SPF15, matte finish, 24h wear and long-lasting resistance.'},ref:'MAC-B004-30',price:39.99,image:'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=600&q=80'},
+  {id:'B005',section:'belleza',name:{pt:'Verniz de Unhas Gel',es:'Esmalte de Uñas Gel',en:'Gel Nail Polish'},brand:'OPI',model:'GelColor',size:'15 ml',color:'Rosa',gender:'mujer',tipo:{pt:'Verniz',es:'Esmalte',en:'Nail Polish'},desc:{pt:'Gel de unhas com acabamento brilhante e duração de 3 semanas. Cor: Bubble Bath. Sem lâmpada UV.',es:'Gel de uñas con acabado brillante y duración de 3 semanas. Color: Bubble Bath. Sin lámpara UV.',en:'Nail gel with glossy finish and 3-week wear. Colour: Bubble Bath. No UV lamp needed.'},ref:'OPI-B005-15',price:16.99,image:'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600&q=80'},
+
+  /* LAR */
+  {id:'H001',section:'hogar',name:{pt:'Vela Aromática de Cera de Soja',es:'Vela Aromática de Cera de Soja',en:'Soy Wax Aromatherapy Candle'},brand:'Diptyque',model:'Baies',size:'190 g',color:null,gender:null,tipo:{pt:'Vela',es:'Vela',en:'Candle'},desc:{pt:'Cera de soja ecológica, fragrância de baga negra e rosas, 50h de combustão, copo de vidro reutilizável.',es:'Cera de soja ecológica, fragancia de baya negra y rosas, 50h de combustión, vaso de vidrio reutilizable.',en:'Eco soy wax, blackcurrant and rose fragrance, 50h burn time, reusable glass jar.'},ref:'DPT-H001-190',price:74.99,image:'https://images.unsplash.com/photo-1603006905003-be475563bc59?w=600&q=80'},
+  {id:'H002',section:'hogar',name:{pt:'Jogo de Lençóis Percal 200 fios',es:'Juego de Sábanas Percal 200 hilos',en:'200 Thread Count Percale Sheet Set'},brand:'Zara Home',model:'Classic Percale',size:'150x200',color:'Branco',gender:null,tipo:{pt:'Roupa de Cama',es:'Ropa de Cama',en:'Bedding'},desc:{pt:'100% algodão percal 200 fios, toque fresco e suave, lavável a 60°C. Inclui fronha e lençol de baixo.',es:'100% algodón percal 200 hilos, tacto fresco y suave, lavable a 60°C. Incluye funda y sábana bajera.',en:'100% 200-thread percale cotton, cool and soft touch, washable at 60°C. Includes pillowcase and fitted sheet.'},ref:'ZH-H002-150',price:59.99,image:'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80'},
+  {id:'H003',section:'hogar',name:{pt:'Caneca de Cerâmica Artesanal',es:'Taza de Cerámica Artesanal',en:'Artisan Ceramic Mug'},brand:'Portugal Exclusivo',model:'Handmade Alentejo',size:'350 ml',color:'Azul',gender:null,tipo:{pt:'Loiça',es:'Vajilla',en:'Tableware'},desc:{pt:'Cerâmica artesanal do Alentejo, vidragem à mão, peça única com tonalidades de azul e ocre.',es:'Cerámica artesanal del Alentejo, vidriado a mano, pieza única con tonalidades de azul y ocre.',en:'Handmade Alentejo ceramics, hand-glazed, unique piece with blue and ochre tones.'},ref:'PE-H003-350',price:18.99,image:'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=600&q=80'},
+  {id:'H004',section:'hogar',name:{pt:'Difusor de Aroma Ultrassónico',es:'Difusor de Aroma Ultrasónico',en:'Ultrasonic Aroma Diffuser'},brand:'InnoGear',model:'Essential Oil Diffuser',size:'500 ml',color:'Branco',gender:null,tipo:{pt:'Aromaterapia',es:'Aromaterapia',en:'Aromatherapy'},desc:{pt:'Difusor ultrassónico 500 ml, 7 luzes LED coloridas, modo intermitente e contínuo, silencioso.',es:'Difusor ultrasónico 500 ml, 7 luces LED de colores, modo intermitente y continuo, silencioso.',en:'500 ml ultrasonic diffuser, 7 coloured LED lights, intermittent and continuous mode, silent.'},ref:'ING-H004-500',price:34.99,image:'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=600&q=80'},
+  {id:'H005',section:'hogar',name:{pt:'Tapete de Sala Berbere',es:'Alfombra de Salón Bereber',en:'Berber Living Room Rug'},brand:'Maisons du Monde',model:'Sahara',size:'120x170',color:'Bege',gender:null,tipo:{pt:'Tapete',es:'Alfombra',en:'Rug'},desc:{pt:'Lã natural com padrão geométrico berbere, tufado à mão em Marrocos, textura macia e resistente.',es:'Lana natural con patrón geométrico bereber, tufado a mano en Marruecos, textura suave y resistente.',en:'Natural wool with Berber geometric pattern, hand-tufted in Morocco, soft and resistant texture.'},ref:'MDM-H005-120',price:149.99,image:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80'},
+  {id:'H006',section:'hogar',name:{pt:'Planta Suculenta Kit 3',es:'Planta Suculenta Kit 3',en:'Succulent Plant Kit 3-Pack'},brand:'Green Boutique',model:'Desert Trio',size:'Ø 9 cm',color:null,gender:null,tipo:{pt:'Plantas',es:'Plantas',en:'Plants'},desc:{pt:'Kit 3 suculentas sortidas em vasos cerâmica artesanais, fácil manutenção, perfeitas para decoração interior.',es:'Kit 3 suculentas surtidas en macetas de cerámica artesanales, fácil mantenimiento, perfectas para decoración interior.',en:'Kit of 3 assorted succulents in handmade ceramic pots, easy care, perfect for indoor decoration.'},ref:'GB-H006-3K',price:29.99,image:'https://images.unsplash.com/photo-1459411621453-7b03977f4bfc?w=600&q=80'}
+];
+
+/* ══════════════════════════════════════════════════════════
+   STATE
+   ══════════════════════════════════════════════════════════ */
+let LANG='pt', SECTION='todo', filtersOpen=false;
+const FONT_SIZES=[12,13,14,15,16,17,18,20];
+let fontIdx=3;
+
+/* ══════════════════════════════════════════════════════════
+   INIT
+   ══════════════════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded',()=>{
+  buildTabs();
+  buildFilters();
+  renderProducts();
+  applyLang();
+});
+
+/* ══════════════════════════════════════════════════════════
+   TABS
+   ══════════════════════════════════════════════════════════ */
+const SECTIONS=['todo','ropa','calzado','alimentacion','perfumeria','cosmetica','belleza','hogar'];
+function buildTabs(){
+  const nav=document.getElementById('tabs-nav');
+  nav.innerHTML='';
+  SECTIONS.forEach(s=>{
+    const b=document.createElement('button');
+    b.className='tab-btn'+(s===SECTION?' active':'');
+    b.dataset.section=s;
+    b.textContent=T[LANG].tabs[s];
+    b.onclick=()=>{SECTION=s;buildTabs();buildFilters();renderProducts()};
+    nav.appendChild(b);
+  });
+}
+
+/* ══════════════════════════════════════════════════════════
+   FILTERS
+   ══════════════════════════════════════════════════════════ */
+function getSectionProducts(){
+  return SECTION==='todo'?PRODUCTS:PRODUCTS.filter(p=>p.section===SECTION);
+}
+
+function buildFilters(){
+  const pool=getSectionProducts();
+  const t=T[LANG];
+  const all=`— ${t.filt.all} —`;
+
+  function opts(sel,arr,ph){
+    const cur=sel.value;
+    sel.innerHTML=`<option value="">${ph}</option>`+[...new Set(arr)].filter(Boolean).sort().map(v=>`<option value="${v}"${v===cur?'selected':''}>${v}</option>`).join('');
+  }
+
+  opts(document.getElementById('f-brand'), pool.map(p=>p.brand), t.filt.brand);
+  opts(document.getElementById('f-color'), pool.map(p=>p.color).filter(Boolean), t.filt.color);
+  opts(document.getElementById('f-size'),  pool.map(p=>p.size).filter(Boolean),  t.filt.size);
+  opts(document.getElementById('f-tipo'),  pool.map(p=>p.tipo[LANG]),             t.filt.tipo);
+  opts(document.getElementById('f-gender'),pool.map(p=>p.gender).filter(Boolean).map(g=>t.gen[g]), t.filt.gender);
+
+  const fs=document.getElementById('f-sort');
+  const sv=fs.value;
+  fs.innerHTML=`<option value="">${t.sort.def}</option><option value="asc"${sv==='asc'?' selected':''}>${t.sort.asc}</option><option value="desc"${sv==='desc'?' selected':''}>${t.sort.desc}</option>`;
+
+  document.getElementById('f-reset').textContent=t.filt.reset;
+  document.getElementById('filter-label').textContent=t.filt.toggle;
+}
+
+function getFilters(){
+  return {
+    brand:document.getElementById('f-brand').value,
+    color:document.getElementById('f-color').value,
+    size:document.getElementById('f-size').value,
+    tipo:document.getElementById('f-tipo').value,
+    gender:document.getElementById('f-gender').value,
+    sort:document.getElementById('f-sort').value
+  };
+}
+
+function resetFilters(){
+  ['f-brand','f-color','f-size','f-tipo','f-gender','f-sort'].forEach(id=>document.getElementById(id).value='');
+  renderProducts();
+}
+
+function toggleFilters(){
+  filtersOpen=!filtersOpen;
+  document.getElementById('filter-toggle').classList.toggle('open',filtersOpen);
+  document.getElementById('filter-grid').classList.toggle('open',filtersOpen);
+}
+
+/* ══════════════════════════════════════════════════════════
+   RENDER
+   ══════════════════════════════════════════════════════════ */
+function renderProducts(){
+  const f=getFilters();
+  const t=T[LANG];
+  let pool=getSectionProducts();
+
+  if(f.brand) pool=pool.filter(p=>p.brand===f.brand);
+  if(f.color) pool=pool.filter(p=>p.color===f.color);
+  if(f.size)  pool=pool.filter(p=>p.size===f.size);
+  if(f.tipo)  pool=pool.filter(p=>p.tipo[LANG]===f.tipo);
+  if(f.gender)pool=pool.filter(p=>p.gender&&t.gen[p.gender]===f.gender);
+  if(f.sort==='asc')  pool=[...pool].sort((a,b)=>a.price-b.price);
+  if(f.sort==='desc') pool=[...pool].sort((a,b)=>b.price-a.price);
+
+  document.getElementById('results-info').textContent=t.results(pool.length);
+
+  const grid=document.getElementById('products-grid');
+
+  if(SECTION==='todo'){
+    // group by section
+    const groups={};
+    pool.forEach(p=>{
+      if(!groups[p.section]) groups[p.section]=[];
+      groups[p.section].push(p);
+    });
+    let html='';
+    SECTIONS.filter(s=>s!=='todo'&&groups[s]&&groups[s].length).forEach(s=>{
+      html+=`<div class="section-hdr">${t.tabs[s]}</div>`;
+      groups[s].forEach(p=>html+=cardHTML(p,t));
+    });
+    if(!html) html=`<div class="empty-state">${t.card.none}</div>`;
+    grid.innerHTML=html;
+  } else {
+    if(!pool.length){grid.innerHTML=`<div class="empty-state">${t.card.none}</div>`;return;}
+    grid.innerHTML=pool.map(p=>cardHTML(p,t)).join('');
+  }
+}
+
+function cardHTML(p,t){
+  const price=fmtPrice(p.price,LANG);
+  const tags=[p.size?`${t.card.size}: ${p.size}`:'', p.color?p.color:'', p.gender?t.gen[p.gender]:''].filter(Boolean);
+
+  return `
+  <div class="product-card">
+    <div class="card-img">
+      <img src="${p.image}" alt="${p.name[LANG]}" loading="lazy">
+      <span class="card-badge">${p.tipo[LANG]}</span>
+    </div>
+    <div class="card-body">
+      <div class="card-brand">${p.brand}</div>
+      <div class="card-name">${p.name[LANG]}</div>
+      <div class="card-model">${p.model}</div>
+      ${tags.length?`<div class="card-tags">${tags.map(tg=>`<span class="tag">${tg}</span>`).join('')}</div>`:''}
+      <div class="card-desc">${p.desc[LANG]}</div>
+      <div class="card-ref">${t.card.ref}: ${p.ref}</div>
+    </div>
+    <div class="card-foot">
+      <span class="card-price">${price}</span>
+      <div class="card-btns">
+        <button class="btn-order btn-messenger" onclick="orderMessenger(event,'${p.id}')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.145 2 11.243c0 2.826 1.348 5.354 3.476 7.044V22l3.194-1.755A10.6 10.6 0 0 0 12 20.486c5.523 0 10-4.145 10-9.243S17.523 2 12 2z"/></svg>
+          ${t.card.order}
+        </button>
+        <button class="btn-order btn-whatsapp" onclick="orderWhatsApp('${p.id}')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.85L.072 23.927l6.218-1.432A11.94 11.94 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.885 0-3.651-.52-5.162-1.426l-.371-.22-3.844.885.916-3.741-.242-.385A9.932 9.932 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+          ${t.card.orderWa}
+        </button>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ══════════════════════════════════════════════════════════
+   LANGUAGE
+   ══════════════════════════════════════════════════════════ */
+function setLang(l){
+  LANG=l;
+  document.documentElement.lang=l;
+  document.querySelectorAll('.btn-lang').forEach(b=>b.classList.toggle('active',b.textContent===l.toUpperCase()));
+  applyLang();
+  buildTabs();
+  buildFilters();
+  renderProducts();
+}
+function applyLang(){
+  const t=T[LANG];
+  const dark=document.documentElement.dataset.theme==='dark';
+  document.getElementById('theme-btn').textContent=dark?t.light:t.dark;
+}
+
+/* ══════════════════════════════════════════════════════════
+   THEME
+   ══════════════════════════════════════════════════════════ */
+function toggleTheme(){
+  const dark=document.documentElement.dataset.theme==='dark';
+  document.documentElement.dataset.theme=dark?'light':'dark';
+  document.getElementById('theme-btn').textContent=dark?T[LANG].dark:T[LANG].light;
+}
+
+/* ══════════════════════════════════════════════════════════
+   FONT SIZE
+   ══════════════════════════════════════════════════════════ */
+function chgFont(dir){
+  fontIdx=Math.max(0,Math.min(FONT_SIZES.length-1,fontIdx+dir));
+  document.documentElement.style.setProperty('--font-base',FONT_SIZES[fontIdx]+'px');
+}
+
+/* ══════════════════════════════════════════════════════════
+   ORDER MESSENGER — copia mensagem + abre Messenger
+   ══════════════════════════════════════════════════════════ */
+function orderMessenger(e,id){
+  const p=PRODUCTS.find(x=>x.id===id);
+  const msg=T[LANG].msg(p);
+  const btn=e.currentTarget;
+  const orig=btn.innerHTML;
+  navigator.clipboard.writeText(msg).then(()=>{
+    btn.textContent='✓ Copiado!';
+    setTimeout(()=>{btn.innerHTML=orig;},1800);
+  }).catch(()=>{
+    btn.textContent='✓ OK';
+    setTimeout(()=>{btn.innerHTML=orig;},1800);
+  });
+  setTimeout(()=>{window.open(`https://m.me/${FACEBOOK_ID}`,'_blank');},300);
+}
+
+/* ══════════════════════════════════════════════════════════
+   ORDER WHATSAPP — abre WhatsApp com mensagem pré-escrita
+   ══════════════════════════════════════════════════════════ */
+function orderWhatsApp(id){
+  const p=PRODUCTS.find(x=>x.id===id);
+  const msg=encodeURIComponent(T[LANG].msg(p));
+  window.open(`https://wa.me/${WHATSAPP_NUM}?text=${msg}`,'_blank');
+}
+</script>
+</body>
+</html>
