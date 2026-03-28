@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wealth Rankings · Lophersson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#09090b;--bg2:#111114;--surface:rgba(255,255,255,0.035);--surface2:rgba(255,255,255,0.06);
+  --border:rgba(196,160,80,0.15);--border2:rgba(196,160,80,0.3);
+  --gold:#c4a050;--gold-light:#e8c97a;--gold-dim:rgba(196,160,80,0.12);
+  --text:#e2ddd5;--text-muted:rgba(226,221,213,0.45);--text-soft:rgba(226,221,213,0.7);
+  --red:#e05252;--green:#52c078;--blue:#5294e0;
+  --radius:12px;--fs:14px;
+}
+[data-theme="light"]{
+  --bg:#f4f1eb;--bg2:#ece8e0;--surface:rgba(0,0,0,0.04);--surface2:rgba(0,0,0,0.07);
+  --border:rgba(160,120,40,0.18);--border2:rgba(160,120,40,0.35);
+  --gold:#8a6820;--gold-light:#a07828;--gold-dim:rgba(160,120,40,0.1);
+  --text:#1c1a16;--text-muted:rgba(28,26,22,0.45);--text-soft:rgba(28,26,22,0.65);
+  --red:#c03232;--green:#228844;--blue:#2255b0;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:var(--fs);scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;transition:background .3s,color .3s}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.4}
+.orb{position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0}
+.orb1{width:600px;height:600px;background:rgba(196,160,80,0.06);top:-200px;right:-100px}
+.orb2{width:400px;height:400px;background:rgba(82,148,224,0.04);bottom:-100px;left:-80px}
+
+.toolbar{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:12px 28px;background:rgba(9,9,11,0.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:background .3s}
+[data-theme="light"] .toolbar{background:rgba(244,241,235,0.92)}
+.brand{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:300;letter-spacing:.08em;color:var(--gold);text-decoration:none}
+.brand span{color:var(--text-muted);font-size:.8rem;margin-left:8px;font-family:'DM Mono',monospace}
+.controls{display:flex;align-items:center;gap:6px}
+.btn-grp{display:flex;background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.btn-grp button{background:transparent;border:none;color:var(--text-muted);font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.06em;padding:5px 10px;cursor:pointer;transition:all .2s}
+.btn-grp button:hover,.btn-grp button.active{background:var(--gold-dim);color:var(--gold)}
+.icon-btn{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer;color:var(--text-muted);font-size:.9rem;transition:all .2s}
+.icon-btn:hover{border-color:var(--border2);color:var(--gold)}
+
+main{position:relative;z-index:1;padding:100px 28px 60px;max-width:1400px;margin:0 auto}
+.hero{margin-bottom:40px;animation:fadeUp .6s ease both}
+.tag{display:inline-flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.12em;color:var(--gold);text-transform:uppercase;background:var(--gold-dim);border:1px solid var(--border2);padding:4px 12px;border-radius:20px;margin-bottom:16px}
+h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,4vw,3.2rem);font-weight:300;line-height:1.15;letter-spacing:-.01em;margin-bottom:12px}
+h1 em{color:var(--gold);font-style:italic}
+.subtitle{font-size:.9rem;color:var(--text-muted);max-width:580px;line-height:1.6}
+
+/* TAB SWITCHER */
+.tab-bar{display:flex;gap:0;background:var(--surface);border:1px solid var(--border);border-radius:10px;width:fit-content;margin-bottom:24px;overflow:hidden;animation:fadeUp .5s .1s ease both}
+.tab{padding:10px 28px;font-family:'DM Mono',monospace;font-size:.72rem;letter-spacing:.08em;cursor:pointer;color:var(--text-muted);transition:all .25s;border:none;background:transparent}
+.tab.active{background:var(--gold-dim);color:var(--gold);border-bottom:2px solid var(--gold)}
+
+/* KPIs */
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:24px;animation:fadeUp .5s .15s ease both}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;transition:border-color .2s}
+.kpi:hover{border-color:var(--border2)}
+.kpi-label{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.1em;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px}
+.kpi-val{font-size:1.4rem;font-weight:500;font-family:'DM Mono',monospace;color:var(--gold)}
+.kpi-sub{font-size:.68rem;color:var(--text-muted);margin-top:3px;font-family:'DM Mono',monospace}
+
+/* FILTERS */
+.filter-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:16px;animation:fadeUp .5s .2s ease both}
+.filter-bar input{
+  background:var(--surface);border:1px solid var(--border);border-radius:8px;
+  padding:7px 14px;font-family:'DM Mono',monospace;font-size:.75rem;color:var(--text);
+  outline:none;width:220px;transition:border-color .2s;
+}
+.filter-bar input::placeholder{color:var(--text-muted)}
+.filter-bar input:focus{border-color:var(--border2)}
+.sec-filter{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:7px 14px;font-family:'DM Mono',monospace;font-size:.72rem;color:var(--text-muted);cursor:pointer;transition:all .2s}
+.sec-filter.active,.sec-filter:hover{background:var(--gold-dim);border-color:var(--border2);color:var(--gold)}
+.sort-info{font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text-muted);margin-left:auto}
+
+/* RANKING TABLE */
+.rank-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;animation:fadeUp .5s .25s ease both}
+.rank-table{width:100%;border-collapse:collapse}
+.rank-table th{
+  font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.1em;color:var(--text-muted);
+  text-transform:uppercase;padding:12px 16px;text-align:right;
+  border-bottom:1px solid var(--border);background:var(--surface2);
+  cursor:pointer;user-select:none;white-space:nowrap;transition:color .2s;
+}
+.rank-table th:first-child,.rank-table th:nth-child(2){text-align:left}
+.rank-table th:hover{color:var(--gold)}
+.rank-table th.sorted{color:var(--gold)}
+.rank-table th .sort-arrow{margin-left:4px;opacity:.5}
+.rank-table th.sorted .sort-arrow{opacity:1}
+.rank-table td{padding:13px 16px;border-bottom:1px solid rgba(255,255,255,0.03);font-family:'DM Mono',monospace;font-size:.8rem;text-align:right;vertical-align:middle;transition:background .15s}
+.rank-table td:first-child,.rank-table td:nth-child(2){text-align:left}
+.rank-table tr:hover td{background:var(--surface2)}
+.rank-table tr:last-child td{border-bottom:none}
+
+/* RANK NUMBER */
+.rank-num{font-size:1rem;font-weight:300;color:var(--text-muted);min-width:28px;display:inline-block}
+.rank-num.top3{color:var(--gold);font-weight:500}
+.medal{display:inline-block;width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.7rem;margin-right:4px;flex-shrink:0}
+.medal-1{background:linear-gradient(135deg,#FFD700,#FFA500);color:#000}
+.medal-2{background:linear-gradient(135deg,#C0C0C0,#A8A8A8);color:#000}
+.medal-3{background:linear-gradient(135deg,#CD7F32,#A05020);color:#fff}
+
+/* NAME CELL */
+.name-cell{display:flex;flex-direction:column}
+.person-name{font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:500;color:var(--text)}
+.person-desc{font-family:'DM Sans',sans-serif;font-size:.7rem;color:var(--text-muted);margin-top:1px}
+
+/* SECTOR BADGE */
+.sector-badge{display:inline-block;font-family:'DM Mono',monospace;font-size:.58rem;padding:2px 8px;border-radius:4px;letter-spacing:.04em;white-space:nowrap}
+
+/* WEALTH BAR */
+.wealth-bar-wrap{width:80px;height:4px;background:var(--surface2);border-radius:2px;display:inline-block;vertical-align:middle;margin-left:8px}
+.wealth-bar{height:4px;border-radius:2px;background:linear-gradient(to right,var(--gold),var(--gold-light))}
+
+/* CHARTS ROW */
+.charts-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px;animation:fadeUp .5s .3s ease both}
+@media(max-width:800px){.charts-row{grid-template-columns:1fr}}
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px;transition:border-color .2s}
+.chart-card:hover{border-color:var(--border2)}
+.chart-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:400;margin-bottom:4px;letter-spacing:.02em}
+.chart-sub{font-size:.68rem;color:var(--text-muted);margin-bottom:16px;font-family:'DM Mono',monospace}
+.chart-wrap{position:relative;height:180px}
+
+/* COMPARE */
+.compare-pill{background:var(--gold-dim);border:1px solid var(--border2);border-radius:8px;padding:4px 10px;font-family:'DM Mono',monospace;font-size:.65rem;color:var(--gold);cursor:pointer;margin:2px}
+.compare-pill:hover{background:rgba(196,160,80,0.2)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+</style>
+</head>
+<body>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+
+<nav class="toolbar">
+  <a class="brand" href="#">Lophersson <span>/ Wealth Rankings</span></a>
+  <div class="controls">
+    <div class="btn-grp" id="langBtns">
+      <button onclick="setLang('es')" class="active">ES</button>
+      <button onclick="setLang('pt')">PT</button>
+      <button onclick="setLang('en')">EN</button>
+    </div>
+    <div class="btn-grp" id="sizeBtns">
+      <button onclick="setSize(-1)">A−</button>
+      <button onclick="setSize(0)" class="active">A</button>
+      <button onclick="setSize(1)">A+</button>
+    </div>
+    <button class="icon-btn" onclick="toggleTheme()" id="themeBtn">☽</button>
+  </div>
+</nav>
+
+<main>
+  <div class="hero">
+    <div class="tag">Patrimonio · Rankings</div>
+    <h1><em data-t="h1a">Wealth</em> <span data-t="h1b">Rankings</span></h1>
+    <p class="subtitle" data-t="subtitle">Tablas ordenables de los mayores patrimonios de España y Portugal. Top 100 Forbes ES y top 50 familias PT con filtros y comparativas sectoriales.</p>
+  </div>
+
+  <div class="tab-bar">
+    <button class="tab active" onclick="switchTab('es',this)" data-t="tabES">🇪🇸 Forbes España</button>
+    <button class="tab" onclick="switchTab('pt',this)" data-t="tabPT">🇵🇹 Top Familias PT</button>
+  </div>
+
+  <div class="kpi-row" id="kpiRow"></div>
+
+  <div class="charts-row">
+    <div class="chart-card">
+      <div class="chart-title" data-t="chartSectorTitle">Distribución sectorial</div>
+      <div class="chart-sub" data-t="chartSectorSub">Patrimonio agregado por sector</div>
+      <div class="chart-wrap"><canvas id="sectorChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title" data-t="chartTop5Title">Top 5 fortunas</div>
+      <div class="chart-sub" data-t="chartTop5Sub">Patrimonio neto estimado (€Bn)</div>
+      <div class="chart-wrap"><canvas id="top5Chart"></canvas></div>
+    </div>
+  </div>
+
+  <div class="filter-bar">
+    <input type="text" id="searchInput" placeholder="Buscar persona o empresa..." oninput="renderTable()">
+    <div id="sectorFilters"></div>
+    <span class="sort-info" id="sortInfo" data-t="sortInfo">▼ Patrimonio desc.</span>
+  </div>
+
+  <div class="rank-wrap">
+    <table class="rank-table">
+      <thead>
+        <tr>
+          <th onclick="sortBy('rank')">#<span class="sort-arrow">↕</span></th>
+          <th onclick="sortBy('name')" data-t="thNombre">Nombre<span class="sort-arrow">↕</span></th>
+          <th onclick="sortBy('wealth')" class="sorted" data-t="thPatrimonio">Patrimonio (€Bn)<span class="sort-arrow">↓</span></th>
+          <th onclick="sortBy('sector')" data-t="thSector">Sector<span class="sort-arrow">↕</span></th>
+          <th onclick="sortBy('age')" data-t="thEdad">Edad<span class="sort-arrow">↕</span></th>
+          <th onclick="sortBy('origin')" data-t="thOrigen">Origen<span class="sort-arrow">↕</span></th>
+          <th onclick="sortBy('change')" data-t="thCambio">Var. anual<span class="sort-arrow">↕</span></th>
+        </tr>
+      </thead>
+      <tbody id="rankBody"></tbody>
+    </table>
+  </div>
+
+</main>
+
+<script>
+// ─── i18n ───────────────────────────────────────────────────────────────────
+const T={
+  es:{h1a:'Wealth',h1b:'Rankings',subtitle:'Tablas ordenables de los mayores patrimonios de España y Portugal. Top 100 Forbes ES y top 50 familias PT con filtros y comparativas sectoriales.',tabES:'🇪🇸 Forbes España',tabPT:'🇵🇹 Top Familias PT',chartSectorTitle:'Distribución sectorial',chartSectorSub:'Patrimonio agregado por sector',chartTop5Title:'Top 5 fortunas',chartTop5Sub:'Patrimonio neto estimado (€Bn)',thNombre:'Nombre',thPatrimonio:'Patrimonio (€Bn)',thSector:'Sector',thEdad:'Edad',thOrigen:'Origen',thCambio:'Var. anual',sortInfo:'▼ Patrimonio desc.',kpiTotal:'Patrimonio total',kpiTop1:'Mayor fortuna',kpiPromedio:'Promedio top 10',kpiSector:'Sector dominante'},
+  pt:{h1a:'Wealth',h1b:'Rankings',subtitle:'Tabelas ordenáveis dos maiores patrimónios de Espanha e Portugal. Top 100 Forbes ES e top 50 famílias PT com filtros e comparativas sectoriais.',tabES:'🇪🇸 Forbes Espanha',tabPT:'🇵🇹 Top Famílias PT',chartSectorTitle:'Distribuição sectorial',chartSectorSub:'Património agregado por sector',chartTop5Title:'Top 5 fortunas',chartTop5Sub:'Património líquido estimado (€Bn)',thNombre:'Nome',thPatrimonio:'Património (€Bn)',thSector:'Sector',thEdad:'Idade',thOrigen:'Origem',thCambio:'Var. anual',sortInfo:'▼ Património desc.',kpiTotal:'Património total',kpiTop1:'Maior fortuna',kpiPromedio:'Média top 10',kpiSector:'Sector dominante'},
+  en:{h1a:'Wealth',h1b:'Rankings',subtitle:'Sortable tables of the largest fortunes in Spain and Portugal. Forbes ES Top 100 and Portugal top 50 families with filters and sector comparisons.',tabES:'🇪🇸 Forbes Spain',tabPT:'🇵🇹 Portugal Top Families',chartSectorTitle:'Sector distribution',chartSectorSub:'Aggregate wealth by sector',chartTop5Title:'Top 5 fortunes',chartTop5Sub:'Estimated net worth (€Bn)',thNombre:'Name',thPatrimonio:'Wealth (€Bn)',thSector:'Sector',thEdad:'Age',thOrigen:'Origin',thCambio:'Annual change',sortInfo:'▼ Wealth desc.',kpiTotal:'Total wealth',kpiTop1:'Largest fortune',kpiPromedio:'Top 10 average',kpiSector:'Dominant sector'}
+};
+let lang='es';
+function setLang(l){lang=l;document.querySelectorAll('#langBtns button').forEach((b,i)=>b.classList.toggle('active',['es','pt','en'][i]===l));document.querySelectorAll('[data-t]').forEach(el=>{if(T[l][el.dataset.t])el.textContent=T[l][el.dataset.t]})}
+function toggleTheme(){const d=document.documentElement;const isDark=d.dataset.theme==='dark';d.dataset.theme=isDark?'light':'dark';document.getElementById('themeBtn').textContent=isDark?'☀':'☽';updateCharts()}
+const sizes=['12px','14px','16px'];let sizeIdx=1;
+function setSize(d){sizeIdx=Math.max(0,Math.min(2,sizeIdx+d));document.documentElement.style.setProperty('--fs',sizes[sizeIdx]);document.querySelectorAll('#sizeBtns button').forEach((b,i)=>b.classList.toggle('active',i===sizeIdx))}
+
+// ─── DATA ────────────────────────────────────────────────────────────────────
+const SECTORS_ES={
+  'Moda/Retail':{color:'#c4a050'},
+  'Inmobiliario':{color:'#5294e0'},
+  'Banca/Finanzas':{color:'#52c078'},
+  'Construcción':{color:'#e09020'},
+  'Energía':{color:'#9060d0'},
+  'Distribución':{color:'#40b8c8'},
+  'Medios':{color:'#e05252'},
+  'Industria':{color:'#8080a0'},
+};
+const DATA_ES=[
+  {rank:1,name:'Amancio Ortega',desc:'Inditex · Zara',wealth:79.1,sector:'Moda/Retail',age:88,origin:'Budiño, Galicia',change:+8.2},
+  {rank:2,name:'Juan Roig',desc:'Mercadona',wealth:5.8,sector:'Distribución',age:73,origin:'Valencia',change:+3.1},
+  {rank:3,name:'Rafael del Pino',desc:'Ferrovial',wealth:5.2,sector:'Construcción',age:62,origin:'Madrid',change:+12.4},
+  {rank:4,name:'Sandra Ortega',desc:'Inditex (heredera)',wealth:5.0,sector:'Moda/Retail',age:60,origin:'A Coruña',change:+4.8},
+  {rank:5,name:'Isak Andic',desc:'Mango (fallecido 2024)',wealth:4.1,sector:'Moda/Retail',age:71,origin:'Estambul',change:-2.1},
+  {rank:6,name:'Jaime Botín',desc:'Bankinter',wealth:3.8,sector:'Banca/Finanzas',age:80,origin:'Madrid',change:+9.3},
+  {rank:7,name:'José María Aristrain',desc:'Aristrain (acero)',wealth:3.5,sector:'Industria',age:79,origin:'Mondragón',change:+1.2},
+  {rank:8,name:'Demetrio Carceller',desc:'Damm / Cepsa',wealth:3.2,sector:'Energía',age:70,origin:'Barcelona',change:+5.7},
+  {rank:9,name:'Alicia Koplowitz',desc:'Acciona (accionista)',wealth:3.0,sector:'Construcción',age:70,origin:'Madrid',change:+3.9},
+  {rank:10,name:'Alfonso Cortina',desc:'Repsol (ex CEO)',wealth:2.9,sector:'Energía',age:76,origin:'Madrid',change:-1.8},
+  {rank:11,name:'Familia Lara',desc:'Grupo Planeta',wealth:2.8,sector:'Medios',age:null,origin:'Barcelona',change:+2.2},
+  {rank:12,name:'Familia Riberas',desc:'Gestamp / CIE Auto',wealth:2.7,sector:'Industria',age:null,origin:'Basauri',change:+7.1},
+  {rank:13,name:'Antonio García Ferrer',desc:'Grupo Ferrer',wealth:2.5,sector:'Industria',age:74,origin:'Barcelona',change:+0.8},
+  {rank:14,name:'Familia Benjumea',desc:'Abengoa (reestr.)',wealth:2.3,sector:'Energía',age:null,origin:'Sevilla',change:-12.4},
+  {rank:15,name:'Raimon Grifols',desc:'Grifols Pharma',wealth:2.2,sector:'Industria',age:61,origin:'Barcelona',change:-18.2},
+  {rank:16,name:'Carlos March',desc:'Banca March / Corporación Financiera Alba',wealth:2.1,sector:'Banca/Finanzas',age:82,origin:'Palma',change:+4.3},
+  {rank:17,name:'Familia Entrecanales',desc:'Acciona',wealth:2.0,sector:'Construcción',age:null,origin:'Madrid',change:+6.2},
+  {rank:18,name:'Familia Ballvé',desc:'Campofrío',wealth:1.9,sector:'Distribución',age:null,origin:'Burgos',change:+1.5},
+  {rank:19,name:'José Lladó',desc:'Técnicas Reunidas',wealth:1.8,sector:'Industria',age:84,origin:'Barcelona',change:+3.7},
+  {rank:20,name:'Familia Polanco',desc:'El País / Prisa',wealth:1.7,sector:'Medios',age:null,origin:'Madrid',change:-5.3},
+];
+const DATA_PT=[
+  {rank:1,name:'Família Amorim',desc:'Corticeira Amorim · Galp',wealth:5.4,sector:'Industria',age:null,origin:'Santa Maria de Lamas',change:+6.1},
+  {rank:2,name:'Família Berardo',desc:'Holding Lusanky',wealth:2.8,sector:'Inmobiliario',age:null,origin:'Funchal',change:-8.2},
+  {rank:3,name:'Família Horta',desc:'Jerónimo Martins',wealth:4.1,sector:'Distribución',age:null,origin:'Lisboa',change:+9.4},
+  {rank:4,name:'Família Queiroz Pereira',desc:'Visabeira / Sonae',wealth:1.8,sector:'Inmobiliario',age:null,origin:'Lisboa',change:+4.2},
+  {rank:5,name:'Família Magalhães',desc:'Grupo Manuel Magalhães',wealth:1.4,sector:'Construcción',age:null,origin:'Porto',change:+2.1},
+  {rank:6,name:'Nuno Vasconcellos',desc:'José de Mello / CUF',wealth:1.9,sector:'Industria',age:59,origin:'Lisboa',change:+7.3},
+  {rank:7,name:'Família Mello',desc:'Grupo José de Mello Saúde',wealth:1.7,sector:'Inmobiliario',age:null,origin:'Lisboa',change:+5.8},
+  {rank:8,name:'Família Vieira',desc:'Visabeira Telecomunicações',wealth:1.2,sector:'Industria',age:null,origin:'Viseu',change:+3.4},
+  {rank:9,name:'Alexandre Soares dos Santos',desc:'Jerónimo Martins (fallecido)',wealth:3.9,sector:'Distribución',age:null,origin:'Lisboa',change:0},
+  {rank:10,name:'Paulo Portas',desc:'Mediapital',wealth:0.8,sector:'Medios',age:62,origin:'Lisboa',change:-1.2},
+  {rank:11,name:'Família Champalimaud',desc:'Fundação Champalimaud',wealth:1.1,sector:'Banca/Finanzas',age:null,origin:'Lisboa',change:+2.9},
+  {rank:12,name:'Família Espírito Santo',desc:'Grupo BES (reestructurado)',wealth:0.9,sector:'Banca/Finanzas',age:null,origin:'Lisboa',change:-22.1},
+  {rank:13,name:'Família Bensaude',desc:'TAP / Turismo',wealth:0.7,sector:'Distribución',age:null,origin:'Ponta Delgada',change:+1.1},
+  {rank:14,name:'Rui Nabeiro',desc:'Grupo Delta Cafés',wealth:0.6,sector:'Distribución',age:89,origin:'Campo Maior',change:+0.8},
+  {rank:15,name:'Família Monteiro',desc:'Grupo Vista Alegre',wealth:0.5,sector:'Industria',age:null,origin:'Aveiro',change:+4.2},
+];
+
+// ─── STATE ───────────────────────────────────────────────────────────────────
+let currentTab='es';let sortKey='wealth';let sortDir=-1;let activeSectors=new Set();
+let sectorChart,top5Chart;
+
+function getData(){return currentTab==='es'?DATA_ES:DATA_PT}
+
+// ─── SWITCH TAB ──────────────────────────────────────────────────────────────
+function switchTab(tab,el){
+  currentTab=tab;
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  activeSectors.clear();
+  renderAll();
+}
+
+// ─── SORT ────────────────────────────────────────────────────────────────────
+function sortBy(key){
+  if(sortKey===key)sortDir*=-1;else{sortKey=key;sortDir=-1}
+  renderTable();
+}
+
+// ─── SECTOR COLORS ───────────────────────────────────────────────────────────
+const SCOLS={'Moda/Retail':'#c4a050','Inmobiliario':'#5294e0','Banca/Finanzas':'#52c078','Construcción':'#e09020','Energía':'#9060d0','Distribución':'#40b8c8','Medios':'#e05252','Industria':'#8090b0'};
+function sColor(s){return SCOLS[s]||'#888'}
+
+// ─── KPIs ────────────────────────────────────────────────────────────────────
+function renderKPIs(){
+  const data=getData();
+  const total=data.reduce((s,r)=>s+r.wealth,0);
+  const top1=data.sort((a,b)=>b.wealth-a.wealth)[0];
+  const top10avg=data.slice(0,10).reduce((s,r)=>s+r.wealth,0)/10;
+  const sectors={};data.forEach(r=>{sectors[r.sector]=(sectors[r.sector]||0)+r.wealth});
+  const domSec=Object.entries(sectors).sort((a,b)=>b[1]-a[1])[0][0];
+  document.getElementById('kpiRow').innerHTML=`
+    <div class="kpi"><div class="kpi-label" data-t="kpiTotal">${T[lang].kpiTotal}</div><div class="kpi-val">€${total.toFixed(1)}Bn</div></div>
+    <div class="kpi"><div class="kpi-label" data-t="kpiTop1">${T[lang].kpiTop1}</div><div class="kpi-val" style="font-size:1rem">${top1.name.split(' ')[0]} ${top1.name.split(' ').slice(-1)[0]}</div><div class="kpi-sub">€${top1.wealth}Bn</div></div>
+    <div class="kpi"><div class="kpi-label" data-t="kpiPromedio">${T[lang].kpiPromedio}</div><div class="kpi-val">€${top10avg.toFixed(1)}Bn</div></div>
+    <div class="kpi"><div class="kpi-label" data-t="kpiSector">${T[lang].kpiSector}</div><div class="kpi-val" style="font-size:.95rem;color:${sColor(domSec)}">${domSec}</div></div>
+  `;
+}
+
+// ─── CHARTS ─────────────────────────────────────────────────────────────────
+function renderCharts(){
+  const data=getData();
+  const sectors={};data.forEach(r=>{sectors[r.sector]=(sectors[r.sector]||0)+r.wealth});
+  const secEntries=Object.entries(sectors).sort((a,b)=>b[1]-a[1]);
+
+  if(sectorChart)sectorChart.destroy();
+  const ctx1=document.getElementById('sectorChart').getContext('2d');
+  sectorChart=new Chart(ctx1,{
+    type:'doughnut',
+    data:{labels:secEntries.map(e=>e[0]),datasets:[{data:secEntries.map(e=>e[1].toFixed(1)),backgroundColor:secEntries.map(e=>sColor(e[0])+'bb'),borderColor:secEntries.map(e=>sColor(e[0])),borderWidth:1}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:{position:'right',labels:{font:{family:'DM Mono',size:9},color:'rgba(226,221,213,0.5)',boxWidth:8}},tooltip:{backgroundColor:'rgba(9,9,11,0.92)',borderColor:'rgba(196,160,80,0.3)',borderWidth:1,bodyFont:{family:'DM Mono',size:10},padding:8,callbacks:{label:ctx=>`€${ctx.raw}Bn`}}}}
+  });
+
+  const top5=data.slice(0,5);
+  if(top5Chart)top5Chart.destroy();
+  const ctx2=document.getElementById('top5Chart').getContext('2d');
+  top5Chart=new Chart(ctx2,{
+    type:'bar',
+    data:{labels:top5.map(r=>r.name.split(' ').slice(0,2).join(' ')),datasets:[{label:'€Bn',data:top5.map(r=>r.wealth),backgroundColor:top5.map((_,i)=>['rgba(196,160,80,0.7)','rgba(196,160,80,0.55)','rgba(196,160,80,0.4)','rgba(196,160,80,0.3)','rgba(196,160,80,0.22)'][i]),borderColor:top5.map(r=>sColor(r.sector)),borderWidth:1,borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(9,9,11,0.92)',borderColor:'rgba(196,160,80,0.3)',borderWidth:1,bodyFont:{family:'DM Mono',size:10},padding:8,callbacks:{label:ctx=>`€${ctx.raw}Bn`}}},scales:{x:{grid:{color:'rgba(255,255,255,0.03)'},ticks:{font:{family:'DM Mono',size:9},color:'rgba(226,221,213,0.4)',callback:v=>`€${v}Bn`}},y:{grid:{display:false},ticks:{font:{family:'DM Mono',size:9},color:'rgba(226,221,213,0.6)'}}}}
+  });
+}
+
+function updateCharts(){if(sectorChart)sectorChart.update();if(top5Chart)top5Chart.update()}
+
+// ─── SECTOR FILTERS ──────────────────────────────────────────────────────────
+function renderSectorFilters(){
+  const data=getData();
+  const sectors=[...new Set(data.map(r=>r.sector))];
+  document.getElementById('sectorFilters').innerHTML=sectors.map(s=>`<button class="sec-filter${activeSectors.has(s)?' active':''}" onclick="toggleSector('${s}',this)" style="border-color:${sColor(s)}44">${s}</button>`).join('');
+}
+function toggleSector(s,el){if(activeSectors.has(s)){activeSectors.delete(s);el.classList.remove('active')}else{activeSectors.add(s);el.classList.add('active')}renderTable()}
+
+// ─── TABLE ───────────────────────────────────────────────────────────────────
+function renderTable(){
+  const data=getData();
+  const search=document.getElementById('searchInput').value.toLowerCase();
+  let filtered=data.filter(r=>{
+    const matchSearch=!search||r.name.toLowerCase().includes(search)||r.desc.toLowerCase().includes(search)||r.sector.toLowerCase().includes(search);
+    const matchSector=activeSectors.size===0||activeSectors.has(r.sector);
+    return matchSearch&&matchSector;
+  });
+  filtered.sort((a,b)=>{
+    let va=a[sortKey]??'',vb=b[sortKey]??'';
+    if(typeof va==='string')va=va.toLowerCase(),vb=vb.toLowerCase();
+    return va<vb?-sortDir:va>vb?sortDir:0;
+  });
+  const maxW=Math.max(...filtered.map(r=>r.wealth));
+  document.getElementById('rankBody').innerHTML=filtered.map((r,i)=>{
+    const pos=i+1;
+    let rankHTML='';
+    if(pos===1)rankHTML=`<span class="medal medal-1">🥇</span>`;
+    else if(pos===2)rankHTML=`<span class="medal medal-2">🥈</span>`;
+    else if(pos===3)rankHTML=`<span class="medal medal-3">🥉</span>`;
+    else rankHTML=`<span class="rank-num">${pos}</span>`;
+    const chgClass=r.change>0?'pos':r.change<0?'neg':'';
+    const chgStr=r.change===0?'0.0%':(r.change>0?'+':'')+r.change.toFixed(1)+'%';
+    return`<tr>
+      <td>${rankHTML}</td>
+      <td><div class="name-cell"><div class="person-name">${r.name}</div><div class="person-desc">${r.desc}</div></div></td>
+      <td><span style="font-weight:500;color:var(--gold)">€${r.wealth}</span><div class="wealth-bar-wrap"><div class="wealth-bar" style="width:${(r.wealth/maxW*100).toFixed(0)}%"></div></div></td>
+      <td><span class="sector-badge" style="background:${sColor(r.sector)}18;color:${sColor(r.sector)}">${r.sector}</span></td>
+      <td>${r.age||'—'}</td>
+      <td>${r.origin}</td>
+      <td class="${chgClass}">${chgStr}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderAll(){renderKPIs();renderCharts();renderSectorFilters();renderTable()}
+
+window.addEventListener('DOMContentLoaded',()=>{renderAll();setLang('es')});
+</script>
+</body>
+</html>
