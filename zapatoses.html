@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Análise · zapatos.es</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --white:    #ffffff;
+      --off:      #f7f6f3;
+      --text:     #1a1a1a;
+      --muted:    #6b6b6b;
+      --border:   #e2e0db;
+      --green:    #2e7d4f;
+      --green-bg: #f0f7f3;
+      --red:      #b83232;
+      --red-bg:   #fdf2f2;
+      --amber:    #b45309;
+      --amber-bg: #fef9ed;
+      --blue:     #1d4ed8;
+      --blue-bg:  #eff4ff;
+      --serif:    'Playfair Display', Georgia, serif;
+      --sans:     'Lato', 'Helvetica Neue', sans-serif;
+    }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+
+    body {
+      background: var(--white);
+      color: var(--text);
+      font-family: var(--sans);
+      font-weight: 400;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 2.5rem 2rem 2rem;
+      text-align: center;
+      animation: fadeDown .6s ease both;
+    }
+
+    .tag {
+      display: inline-block;
+      font-family: var(--sans);
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 2rem;
+      padding: .25rem .9rem;
+      margin-bottom: 1.1rem;
+    }
+
+    header h1 {
+      font-family: var(--serif);
+      font-size: clamp(1.9rem, 5vw, 3rem);
+      font-weight: 600;
+      letter-spacing: -.01em;
+      color: var(--text);
+      line-height: 1.2;
+    }
+
+    header h1 span {
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    header p.subtitle {
+      margin-top: .8rem;
+      font-size: .95rem;
+      color: var(--muted);
+      max-width: 540px;
+      margin-inline: auto;
+    }
+
+    /* ── LAYOUT ── */
+    main {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 5rem;
+    }
+
+    /* ── INTRO CARD ── */
+    .intro-card {
+      background: var(--off);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.6rem 1.8rem;
+      margin-bottom: 2.8rem;
+      animation: fadeUp .5s .1s ease both;
+    }
+
+    .intro-card p {
+      font-size: .96rem;
+      color: var(--text);
+      line-height: 1.75;
+    }
+
+    .intro-card strong { font-weight: 700; }
+
+    /* ── SECTION ── */
+    section {
+      margin-bottom: 2.4rem;
+      animation: fadeUp .5s ease both;
+    }
+
+    section:nth-child(2) { animation-delay: .15s; }
+    section:nth-child(3) { animation-delay: .25s; }
+    section:nth-child(4) { animation-delay: .35s; }
+    section:nth-child(5) { animation-delay: .45s; }
+    section:nth-child(6) { animation-delay: .55s; }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .section-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .dot-green  { background: var(--green); }
+    .dot-red    { background: var(--red); }
+    .dot-amber  { background: var(--amber); }
+    .dot-blue   { background: var(--blue); }
+
+    .section-header h2 {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* ── CARDS ── */
+    .card {
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      padding: 1.4rem 1.6rem;
+      font-size: .92rem;
+    }
+
+    .card-green  { background: var(--green-bg); border-color: #b7dfc8; }
+    .card-red    { background: var(--red-bg);   border-color: #f0bebe; }
+    .card-amber  { background: var(--amber-bg); border-color: #f5d89a; }
+    .card-blue   { background: var(--blue-bg);  border-color: #bfcfff; }
+    .card-grey   { background: var(--off);      border-color: var(--border); }
+
+    /* ── LIST ── */
+    ul.check-list, ul.problem-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: .55rem;
+    }
+
+    ul.check-list li::before {
+      content: "✔";
+      color: var(--green);
+      font-size: .85rem;
+      margin-right: .55rem;
+    }
+
+    ul.problem-list li { padding-left: 1.6rem; position: relative; }
+    ul.problem-list li::before {
+      content: "—";
+      color: var(--muted);
+      position: absolute;
+      left: 0;
+      font-weight: 300;
+    }
+
+    /* ── RATING BADGE ── */
+    .rating-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .badge {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: .9rem 1.4rem;
+      min-width: 110px;
+      text-align: center;
+    }
+
+    .badge .val {
+      font-family: var(--serif);
+      font-size: 1.7rem;
+      font-weight: 600;
+      color: var(--red);
+      line-height: 1;
+    }
+
+    .badge .lbl {
+      font-size: .73rem;
+      color: var(--muted);
+      margin-top: .35rem;
+      letter-spacing: .04em;
+    }
+
+    /* ── PROBLEM GROUPS ── */
+    .problem-group {
+      margin-bottom: 1rem;
+    }
+
+    .problem-group-title {
+      font-weight: 700;
+      font-size: .85rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: .4rem;
+    }
+
+    /* ── VERDICT ── */
+    .verdict-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .9rem;
+      margin-bottom: 1.2rem;
+    }
+
+    @media (max-width: 480px) {
+      .verdict-grid { grid-template-columns: 1fr; }
+    }
+
+    .verdict-item {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.2rem;
+      font-size: .9rem;
+    }
+
+    .verdict-item .q { color: var(--muted); font-size: .8rem; margin-bottom: .2rem; }
+    .verdict-item .a { font-weight: 700; font-size: 1rem; }
+    .verdict-item .a.yes  { color: var(--green); }
+    .verdict-item .a.no   { color: var(--red); }
+
+    /* ── TIPS ── */
+    ul.tips-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: .6rem;
+    }
+
+    ul.tips-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: .65rem;
+      font-size: .92rem;
+    }
+
+    ul.tips-list li .icon {
+      font-size: 1rem;
+      flex-shrink: 0;
+      margin-top: .05rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 2rem 1rem 2.5rem;
+      border-top: 1px solid var(--border);
+      font-size: .8rem;
+      color: var(--muted);
+      animation: fadeUp .5s .6s ease both;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="tag">Análise de Confiança</div>
+  <h1>zapatos.es <span>· Vale a pena?</span></h1>
+  <p class="subtitle">Uma avaliação clara e honesta sobre reputação, fiabilidade e riscos desta loja online de calçado.</p>
+</header>
+
+<main>
+
+  <!-- INTRO -->
+  <div class="intro-card">
+    <p>
+      Sim, o que te disseram está correto: <strong>zapatos.es</strong> é uma loja real e pertence a uma empresa polaca, concretamente ao grupo <strong>CCC</strong> — um dos maiores distribuidores de calçado na Europa. Não é uma fraude, mas a sua reputação entre clientes é bastante irregular.
+    </p>
+  </div>
+
+  <!-- PONTOS POSITIVOS -->
+  <section>
+    <div class="section-header">
+      <div class="section-dot dot-green"></div>
+      <h2>O que tem de bom</h2>
+    </div>
+    <div class="card card-green">
+      <ul class="check-list">
+        <li>Empresa real com estrutura internacional sólida</li>
+        <li>Catálogo amplo com mais de 400 marcas disponíveis</li>
+        <li>Preços competitivos — por vezes mais baratos do que outros sites</li>
+        <li>Muitos clientes reportam entregas em poucos dias</li>
+        <li>Produtos geralmente corretos e originais</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- PONTOS NEGATIVOS -->
+  <section>
+    <div class="section-header">
+      <div class="section-dot dot-red"></div>
+      <h2>O que tem de mau</h2>
+    </div>
+    <div class="card card-red">
+      <div class="rating-row">
+        <div class="badge">
+          <span class="val">2,8</span>
+          <span class="lbl">/ 5 no Trustpilot</span>
+        </div>
+        <div class="badge">
+          <span class="val">38%</span>
+          <span class="lbl">avaliações de 1 estrela</span>
+        </div>
+      </div>
+
+      <div class="problem-group">
+        <div class="problem-group-title">🚚 Envios</div>
+        <ul class="problem-list">
+          <li>Atrasos significativos ou encomendas que não chegam</li>
+          <li>Falta de rastreamento claro do pacote</li>
+        </ul>
+      </div>
+
+      <div class="problem-group">
+        <div class="problem-group-title">📞 Atendimento ao cliente</div>
+        <ul class="problem-list">
+          <li>Difícil de contactar</li>
+          <li>Respostas lentas ou pouco úteis</li>
+        </ul>
+      </div>
+
+      <div class="problem-group">
+        <div class="problem-group-title">💸 Devoluções e reembolsos</div>
+        <ul class="problem-list">
+          <li>Reembolsos tardios</li>
+          <li>Problemas ao devolver produtos</li>
+          <li>Falta de resposta após envio da devolução</li>
+        </ul>
+      </div>
+
+      <div class="problem-group" style="margin-bottom:0">
+        <div class="problem-group-title">👟 Produto</div>
+        <ul class="problem-list">
+          <li>Artigos com defeito em alguns casos</li>
+          <li>Tamanhos incorretos</li>
+          <li>Produtos que não correspondem à descrição</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- VEREDICTO -->
+  <section>
+    <div class="section-header">
+      <div class="section-dot dot-amber"></div>
+      <h2>Conclusão honesta</h2>
+    </div>
+    <div class="card card-amber">
+      <div class="verdict-grid">
+        <div class="verdict-item">
+          <div class="q">Funciona?</div>
+          <div class="a yes">Sim.</div>
+        </div>
+        <div class="verdict-item">
+          <div class="q">Tão fiável como Zalando ou Amazon?</div>
+          <div class="a no">Não.</div>
+        </div>
+      </div>
+      <p style="font-size:.92rem; color:var(--text);">
+        É um site de <strong>risco médio</strong>: podes ter uma boa experiência — muitos clientes têm — mas existe uma probabilidade real de problemas, sobretudo se precisares de devolver algo ou de apoio ao cliente.
+      </p>
+    </div>
+  </section>
+
+  <!-- RECOMENDAÇÕES -->
+  <section>
+    <div class="section-header">
+      <div class="section-dot dot-blue"></div>
+      <h2>Recomendações se decidires comprar</h2>
+    </div>
+    <div class="card card-blue">
+      <ul class="tips-list">
+        <li><span class="icon">💳</span> Usa PayPal ou cartão com proteção ao comprador</li>
+        <li><span class="icon">⏱️</span> Evita compras urgentes, por precaução face a possíveis atrasos</li>
+        <li><span class="icon">📏</span> Verifica bem os tamanhos e as condições de devolução antes de pagar</li>
+        <li><span class="icon">💰</span> Não compres produtos caros se ainda não tiveres a certeza da fiabilidade</li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>Se quiseres, indica que tipo de calçado procuras e podemos sugerir alternativas mais fiáveis em termos de preço e qualidade.</p>
+</footer>
+
+</body>
+</html>
