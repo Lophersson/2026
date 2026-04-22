@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cuenta Atrás</title>
+<style>
+  /* ── CONFIG ── cambia TARGET_DATE en el JS ── */
+
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+
+  :root {
+    --bg: #fdf8f5;
+    --surface: #ffffff;
+    --border: #f0e8e0;
+    --text: #2a1f1a;
+    --muted: #9c8878;
+    --accent: #e8405a;
+    --accent-light: #fde8ec;
+    --shadow: rgba(180, 100, 80, 0.10);
+    --shadow-soft: rgba(232, 64, 90, 0.06);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* ── Fondo suave con gradiente animado ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 20% 20%, rgba(232,64,90,0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 50% at 80% 80%, rgba(255,180,140,0.07) 0%, transparent 70%);
+    pointer-events: none;
+    animation: bgPulse 8s ease-in-out infinite alternate;
+  }
+
+  @keyframes bgPulse {
+    from { opacity: 0.7; }
+    to   { opacity: 1; }
+  }
+
+  /* ── Corazones flotantes ── */
+  .hearts-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+  }
+
+  .heart {
+    position: absolute;
+    bottom: -60px;
+    font-size: 1.2rem;
+    opacity: 0;
+    animation: floatHeart linear infinite;
+    filter: drop-shadow(0 2px 4px rgba(232,64,90,0.3));
+  }
+
+  @keyframes floatHeart {
+    0%   { transform: translateY(0) translateX(0) scale(0.8) rotate(-10deg); opacity: 0; }
+    10%  { opacity: 0.55; }
+    50%  { transform: translateY(-45vh) translateX(20px) scale(1) rotate(8deg); }
+    80%  { opacity: 0.3; }
+    100% { transform: translateY(-100vh) translateX(-10px) scale(0.6) rotate(-5deg); opacity: 0; }
+  }
+
+  /* ── Wrapper principal ── */
+  .wrapper {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 480px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  /* ── Tarjeta base ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 1.8rem 2rem;
+    box-shadow: 0 4px 24px var(--shadow), 0 1px 3px rgba(0,0,0,0.04);
+    animation: fadeUp 0.6s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card:nth-child(2) { animation-delay: 0.15s; }
+  .card:nth-child(3) { animation-delay: 0.28s; }
+
+  /* ── Título de sección ── */
+  .section-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.70rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.9rem;
+  }
+
+  /* ── Bloque de hora actual ── */
+  .now-time {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 14vw, 4.2rem);
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    animation: tickPulse 1s ease-in-out infinite alternate;
+  }
+
+  @keyframes tickPulse {
+    from { opacity: 1; }
+    to   { opacity: 0.85; }
+  }
+
+  .now-date {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--muted);
+    margin-top: 0.4rem;
+  }
+
+  /* ── Objetivo ── */
+  .target-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .target-heart {
+    font-size: 1.3rem;
+    animation: heartbeat 1.4s ease-in-out infinite;
+  }
+
+  @keyframes heartbeat {
+    0%,100% { transform: scale(1); }
+    14%     { transform: scale(1.25); }
+    28%     { transform: scale(1); }
+    42%     { transform: scale(1.18); }
+    56%     { transform: scale(1); }
+  }
+
+  .target-datetime {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  /* ── Countdown grid ── */
+  .countdown-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .unit-box {
+    background: var(--accent-light);
+    border-radius: 14px;
+    padding: 1rem 0.5rem 0.8rem;
+    text-align: center;
+    border: 1px solid rgba(232,64,90,0.12);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .unit-box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px var(--shadow-soft);
+  }
+
+  .unit-value {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 7vw, 2.2rem);
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+    display: block;
+    transition: transform 0.12s cubic-bezier(.34,1.56,.64,1);
+  }
+
+  .unit-value.bump {
+    animation: bump 0.18s cubic-bezier(.34,1.56,.64,1);
+  }
+
+  @keyframes bump {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.18); }
+    100% { transform: scale(1); }
+  }
+
+  .unit-label {
+    font-size: 0.60rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: block;
+    margin-top: 0.35rem;
+  }
+
+  /* ── Mensaje final ── */
+  .finished-msg {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.3rem;
+    color: var(--accent);
+    text-align: center;
+    padding: 0.5rem 0;
+    animation: fadeUp 0.5s ease both;
+    display: none;
+  }
+
+  /* ── Footer discreto ── */
+  .footer-note {
+    text-align: center;
+    font-size: 0.72rem;
+    color: var(--muted);
+    opacity: 0.7;
+    margin-top: 0.5rem;
+  }
+
+  /* Línea separadora fina */
+  .divider {
+    width: 40px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    border-radius: 2px;
+    margin: 0.9rem 0;
+    opacity: 0.4;
+  }
+</style>
+</head>
+<body>
+
+<!-- Corazones flotantes -->
+<div class="hearts-container" id="heartsContainer"></div>
+
+<div class="wrapper">
+
+  <!-- Tarjeta 1: Ahora -->
+  <div class="card">
+    <div class="section-label">Ahora mismo</div>
+    <div class="now-time" id="nowTime">--:--:--</div>
+    <div class="now-date" id="nowDate">cargando...</div>
+  </div>
+
+  <!-- Tarjeta 2: Cuenta atrás -->
+  <div class="card">
+    <div class="section-label">Cuenta atrás hasta</div>
+    <div class="target-row">
+      <span class="target-heart">❤️</span>
+      <span class="target-datetime" id="targetLabel">--</span>
+    </div>
+    <div class="divider"></div>
+    <div class="countdown-grid">
+      <div class="unit-box">
+        <span class="unit-value" id="cdDays">--</span>
+        <span class="unit-label">días</span>
+      </div>
+      <div class="unit-box">
+        <span class="unit-value" id="cdHours">--</span>
+        <span class="unit-label">horas</span>
+      </div>
+      <div class="unit-box">
+        <span class="unit-value" id="cdMinutes">--</span>
+        <span class="unit-label">min</span>
+      </div>
+      <div class="unit-box">
+        <span class="unit-value" id="cdSeconds">--</span>
+        <span class="unit-label">seg</span>
+      </div>
+    </div>
+    <div class="finished-msg" id="finishedMsg">¡Ha llegado el momento! ❤️</div>
+  </div>
+
+</div>
+
+<div class="footer-note">La hora se obtiene de tu dispositivo</div>
+
+<script>
+  // ════════════════════════════════════════
+  //   ✏️  MODIFICA AQUÍ LA FECHA OBJETIVO
+  // ════════════════════════════════════════
+  const TARGET_DATE = new Date(2026, 3, 24, 11, 20, 0);
+  //  new Date(año, mes-1, día, hora, min, seg)
+  //  ej: 24 abril 2026 a las 11:20 → (2026, 3, 24, 11, 20, 0)
+  // ════════════════════════════════════════
+
+  // ── Mostrar fecha objetivo ──
+  const months = ['enero','febrero','marzo','abril','mayo','junio',
+                  'julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  const days   = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+
+  function pad(n){ return String(n).padStart(2,'0'); }
+
+  document.getElementById('targetLabel').textContent =
+    `${TARGET_DATE.getDate()} de ${months[TARGET_DATE.getMonth()]} de ${TARGET_DATE.getFullYear()} · ${pad(TARGET_DATE.getHours())}:${pad(TARGET_DATE.getMinutes())}`;
+
+  // ── Reloj actual ──
+  function updateClock(){
+    const now = new Date();
+    document.getElementById('nowTime').textContent =
+      `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+    document.getElementById('nowDate').textContent =
+      `${days[now.getDay()]}, ${now.getDate()} de ${months[now.getMonth()]} de ${now.getFullYear()}`;
+  }
+
+  // ── Cuenta atrás ──
+  let prevSec = -1;
+  function updateCountdown(){
+    const now  = new Date();
+    const diff = TARGET_DATE - now;
+
+    if(diff <= 0){
+      ['cdDays','cdHours','cdMinutes','cdSeconds'].forEach(id=>{
+        document.getElementById(id).textContent = '00';
+      });
+      document.getElementById('finishedMsg').style.display = 'block';
+      return;
+    }
+
+    const totalSec = Math.floor(diff / 1000);
+    const s = totalSec % 60;
+    const m = Math.floor(totalSec / 60) % 60;
+    const h = Math.floor(totalSec / 3600) % 24;
+    const d = Math.floor(totalSec / 86400);
+
+    const setUnit = (id, val) => {
+      const el = document.getElementById(id);
+      const formatted = String(val).padStart(2,'0');
+      if(el.textContent !== formatted){
+        el.textContent = formatted;
+        el.classList.remove('bump');
+        void el.offsetWidth; // reflow
+        el.classList.add('bump');
+      }
+    };
+
+    setUnit('cdDays',    d);
+    setUnit('cdHours',   h);
+    setUnit('cdMinutes', m);
+    setUnit('cdSeconds', s);
+  }
+
+  // ── Corazones flotantes ──
+  const container = document.getElementById('heartsContainer');
+  const HEARTS = ['❤️','🤍','♥'];
+
+  function spawnHeart(){
+    const el = document.createElement('span');
+    el.className = 'heart';
+    el.textContent = HEARTS[Math.floor(Math.random() * HEARTS.length)];
+    el.style.left    = Math.random() * 100 + 'vw';
+    el.style.fontSize = (0.8 + Math.random() * 1.2) + 'rem';
+    const dur = 7 + Math.random() * 8;
+    el.style.animationDuration = dur + 's';
+    el.style.animationDelay    = (Math.random() * 2) + 's';
+    container.appendChild(el);
+    setTimeout(() => el.remove(), (dur + 2) * 1000);
+  }
+
+  // Lanza corazones periódicamente
+  spawnHeart();
+  setInterval(spawnHeart, 2200);
+
+  // ── Tick principal ──
+  function tick(){
+    updateClock();
+    updateCountdown();
+  }
+  tick();
+  setInterval(tick, 1000);
+</script>
+</body>
+</html>
