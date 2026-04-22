@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Defesa perante a Comissão / Defensa ante la Comisión</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --parchment: #f5f0e8;
+    --parchment-dark: #ede6d6;
+    --parchment-mid: #e8e0cc;
+    --ink: #2c2416;
+    --ink-light: #4a3f2f;
+    --ink-muted: #7a6a52;
+    --gold: #8b6914;
+    --gold-light: #b8922a;
+    --rule: #c8b896;
+    --seal: #6b3a1f;
+  }
+
+  html { font-size: 16px; }
+
+  body {
+    background-color: #ddd5c0;
+    background-image:
+      radial-gradient(ellipse at 20% 10%, #e8dfc8 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 90%, #d4c8ad 0%, transparent 55%);
+    min-height: 100vh;
+    font-family: 'Source Sans 3', sans-serif;
+    color: var(--ink);
+    padding: 2.5rem 1rem 4rem;
+  }
+
+  /* ── Language Toggle ── */
+  .lang-bar {
+    max-width: 780px;
+    margin: 0 auto 1.5rem;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.7rem;
+  }
+  .lang-label {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+  .toggle-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .toggle-track {
+    position: relative;
+    width: 52px;
+    height: 26px;
+    background: var(--parchment-mid);
+    border: 1.5px solid var(--rule);
+    border-radius: 13px;
+    cursor: pointer;
+    transition: background 0.3s;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.15);
+  }
+  .toggle-track.active { background: var(--gold); border-color: var(--gold-light); }
+  .toggle-thumb {
+    position: absolute;
+    top: 2px; left: 2px;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+    transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+  }
+  .toggle-track.active .toggle-thumb { transform: translateX(26px); }
+  .flag { font-size: 1rem; line-height: 1; }
+
+  /* ── Document ── */
+  .document {
+    max-width: 780px;
+    margin: 0 auto;
+    background: var(--parchment);
+    border: 1px solid var(--rule);
+    box-shadow:
+      0 2px 4px rgba(0,0,0,0.08),
+      0 8px 32px rgba(0,0,0,0.12),
+      inset 0 0 60px rgba(200,180,140,0.08);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Decorative corner lines */
+  .document::before {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border: 1px solid var(--rule);
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  /* Paper texture overlay */
+  .document::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    opacity: 0.6;
+  }
+
+  .doc-inner { padding: 3.5rem 4rem; position: relative; z-index: 1; }
+
+  /* Header */
+  .doc-header {
+    text-align: center;
+    padding-bottom: 2rem;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid var(--rule);
+    position: relative;
+  }
+  .doc-header::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 1px;
+    background: var(--gold);
+    margin: 0.6rem auto 0;
+  }
+
+  .emblem {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 0.8rem;
+    opacity: 0.7;
+  }
+
+  .doc-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 1.55rem;
+    color: var(--ink);
+    letter-spacing: 0.04em;
+    line-height: 1.3;
+    margin-bottom: 0.35rem;
+  }
+
+  .doc-subtitle {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+
+  .doc-meta {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.75rem;
+    color: var(--ink-muted);
+    letter-spacing: 0.04em;
+  }
+
+  /* Sections */
+  .section { margin-bottom: 2rem; }
+
+  .section-rule {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 0.9rem;
+  }
+  .section-rule::before {
+    content: '';
+    display: block;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--gold);
+    flex-shrink: 0;
+  }
+  .section-rule::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--rule), transparent);
+  }
+
+  h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--ink);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  p {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.05rem;
+    line-height: 1.85;
+    color: var(--ink-light);
+    text-align: justify;
+    hyphens: auto;
+    margin-top: 0.6rem;
+  }
+
+  ul {
+    list-style: none;
+    margin-top: 0.7rem;
+    padding-left: 0;
+  }
+  ul li {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--ink-light);
+    padding: 0.25rem 0 0.25rem 1.6rem;
+    position: relative;
+    border-bottom: 1px dotted rgba(200,184,150,0.4);
+  }
+  ul li:last-child { border-bottom: none; }
+  ul li::before {
+    content: '◆';
+    position: absolute;
+    left: 0;
+    top: 0.3rem;
+    font-size: 0.45rem;
+    color: var(--gold);
+    line-height: 1.8;
+  }
+
+  /* Footer */
+  .doc-footer {
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 2rem;
+  }
+
+  .footer-text {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.72rem;
+    color: var(--ink-muted);
+    letter-spacing: 0.06em;
+    line-height: 1.6;
+  }
+
+  .signature-area {
+    text-align: center;
+    min-width: 160px;
+  }
+
+  .sig-line {
+    width: 160px;
+    height: 1px;
+    background: var(--ink-muted);
+    margin-bottom: 0.4rem;
+  }
+
+  .sig-label {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+
+  /* Transition */
+  [data-pt], [data-es] { transition: opacity 0.2s; }
+  .lang-es [data-pt] { display: none; }
+  .lang-pt [data-es] { display: none; }
+
+  @media (max-width: 600px) {
+    .doc-inner { padding: 2rem 1.5rem; }
+    .doc-footer { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<div class="lang-bar">
+  <span class="flag">🇵🇹</span>
+  <div class="toggle-wrap">
+    <div class="toggle-track" id="langToggle" onclick="toggleLang()" title="Alternar idioma / Cambiar idioma">
+      <div class="toggle-thumb"></div>
+    </div>
+  </div>
+  <span class="flag">🇪🇸</span>
+</div>
+
+<div class="document" id="doc">
+  <div class="doc-inner">
+
+    <!-- Header -->
+    <div class="doc-header">
+      <span class="emblem">⚖️</span>
+      <div class="doc-subtitle">
+        <span data-pt>Documento de Defesa</span>
+        <span data-es>Documento de Defensa</span>
+      </div>
+      <h1 class="doc-title">
+        <span data-pt>Defesa perante a Comissão</span>
+        <span data-es>Defensa ante la Comisión</span>
+      </h1>
+      <div class="doc-meta">
+        <span data-pt>Exposição da situação familiar — Menor com necessidades específicas</span>
+        <span data-es>Exposición de la situación familiar — Menor con necesidades específicas</span>
+      </div>
+    </div>
+
+    <!-- Intro -->
+    <div class="section">
+      <div class="section-rule">
+        <h2>
+          <span data-pt>Introdução</span>
+          <span data-es>Introducción</span>
+        </h2>
+      </div>
+      <p data-pt>Em primeiro lugar, quero manifestar a minha total disponibilidade para colaborar com a Comissão e agradecer a oportunidade de poder explicar a situação do meu filho. A minha prioridade absoluta é o seu bem-estar, o seu desenvolvimento emocional e a sua estabilidade, tanto no ambiente familiar como no escolar.</p>
+      <p data-es>En primer lugar, quiero mostrar mi total disposición a colaborar con la Comisión y agradecer la oportunidad de poder explicar la situación de mi hijo. Mi prioridad absoluta es su bienestar, su desarrollo emocional y su estabilidad, tanto en el entorno familiar como en el escolar.</p>
+    </div>
+
+    <!-- Situação familiar -->
+    <div class="section">
+      <div class="section-rule">
+        <h2>
+          <span data-pt>Sobre a situação familiar</span>
+          <span data-es>Sobre la situación familiar</span>
+        </h2>
+      </div>
+      <p data-pt>O meu filho, de 11 anos, tem um diagnóstico leve dentro do espectro autista. Como é sabido, este tipo de condição pode implicar uma maior sensibilidade às mudanças, necessidade de rotinas estáveis e algumas dificuldades de adaptação a ambientes variáveis.</p>
+      <p data-pt>Atualmente, em virtude da separação dos progenitores, existe um regime de guarda partilhada semanal. Este modelo foi adotado com a intenção de garantir a presença equilibrada de ambos os pais na sua vida, sempre com base no respeito e no carinho.</p>
+      <p data-es>Mi hijo, de 11 años, cuenta con un diagnóstico leve dentro del espectro autista. Como es sabido, este tipo de condición puede implicar una mayor sensibilidad a los cambios, necesidad de rutinas estables y ciertas dificultades en la adaptación a entornos variables.</p>
+      <p data-es>Actualmente, debido a la separación de los progenitores, existe un régimen de custodia compartida semanal. Este modelo se adoptó con la intención de garantizar la presencia equilibrada de ambos padres en su vida, siempre desde el respeto y el cariño.</p>
+    </div>
+
+    <!-- Impacto -->
+    <div class="section">
+      <div class="section-rule">
+        <h2>
+          <span data-pt>Sobre o impacto observado</span>
+          <span data-es>Sobre el impacto observado</span>
+        </h2>
+      </div>
+      <p data-pt>Estamos cientes de que a mudança semanal de domicílio pode gerar alguma instabilidade na criança, especialmente tendo em conta a sua condição. Este facto pode estar a influenciar:</p>
+      <p data-es>Somos conscientes de que el cambio semanal de domicilio puede generar cierta inestabilidad en el niño, especialmente teniendo en cuenta su condición. Este hecho puede estar influyendo en:</p>
+      <ul>
+        <li>
+          <span data-pt>O seu comportamento no ambiente escolar</span>
+          <span data-es>Su comportamiento en el entorno escolar</span>
+        </li>
+        <li>
+          <span data-pt>A sua capacidade de concentração</span>
+          <span data-es>Su capacidad de concentración</span>
+        </li>
+        <li>
+          <span data-pt>O seu rendimento académico</span>
+          <span data-es>Su rendimiento académico</span>
+        </li>
+      </ul>
+      <p data-pt>Não obstante, é importante salientar que não existe negligência, desatenção nem falta de envolvimento por parte de nenhum dos progenitores. Ambos estamos comprometidos com os seus cuidados, educação e desenvolvimento.</p>
+      <p data-es>No obstante, es importante señalar que no existe desatención, negligencia ni falta de implicación por parte de ninguno de los progenitores. Ambos estamos comprometidos con su cuidado, educación y desarrollo.</p>
+    </div>
+
+    <!-- Medidas -->
+    <div class="section">
+      <div class="section-rule">
+        <h2>
+          <span data-pt>Medidas adotadas</span>
+          <span data-es>Medidas adoptadas</span>
+        </h2>
+      </div>
+      <p data-pt>Para minimizar o impacto desta situação, estão a ser levadas a cabo (ou propõe-se levar a cabo) as seguintes ações:</p>
+      <p data-es>Para minimizar el impacto de esta situación, se están llevando a cabo (o se propone llevar a cabo) las siguientes acciones:</p>
+      <ul>
+        <li>
+          <span data-pt>Manter rotinas o mais semelhantes possível em ambos os domicílios</span>
+          <span data-es>Mantener rutinas lo más similares posibles en ambos domicilios</span>
+        </li>
+        <li>
+          <span data-pt>Coordenação constante entre ambos os progenitores</span>
+          <span data-es>Coordinación constante entre ambos progenitores</span>
+        </li>
+        <li>
+          <span data-pt>Comunicação com o estabelecimento de ensino</span>
+          <span data-es>Comunicación con el centro educativo</span>
+        </li>
+        <li>
+          <span data-pt>Acompanhamento por profissionais (psicólogo, orientador, etc., se aplicável)</span>
+          <span data-es>Seguimiento por profesionales (psicólogo, orientador, etc., si aplica)</span>
+        </li>
+        <li>
+          <span data-pt>Adaptações específicas de acordo com as necessidades do menor</span>
+          <span data-es>Adaptaciones específicas según las necesidades del menor</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Atitude -->
+    <div class="section">
+      <div class="section-rule">
+        <h2>
+          <span data-pt>Atitude perante a intervenção da Comissão</span>
+          <span data-es>Actitud ante la intervención de la Comisión</span>
+        </h2>
+      </div>
+      <p data-pt>Compreendemos e valorizamos a intervenção da Comissão como uma ferramenta de apoio e proteção. A nossa postura é totalmente colaborativa e aberta a recomendações que possam melhorar a situação.</p>
+      <p data-pt>Em nenhum caso existe uma situação de risco grave, mas sim uma dificuldade de adaptação decorrente de um contexto familiar normal após uma separação, agravada pelas características próprias do menor.</p>
+      <p data-es>Entendemos y valoramos la intervención de la Comisión como una herramienta de apoyo y protección. Nuestra postura es totalmente colaborativa y abierta a recomendaciones que puedan mejorar la situación.</p>
+      <p data-es>En ningún caso existe una situación de riesgo grave, sino una dificultad de adaptación derivada de un contexto familiar normal tras una separación, agravada por las características propias del menor.</p>
+    </div>
+
+    <!-- Proposta -->
+    <div class="section">
+      <div class="section-rule">
+        <h2>
+          <span data-pt>Proposta e compromisso</span>
+          <span data-es>Propuesta y compromiso</span>
+        </h2>
+      </div>
+      <p data-pt>Estamos disponíveis para:</p>
+      <p data-es>Estamos dispuestos a:</p>
+      <ul>
+        <li>
+          <span data-pt>Rever o regime de convivência se for considerado benéfico para o menor</span>
+          <span data-es>Revisar el régimen de convivencia si se considera beneficioso para el menor</span>
+        </li>
+        <li>
+          <span data-pt>Aplicar qualquer recomendação técnica ou educativa</span>
+          <span data-es>Aplicar cualquier recomendación técnica o educativa</span>
+        </li>
+        <li>
+          <span data-pt>Participar em programas de orientação familiar, se necessário</span>
+          <span data-es>Participar en programas de orientación familiar si fuera necesario</span>
+        </li>
+      </ul>
+      <p data-pt>O nosso objetivo comum deve ser garantir a estabilidade emocional, o desenvolvimento educativo e o bem-estar integral da criança.</p>
+      <p data-es>Nuestro objetivo común debe ser garantizar la estabilidad emocional, el desarrollo educativo y el bienestar integral del niño.</p>
+    </div>
+
+    <!-- Encerramento -->
+    <div class="section">
+      <div class="section-rule">
+        <h2>
+          <span data-pt>Encerramento</span>
+          <span data-es>Cierre</span>
+        </h2>
+      </div>
+      <p data-pt>Reitero o meu compromisso como progenitor/a e a minha vontade de colaboração. Confio em que, com o apoio adequado, esta situação poderá ser reencaminhada de forma positiva para o meu filho.</p>
+      <p data-es>Reitero mi compromiso como progenitor/a y mi voluntad de colaboración. Confío en que, con el apoyo adecuado, esta situación podrá reconducirse de manera positiva para mi hijo.</p>
+    </div>
+
+    <!-- Footer -->
+    <div class="doc-footer">
+      <div class="footer-text">
+        <span data-pt>Documento preparado para apresentação oral<br>perante a Comissão de Proteção</span>
+        <span data-es>Documento preparado para exposición oral<br>ante la Comisión de Protección</span>
+      </div>
+      <div class="signature-area">
+        <div class="sig-line"></div>
+        <div class="sig-label">
+          <span data-pt>Progenitor/a</span>
+          <span data-es>Progenitor/a</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /doc-inner -->
+</div><!-- /document -->
+
+<script>
+  let isES = false;
+  const toggle = document.getElementById('langToggle');
+  const doc = document.getElementById('doc');
+
+  function toggleLang() {
+    isES = !isES;
+    toggle.classList.toggle('active', isES);
+    doc.classList.toggle('lang-es', isES);
+    doc.classList.toggle('lang-pt', !isES);
+    document.documentElement.lang = isES ? 'es' : 'pt';
+  }
+
+  // Init: PT by default
+  doc.classList.add('lang-pt');
+</script>
+</body>
+</html>
