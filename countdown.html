@@ -271,7 +271,7 @@
 
   <!-- Tarjeta 2: Cuenta atrás -->
   <div class="card">
-    <div class="section-label">Cuenta atrás hasta</div>
+    <div class="section-label">Humberto en Barcelos con Karina 😍</div>
     <div class="target-row">
       <span class="target-heart">❤️</span>
       <span class="target-datetime" id="targetLabel">--</span>
@@ -369,14 +369,14 @@
 
   // ── Corazones flotantes ──
   const container = document.getElementById('heartsContainer');
-  const HEARTS = ['❤️','🤍','♥'];
+  const HEARTS = ['❤️','💘','❤️‍🔥','💝','💖'];
 
   function spawnHeart(){
     const el = document.createElement('span');
     el.className = 'heart';
     el.textContent = HEARTS[Math.floor(Math.random() * HEARTS.length)];
     el.style.left    = Math.random() * 100 + 'vw';
-    el.style.fontSize = (0.8 + Math.random() * 1.2) + 'rem';
+    el.style.fontSize = (1.8 + Math.random() * 1.2) + 'rem';
     const dur = 7 + Math.random() * 8;
     el.style.animationDuration = dur + 's';
     el.style.animationDelay    = (Math.random() * 2) + 's';
@@ -386,7 +386,7 @@
 
   // Lanza corazones periódicamente
   spawnHeart();
-  setInterval(spawnHeart, 2200);
+  setInterval(spawnHeart, 3300);
 
   // ── Tick principal ──
   function tick(){
@@ -394,7 +394,7 @@
     updateCountdown();
   }
   tick();
-  setInterval(tick, 1000);
+  setInterval(tick, 750);
 </script>
 </body>
 </html>
