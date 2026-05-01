@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="pt" data-lang="pt" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Humberto López Rodríguez · CV 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Source+Sans+3:wght@300;400;500;600&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+/* ── TOKENS ───────────────────────────────────────── */
+:root{
+  --bg:#f7f5f0;
+  --bg2:#eeebe3;
+  --surface:#ffffff;
+  --surface2:rgba(255,255,255,0.7);
+  --border:rgba(160,130,70,0.22);
+  --border2:rgba(0,0,0,0.08);
+  --gold:#8a6e2f;
+  --gold-dim:rgba(138,110,47,0.55);
+  --gold-glow:rgba(138,110,47,0.07);
+  --navy:#1a2540;
+  --navy-dim:rgba(26,37,64,0.6);
+  --text:#1a1a1a;
+  --text-muted:rgba(26,26,26,0.62);
+  --text-dim:rgba(26,26,26,0.38);
+  --positive:#2e7d52;
+  --positive-bg:rgba(46,125,82,0.07);
+  --radius:8px;
+  --fs:16px;
+  --scale:1;
+}
+[data-theme="dark"]{
+  --bg:#0a0d16;--bg2:#0f1320;
+  --surface:rgba(255,255,255,0.04);--surface2:rgba(255,255,255,0.02);
+  --border:rgba(196,160,80,0.16);--border2:rgba(255,255,255,0.07);
+  --gold:#c4a050;--gold-dim:rgba(196,160,80,0.5);--gold-glow:rgba(196,160,80,0.08);
+  --navy:#c0cce8;--navy-dim:rgba(192,204,232,0.55);
+  --text:#ede8dc;--text-muted:rgba(237,232,220,0.6);--text-dim:rgba(237,232,220,0.3);
+  --positive:#6fcf97;--positive-bg:rgba(111,207,151,0.07);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:calc(var(--fs) * var(--scale));scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:'Source Sans 3',sans-serif;font-weight:400;
+  min-height:100vh;overflow-x:hidden;
+  transition:background .3s,color .3s;
+}
+
+/* SUBTLE PAPER TEXTURE */
+[data-theme="light"] body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  opacity:.5;
+}
+
+/* DARK ORB */
+[data-theme="dark"] .orb{position:fixed;border-radius:50%;pointer-events:none;filter:blur(110px);z-index:0}
+[data-theme="dark"] .o1{width:600px;height:600px;background:radial-gradient(circle,rgba(196,160,80,.05),transparent 70%);top:-150px;right:-80px}
+[data-theme="dark"] .o2{width:400px;height:400px;background:radial-gradient(circle,rgba(80,100,200,.04),transparent 70%);bottom:5%;left:-80px}
+
+/* TOP ACCENT BAR */
+body::after{
+  content:'';position:fixed;top:0;left:0;right:0;height:3px;z-index:100;
+  background:linear-gradient(90deg,var(--navy),var(--gold),var(--navy));
+}
+
+/* ── LAYOUT ────────────────────────────────────────── */
+.wrap{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:0 28px 60px}
+
+/* ── TOOLBAR ───────────────────────────────────────── */
+.toolbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 0 12px;border-bottom:1px solid var(--border);margin-bottom:0;
+  flex-wrap:wrap;gap:8px;
+}
+.logo{
+  font-family:'Playfair Display',serif;font-size:.95rem;font-weight:600;
+  letter-spacing:.25em;color:var(--gold);text-transform:uppercase;
+}
+.tbar-r{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.btn{
+  padding:4px 11px;border-radius:5px;border:1px solid var(--border2);
+  background:var(--surface);color:var(--text-muted);
+  font-family:'IBM Plex Mono',monospace;font-size:.66rem;letter-spacing:.04em;
+  cursor:pointer;transition:all .2s;
+}
+.btn:hover,.btn.on{border-color:var(--gold-dim);color:var(--gold);background:var(--gold-glow)}
+.lang-pills{display:flex;gap:3px}
+.lang-btn{padding:3px 9px;border-radius:5px;border:1px solid var(--border2);
+  background:transparent;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;font-size:.63rem;
+  cursor:pointer;transition:all .2s;letter-spacing:.05em}
+.lang-btn.on{border-color:var(--navy);color:var(--navy);background:rgba(26,37,64,.07)}
+[data-theme="dark"] .lang-btn.on{border-color:var(--gold);color:var(--gold);background:var(--gold-glow)}
+
+/* SIZE CONTROLS */
+.size-ctrl{display:flex;align-items:center;gap:2px}
+.size-btn{
+  width:26px;height:26px;border-radius:5px;border:1px solid var(--border2);
+  background:var(--surface);color:var(--text-muted);
+  font-family:'IBM Plex Mono',monospace;font-size:.8rem;font-weight:500;
+  cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;
+  line-height:1;
+}
+.size-btn:hover{border-color:var(--gold-dim);color:var(--gold);background:var(--gold-glow)}
+.size-label{font-family:'IBM Plex Mono',monospace;font-size:.6rem;color:var(--text-dim);min-width:28px;text-align:center}
+
+/* ── HERO ──────────────────────────────────────────── */
+.hero{
+  display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;
+  padding:28px 0 22px;border-bottom:2px solid var(--border);
+  animation:fadeUp .6s ease both;
+}
+.hero-photo{
+  width:100px;height:100px;border-radius:4px;
+  border:2px solid var(--border);
+  object-fit:cover;object-position:top center;
+  box-shadow:0 4px 20px rgba(0,0,0,.12);
+  display:block;
+}
+.hero-name{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.7rem,4.5vw,2.8rem);font-weight:700;line-height:1.08;
+  color:var(--navy);letter-spacing:-.01em;
+}
+[data-theme="dark"] .hero-name{color:var(--text)}
+.hero-name span{color:var(--gold);font-style:italic;font-weight:400}
+.hero-title{
+  margin-top:7px;font-family:'IBM Plex Mono',monospace;font-size:.7rem;
+  letter-spacing:.15em;color:var(--text-muted);text-transform:uppercase;
+}
+.hero-contact{
+  display:flex;flex-direction:column;gap:5px;align-items:flex-end;
+  font-family:'IBM Plex Mono',monospace;font-size:.67rem;color:var(--text-muted);
+}
+.hero-contact a{color:var(--text-muted);text-decoration:none;transition:color .2s}
+.hero-contact a:hover{color:var(--gold)}
+.hero-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px}
+.tag{
+  padding:3px 10px;border-radius:3px;
+  border:1px solid var(--border);font-size:.66rem;
+  font-family:'IBM Plex Mono',monospace;letter-spacing:.04em;color:var(--text-muted);
+  background:var(--surface);
+}
+
+/* ── SECTIONS ──────────────────────────────────────── */
+.cv-section{padding:22px 0 0;animation:fadeUp .5s ease both}
+.sec-head{
+  display:flex;align-items:center;gap:10px;margin-bottom:14px;
+}
+.sec-bar{width:3px;height:22px;background:var(--gold);border-radius:2px;flex-shrink:0}
+.sec-label{
+  font-family:'IBM Plex Mono',monospace;font-size:.59rem;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--gold-dim);
+}
+.sec-title{
+  font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:600;
+  color:var(--navy);margin-top:1px;letter-spacing:-.01em;
+}
+[data-theme="dark"] .sec-title{color:var(--text)}
+
+/* ── PERFIL ────────────────────────────────────────── */
+.perfil-text{
+  font-size:.94rem;line-height:1.7;color:var(--text-muted);max-width:740px;
+}
+.perfil-text strong{color:var(--navy);font-weight:600}
+[data-theme="dark"] .perfil-text strong{color:var(--text)}
+
+/* ── EXPERIENCIA ───────────────────────────────────── */
+.exp-list{display:flex;flex-direction:column}
+.exp-item{
+  display:grid;grid-template-columns:1fr auto;
+  padding:13px 0;border-bottom:1px solid var(--border2);
+  gap:12px;
+}
+.exp-item:last-child{border-bottom:none}
+.exp-role{font-size:.93rem;font-weight:600;color:var(--navy);margin-bottom:2px}
+[data-theme="dark"] .exp-role{color:var(--text)}
+.exp-company{font-size:.74rem;color:var(--gold);font-family:'IBM Plex Mono',monospace;margin-bottom:4px;font-weight:500}
+.exp-desc{font-size:.82rem;color:var(--text-muted);line-height:1.55}
+.exp-date{
+  font-family:'IBM Plex Mono',monospace;font-size:.63rem;color:var(--text-dim);
+  text-align:right;white-space:nowrap;padding-top:3px;
+}
+
+/* ── SKILL AREAS ───────────────────────────────────── */
+.skill-areas{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.skill-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:14px;transition:border-color .2s,box-shadow .2s;
+}
+[data-theme="light"] .skill-card{box-shadow:0 1px 6px rgba(0,0,0,.05)}
+.skill-card:hover{border-color:var(--gold-dim);box-shadow:0 3px 14px rgba(0,0,0,.08)}
+.skill-card-icon{font-size:1rem;margin-bottom:6px}
+.skill-card-title{font-size:.82rem;font-weight:600;color:var(--navy);margin-bottom:4px}
+[data-theme="dark"] .skill-card-title{color:var(--text)}
+.skill-card-desc{font-size:.76rem;color:var(--text-muted);line-height:1.5}
+
+/* ── COMPETENCIAS TÉCNICAS ─────────────────────────── */
+.comp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:16px}
+.comp-block-title{
+  font-family:'IBM Plex Mono',monospace;font-size:.62rem;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--navy-dim);margin-bottom:8px;
+  padding-bottom:5px;border-bottom:1px solid var(--border);font-weight:500;
+}
+[data-theme="dark"] .comp-block-title{color:var(--gold-dim)}
+.pill-list{display:flex;flex-wrap:wrap;gap:4px}
+.pill{
+  padding:3px 9px;border-radius:3px;border:1px solid var(--border2);
+  font-size:.68rem;font-family:'IBM Plex Mono',monospace;color:var(--text-muted);
+  background:var(--surface);
+}
+.pill.gold{border-color:var(--gold-dim);color:var(--gold);background:var(--gold-glow)}
+
+/* ── PROYECTOS ─────────────────────────────────────── */
+.proj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:11px}
+.proj-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:14px;transition:all .2s;
+}
+[data-theme="light"] .proj-card{box-shadow:0 1px 6px rgba(0,0,0,.05)}
+.proj-card:hover{border-color:var(--gold-dim);box-shadow:0 4px 18px rgba(0,0,0,.09)}
+.proj-icon{font-size:.95rem;margin-bottom:6px}
+.proj-title{font-size:.84rem;font-weight:600;color:var(--navy);margin-bottom:4px}
+[data-theme="dark"] .proj-title{color:var(--text)}
+.proj-desc{font-size:.74rem;color:var(--text-muted);line-height:1.48;margin-bottom:7px}
+.proj-tags{display:flex;flex-wrap:wrap;gap:3px}
+.proj-tag{padding:2px 7px;border-radius:3px;font-size:.62rem;
+  font-family:'IBM Plex Mono',monospace;border:1px solid var(--border);color:var(--text-dim)}
+
+/* ── FORMACIÓN ─────────────────────────────────────── */
+.edu-list{display:flex;flex-direction:column;gap:8px}
+.edu-item{
+  display:grid;grid-template-columns:1fr auto;
+  padding:12px 14px;background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);gap:12px;align-items:center;
+}
+[data-theme="light"] .edu-item{box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.edu-title{font-size:.88rem;font-weight:600;color:var(--navy);margin-bottom:2px}
+[data-theme="dark"] .edu-title{color:var(--text)}
+.edu-inst{font-size:.73rem;color:var(--text-muted);font-family:'IBM Plex Mono',monospace}
+.edu-badge{
+  padding:3px 9px;border-radius:3px;font-size:.62rem;
+  font-family:'IBM Plex Mono',monospace;height:fit-content;white-space:nowrap;
+  border:1px solid var(--border);color:var(--text-dim);font-weight:500;
+}
+.edu-badge.active{border-color:var(--positive);color:var(--positive);background:var(--positive-bg)}
+.edu-badge.done{border-color:var(--gold-dim);color:var(--gold)}
+
+/* ── CERTIFICADOS ──────────────────────────────────── */
+.cert-list{display:flex;flex-direction:column;gap:7px}
+.cert-item{
+  display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;
+  padding:11px 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+}
+[data-theme="light"] .cert-item{box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.cert-num{
+  font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:400;
+  color:var(--gold-dim);line-height:1;width:20px;text-align:center;
+}
+.cert-title{font-size:.82rem;font-weight:600;color:var(--navy);margin-bottom:2px}
+[data-theme="dark"] .cert-title{color:var(--text)}
+.cert-inst{font-size:.7rem;color:var(--text-muted);font-family:'IBM Plex Mono',monospace}
+.cert-hours{
+  font-family:'IBM Plex Mono',monospace;font-size:.65rem;color:var(--gold-dim);
+  text-align:right;font-weight:500;
+}
+
+/* ── IDIOMAS ───────────────────────────────────────── */
+.lang-list{display:flex;gap:10px;flex-wrap:wrap}
+.lang-item{
+  flex:1;min-width:130px;padding:13px 14px;
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  text-align:center;
+}
+[data-theme="light"] .lang-item{box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.lang-flag{font-size:1.2rem;margin-bottom:6px}
+.lang-name{font-size:.86rem;font-weight:600;color:var(--navy);margin-bottom:3px}
+[data-theme="dark"] .lang-name{color:var(--text)}
+.lang-level{font-family:'IBM Plex Mono',monospace;font-size:.67rem;color:var(--text-muted)}
+.lang-bar{height:3px;background:var(--border2);border-radius:2px;margin-top:8px;overflow:hidden}
+.lang-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--navy),var(--gold))}
+[data-theme="dark"] .lang-fill{background:linear-gradient(90deg,var(--gold),var(--gold-dim))}
+
+/* ── OBJETIVO ──────────────────────────────────────── */
+.obj-box{
+  background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--gold);
+  border-radius:var(--radius);padding:20px 22px;
+}
+[data-theme="light"] .obj-box{box-shadow:0 1px 8px rgba(0,0,0,.05)}
+.obj-text{font-size:.9rem;line-height:1.72;color:var(--text-muted);margin-bottom:14px}
+.obj-text strong{color:var(--navy);font-weight:600}
+[data-theme="dark"] .obj-text strong{color:var(--text)}
+.obj-list{display:flex;flex-direction:column;gap:5px}
+.obj-item{
+  display:flex;align-items:center;gap:9px;
+  font-size:.8rem;color:var(--text-muted);
+}
+.obj-item::before{
+  content:'';width:5px;height:5px;border-radius:50%;
+  background:var(--gold);flex-shrink:0;
+}
+
+/* ── DIVIDER ───────────────────────────────────────── */
+hr.div{border:none;border-top:1px solid var(--border);margin:0}
+
+/* ── FOOTER ────────────────────────────────────────── */
+footer{
+  text-align:center;padding:22px 0 8px;
+  font-family:'IBM Plex Mono',monospace;font-size:.61rem;letter-spacing:.12em;
+  color:var(--text-dim);
+}
+
+/* ── PRINT ─────────────────────────────────────────── */
+@media print{
+  body{background:#fff!important;color:#111!important}
+  .toolbar,.orb,body::before,body::after{display:none!important}
+  .cv-section{break-inside:avoid}
+  :root{--bg:#fff;--text:#111;--text-muted:#444;--gold:#8a6e2f;--navy:#1a2540;--border:#ddd;--surface:#f9f9f9}
+}
+
+/* ── ANIMATIONS ────────────────────────────────────── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.cv-section:nth-child(2){animation-delay:.04s}
+.cv-section:nth-child(3){animation-delay:.08s}
+.cv-section:nth-child(4){animation-delay:.12s}
+.cv-section:nth-child(5){animation-delay:.16s}
+.cv-section:nth-child(6){animation-delay:.20s}
+
+/* ── RESPONSIVE ────────────────────────────────────── */
+@media(max-width:600px){
+  .hero{grid-template-columns:1fr}
+  .hero-contact{align-items:flex-start}
+  .comp-grid{grid-template-columns:1fr 1fr}
+}
+
+/* ── I18N ──────────────────────────────────────────── */
+[data-es],[data-en]{display:none}
+</style>
+</head>
+<body>
+<div class="orb o1"></div>
+<div class="orb o2"></div>
+
+<div class="wrap">
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <div class="logo">Lophersson</div>
+  <div class="tbar-r">
+    <div class="lang-pills">
+      <button class="lang-btn" onclick="setLang('es')">ES</button>
+      <button class="lang-btn" onclick="setLang('en')">EN</button>
+      <button class="lang-btn on" onclick="setLang('pt')">PT</button>
+    </div>
+    <!-- FONT SIZE -->
+    <div class="size-ctrl">
+      <button class="size-btn" onclick="adjustSize(-1)" title="Reducir texto">−</button>
+      <span class="size-label" id="sizeLabel">100%</span>
+      <button class="size-btn" onclick="adjustSize(1)" title="Aumentar texto">+</button>
+    </div>
+    <button class="btn" onclick="toggleTheme()" id="themeBtn">◑ <span data-pt>Modo escuro</span><span data-es style="display:none">Modo oscuro</span><span data-en style="display:none">Dark mode</span></button>
+    <button class="btn" onclick="window.print()">🖨 PDF</button>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div>
+    <div class="hero-name">Humberto<br><span>López Rodríguez</span></div>
+    <div class="hero-title">
+      <span data-es style="display:none">Financial Data Analyst · FinTech · Business Intelligence</span>
+      <span data-en style="display:none">Financial Data Analyst · FinTech · Business Intelligence</span>
+      <span data-pt>Analista de Dados Financeiros · FinTech · Business Intelligence</span>
+    </div>
+    <div class="hero-tags">
+      <span class="tag">Finanças</span>
+      <span class="tag">FP&amp;A</span>
+      <span class="tag">FinTech</span>
+      <span class="tag">Data Analyst</span>
+      <span class="tag">Ciberseg. Fin.</span>
+    </div>
+    <div class="hero-contact" style="margin-top:12px;align-items:flex-start">
+      <span>📍 Ferrol · A Coruña</span>
+      <a href="tel:+34658868490">📞 658 868 490</a>
+      <a href="https://wa.me/34658868490">💬 WhatsApp</a>
+      <a href="mailto:negronoche50@outlook.com">✉ negronoche50@outlook.com</a>
+      <a href="https://lophersson.github.io/2026/" target="_blank">🌐 lophersson.github.io/2026</a>
+    </div>
+  </div>
+  <div>
+    <img class="hero-photo" src="https://pbs.twimg.com/profile_images/2012681173093216257/DOMH01O8_200x200.jpg" alt="Humberto López Rodríguez"/>
+  </div>
+</div>
+
+<!-- ── 1. PERFIL PROFISSIONAL ─────────────────────────── -->
+<div class="cv-section">
+  <div class="sec-head">
+    <div class="sec-bar"></div>
+    <div>
+      <div class="sec-label" data-pt>Perfil Profissional</div>
+      <div class="sec-label" data-es style="display:none">Perfil Profesional</div>
+      <div class="sec-label" data-en style="display:none">Professional Profile</div>
+    </div>
+  </div>
+  <p class="perfil-text">
+    <span data-pt>Analista financeiro com <strong>perfil tecnológico híbrido</strong> e mais de 10 anos de experiência em banca, back office financeiro, contabilidade analítica e tesouraria. Especializado em <strong>FP&amp;A, controlo de gestão e reporting executivo</strong> com Power BI, Excel avançado, SQL e ERP. Sólidos conhecimentos em <strong>análise contabilística e estrutura de custos</strong>, assim como no desenvolvimento de <strong>ferramentas financeiras interativas</strong> em HTML, CSS e JavaScript. Competência no uso eficaz de <strong>inteligência artificial generativa</strong> para otimização de processos e automação de tarefas analíticas. Familiarizado com <strong>vendas online e comércio eletrónico</strong> em plataformas digitais. Capaz de conectar finanças, dados e tecnologia em ambientes <strong>FinTech e Business Intelligence</strong>.</span>
+    <span data-es style="display:none">Analista financiero con <strong>perfil tecnológico híbrido</strong> y más de 10 años de experiencia en banca, back office financiero, contabilidad analítica y tesorería. Especializado en <strong>FP&amp;A, control de gestión y reporting ejecutivo</strong> con Power BI, Excel avanzado, SQL y ERP. Sólidos conocimientos en <strong>análisis contable y estructuras de costes</strong>, así como en el desarrollo de <strong>herramientas financieras interactivas</strong> mediante HTML, CSS y JavaScript. Competencia en el uso eficaz de <strong>inteligencia artificial generativa</strong> para optimización de procesos, diseño de prompts orientados a resultados y automatización de tareas analíticas. Familiarizado con <strong>venta online y comercio electrónico</strong> en plataformas digitales, con visión del ciclo de venta y experiencia de cliente. Capaz de conectar finanzas, datos y tecnología para aportar valor en entornos <strong>FinTech y Business Intelligence</strong>.</span>
+    <span data-en style="display:none">Finance professional with a <strong>hybrid technology profile</strong> and over 10 years of experience in banking, financial back office, analytical accounting and treasury. Specialised in <strong>FP&amp;A, management control and executive reporting</strong> with Power BI, advanced Excel, SQL and ERP. Strong background in <strong>accounting analysis and cost structures</strong>, as well as the development of <strong>interactive financial tools</strong> using HTML, CSS and JavaScript. Proficient in the effective use of <strong>generative AI</strong> for process optimisation, results-oriented prompt design and analytical task automation. Familiar with <strong>online sales and e-commerce</strong> on digital platforms. Able to connect finance, data and technology to deliver value in <strong>FinTech and Business Intelligence</strong> environments.</span>
+  </p>
+</div>
+
+<hr class="div"/>
+
+<!-- ── 2. EXPERIÊNCIA ─────────────────────────────────── -->
+<div class="cv-section">
+  <div class="sec-head">
+    <div class="sec-bar"></div>
+    <div>
+      <div class="sec-label" data-pt>Experiência Relevante</div>
+      <div class="sec-label" data-es style="display:none">Experiencia Relevante</div>
+      <div class="sec-label" data-en style="display:none">Relevant Experience</div>
+    </div>
+  </div>
+  <div class="exp-list">
+
+    <div class="exp-item">
+      <div>
+        <div class="exp-role" data-pt>Freelance · Tesoureiro, Administrador Privado &amp; Gestor de Finanças</div>
+        <div class="exp-role" data-es style="display:none">Freelance · Tesorero, Administrador Privado &amp; Gestor de Finanzas</div>
+        <div class="exp-role" data-en style="display:none">Freelance · Treasurer, Private Administrator &amp; Personal Finance Manager</div>
+        <div class="exp-company">Atividade independente · Particulares &amp; PME – A Coruña</div>
+        <div class="exp-desc" data-pt>Serviços de tesouraria, guarda e custódia de capitais para particulares e pequenas empresas. Administração privada de patrimónios, planeamento financeiro pessoal, controlo orçamental e gestão de fluxos de caixa. Assessoria em otimização de despesas, acompanhamento de investimentos e elaboração de relatórios financeiros periódicos.</div>
+        <div class="exp-desc" data-es style="display:none">Servicios de tesorería, guarda y custodia de capitales para particulares y pequeñas empresas. Administración privada de patrimonios, planificación financiera personal, control presupuestario y gestión de flujos de caja. Asesoramiento en optimización de gastos, seguimiento de inversiones y elaboración de informes financieros periódicos.</div>
+        <div class="exp-desc" data-en style="display:none">Treasury services, capital safekeeping and custody for individuals and small businesses. Private wealth administration, personal financial planning, budget control and cash flow management. Advisory on expense optimisation, investment monitoring and periodic financial reporting.</div>
+      </div>
+      <div class="exp-date" style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+        <span style="color:var(--positive);font-family:'IBM Plex Mono',monospace;font-size:.61rem;border:1px solid var(--positive);border-radius:3px;padding:2px 7px;background:var(--positive-bg)" data-pt>ATUAL</span>
+        <span style="color:var(--positive);font-family:'IBM Plex Mono',monospace;font-size:.61rem;border:1px solid var(--positive);border-radius:3px;padding:2px 7px;background:var(--positive-bg);display:none" data-es>ACTUAL</span>
+        <span style="color:var(--positive);font-family:'IBM Plex Mono',monospace;font-size:.61rem;border:1px solid var(--positive);border-radius:3px;padding:2px 7px;background:var(--positive-bg);display:none" data-en>CURRENT</span>
+        <span>2025 —</span>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div>
+        <div class="exp-role" data-pt>Técnico de Cibersegurança</div>
+        <div class="exp-role" data-es style="display:none">Técnico de Ciberseguridad</div>
+        <div class="exp-role" data-en style="display:none">Cybersecurity Technician</div>
+        <div class="exp-company">Escuela de Finanzas Business School – Oleiros</div>
+        <div class="exp-desc" data-pt>Monitorização, análise e resposta a incidentes em sistemas financeiros. Análise de riscos e aplicação de protocolos RGPD.</div>
+        <div class="exp-desc" data-es style="display:none">Monitorización, análisis y respuesta a incidentes en sistemas financieros. Análisis de riesgos y aplicación de protocolos RGPD.</div>
+        <div class="exp-desc" data-en style="display:none">Monitoring, analysis and incident response in financial systems. Risk analysis and GDPR protocol application.</div>
+      </div>
+      <div class="exp-date">2024</div>
+    </div>
+
+    <div class="exp-item">
+      <div>
+        <div class="exp-role">QA Tester</div>
+        <div class="exp-company">Editorial La Capital – A Coruña</div>
+        <div class="exp-desc" data-pt>Testes funcionais, garantia de qualidade e reporte de erros em ambientes web.</div>
+        <div class="exp-desc" data-es style="display:none">Pruebas funcionales, aseguramiento de calidad y reporte de errores en entornos web.</div>
+        <div class="exp-desc" data-en style="display:none">Functional testing, quality assurance and bug reporting in web environments.</div>
+      </div>
+      <div class="exp-date">2024</div>
+    </div>
+
+    <div class="exp-item">
+      <div>
+        <div class="exp-role" data-pt>Gestor de Informação</div>
+        <div class="exp-role" data-es style="display:none">Gestor de la Información</div>
+        <div class="exp-role" data-en style="display:none">Information Systems Manager</div>
+        <div class="exp-company">Libolis – A Coruña</div>
+        <div class="exp-desc" data-pt>Gestão de dados, bases de dados relacionais e CRM corporativo. Tratamento e exploração de informação estruturada.</div>
+        <div class="exp-desc" data-es style="display:none">Gestión de datos, bases de datos relacionales y CRM corporativo. Tratamiento y explotación de información estructurada.</div>
+        <div class="exp-desc" data-en style="display:none">Data management, relational databases and corporate CRM. Processing and exploitation of structured information.</div>
+      </div>
+      <div class="exp-date">2023</div>
+    </div>
+
+    <div class="exp-item">
+      <div>
+        <div class="exp-role" data-pt>Gestor de Operações – Back Office Bancário</div>
+        <div class="exp-role" data-es style="display:none">Gestor de Operaciones – Back Office Bancario</div>
+        <div class="exp-role" data-en style="display:none">Operations Manager – Banking Back Office</div>
+        <div class="exp-company">Abanca Servicios Financieros – A Coruña</div>
+        <div class="exp-desc" data-pt>Gestão de créditos, operativa back office bancário e uso do aplicativo Oficina 2000. Conciliações e controlo de operações financeiras.</div>
+        <div class="exp-desc" data-es style="display:none">Gestión de créditos, operativa back office bancario y manejo del aplicativo Oficina 2000. Conciliaciones y control de operaciones financieras.</div>
+        <div class="exp-desc" data-en style="display:none">Credit management, banking back office operations and Oficina 2000 application. Reconciliations and financial operations control.</div>
+      </div>
+      <div class="exp-date">2020</div>
+    </div>
+
+    <div class="exp-item">
+      <div>
+        <div class="exp-role" data-pt>Administrativo Contabilístico</div>
+        <div class="exp-role" data-es style="display:none">Administrativo Contable</div>
+        <div class="exp-role" data-en style="display:none">Accounting Administrator</div>
+        <div class="exp-company">Asesoría Serva – Ferrol</div>
+        <div class="exp-desc" data-pt>Contabilidade analítica, liquidação de impostos, gestão de tesouraria e conciliações bancárias. Elaboração de balanços e demonstrações de resultados.</div>
+        <div class="exp-desc" data-es style="display:none">Contabilidad analítica, liquidación de impuestos, gestión de tesorería y conciliaciones bancarias. Elaboración de balances y cuentas de resultados.</div>
+        <div class="exp-desc" data-en style="display:none">Analytical accounting, tax settlement, treasury management and bank reconciliations. Balance sheets and income statement preparation.</div>
+      </div>
+      <div class="exp-date">2017</div>
+    </div>
+
+    <div class="exp-item">
+      <div>
+        <div class="exp-role" data-pt>Funcionário Bancário</div>
+        <div class="exp-role" data-es style="display:none">Empleado de Banca</div>
+        <div class="exp-role" data-en style="display:none">Banking Officer</div>
+        <div class="exp-company">BNP Paribas · Bankinter · Ibercaja</div>
+        <div class="exp-desc" data-pt>Operativa bancária, produtos de financiamento e investimento, declarações de IRS em diversas entidades do setor.</div>
+        <div class="exp-desc" data-es style="display:none">Operativa bancaria, productos de financiación, inversión y declaraciones IRPF en distintas entidades del sector.</div>
+        <div class="exp-desc" data-en style="display:none">Banking operations, financing and investment products, income tax declarations across multiple financial institutions.</div>
+      </div>
+      <div class="exp-date">2005–2007</div>
+    </div>
+
+  </div>
+</div>
+
+<hr class="div"/>
+
+<!-- ── 3. ÁREAS DE ESPECIALIZAÇÃO ───────────────────── -->
+<div class="cv-section">
+  <div class="sec-head">
+    <div class="sec-bar"></div>
+    <div>
+      <div class="sec-label" data-pt>FinTech · Análise · Tecnologia</div>
+      <div class="sec-label" data-es style="display:none">FinTech · Análisis · Tecnología</div>
+      <div class="sec-label" data-en style="display:none">FinTech · Analysis · Technology</div>
+    </div>
+  </div>
+  <div class="skill-areas">
+    <div class="skill-card">
+      <div class="skill-card-icon">📊</div>
+      <div class="skill-card-title" data-pt>Análise de Dados Financeiros</div>
+      <div class="skill-card-title" data-es style="display:none">Análisis de Datos Financieros</div>
+      <div class="skill-card-title" data-en style="display:none">Financial Data Analysis</div>
+      <div class="skill-card-desc" data-pt>Modelização, KPIs, dashboards interativos, forecasting e análise de desvios.</div>
+      <div class="skill-card-desc" data-es style="display:none">Modelización, KPIs, dashboards interactivos, forecasting y análisis de desviaciones.</div>
+      <div class="skill-card-desc" data-en style="display:none">Modelling, KPIs, interactive dashboards, forecasting and variance analysis.</div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-card-icon">🏦</div>
+      <div class="skill-card-title" data-pt>FinTech &amp; Sistemas Digitais</div>
+      <div class="skill-card-title" data-es style="display:none">FinTech &amp; Sistemas Digitales</div>
+      <div class="skill-card-title" data-en style="display:none">FinTech &amp; Digital Systems</div>
+      <div class="skill-card-desc" data-pt>ERP, banca digital, processamento de dados, automação e integração de APIs.</div>
+      <div class="skill-card-desc" data-es style="display:none">ERP, banca digital, procesamiento de datos, automatización e integración de APIs.</div>
+      <div class="skill-card-desc" data-en style="display:none">ERP, digital banking, data processing, automation and API integration.</div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-card-icon">🔐</div>
+      <div class="skill-card-title" data-pt>Cibersegurança Financeira</div>
+      <div class="skill-card-title" data-es style="display:none">Ciberseguridad Financiera</div>
+      <div class="skill-card-title" data-en style="display:none">Financial Cybersecurity</div>
+      <div class="skill-card-desc" data-pt>Segurança em sistemas financeiros, RGPD, análise de riscos e prevenção de fraude digital.</div>
+      <div class="skill-card-desc" data-es style="display:none">Seguridad en sistemas financieros, RGPD, análisis de riesgos y prevención de fraude digital.</div>
+      <div class="skill-card-desc" data-en style="display:none">Security in financial systems, GDPR, risk analysis and digital fraud prevention.</div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-card-icon">🤖</div>
+      <div class="skill-card-title" data-pt>Inteligência Artificial Aplicada</div>
+      <div class="skill-card-title" data-es style="display:none">Inteligencia Artificial Aplicada</div>
+      <div class="skill-card-title" data-en style="display:none">Applied Artificial Intelligence</div>
+      <div class="skill-card-desc" data-pt>Uso eficaz de modelos de IA generativa (Claude, ChatGPT, Copilot). Design de prompts orientados a resultados em ambientes analíticos e financeiros.</div>
+      <div class="skill-card-desc" data-es style="display:none">Uso eficaz de modelos de IA generativa (Claude, ChatGPT, Copilot). Diseño de prompts orientados a resultados en entornos analíticos y financieros.</div>
+      <div class="skill-card-desc" data-en style="display:none">Effective use of generative AI models (Claude, ChatGPT, Copilot). Results-oriented prompt design in analytical and financial environments.</div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-card-icon">🛒</div>
+      <div class="skill-card-title" data-pt>Comércio Eletrónico &amp; Venda Online</div>
+      <div class="skill-card-title" data-es style="display:none">Comercio Electrónico &amp; Venta Online</div>
+      <div class="skill-card-title" data-en style="display:none">E-Commerce &amp; Online Sales</div>
+      <div class="skill-card-desc" data-pt>Operação em plataformas de comércio eletrónico. Gestão do ciclo de venda digital, experiência do cliente e análise de desempenho de vendas online.</div>
+      <div class="skill-card-desc" data-es style="display:none">Operación en plataformas de comercio electrónico. Gestión del ciclo de venta digital, experiencia de cliente y análisis de rendimiento de ventas online.</div>
+      <div class="skill-card-desc" data-en style="display:none">Operation on e-commerce platforms. Digital sales cycle management, customer experience and online sales performance analysis.</div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-card-icon">💻</div>
+      <div class="skill-card-title" data-pt>Desenvolvimento Web &amp; Ferramentas Financeiras</div>
+      <div class="skill-card-title" data-es style="display:none">Desarrollo Web &amp; Herramientas Financieras</div>
+      <div class="skill-card-title" data-en style="display:none">Web Dev &amp; Financial Tools</div>
+      <div class="skill-card-desc" data-pt>Desenvolvimento de calculadoras, simuladores e dashboards financeiros interativos com HTML5, CSS3 e JavaScript. Visualização de dados com Chart.js.</div>
+      <div class="skill-card-desc" data-es style="display:none">Desarrollo de calculadoras, simuladores y dashboards financieros interactivos con HTML5, CSS3 y JavaScript. Visualización de datos con Chart.js.</div>
+      <div class="skill-card-desc" data-en style="display:none">Development of interactive financial calculators, simulators and dashboards with HTML5, CSS3 and JavaScript. Data visualisation with Chart.js.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="div"/>
+
+<!-- ── 4. COMPETÊNCIAS TÉCNICAS ───────────────────────── -->
+<div class="cv-section">
+  <div class="sec-head">
+    <div class="sec-bar"></div>
+    <div>
+      <div class="sec-label" data-pt>Competências Técnicas</div>
+      <div class="sec-label" data-es style="display:none">Competencias Técnicas</div>
+      <div class="sec-label" data-en style="display:none">Technical Skills</div>
+    </div>
+  </div>
+  <div class="comp-grid">
+    <div class="comp-block">
+      <div class="comp-block-title" data-pt>💰 Finanças &amp; Controlo</div>
+      <div class="comp-block-title" data-es style="display:none">💰 Finanzas &amp; Control</div>
+      <div class="comp-block-title" data-en style="display:none">💰 Finance &amp; Control</div>
+      <div class="pill-list">
+        <span class="pill gold">Contabilidade analítica</span>
+        <span class="pill gold">FP&amp;A</span>
+        <span class="pill">Orçamentação</span>
+        <span class="pill">Controlo de Gestão</span>
+        <span class="pill">Tesouraria</span>
+        <span class="pill">Conciliações</span>
+        <span class="pill">Reporting financeiro</span>
+        <span class="pill">Forecasting</span>
+        <span class="pill">Análise de custos</span>
+        <span class="pill">Análise de viabilidade</span>
+      </div>
+    </div>
+    <div class="comp-block">
+      <div class="comp-block-title" data-pt>📊 Dados &amp; BI</div>
+      <div class="comp-block-title" data-es style="display:none">📊 Datos &amp; BI</div>
+      <div class="comp-block-title" data-en style="display:none">📊 Data &amp; BI</div>
+      <div class="pill-list">
+        <span class="pill gold">Excel Avançado</span>
+        <span class="pill gold">Power BI</span>
+        <span class="pill gold">SQL / MySQL</span>
+        <span class="pill">Python básico</span>
+        <span class="pill">Análise de KPIs</span>
+        <span class="pill">Modelização financeira</span>
+        <span class="pill">Visualização de dados</span>
+        <span class="pill">Matemática financeira</span>
+      </div>
+    </div>
+    <div class="comp-block">
+      <div class="comp-block-title" data-pt>💻 Sistemas &amp; Dev</div>
+      <div class="comp-block-title" data-es style="display:none">💻 Sistemas &amp; Dev</div>
+      <div class="comp-block-title" data-en style="display:none">💻 Systems &amp; Dev</div>
+      <div class="pill-list">
+        <span class="pill gold">SAP</span>
+        <span class="pill gold">Dynamics 365</span>
+        <span class="pill">Odoo</span>
+        <span class="pill">Anfix</span>
+        <span class="pill">HTML5 / CSS3 / JS</span>
+        <span class="pill">GitHub</span>
+        <span class="pill">Banca digital</span>
+        <span class="pill">CRM</span>
+        <span class="pill">APIs REST</span>
+      </div>
+    </div>
+    <div class="comp-block">
+      <div class="comp-block-title" data-pt>🤖 IA &amp; Digital</div>
+      <div class="comp-block-title" data-es style="display:none">🤖 IA &amp; Digital</div>
+      <div class="comp-block-title" data-en style="display:none">🤖 AI &amp; Digital</div>
+      <div class="pill-list">
+        <span class="pill gold">IA Generativa</span>
+        <span class="pill gold">Prompt Engineering</span>
+        <span class="pill">Claude / ChatGPT</span>
+        <span class="pill">Copilot</span>
+        <span class="pill">E-commerce</span>
+        <span class="pill">Venda online</span>
+        <span class="pill">WordPress</span>
+        <span class="pill">SEO básico</span>
+      </div>
+    </div>
+    <div class="comp-block">
+      <div class="comp-block-title" data-pt>🔐 Cibersegurança</div>
+      <div class="comp-block-title" data-es style="display:none">🔐 Ciberseguridad</div>
+      <div class="comp-block-title" data-en style="display:none">🔐 Cybersecurity</div>
+      <div class="pill-list">
+        <span class="pill">RGPD</span>
+        <span class="pill">Análise de riscos</span>
+        <span class="pill">Prevenção de fraude</span>
+        <span class="pill">Segurança sistemas fin.</span>
+        <span class="pill">QA Testing</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="div"/>
+
+<!-- ── 5. PROJETOS DESTACADOS ────────────────────────── -->
+<div class="cv-section">
+  <div class="sec-head">
+    <div class="sec-bar"></div>
+    <div>
+      <div class="sec-label" data-pt>Projetos Destacados</div>
+      <div class="sec-label" data-es style="display:none">Proyectos Destacados</div>
+      <div class="sec-label" data-en style="display:none">Featured Projects</div>
+    </div>
+  </div>
+  <div class="proj-grid">
+    <div class="proj-card">
+      <div class="proj-icon">📊</div>
+      <div class="proj-title" data-pt>Dashboard CFO – Análise Financeira</div>
+      <div class="proj-title" data-es style="display:none">Dashboard CFO – Análisis Financiero</div>
+      <div class="proj-title" data-en style="display:none">CFO Dashboard – Financial Analysis</div>
+      <div class="proj-desc" data-pt>Painel executivo com cenários, KPIs e indicadores interativos. Visualização de resultados com Chart.js.</div>
+      <div class="proj-desc" data-es style="display:none">Panel ejecutivo con escenarios, KPIs e indicadores interactivos. Visualización de resultados con Chart.js.</div>
+      <div class="proj-desc" data-en style="display:none">Executive panel with scenarios, KPIs and interactive indicators. Results visualisation with Chart.js.</div>
+      <div class="proj-tags"><span class="proj-tag">Chart.js</span><span class="proj-tag">HTML/JS</span><span class="proj-tag">FP&amp;A</span></div>
+    </div>
+    <div class="proj-card">
+      <div class="proj-icon">🧮</div>
+      <div class="proj-title" data-pt>Suite de Matemática Financeira</div>
+      <div class="proj-title" data-es style="display:none">Suite Matemáticas Financieras</div>
+      <div class="proj-title" data-en style="display:none">Financial Mathematics Suite</div>
+      <div class="proj-desc" data-pt>22 exercícios interativos: VAL/TIR, amortização, depreciação, regressão linear, CAPM, WACC e análise de viabilidade.</div>
+      <div class="proj-desc" data-es style="display:none">22 ejercicios interactivos: VAN/TIR, amortización, depreciación, regresión lineal, CAPM, WACC y análisis de viabilidad.</div>
+      <div class="proj-desc" data-en style="display:none">22 interactive exercises: NPV/IRR, amortisation, depreciation, linear regression, CAPM, WACC and feasibility analysis.</div>
+      <div class="proj-tags"><span class="proj-tag">Finanças</span><span class="proj-tag">Econometria</span><span class="proj-tag">JS</span></div>
+    </div>
+    <div class="proj-card">
+      <div class="proj-icon">🏦</div>
+      <div class="proj-title" data-pt>Calculadora FinTech (Fintonic)</div>
+      <div class="proj-title" data-es style="display:none">Calculadora FinTech (Fintonic)</div>
+      <div class="proj-title" data-en style="display:none">FinTech Calculator (Fintonic)</div>
+      <div class="proj-desc" data-pt>Calculadora de empréstimos com parâmetros financeiros reais, prestações e TAEG com Newton-Raphson.</div>
+      <div class="proj-desc" data-es style="display:none">Calculadora de préstamos con parámetros financieros reales, cuotas y TAE con Newton-Raphson.</div>
+      <div class="proj-desc" data-en style="display:none">Loan calculator with real financial parameters, instalments and APR using Newton-Raphson.</div>
+      <div class="proj-tags"><span class="proj-tag">Finanças</span><span class="proj-tag">JS</span><span class="proj-tag">UX</span></div>
+    </div>
+    <div class="proj-card">
+      <div class="proj-icon">🇵🇹</div>
+      <div class="proj-title" data-pt>Simulador IRS Modelo 3 – Portugal</div>
+      <div class="proj-title" data-es style="display:none">Simulador IRS Modelo 3 – Portugal</div>
+      <div class="proj-title" data-en style="display:none">IRS Model 3 Simulator – Portugal</div>
+      <div class="proj-desc" data-pt>Simulador fiscal português multilingue com escalões de rendimento 2024 e deduções.</div>
+      <div class="proj-desc" data-es style="display:none">Simulador fiscal portugués multilingüe con tramos de renta 2024 y deducciones.</div>
+      <div class="proj-desc" data-en style="display:none">Multilingual Portuguese tax simulator with 2024 income brackets and deductions.</div>
+      <div class="proj-tags"><span class="proj-tag">Fiscal</span><span class="proj-tag">ES/PT/EN</span></div>
+    </div>
+    <div class="proj-card">
+      <div class="proj-icon">💳</div>
+      <div class="proj-title" data-pt>Suite Orçamentos &amp; Despesas 2026</div>
+      <div class="proj-title" data-es style="display:none">Suite Presupuestos &amp; Gastos 2026</div>
+      <div class="proj-title" data-en style="display:none">Budget &amp; Expenses Suite 2026</div>
+      <div class="proj-desc" data-pt>Dashboard de salário, orçamento e despesas com lógica de retenções (SS, IRS) e análise de desvios.</div>
+      <div class="proj-desc" data-es style="display:none">Dashboard de nómina, presupuesto y gastos con lógica de retenciones (SS, IRPF) y análisis de desviaciones.</div>
+      <div class="proj-desc" data-en style="display:none">Payroll, budget and expenses dashboard with withholding logic (SS, IRPF) and variance analysis.</div>
+      <div class="proj-tags"><span class="proj-tag">Finanças pessoais</span><span class="proj-tag">JS</span></div>
+    </div>
+    <div class="proj-card">
+      <div class="proj-icon">🌐</div>
+      <div class="proj-title">Portfolio · lophersson.github.io</div>
+      <div class="proj-desc" data-pt>Portfolio digital com projetos financeiros, ferramentas web e demos interativas. Trilingue ES/PT/EN.</div>
+      <div class="proj-desc" data-es style="display:none">Portfolio digital con proyectos financieros, herramientas web y demos interactivas. Trilingüe ES/PT/EN.</div>
+      <div class="proj-desc" data-en style="display:none">Digital portfolio with financial projects, web tools and interactive demos. Trilingual ES/PT/EN.</div>
+      <div class="proj-tags"><span class="proj-tag">GitHub Pages</span><span class="proj-tag">HTML/CSS/JS</span></div>
+    </div>
+  </div>
+</div>
+
+<hr class="div"/>
+
+<!-- ── 6. FORMAÇÃO ACADÉMICA ─────────────────────────── -->
+<div class="cv-section">
+  <div class="sec-head">
+    <div class="sec-bar"></div>
+    <div>
+      <div class="sec-label" data-pt>Formação Académica</div>
+      <div class="sec-label" data-es style="display:none">Formación Académica</div>
+      <div class="sec-label" data-en style="display:none">Academic Background</div>
+    </div>
+  </div>
+  <div class="edu-list">
+    <div class="edu-item">
+      <div>
+        <div class="edu-title" data-pt>Desenvolvimento de Aplicações Web (DAW) · CFGS</div>
+        <div class="edu-title" data-es style="display:none">Desarrollo de Aplicaciones Web (DAW) · CFGS</div>
+        <div class="edu-title" data-en style="display:none">Web Application Development (DAW) · HND</div>
+        <div class="edu-inst">CIFP Rodolfo Ucha Piñeiro – Ferrol · 2025</div>
+      </div>
+      <span class="edu-badge active" data-pt>EM CURSO</span>
+      <span class="edu-badge active" data-es style="display:none">EN CURSO</span>
+      <span class="edu-badge active" data-en style="display:none">IN PROGRESS</span>
+    </div>
+    <div class="edu-item">
+      <div>
+        <div class="edu-title" data-pt>Ciências Empresariais – 90/240 ECTS</div>
+        <div class="edu-title" data-es style="display:none">Ciencias Empresariales – 90/240 ECTS</div>
+        <div class="edu-title" data-en style="display:none">Business Administration – 90/240 ECTS</div>
+        <div class="edu-inst">Universidade da Coruña · 2020</div>
+      </div>
+      <span class="edu-badge" data-pt>PARCIAL</span>
+      <span class="edu-badge" data-es style="display:none">PARCIAL</span>
+      <span class="edu-badge" data-en style="display:none">PARTIAL</span>
+    </div>
+    <div class="edu-item">
+      <div>
+        <div class="edu-title" data-pt>Administração e Finanças · CFGS</div>
+        <div class="edu-title" data-es style="display:none">Administración y Finanzas · CFGS</div>
+        <div class="edu-title" data-en style="display:none">Business Administration &amp; Finance · HND</div>
+        <div class="edu-inst">CIFP Rodolfo Ucha Piñeiro – Ferrol · 2018</div>
+      </div>
+      <span class="edu-badge done" data-pt>CONCLUÍDO</span>
+      <span class="edu-badge done" data-es style="display:none">FINALIZADO</span>
+      <span class="edu-badge done" data-en style="display:none">COMPLETED</span>
+    </div>
+    <div class="edu-item">
+      <div>
+        <div class="edu-title" data-pt>Inglês Nível Pré-Intermédio (B1)</div>
+        <div class="edu-title" data-es style="display:none">Inglés Nivel Preintermedio (B1)</div>
+        <div class="edu-title" data-en style="display:none">English Pre-Intermediate (B1)</div>
+        <div class="edu-inst">EOI Ferrol · 2010 · 3 años</div>
+      </div>
+      <span class="edu-badge done">B1</span>
+    </div>
+  </div>
+</div>
+
+<hr class="div"/>
+
+<!-- ── 7. CERTIFICADOS N3 ──────────────────────────────── -->
+<div class="cv-section">
+  <div class="sec-head">
+    <div class="sec-bar"></div>
+    <div>
+      <div class="sec-label" data-pt>Certificados Profissionais N3</div>
+      <div class="sec-label" data-es style="display:none">Certificados Profesionales N3</div>
+      <div class="sec-label" data-en style="display:none">Level 3 Professional Certificates</div>
+    </div>
+  </div>
+  <div class="cert-list">
+    <div class="cert-item">
+      <div class="cert-num">1</div>
+      <div>
+        <div class="cert-title">Programación en Lenguajes Estructurados · IFCD0111</div>
+        <div class="cert-inst">London Institute – Ferrol · 2025</div>
+      </div>
+      <div class="cert-hours">718h</div>
+    </div>
+    <div class="cert-item">
+      <div class="cert-num">2</div>
+      <div>
+        <div class="cert-title">Seguridad Informática · IFCT0109</div>
+        <div class="cert-inst">Informática A Coruña · 2024</div>
+      </div>
+      <div class="cert-hours">578h</div>
+    </div>
+    <div class="cert-item">
+      <div class="cert-num">3</div>
+      <div>
+        <div class="cert-title">Desarrollo de Aplicaciones con Tecnologías Web · IFCD0210</div>
+        <div class="cert-inst">Academia Postal – A Coruña · 2023</div>
+      </div>
+      <div class="cert-hours">668h</div>
+    </div>
+    <div class="cert-item">
+      <div class="cert-num">4</div>
+      <div>
+        <div class="cert-title">Sistemas de Gestión de la Información · IFCT0211</div>
+        <div class="cert-inst">ntFOR – A Coruña · 2023</div>
+      </div>
+      <div class="cert-hours">608h</div>
+    </div>
+  </div>
+</div>
+
+<hr class="div"/>
+
+<!-- ── 8. IDIOMAS ──────────────────────────────────────── -->
+<div class="cv-section">
+  <div class="sec-head">
+    <div class="sec-bar"></div>
+    <div>
+      <div class="sec-label" data-pt>Idiomas</div>
+      <div class="sec-label" data-es style="display:none">Idiomas</div>
+      <div class="sec-label" data-en style="display:none">Languages</div>
+    </div>
+  </div>
+  <div class="lang-list">
+    <div class="lang-item">
+      <div class="lang-flag">🇪🇸</div>
+      <div class="lang-name" data-pt>Espanhol</div>
+      <div class="lang-name" data-es style="display:none">Español</div>
+      <div class="lang-name" data-en style="display:none">Spanish</div>
+      <div class="lang-level" data-pt>Nativo · C2</div>
+      <div class="lang-level" data-es style="display:none">Nativo · C2</div>
+      <div class="lang-level" data-en style="display:none">Native · C2</div>
+      <div class="lang-bar"><div class="lang-fill" style="width:100%"></div></div>
+    </div>
+    <div class="lang-item">
+      <div class="lang-flag">🇬🇧</div>
+      <div class="lang-name" data-pt>Inglês</div>
+      <div class="lang-name" data-es style="display:none">Inglés</div>
+      <div class="lang-name" data-en style="display:none">English</div>
+      <div class="lang-level">B1 · Pré-intermédio</div>
+      <div class="lang-bar"><div class="lang-fill" style="width:45%"></div></div>
+    </div>
+    <div class="lang-item">
+      <div class="lang-flag">🇵🇹</div>
+      <div class="lang-name" data-pt>Português</div>
+      <div class="lang-name" data-es style="display:none">Portugués</div>
+      <div class="lang-name" data-en style="display:none">Portuguese</div>
+      <div class="lang-level">A1–A2 · Iniciação</div>
+      <div class="lang-bar"><div class="lang-fill" style="width:20%"></div></div>
+    </div>
+  </div>
+</div>
+
+<hr class="div"/>
+
+<!-- ── 9. OBJETIVO PROFISSIONAL ────────────────────────── -->
+<div class="cv-section">
+  <div class="sec-head">
+    <div class="sec-bar"></div>
+    <div>
+      <div class="sec-label" data-pt>Objetivo Profissional</div>
+      <div class="sec-label" data-es style="display:none">Objetivo Profesional</div>
+      <div class="sec-label" data-en style="display:none">Career Objective</div>
+    </div>
+  </div>
+  <div class="obj-box">
+    <p class="obj-text" data-pt>Procuro posições como <strong>Analista de Dados Financeiros, Business Analyst ou Controller</strong> em ambientes FinTech, banca digital ou consultoras financeiras, onde possa combinar análise financeira, tratamento de dados, desenvolvimento de ferramentas e uso de inteligência artificial para <strong>otimizar a tomada de decisões</strong>. Aberto ao mercado espanhol e português.</p>
+    <p class="obj-text" data-es style="display:none">Busco posiciones como <strong>Financial Data Analyst, Business Analyst o Controller</strong> en entornos FinTech, banca digital o consultoras financieras, donde pueda combinar análisis financiero, tratamiento de datos, desarrollo de herramientas y uso de inteligencia artificial para <strong>optimizar la toma de decisiones</strong> y aportar valor real al negocio. Abierto a mercado español y portugués.</p>
+    <p class="obj-text" data-en style="display:none">I seek positions as <strong>Financial Data Analyst, Business Analyst or Controller</strong> in FinTech, digital banking or financial consulting, where I can combine financial analysis, data processing, tool development and AI to <strong>optimise decision-making</strong> and deliver real business value. Open to Spanish and Portuguese markets.</p>
+    <div class="obj-list">
+      <div class="obj-item" data-pt>Análise financeira, FP&amp;A e controlo de gestão em ambientes digitais</div>
+      <div class="obj-item" data-es style="display:none">Análisis financiero, FP&amp;A y control de gestión en entornos digitales</div>
+      <div class="obj-item" data-en style="display:none">Financial analysis, FP&amp;A and management control in digital environments</div>
+      <div class="obj-item" data-pt>Business Intelligence e dashboards com Power BI e SQL</div>
+      <div class="obj-item" data-es style="display:none">Business Intelligence y dashboards con Power BI y SQL</div>
+      <div class="obj-item" data-en style="display:none">Business Intelligence and dashboards with Power BI and SQL</div>
+      <div class="obj-item" data-pt>Desenvolvimento de ferramentas financeiras interativas (HTML/JS/Python)</div>
+      <div class="obj-item" data-es style="display:none">Desarrollo de herramientas financieras interactivas (HTML/JS/Python)</div>
+      <div class="obj-item" data-en style="display:none">Development of interactive financial tools (HTML/JS/Python)</div>
+      <div class="obj-item" data-pt>Uso de IA generativa e prompt engineering em processos analíticos</div>
+      <div class="obj-item" data-es style="display:none">Uso de IA generativa y prompt engineering en procesos analíticos</div>
+      <div class="obj-item" data-en style="display:none">Generative AI and prompt engineering in analytical processes</div>
+      <div class="obj-item" data-pt>Cibersegurança aplicada a sistemas financeiros e cumprimento normativo</div>
+      <div class="obj-item" data-es style="display:none">Ciberseguridad aplicada a sistemas financieros y cumplimiento normativo</div>
+      <div class="obj-item" data-en style="display:none">Cybersecurity applied to financial systems and regulatory compliance</div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  negronoche50@outlook.com · Ferrol, A Coruña · España · lophersson.github.io/2026 · 2026
+</footer>
+
+</div><!-- /wrap -->
+
+<script>
+// ── FONT SIZE ──────────────────────────────────────────
+const SIZES = [80,85,90,95,100,105,110,115,120,125,130];
+let sizeIdx = 4; // default 100%
+
+function adjustSize(dir){
+  sizeIdx = Math.max(0, Math.min(SIZES.length-1, sizeIdx + dir));
+  document.documentElement.style.setProperty('--scale', SIZES[sizeIdx]/100);
+  document.getElementById('sizeLabel').textContent = SIZES[sizeIdx]+'%';
+}
+
+// ── THEME ──────────────────────────────────────────────
+function toggleTheme(){
+  const h = document.documentElement;
+  const isDark = h.getAttribute('data-theme') === 'dark';
+  h.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  const btn = document.getElementById('themeBtn');
+  const lang = h.getAttribute('data-lang') || 'pt';
+  const labels = {pt:['Modo escuro','Modo claro'],es:['Modo oscuro','Modo claro'],en:['Dark mode','Light mode']};
+  const pair = labels[lang] || labels.pt;
+  btn.innerHTML = '◑ ' + (isDark ? pair[0] : pair[1]);
+}
+
+// ── LANG ───────────────────────────────────────────────
+const DISPLAY_MAP={
+  A:'inline',SPAN:'inline',STRONG:'inline',EM:'inline',
+  DIV:'block',P:'block',SECTION:'block',HEADER:'block',FOOTER:'block',
+  LI:'list-item',
+};
+function naturalDisplay(el){ return DISPLAY_MAP[el.tagName]||'block'; }
+
+function setLang(lang){
+  document.querySelectorAll('.lang-btn').forEach(b=>{
+    b.classList.toggle('on', b.textContent.trim().toLowerCase()===lang);
+  });
+  document.querySelectorAll('[data-es],[data-en],[data-pt]').forEach(el=>{
+    el.style.display = el.hasAttribute('data-'+lang) ? naturalDisplay(el) : 'none';
+  });
+  document.documentElement.setAttribute('lang', lang);
+  document.documentElement.setAttribute('data-lang', lang);
+  // update theme button label
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const btn = document.getElementById('themeBtn');
+  const labels = {pt:['Modo escuro','Modo claro'],es:['Modo oscuro','Modo claro'],en:['Dark mode','Light mode']};
+  const pair = labels[lang] || labels.pt;
+  btn.innerHTML = '◑ ' + (isDark ? pair[1] : pair[0]);
+}
+
+// Init PT + light
+setLang('pt');
+</script>
+</body>
+</html>
