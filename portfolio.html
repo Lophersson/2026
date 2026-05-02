@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="pt" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Lophersson · Portfolio Financeiro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Source+Sans+3:wght@300;400;500;600&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#070b12;--bg2:#0c1220;--bg3:#111827;
+  --surface:rgba(255,255,255,0.04);--surface2:rgba(255,255,255,0.07);
+  --border:rgba(196,160,80,0.18);--border2:rgba(255,255,255,0.08);
+  --gold:#c4a050;--gold-dim:rgba(196,160,80,0.5);--gold-glow:rgba(196,160,80,0.1);
+  --gold-deep:#8a6e2f;
+  --navy:#3a5aff;--navy-dim:rgba(58,90,255,0.15);
+  --text:#ede8dc;--text-muted:rgba(237,232,220,0.62);--text-dim:rgba(237,232,220,0.32);
+  --positive:#5ec48a;--danger:#e07070;
+  --radius:10px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:15px}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:'Source Sans 3',sans-serif;font-weight:400;
+  min-height:100vh;overflow-x:hidden;
+}
+
+/* ── GRAIN ── */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  opacity:.4;
+}
+
+/* ── ORB AMBIENTS ── */
+.amb{position:fixed;border-radius:50%;pointer-events:none;filter:blur(120px);z-index:0}
+.a1{width:700px;height:700px;background:radial-gradient(circle,rgba(196,160,80,.055),transparent 70%);top:-200px;right:-150px}
+.a2{width:500px;height:500px;background:radial-gradient(circle,rgba(58,90,255,.04),transparent 70%);bottom:0;left:-100px}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 40px;height:58px;
+  background:rgba(7,11,18,.85);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{
+  font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;
+  color:var(--gold);letter-spacing:.2em;text-transform:uppercase;cursor:pointer;
+  text-decoration:none;
+}
+.nav-pills{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.nav-pills::-webkit-scrollbar{display:none}
+.nav-pill{
+  padding:5px 13px;border-radius:5px;border:1px solid transparent;
+  font-family:'IBM Plex Mono',monospace;font-size:.62rem;letter-spacing:.06em;
+  color:var(--text-dim);cursor:pointer;transition:all .2s;white-space:nowrap;
+  background:transparent;text-decoration:none;
+}
+.nav-pill:hover{border-color:var(--border);color:var(--text-muted)}
+.nav-pill.active{border-color:var(--gold-dim);color:var(--gold);background:var(--gold-glow)}
+
+/* ── SECTIONS WRAPPER ── */
+.page{display:none;min-height:100vh;padding-top:58px;position:relative;z-index:1}
+.page.active{display:block}
+
+/* ═══════════════════════════════════════════════
+   LANDING / PORTFOLIO
+═══════════════════════════════════════════════ */
+#home{
+  display:flex;flex-direction:column;align-items:center;
+  padding-top:58px;
+}
+.hero-landing{
+  width:100%;max-width:960px;padding:80px 40px 60px;
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+}
+.hero-eyebrow{
+  font-family:'IBM Plex Mono',monospace;font-size:.65rem;letter-spacing:.28em;
+  text-transform:uppercase;color:var(--gold-dim);margin-bottom:18px;
+}
+.hero-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.4rem,6vw,4.2rem);font-weight:700;line-height:1.07;
+  color:var(--text);letter-spacing:-.02em;margin-bottom:8px;
+}
+.hero-title em{color:var(--gold);font-style:italic;font-weight:400}
+.hero-subtitle{
+  font-size:1rem;color:var(--text-muted);max-width:520px;line-height:1.65;margin-bottom:36px;
+}
+.hero-cta{
+  display:flex;gap:10px;flex-wrap:wrap;justify-content:center;
+}
+.btn-primary{
+  padding:10px 26px;border-radius:6px;
+  background:var(--gold);color:#0a0800;
+  font-family:'IBM Plex Mono',monospace;font-size:.75rem;font-weight:500;letter-spacing:.07em;
+  cursor:pointer;border:none;transition:all .22s;text-transform:uppercase;
+}
+.btn-primary:hover{background:#d4b060;box-shadow:0 0 30px rgba(196,160,80,.3)}
+.btn-outline{
+  padding:10px 26px;border-radius:6px;
+  border:1px solid var(--border);color:var(--text-muted);
+  font-family:'IBM Plex Mono',monospace;font-size:.75rem;letter-spacing:.07em;
+  cursor:pointer;background:transparent;transition:all .22s;text-transform:uppercase;
+}
+.btn-outline:hover{border-color:var(--gold-dim);color:var(--gold)}
+
+/* DIVIDER */
+.hr-fancy{
+  width:100%;max-width:960px;height:1px;
+  background:linear-gradient(90deg,transparent,var(--border),transparent);
+  margin:0 auto;
+}
+
+/* PROJECTS GRID */
+.proj-section{width:100%;max-width:960px;padding:50px 40px 80px;margin:0 auto}
+.proj-section-label{
+  font-family:'IBM Plex Mono',monospace;font-size:.62rem;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--gold-dim);margin-bottom:6px;
+}
+.proj-section-title{
+  font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:600;
+  color:var(--text);margin-bottom:32px;
+}
+
+.cards-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px;
+}
+.pcard{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:12px;padding:24px;cursor:pointer;
+  transition:all .25s;position:relative;overflow:hidden;
+  text-decoration:none;color:inherit;display:block;
+}
+.pcard::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,var(--gold-glow),transparent 60%);
+  opacity:0;transition:opacity .3s;
+}
+.pcard:hover{border-color:var(--gold-dim);transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.4)}
+.pcard:hover::before{opacity:1}
+.pcard-num{
+  font-family:'Playfair Display',serif;font-size:2rem;font-weight:400;
+  color:rgba(196,160,80,.15);line-height:1;margin-bottom:12px;
+}
+.pcard-icon{font-size:1.6rem;margin-bottom:10px;display:block}
+.pcard-title{
+  font-family:'Playfair Display',serif;font-size:1rem;font-weight:600;
+  color:var(--text);margin-bottom:8px;line-height:1.3;
+}
+.pcard-desc{font-size:.8rem;color:var(--text-muted);line-height:1.55;margin-bottom:14px}
+.pcard-tags{display:flex;flex-wrap:wrap;gap:4px}
+.ptag{
+  padding:2px 9px;border-radius:3px;font-size:.63rem;
+  font-family:'IBM Plex Mono',monospace;border:1px solid var(--border2);
+  color:var(--text-dim);background:var(--surface2);
+}
+.pcard-arrow{
+  position:absolute;bottom:20px;right:20px;
+  font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--gold-dim);
+  opacity:0;transition:opacity .25s,transform .25s;
+}
+.pcard:hover .pcard-arrow{opacity:1;transform:translateX(3px)}
+
+/* ═══════════════════════════════════════════════
+   PROJECT PAGES COMMONS
+═══════════════════════════════════════════════ */
+.proj-page{
+  min-height:100vh;padding:58px 0 80px;
+  position:relative;z-index:1;
+}
+.proj-page-inner{max-width:960px;margin:0 auto;padding:40px 40px 0}
+.back-btn{
+  display:inline-flex;align-items:center;gap:7px;
+  font-family:'IBM Plex Mono',monospace;font-size:.67rem;
+  color:var(--text-dim);cursor:pointer;border:none;background:none;
+  letter-spacing:.06em;padding:0;margin-bottom:32px;transition:color .2s;
+  text-transform:uppercase;
+}
+.back-btn:hover{color:var(--gold)}
+.back-btn::before{content:'←';font-size:.8rem}
+.proj-header{margin-bottom:32px;padding-bottom:24px;border-bottom:1px solid var(--border)}
+.proj-number{
+  font-family:'IBM Plex Mono',monospace;font-size:.62rem;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--gold-dim);margin-bottom:8px;
+}
+.proj-h1{
+  font-family:'Playfair Display',serif;font-size:clamp(1.6rem,4vw,2.6rem);
+  font-weight:700;color:var(--text);line-height:1.1;margin-bottom:10px;
+}
+.proj-h1 em{color:var(--gold);font-style:italic;font-weight:400}
+.proj-lead{font-size:.95rem;color:var(--text-muted);max-width:620px;line-height:1.65}
+.proj-tags-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.proj-tag-big{
+  padding:4px 12px;border-radius:4px;font-size:.68rem;
+  font-family:'IBM Plex Mono',monospace;border:1px solid var(--border);
+  color:var(--gold-dim);background:var(--gold-glow);
+}
+
+/* card container */
+.content-grid{display:grid;gap:20px;margin-bottom:24px}
+.content-grid.cols2{grid-template-columns:1fr 1fr}
+.content-grid.cols3{grid-template-columns:1fr 1fr 1fr}
+.c-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:22px;
+}
+.c-card-label{
+  font-family:'IBM Plex Mono',monospace;font-size:.6rem;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--gold-dim);margin-bottom:10px;
+}
+.c-card-val{
+  font-family:'Playfair Display',serif;font-size:2rem;font-weight:600;
+  color:var(--gold);line-height:1;margin-bottom:4px;
+}
+.c-card-sub{font-size:.76rem;color:var(--text-dim)}
+.c-card-title{font-size:.9rem;font-weight:600;color:var(--text);margin-bottom:8px}
+.c-card-body{font-size:.8rem;color:var(--text-muted);line-height:1.6}
+
+/* table */
+.data-table{width:100%;border-collapse:collapse;font-size:.8rem}
+.data-table th{
+  font-family:'IBM Plex Mono',monospace;font-size:.62rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--gold-dim);padding:10px 12px;
+  border-bottom:1px solid var(--border);text-align:left;
+}
+.data-table td{padding:10px 12px;border-bottom:1px solid var(--border2);color:var(--text-muted)}
+.data-table tr:hover td{background:var(--surface2)}
+.data-table td.mono{font-family:'IBM Plex Mono',monospace;font-size:.75rem}
+.data-table td.pos{color:var(--positive)}
+.data-table td.neg{color:var(--danger)}
+
+/* chart container */
+.chart-wrap{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:22px;
+}
+.chart-wrap canvas{max-height:280px}
+
+/* form elements */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.form-field{display:flex;flex-direction:column;gap:5px}
+.form-field label{
+  font-family:'IBM Plex Mono',monospace;font-size:.62rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--gold-dim);
+}
+.form-field input,
+.form-field select{
+  padding:9px 12px;border-radius:6px;
+  border:1px solid var(--border2);background:var(--bg3);
+  color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:.78rem;
+  outline:none;transition:border-color .2s;
+}
+.form-field input:focus,
+.form-field select:focus{border-color:var(--gold-dim)}
+.calc-btn{
+  padding:10px 22px;border-radius:6px;
+  background:var(--gold);color:#0a0800;
+  font-family:'IBM Plex Mono',monospace;font-size:.72rem;font-weight:500;letter-spacing:.08em;
+  cursor:pointer;border:none;transition:all .2s;text-transform:uppercase;
+}
+.calc-btn:hover{background:#d4b060}
+.result-box{
+  margin-top:16px;padding:18px;border-radius:var(--radius);
+  border:1px solid var(--border);background:var(--bg3);
+}
+.result-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:6px 0;border-bottom:1px solid var(--border2);
+  font-size:.82rem;
+}
+.result-row:last-child{border-bottom:none}
+.result-row .rlabel{color:var(--text-dim);font-size:.78rem}
+.result-row .rval{
+  font-family:'IBM Plex Mono',monospace;font-size:.85rem;color:var(--gold);font-weight:500;
+}
+
+/* badge */
+.badge{
+  display:inline-block;padding:3px 9px;border-radius:3px;
+  font-family:'IBM Plex Mono',monospace;font-size:.62rem;letter-spacing:.06em;
+}
+.badge-green{border:1px solid var(--positive);color:var(--positive);background:rgba(94,196,138,.07)}
+.badge-gold{border:1px solid var(--gold-dim);color:var(--gold);background:var(--gold-glow)}
+
+/* exercise card */
+.ex-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:18px;margin-bottom:12px;
+}
+.ex-card-title{
+  font-family:'Playfair Display',serif;font-size:.95rem;font-weight:600;
+  color:var(--gold);margin-bottom:6px;
+}
+.ex-card-formula{
+  font-family:'IBM Plex Mono',monospace;font-size:.74rem;color:var(--text-dim);
+  padding:8px 12px;background:var(--bg3);border-radius:5px;margin-bottom:10px;
+  border-left:2px solid var(--gold-dim);
+}
+.ex-result{
+  font-family:'IBM Plex Mono',monospace;font-size:.78rem;color:var(--positive);
+  padding:6px 0;
+}
+
+/* budget row */
+.budget-row{
+  display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;
+  padding:8px 12px;border-radius:5px;border-bottom:1px solid var(--border2);
+}
+.budget-row:hover{background:var(--surface2)}
+.budget-label{font-size:.82rem;color:var(--text-muted)}
+.budget-planned{font-family:'IBM Plex Mono',monospace;font-size:.78rem;color:var(--text-dim)}
+.budget-actual{font-family:'IBM Plex Mono',monospace;font-size:.78rem}
+.budget-bar-wrap{height:3px;background:var(--border2);border-radius:2px;margin-top:3px;overflow:hidden}
+.budget-bar-fill{height:100%;border-radius:2px;transition:width .5s ease}
+
+/* tax table */
+.tax-row{
+  display:grid;grid-template-columns:auto 1fr auto auto;gap:12px;align-items:center;
+  padding:9px 12px;border-bottom:1px solid var(--border2);font-size:.8rem;
+}
+.tax-row:last-child{border-bottom:none}
+.tax-pct{font-family:'IBM Plex Mono',monospace;color:var(--gold);font-size:.82rem;font-weight:500}
+.tax-range{color:var(--text-muted)}
+.tax-bar{height:6px;background:var(--border2);border-radius:3px;overflow:hidden;min-width:80px}
+.tax-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--gold-deep),var(--gold))}
+
+/* animations */
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.page.active .proj-header{animation:fadeUp .5s ease both}
+.page.active .pcard{animation:fadeUp .5s ease both}
+.cards-grid .pcard:nth-child(1){animation-delay:.05s}
+.cards-grid .pcard:nth-child(2){animation-delay:.10s}
+.cards-grid .pcard:nth-child(3){animation-delay:.15s}
+.cards-grid .pcard:nth-child(4){animation-delay:.20s}
+.cards-grid .pcard:nth-child(5){animation-delay:.25s}
+.cards-grid .pcard:nth-child(6){animation-delay:.30s}
+
+/* responsive */
+@media(max-width:640px){
+  nav{padding:0 16px}
+  .proj-page-inner,.proj-section{padding-left:18px;padding-right:18px}
+  .hero-landing{padding:60px 18px 40px}
+  .content-grid.cols2,.content-grid.cols3{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="amb a1"></div>
+<div class="amb a2"></div>
+
+<!-- ── NAV ── -->
+<nav>
+  <a class="nav-logo" onclick="showPage('home')" href="#">Lophersson</a>
+  <div class="nav-pills">
+    <a class="nav-pill active" onclick="showPage('home')" href="#">Portfolio</a>
+    <a class="nav-pill" onclick="showPage('p1')" href="#">CFO Dashboard</a>
+    <a class="nav-pill" onclick="showPage('p2')" href="#">Mat. Financeira</a>
+    <a class="nav-pill" onclick="showPage('p3')" href="#">FinTech Calc</a>
+    <a class="nav-pill" onclick="showPage('p4')" href="#">IRS Modelo 3</a>
+    <a class="nav-pill" onclick="showPage('p5')" href="#">Orçamentos</a>
+  </div>
+</nav>
+
+<!-- ════════════════════════════════════════════
+  HOME / LANDING
+════════════════════════════════════════════ -->
+<div id="home" class="page active">
+  <div class="hero-landing">
+    <div class="hero-eyebrow">Humberto López Rodríguez · 2026</div>
+    <h1 class="hero-title">Portfolio<br><em>Financeiro</em></h1>
+    <p class="hero-subtitle">Ferramentas interativas de análise financeira, simulação fiscal, controlo orçamental e inteligência de negócio — construídas com HTML, JS e Chart.js.</p>
+    <div class="hero-cta">
+      <button class="btn-primary" onclick="scrollToProjects()">Ver projetos</button>
+      <a class="btn-outline" href="https://lophersson.github.io/2026/" target="_blank">lophersson.github.io</a>
+    </div>
+  </div>
+
+  <div class="hr-fancy"></div>
+
+  <div class="proj-section" id="projGrid">
+    <div class="proj-section-label">Projetos Destacados</div>
+    <div class="proj-section-title">5 ferramentas financeiras</div>
+    <div class="cards-grid">
+
+      <a class="pcard" onclick="showPage('p1')" href="#">
+        <div class="pcard-num">01</div>
+        <div class="pcard-icon">📊</div>
+        <div class="pcard-title">Dashboard CFO – Análise Financeira</div>
+        <div class="pcard-desc">Painel executivo com cenários, KPIs e indicadores interativos. Visualização de resultados com Chart.js.</div>
+        <div class="pcard-tags">
+          <span class="ptag">Chart.js</span><span class="ptag">HTML/JS</span><span class="ptag">FP&A</span>
+        </div>
+        <span class="pcard-arrow">→ Abrir</span>
+      </a>
+
+      <a class="pcard" onclick="showPage('p2')" href="#">
+        <div class="pcard-num">02</div>
+        <div class="pcard-icon">🧮</div>
+        <div class="pcard-title">Suite de Matemática Financeira</div>
+        <div class="pcard-desc">22 exercícios interativos: VAL/TIR, amortização, depreciação, regressão linear, CAPM, WACC e análise de viabilidade.</div>
+        <div class="pcard-tags">
+          <span class="ptag">Finanças</span><span class="ptag">Econometria</span><span class="ptag">JS</span>
+        </div>
+        <span class="pcard-arrow">→ Abrir</span>
+      </a>
+
+      <a class="pcard" onclick="showPage('p3')" href="#">
+        <div class="pcard-num">03</div>
+        <div class="pcard-icon">🏦</div>
+        <div class="pcard-title">Calculadora FinTech (Fintonic)</div>
+        <div class="pcard-desc">Calculadora de empréstimos com parâmetros financeiros reais, prestações e TAEG com Newton-Raphson.</div>
+        <div class="pcard-tags">
+          <span class="ptag">Finanças</span><span class="ptag">JS</span><span class="ptag">UX</span>
+        </div>
+        <span class="pcard-arrow">→ Abrir</span>
+      </a>
+
+      <a class="pcard" onclick="showPage('p4')" href="#">
+        <div class="pcard-num">04</div>
+        <div class="pcard-icon">🇵🇹</div>
+        <div class="pcard-title">Simulador IRS Modelo 3 – Portugal</div>
+        <div class="pcard-desc">Simulador fiscal português multilingue com escalões de rendimento 2024 e deduções.</div>
+        <div class="pcard-tags">
+          <span class="ptag">Fiscal</span><span class="ptag">ES/PT/EN</span>
+        </div>
+        <span class="pcard-arrow">→ Abrir</span>
+      </a>
+
+      <a class="pcard" onclick="showPage('p5')" href="#">
+        <div class="pcard-num">05</div>
+        <div class="pcard-icon">💳</div>
+        <div class="pcard-title">Suite Orçamentos &amp; Despesas 2026</div>
+        <div class="pcard-desc">Dashboard de salário, orçamento e despesas com lógica de retenções (SS, IRS) e análise de desvios.</div>
+        <div class="pcard-tags">
+          <span class="ptag">Finanças pessoais</span><span class="ptag">JS</span>
+        </div>
+        <span class="pcard-arrow">→ Abrir</span>
+      </a>
+
+      <div class="pcard" style="background:transparent;border-style:dashed;cursor:default;display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:200px;gap:10px">
+        <div style="font-size:1.4rem">🌐</div>
+        <div style="font-family:'Playfair Display',serif;font-size:.95rem;color:var(--text-muted);text-align:center">Portfolio completo</div>
+        <a href="https://lophersson.github.io/2026/" target="_blank" style="font-family:'IBM Plex Mono',monospace;font-size:.67rem;color:var(--gold-dim);text-decoration:none;letter-spacing:.08em">lophersson.github.io/2026 →</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════
+  P1 · CFO DASHBOARD
+════════════════════════════════════════════ -->
+<div id="p1" class="page proj-page">
+<div class="proj-page-inner">
+  <button class="back-btn" onclick="showPage('home')">Voltar ao Portfolio</button>
+  <div class="proj-header">
+    <div class="proj-number">Projeto 01 · Chart.js · HTML/JS · FP&A</div>
+    <h1 class="proj-h1">Dashboard CFO<br><em>Análise Financeira</em></h1>
+    <p class="proj-lead">Painel executivo com cenários, KPIs e indicadores interativos para controlo de gestão e reporting executivo.</p>
+    <div class="proj-tags-row">
+      <span class="proj-tag-big">Chart.js</span>
+      <span class="proj-tag-big">FP&A</span>
+      <span class="proj-tag-big">KPIs</span>
+      <span class="proj-tag-big">Forecasting</span>
+    </div>
+  </div>
+
+  <!-- KPI CARDS -->
+  <div class="content-grid cols3" style="margin-bottom:20px">
+    <div class="c-card">
+      <div class="c-card-label">Receita YTD</div>
+      <div class="c-card-val">€ 2.84M</div>
+      <div class="c-card-sub"><span class="badge badge-green">+12.4%</span> vs ano anterior</div>
+    </div>
+    <div class="c-card">
+      <div class="c-card-label">EBITDA</div>
+      <div class="c-card-val">€ 680K</div>
+      <div class="c-card-sub">Margem <span style="color:var(--gold);font-family:'IBM Plex Mono',monospace">23.9%</span></div>
+    </div>
+    <div class="c-card">
+      <div class="c-card-label">Cash Flow Operacional</div>
+      <div class="c-card-val">€ 410K</div>
+      <div class="c-card-sub"><span class="badge badge-gold">Forecast Q4: €520K</span></div>
+    </div>
+  </div>
+
+  <div class="content-grid cols2">
+    <div class="chart-wrap">
+      <div class="c-card-label" style="margin-bottom:12px">Receita vs Despesas — 2026</div>
+      <canvas id="cfoChart"></canvas>
+    </div>
+    <div class="c-card">
+      <div class="c-card-label" style="margin-bottom:14px">Análise de Desvios por Departamento</div>
+      <table class="data-table">
+        <thead><tr><th>Dept.</th><th>Orçado</th><th>Real</th><th>Δ</th></tr></thead>
+        <tbody>
+          <tr><td>Vendas</td><td class="mono">€ 850K</td><td class="mono">€ 920K</td><td class="mono pos">+8.2%</td></tr>
+          <tr><td>Marketing</td><td class="mono">€ 120K</td><td class="mono">€ 134K</td><td class="mono neg">-11.7%</td></tr>
+          <tr><td>Operações</td><td class="mono">€ 340K</td><td class="mono">€ 318K</td><td class="mono pos">+6.5%</td></tr>
+          <tr><td>TI</td><td class="mono">€ 90K</td><td class="mono">€ 87K</td><td class="mono pos">+3.3%</td></tr>
+          <tr><td>RH</td><td class="mono">€ 210K</td><td class="mono">€ 215K</td><td class="mono neg">-2.4%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="content-grid" style="margin-top:20px">
+    <div class="chart-wrap">
+      <div class="c-card-label" style="margin-bottom:12px">Distribuição de Custos — Pizza</div>
+      <canvas id="pieCfo" style="max-height:200px"></canvas>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- ════════════════════════════════════════════
+  P2 · MATEMÁTICA FINANCEIRA
+════════════════════════════════════════════ -->
+<div id="p2" class="page proj-page">
+<div class="proj-page-inner">
+  <button class="back-btn" onclick="showPage('home')">Voltar ao Portfolio</button>
+  <div class="proj-header">
+    <div class="proj-number">Projeto 02 · Finanças · Econometria · JS</div>
+    <h1 class="proj-h1">Suite de<br><em>Matemática Financeira</em></h1>
+    <p class="proj-lead">22 exercícios interativos cobrindo os principais modelos de avaliação financeira: VAL/TIR, CAPM, WACC, regressão linear e análise de viabilidade.</p>
+    <div class="proj-tags-row">
+      <span class="proj-tag-big">VAL / TIR</span>
+      <span class="proj-tag-big">CAPM</span>
+      <span class="proj-tag-big">WACC</span>
+      <span class="proj-tag-big">Amortização</span>
+      <span class="proj-tag-big">Regressão</span>
+    </div>
+  </div>
+
+  <div class="content-grid cols2">
+    <!-- VAL/TIR -->
+    <div class="c-card">
+      <div class="c-card-label">Exercício 01 — VAL / TIR</div>
+      <div class="c-card-title">Valor Atual Líquido &amp; TIR</div>
+      <div class="ex-card-formula">VAL = Σ CFt / (1+r)^t − I₀</div>
+      <div class="form-row" style="grid-template-columns:1fr 1fr">
+        <div class="form-field">
+          <label>Investimento (€)</label>
+          <input type="number" id="valInv" value="50000" step="1000"/>
+        </div>
+        <div class="form-field">
+          <label>Taxa (%)</label>
+          <input type="number" id="valRate" value="8" step="0.5"/>
+        </div>
+      </div>
+      <div class="form-field" style="margin-bottom:10px">
+        <label>Fluxos anuais (€, separados por vírgulas)</label>
+        <input type="text" id="valFlows" value="15000,18000,20000,22000,25000"/>
+      </div>
+      <button class="calc-btn" onclick="calcVAL()">Calcular VAL/TIR</button>
+      <div class="result-box" id="valResult" style="display:none"></div>
+    </div>
+
+    <!-- CAPM -->
+    <div class="c-card">
+      <div class="c-card-label">Exercício 05 — CAPM</div>
+      <div class="c-card-title">Capital Asset Pricing Model</div>
+      <div class="ex-card-formula">E(Ri) = Rf + βi × (E(Rm) − Rf)</div>
+      <div class="form-row" style="grid-template-columns:1fr 1fr 1fr">
+        <div class="form-field">
+          <label>Rf (%)</label>
+          <input type="number" id="capmRf" value="2.5" step="0.1"/>
+        </div>
+        <div class="form-field">
+          <label>Beta (β)</label>
+          <input type="number" id="capmBeta" value="1.2" step="0.1"/>
+        </div>
+        <div class="form-field">
+          <label>Rm (%)</label>
+          <input type="number" id="capmRm" value="9.5" step="0.1"/>
+        </div>
+      </div>
+      <button class="calc-btn" onclick="calcCAPM()">Calcular CAPM</button>
+      <div class="result-box" id="capmResult" style="display:none"></div>
+    </div>
+  </div>
+
+  <div class="content-grid cols2" style="margin-top:16px">
+    <!-- WACC -->
+    <div class="c-card">
+      <div class="c-card-label">Exercício 06 — WACC</div>
+      <div class="c-card-title">Custo Médio Ponderado de Capital</div>
+      <div class="ex-card-formula">WACC = (E/V)×Re + (D/V)×Rd×(1−T)</div>
+      <div class="form-row" style="grid-template-columns:1fr 1fr">
+        <div class="form-field"><label>Capital Próprio (€)</label><input type="number" id="waccE" value="300000"/></div>
+        <div class="form-field"><label>Dívida (€)</label><input type="number" id="waccD" value="200000"/></div>
+        <div class="form-field"><label>Re (%)</label><input type="number" id="waccRe" value="10" step="0.5"/></div>
+        <div class="form-field"><label>Rd (%)</label><input type="number" id="waccRd" value="5" step="0.5"/></div>
+        <div class="form-field"><label>Taxa Imposto (%)</label><input type="number" id="waccT" value="21" step="0.5"/></div>
+      </div>
+      <button class="calc-btn" onclick="calcWACC()">Calcular WACC</button>
+      <div class="result-box" id="waccResult" style="display:none"></div>
+    </div>
+
+    <!-- AMORTIZAÇÃO -->
+    <div class="c-card">
+      <div class="c-card-label">Exercício 09 — Amortização Francesa</div>
+      <div class="c-card-title">Tabela de Amortização</div>
+      <div class="ex-card-formula">R = C × i / (1 − (1+i)^−n)</div>
+      <div class="form-row" style="grid-template-columns:1fr 1fr 1fr">
+        <div class="form-field"><label>Capital (€)</label><input type="number" id="amC" value="100000"/></div>
+        <div class="form-field"><label>Taxa anual (%)</label><input type="number" id="amR" value="5" step="0.25"/></div>
+        <div class="form-field"><label>Anos</label><input type="number" id="amN" value="5" min="1" max="30"/></div>
+      </div>
+      <button class="calc-btn" onclick="calcAmort()">Gerar tabela</button>
+      <div id="amortResult" style="margin-top:12px;overflow-x:auto"></div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- ════════════════════════════════════════════
+  P3 · CALCULADORA FINTONIC
+════════════════════════════════════════════ -->
+<div id="p3" class="page proj-page">
+<div class="proj-page-inner">
+  <button class="back-btn" onclick="showPage('home')">Voltar ao Portfolio</button>
+  <div class="proj-header">
+    <div class="proj-number">Projeto 03 · Finanças · JS · UX</div>
+    <h1 class="proj-h1">Calculadora FinTech<br><em>Fintonic</em></h1>
+    <p class="proj-lead">Calculadora de empréstimos com parâmetros financeiros reais, cálculo de prestações e TAEG utilizando o método iterativo Newton-Raphson.</p>
+    <div class="proj-tags-row">
+      <span class="proj-tag-big">Newton-Raphson</span>
+      <span class="proj-tag-big">TAEG</span>
+      <span class="proj-tag-big">Amortização</span>
+      <span class="proj-tag-big">FinTech</span>
+    </div>
+  </div>
+
+  <div class="content-grid cols2">
+    <div class="c-card">
+      <div class="c-card-label">Parâmetros do Empréstimo</div>
+      <div class="form-row">
+        <div class="form-field"><label>Montante (€)</label><input type="number" id="loanAmt" value="15000" step="500"/></div>
+        <div class="form-field"><label>Prazo (meses)</label><input type="number" id="loanN" value="48" min="6" max="360"/></div>
+        <div class="form-field"><label>TAN (%)</label><input type="number" id="loanTAN" value="7.9" step="0.1"/></div>
+        <div class="form-field"><label>Comissão abertura (€)</label><input type="number" id="loanFee" value="150" step="10"/></div>
+      </div>
+      <div class="form-field" style="margin-bottom:14px">
+        <label>Tipo de empréstimo</label>
+        <select id="loanType">
+          <option value="pessoal">Crédito Pessoal</option>
+          <option value="auto">Crédito Automóvel</option>
+          <option value="habitacao">Crédito Habitação</option>
+        </select>
+      </div>
+      <button class="calc-btn" onclick="calcLoan()">Calcular Empréstimo</button>
+    </div>
+
+    <div class="c-card">
+      <div class="c-card-label" style="margin-bottom:14px">Resultados</div>
+      <div id="loanResult">
+        <div style="color:var(--text-dim);font-size:.82rem;padding:20px 0;text-align:center">Introduza os parâmetros e calcule</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-grid" style="margin-top:20px">
+    <div class="chart-wrap">
+      <div class="c-card-label" style="margin-bottom:12px">Evolução Capital vs Juros pagos</div>
+      <canvas id="loanChart"></canvas>
+    </div>
+  </div>
+
+  <div class="content-grid" style="margin-top:16px">
+    <div class="c-card">
+      <div class="c-card-label" style="margin-bottom:12px">Primeiras 12 prestações</div>
+      <div id="loanTable" style="overflow-x:auto"></div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- ════════════════════════════════════════════
+  P4 · IRS MODELO 3
+════════════════════════════════════════════ -->
+<div id="p4" class="page proj-page">
+<div class="proj-page-inner">
+  <button class="back-btn" onclick="showPage('home')">Voltar ao Portfolio</button>
+  <div class="proj-header">
+    <div class="proj-number">Projeto 04 · Fiscal · ES/PT/EN</div>
+    <h1 class="proj-h1">Simulador IRS<br><em>Modelo 3 — Portugal</em></h1>
+    <p class="proj-lead">Simulador fiscal português com escalões de rendimento 2024, deduções específicas, mínimo de existência e cálculo de coleta.</p>
+    <div class="proj-tags-row">
+      <span class="proj-tag-big">IRS 2024</span>
+      <span class="proj-tag-big">Escalões</span>
+      <span class="proj-tag-big">Deduções</span>
+      <span class="proj-tag-big">Modelo 3</span>
+    </div>
+  </div>
+
+  <!-- ESCALÕES -->
+  <div class="c-card" style="margin-bottom:20px">
+    <div class="c-card-label" style="margin-bottom:14px">Escalões IRS Portugal 2024</div>
+    <div id="taxBrackets"></div>
+  </div>
+
+  <div class="content-grid cols2">
+    <div class="c-card">
+      <div class="c-card-label">Dados do Contribuinte</div>
+      <div class="form-field" style="margin-bottom:10px">
+        <label>Rendimento Bruto Anual (€)</label>
+        <input type="number" id="irsGross" value="28000" step="500" oninput="calcIRS()"/>
+      </div>
+      <div class="form-field" style="margin-bottom:10px">
+        <label>Deduções Específicas (€)</label>
+        <input type="number" id="irsDed" value="4104" step="100" oninput="calcIRS()"/>
+      </div>
+      <div class="form-field" style="margin-bottom:10px">
+        <label>Deduções à Coleta (€)</label>
+        <input type="number" id="irsCol" value="1500" step="100" oninput="calcIRS()"/>
+      </div>
+      <div class="form-field" style="margin-bottom:14px">
+        <label>Retenções na Fonte (€)</label>
+        <input type="number" id="irsRet" value="3200" step="100" oninput="calcIRS()"/>
+      </div>
+      <button class="calc-btn" onclick="calcIRS()">Simular IRS</button>
+    </div>
+
+    <div class="c-card">
+      <div class="c-card-label" style="margin-bottom:14px">Resultado da Liquidação</div>
+      <div id="irsResult">
+        <div style="color:var(--text-dim);font-size:.82rem;padding:20px 0;text-align:center">Ajuste os valores para simular</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- ════════════════════════════════════════════
+  P5 · ORÇAMENTOS & DESPESAS
+════════════════════════════════════════════ -->
+<div id="p5" class="page proj-page">
+<div class="proj-page-inner">
+  <button class="back-btn" onclick="showPage('home')">Voltar ao Portfolio</button>
+  <div class="proj-header">
+    <div class="proj-number">Projeto 05 · Finanças pessoais · JS</div>
+    <h1 class="proj-h1">Suite Orçamentos<br><em>&amp; Despesas 2026</em></h1>
+    <p class="proj-lead">Dashboard de salário, orçamento mensal e controlo de despesas com lógica de retenções (SS, IRS) e análise de desvios em tempo real.</p>
+    <div class="proj-tags-row">
+      <span class="proj-tag-big">Nómina</span>
+      <span class="proj-tag-big">SS / IRS</span>
+      <span class="proj-tag-big">Desvios</span>
+      <span class="proj-tag-big">Despesas</span>
+    </div>
+  </div>
+
+  <!-- SALARY CALC -->
+  <div class="content-grid cols2" style="margin-bottom:20px">
+    <div class="c-card">
+      <div class="c-card-label">Calculadora de Salário Líquido</div>
+      <div class="form-field" style="margin-bottom:10px">
+        <label>Salário Bruto Mensal (€)</label>
+        <input type="number" id="salBruto" value="1800" step="50" oninput="calcSalario()"/>
+      </div>
+      <div class="form-field" style="margin-bottom:10px">
+        <label>Situação Familiar</label>
+        <select id="salSit" onchange="calcSalario()">
+          <option value="solt">Solteiro(a) sem dependentes</option>
+          <option value="cas">Casado(a) — 2 titulares</option>
+          <option value="dep1">Com 1 dependente</option>
+          <option value="dep2">Com 2 dependentes</option>
+        </select>
+      </div>
+      <div id="salResult"></div>
+    </div>
+
+    <div class="c-card">
+      <div class="c-card-label" style="margin-bottom:12px">Distribuição do Salário</div>
+      <canvas id="salChart" style="max-height:220px"></canvas>
+    </div>
+  </div>
+
+  <!-- BUDGET -->
+  <div class="c-card">
+    <div class="c-card-label" style="margin-bottom:14px">Orçamento vs Despesas Reais — Maio 2026</div>
+    <div id="budgetTable"></div>
+    <div id="budgetTotals" style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border)"></div>
+  </div>
+
+  <div class="content-grid" style="margin-top:20px">
+    <div class="chart-wrap">
+      <div class="c-card-label" style="margin-bottom:12px">Evolução mensal de despesas — 2026</div>
+      <canvas id="expChart"></canvas>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<script>
+/* ═══════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════ */
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav-pill').forEach(p=>{
+    const target = p.getAttribute('onclick')?.match(/'(\w+)'/)?.[1];
+    p.classList.toggle('active', target===id);
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+  // lazy init charts
+  if(id==='p1') initCFOCharts();
+  if(id==='p3'){calcLoan();} 
+  if(id==='p4'){buildTaxTable();calcIRS();}
+  if(id==='p5'){calcSalario();buildBudget();initExpChart();}
+}
+
+function scrollToProjects(){
+  document.getElementById('projGrid').scrollIntoView({behavior:'smooth'});
+}
+
+/* ═══════════════════════════════════════
+   CHART.JS DEFAULTS
+═══════════════════════════════════════ */
+Chart.defaults.color='rgba(237,232,220,0.5)';
+Chart.defaults.borderColor='rgba(255,255,255,0.07)';
+const GOLD='#c4a050', GOLD2='rgba(196,160,80,0.3)', NAVY='#5577ff', NAVY2='rgba(85,119,255,0.25)';
+const GREEN='#5ec48a', RED='#e07070';
+let chartInstances={};
+function destroyChart(id){if(chartInstances[id]){chartInstances[id].destroy();delete chartInstances[id];}}
+
+/* ═══════════════════════════════════════
+   P1 · CFO CHARTS
+═══════════════════════════════════════ */
+function initCFOCharts(){
+  destroyChart('cfoChart'); destroyChart('pieCfo');
+  const months=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+  const rec=[210,225,240,260,280,295,310,300,320,315,330,345];
+  const dep=[155,160,165,175,185,190,200,195,210,205,215,220];
+  chartInstances['cfoChart']=new Chart(document.getElementById('cfoChart'),{
+    type:'bar',
+    data:{
+      labels:months,
+      datasets:[
+        {label:'Receita (K€)',data:rec,backgroundColor:GOLD2,borderColor:GOLD,borderWidth:1.5,borderRadius:3},
+        {label:'Despesas (K€)',data:dep,backgroundColor:NAVY2,borderColor:NAVY,borderWidth:1.5,borderRadius:3}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{labels:{font:{size:11}}}},scales:{y:{ticks:{callback:v=>v+'K'}}}}
+  });
+  chartInstances['pieCfo']=new Chart(document.getElementById('pieCfo'),{
+    type:'doughnut',
+    data:{
+      labels:['Vendas','Marketing','Operações','TI','RH'],
+      datasets:[{data:[34,10,30,8,18],backgroundColor:['#c4a050','#5577ff','#5ec48a','#e07070','#a0c4ff'],borderWidth:0}]
+    },
+    options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{position:'right',labels:{font:{size:11}}}}}
+  });
+}
+
+/* ═══════════════════════════════════════
+   P2 · MATEMÁTICA FINANCEIRA
+═══════════════════════════════════════ */
+function calcVAL(){
+  const I0=parseFloat(document.getElementById('valInv').value)||0;
+  const r=parseFloat(document.getElementById('valRate').value)/100||0;
+  const flows=document.getElementById('valFlows').value.split(',').map(v=>parseFloat(v.trim())||0);
+  let val=0;
+  flows.forEach((cf,t)=>{val+=cf/Math.pow(1+r,t+1);});
+  val-=I0;
+  // TIR by bisection
+  let lo=-0.5,hi=5,tir=0;
+  for(let i=0;i<100;i++){
+    const m=(lo+hi)/2;
+    let npv=-I0; flows.forEach((cf,t)=>{npv+=cf/Math.pow(1+m,t+1);});
+    if(npv>0)lo=m; else hi=m;
+    tir=m;
+  }
+  const el=document.getElementById('valResult');
+  el.style.display='block';
+  el.innerHTML=`
+    <div class="result-row"><span class="rlabel">Valor Atual Líquido (VAL)</span><span class="rval" style="color:${val>=0?'var(--positive)':'var(--danger)'}">${fmt(val)} €</span></div>
+    <div class="result-row"><span class="rlabel">Taxa Interna de Rendibilidade (TIR)</span><span class="rval">${(tir*100).toFixed(2)}%</span></div>
+    <div class="result-row"><span class="rlabel">Decisão</span><span class="rval">${val>=0?'✅ VIÁVEL':'❌ NÃO VIÁVEL'}</span></div>
+  `;
+}
+
+function calcCAPM(){
+  const Rf=parseFloat(document.getElementById('capmRf').value)/100||0;
+  const beta=parseFloat(document.getElementById('capmBeta').value)||0;
+  const Rm=parseFloat(document.getElementById('capmRm').value)/100||0;
+  const Ei=Rf+beta*(Rm-Rf);
+  const el=document.getElementById('capmResult');
+  el.style.display='block';
+  el.innerHTML=`
+    <div class="result-row"><span class="rlabel">Prémio de Risco de Mercado</span><span class="rval">${((Rm-Rf)*100).toFixed(2)}%</span></div>
+    <div class="result-row"><span class="rlabel">Contribuição do Beta</span><span class="rval">${(beta*(Rm-Rf)*100).toFixed(2)}%</span></div>
+    <div class="result-row"><span class="rlabel">Retorno Esperado E(Ri)</span><span class="rval" style="color:var(--positive)">${(Ei*100).toFixed(2)}%</span></div>
+  `;
+}
+
+function calcWACC(){
+  const E=parseFloat(document.getElementById('waccE').value)||0;
+  const D=parseFloat(document.getElementById('waccD').value)||0;
+  const Re=parseFloat(document.getElementById('waccRe').value)/100||0;
+  const Rd=parseFloat(document.getElementById('waccRd').value)/100||0;
+  const T=parseFloat(document.getElementById('waccT').value)/100||0;
+  const V=E+D;
+  const wacc=(E/V)*Re+(D/V)*Rd*(1-T);
+  const el=document.getElementById('waccResult');
+  el.style.display='block';
+  el.innerHTML=`
+    <div class="result-row"><span class="rlabel">Peso Capital Próprio</span><span class="rval">${(E/V*100).toFixed(1)}%</span></div>
+    <div class="result-row"><span class="rlabel">Peso Dívida</span><span class="rval">${(D/V*100).toFixed(1)}%</span></div>
+    <div class="result-row"><span class="rlabel">WACC</span><span class="rval" style="color:var(--positive)">${(wacc*100).toFixed(2)}%</span></div>
+  `;
+}
+
+function calcAmort(){
+  const C=parseFloat(document.getElementById('amC').value)||0;
+  const r=parseFloat(document.getElementById('amR').value)/100||0;
+  const n=parseInt(document.getElementById('amN').value)||0;
+  const R=C*r/(1-Math.pow(1+r,-n));
+  let saldo=C, rows='';
+  for(let i=1;i<=n;i++){
+    const juros=saldo*r;
+    const amort=R-juros;
+    saldo-=amort;
+    rows+=`<tr><td class="mono">${i}</td><td class="mono">${fmt(R)}</td><td class="mono">${fmt(juros)}</td><td class="mono">${fmt(amort)}</td><td class="mono">${fmt(Math.max(0,saldo))}</td></tr>`;
+  }
+  document.getElementById('amortResult').innerHTML=`
+    <table class="data-table">
+      <thead><tr><th>#</th><th>Prestação</th><th>Juros</th><th>Amort.</th><th>Saldo</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+}
+
+/* ═══════════════════════════════════════
+   P3 · LOAN CALCULATOR
+═══════════════════════════════════════ */
+let loanChartInst=null;
+function calcLoan(){
+  const C=parseFloat(document.getElementById('loanAmt').value)||15000;
+  const n=parseInt(document.getElementById('loanN').value)||48;
+  const tan=parseFloat(document.getElementById('loanTAN').value)/100||0.079;
+  const fee=parseFloat(document.getElementById('loanFee').value)||150;
+  const im=tan/12;
+  const R=C*im/(1-Math.pow(1+im,-n));
+  const total=R*n+fee;
+  const totalJuros=total-C-fee;
+  // TAEG approx Newton-Raphson
+  let taeg=tan;
+  for(let k=0;k<50;k++){
+    const im2=taeg/12;
+    let f=-( C-fee), df=0;
+    for(let t=1;t<=n;t++){f+=R/Math.pow(1+im2,t); df-=t*R/(12*Math.pow(1+im2,t+1));}
+    const step=f/df; taeg-=step;
+    if(Math.abs(step)<1e-10)break;
+  }
+  document.getElementById('loanResult').innerHTML=`
+    <div class="result-row"><span class="rlabel">Prestação mensal</span><span class="rval">${fmt(R)} €</span></div>
+    <div class="result-row"><span class="rlabel">TAN</span><span class="rval">${(tan*100).toFixed(2)}%</span></div>
+    <div class="result-row"><span class="rlabel">TAEG</span><span class="rval">${(taeg*100).toFixed(2)}%</span></div>
+    <div class="result-row"><span class="rlabel">Total Juros</span><span class="rval" style="color:var(--danger)">${fmt(totalJuros)} €</span></div>
+    <div class="result-row"><span class="rlabel">Total Imputado ao Crédito</span><span class="rval">${fmt(total)} €</span></div>
+  `;
+  // Chart
+  destroyChart('loanChart');
+  const labs=[],capData=[],jurData=[];
+  let saldo=C;
+  for(let i=1;i<=Math.min(n,60);i++){
+    const j=saldo*im; const a=R-j; saldo-=a;
+    labs.push('M'+i); capData.push(parseFloat(saldo.toFixed(2))); jurData.push(parseFloat(j.toFixed(2)));
+  }
+  loanChartInst=new Chart(document.getElementById('loanChart'),{
+    type:'line',
+    data:{labels:labs,datasets:[
+      {label:'Capital em dívida',data:capData,borderColor:GOLD,backgroundColor:GOLD2,fill:true,tension:0.3,pointRadius:0},
+      {label:'Juros por prestação',data:jurData,borderColor:NAVY,backgroundColor:NAVY2,fill:true,tension:0.3,pointRadius:0}
+    ]},
+    options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{labels:{font:{size:11}}}},scales:{y:{ticks:{callback:v=>fmt(v)+'€'}}}}
+  });
+  chartInstances['loanChart']=loanChartInst;
+  // Table
+  let rows='', s2=C;
+  for(let i=1;i<=12;i++){
+    const j=s2*im; const a=R-j; s2-=a;
+    rows+=`<tr><td class="mono">${i}</td><td class="mono">${fmt(R)}€</td><td class="mono neg">${fmt(j)}€</td><td class="mono pos">${fmt(a)}€</td><td class="mono">${fmt(Math.max(0,s2))}€</td></tr>`;
+  }
+  document.getElementById('loanTable').innerHTML=`
+    <table class="data-table">
+      <thead><tr><th>Mês</th><th>Prestação</th><th>Juros</th><th>Amort.</th><th>Saldo</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+}
+
+/* ═══════════════════════════════════════
+   P4 · IRS
+═══════════════════════════════════════ */
+const BRACKETS=[
+  {max:7703,rate:13.25},{max:11623,rate:18},{max:16472,rate:23},
+  {max:21321,rate:26},{max:27146,rate:32.75},{max:39791,rate:37},
+  {max:51997,rate:43.5},{max:81199,rate:45},{max:Infinity,rate:48}
+];
+
+function buildTaxTable(){
+  let html='';
+  BRACKETS.forEach((b,i)=>{
+    const prev=i===0?0:BRACKETS[i-1].max;
+    const label=b.max===Infinity?`> ${fmt(prev)} €`:`${fmt(prev)} – ${fmt(b.max)} €`;
+    const pct=(b.rate/48)*100;
+    html+=`<div class="tax-row">
+      <span class="tax-pct">${b.rate}%</span>
+      <span class="tax-range">${label}</span>
+      <div class="tax-bar"><div class="tax-fill" style="width:${pct}%"></div></div>
+    </div>`;
+  });
+  document.getElementById('taxBrackets').innerHTML=html;
+}
+
+function calcIRS(){
+  const gross=parseFloat(document.getElementById('irsGross')?.value)||0;
+  const ded=parseFloat(document.getElementById('irsDed')?.value)||0;
+  const colDed=parseFloat(document.getElementById('irsCol')?.value)||0;
+  const ret=parseFloat(document.getElementById('irsRet')?.value)||0;
+  const colectavel=Math.max(0,gross-ded);
+  let coleta=0, prev=0;
+  BRACKETS.forEach(b=>{
+    if(colectavel>prev){
+      const taxable=Math.min(colectavel,b.max)-prev;
+      coleta+=taxable*(b.rate/100);
+      prev=b.max;
+    }
+  });
+  const coletaLiq=Math.max(0,coleta-colDed);
+  const saldo=ret-coletaLiq;
+  const el=document.getElementById('irsResult');
+  if(!el)return;
+  el.innerHTML=`
+    <div class="result-row"><span class="rlabel">Rendimento Coletável</span><span class="rval">${fmt(colectavel)} €</span></div>
+    <div class="result-row"><span class="rlabel">Coleta bruta</span><span class="rval">${fmt(coleta)} €</span></div>
+    <div class="result-row"><span class="rlabel">Deduções à coleta</span><span class="rval">− ${fmt(colDed)} €</span></div>
+    <div class="result-row"><span class="rlabel">Coleta líquida</span><span class="rval">${fmt(coletaLiq)} €</span></div>
+    <div class="result-row"><span class="rlabel">Retenções na fonte</span><span class="rval">− ${fmt(ret)} €</span></div>
+    <div class="result-row" style="padding-top:10px;margin-top:4px;border-top:1px solid var(--border)">
+      <span class="rlabel" style="font-size:.84rem;color:var(--text)">Saldo final</span>
+      <span class="rval" style="font-size:1.1rem;color:${saldo>=0?'var(--positive)':'var(--danger)'}">${saldo>=0?'A RECEBER':'A PAGAR'} ${fmt(Math.abs(saldo))} €</span>
+    </div>
+  `;
+}
+
+/* ═══════════════════════════════════════
+   P5 · ORÇAMENTOS
+═══════════════════════════════════════ */
+const budgetData=[
+  {cat:'Habitação',planned:600,actual:600},{cat:'Alimentação',planned:350,actual:382},
+  {cat:'Transporte',planned:120,actual:95},{cat:'Saúde',planned:80,actual:112},
+  {cat:'Lazer',planned:100,actual:78},{cat:'Comunicações',planned:45,actual:45},
+  {cat:'Vestuário',planned:60,actual:88},{cat:'Poupança',planned:200,actual:200},
+];
+
+function calcSalario(){
+  const bruto=parseFloat(document.getElementById('salBruto')?.value)||1800;
+  const sit=document.getElementById('salSit')?.value||'solt';
+  const ss=bruto*0.11;
+  // IRS retenção tabela simplificada
+  const irsRates={solt:0.155,cas:0.13,dep1:0.12,dep2:0.10};
+  const irsR=(irsRates[sit]||0.155)*bruto;
+  const liq=bruto-ss-irsR;
+  const el=document.getElementById('salResult');
+  if(!el)return;
+  el.innerHTML=`
+    <div class="result-row"><span class="rlabel">Salário Bruto</span><span class="rval">${fmt(bruto)} €</span></div>
+    <div class="result-row"><span class="rlabel">Segurança Social (11%)</span><span class="rval neg">− ${fmt(ss)} €</span></div>
+    <div class="result-row"><span class="rlabel">Retenção IRS</span><span class="rval neg">− ${fmt(irsR)} €</span></div>
+    <div class="result-row" style="margin-top:4px;padding-top:8px;border-top:1px solid var(--border)">
+      <span class="rlabel" style="color:var(--text)">Salário Líquido</span>
+      <span class="rval" style="font-size:1.1rem;color:var(--positive)">${fmt(liq)} €</span>
+    </div>
+  `;
+  // Pie chart
+  destroyChart('salChart');
+  chartInstances['salChart']=new Chart(document.getElementById('salChart'),{
+    type:'doughnut',
+    data:{
+      labels:['Líquido','Seg. Social','IRS'],
+      datasets:[{data:[liq,ss,irsR].map(v=>parseFloat(v.toFixed(2))),backgroundColor:[GREEN,GOLD,RED],borderWidth:0}]
+    },
+    options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}}}
+  });
+}
+
+function buildBudget(){
+  let totalP=0,totalA=0,html='';
+  budgetData.forEach(d=>{
+    totalP+=d.planned; totalA+=d.actual;
+    const pct=Math.min(100,(d.actual/d.planned)*100);
+    const over=d.actual>d.planned;
+    const color=over?RED:GREEN;
+    const diff=d.actual-d.planned;
+    html+=`<div class="budget-row">
+      <div><div class="budget-label">${d.cat}</div>
+        <div class="budget-bar-wrap"><div class="budget-bar-fill" style="width:${Math.min(pct,100)}%;background:${color}"></div></div>
+      </div>
+      <span class="budget-planned">${fmt(d.planned)} €</span>
+      <span class="budget-actual" style="color:${color}">${fmt(d.actual)} €<br><span style="font-size:.65rem;color:var(--text-dim)">${diff>=0?'+':''}${fmt(diff)}</span></span>
+    </div>`;
+  });
+  document.getElementById('budgetTable').innerHTML=html;
+  const devTotal=totalA-totalP;
+  document.getElementById('budgetTotals').innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--text-dim);letter-spacing:.1em;text-transform:uppercase">Totais do mês</span>
+      <div style="display:flex;gap:20px;flex-wrap:wrap">
+        <div style="text-align:right"><div style="font-size:.68rem;color:var(--text-dim)">Orçado</div><div style="font-family:'IBM Plex Mono',monospace;color:var(--gold)">${fmt(totalP)} €</div></div>
+        <div style="text-align:right"><div style="font-size:.68rem;color:var(--text-dim)">Real</div><div style="font-family:'IBM Plex Mono',monospace;color:var(--text)">${fmt(totalA)} €</div></div>
+        <div style="text-align:right"><div style="font-size:.68rem;color:var(--text-dim)">Desvio</div><div style="font-family:'IBM Plex Mono',monospace;color:${devTotal>0?RED:GREEN}">${devTotal>0?'+':''}${fmt(devTotal)} €</div></div>
+      </div>
+    </div>
+  `;
+}
+
+function initExpChart(){
+  destroyChart('expChart');
+  const months=['Jan','Fev','Mar','Abr','Mai'];
+  chartInstances['expChart']=new Chart(document.getElementById('expChart'),{
+    type:'line',
+    data:{
+      labels:months,
+      datasets:[
+        {label:'Orçado',data:[1530,1530,1555,1555,1555],borderColor:GOLD,borderDash:[5,4],pointRadius:4,fill:false,tension:0},
+        {label:'Real',data:[1480,1612,1545,1590,1600],borderColor:GREEN,backgroundColor:'rgba(94,196,138,0.12)',fill:true,tension:0.35,pointRadius:4},
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{labels:{font:{size:11}}}},scales:{y:{ticks:{callback:v=>fmt(v)+'€'}}}}
+  });
+}
+
+/* ═══════════════════════════════════════
+   HELPERS
+═══════════════════════════════════════ */
+function fmt(n){
+  return new Intl.NumberFormat('pt-PT',{minimumFractionDigits:2,maximumFractionDigits:2}).format(n);
+}
+
+// init P4 on load for tax table (passive)
+window.addEventListener('load',()=>{
+  buildTaxTable();
+  calcIRS();
+  calcSalario();
+  buildBudget();
+});
+</script>
+</body>
+</html>
