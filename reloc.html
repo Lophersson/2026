@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lophersson · Barcelos Checklist</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #c4a050;
+    --gold-dim: rgba(196,160,80,0.15);
+    --gold-border: rgba(196,160,80,0.3);
+    --void: #0a0a0a;
+    --surface: #111111;
+    --surface2: #181818;
+    --text: #e8e2d6;
+    --text-dim: #7a7268;
+    --text-mid: #b0aa9e;
+    --green: #4caf7d;
+    --green-dim: rgba(76,175,125,0.12);
+    --red: #e05c5c;
+    --week-accent: #7eb8c4;
+    --week-dim: rgba(126,184,196,0.12);
+    --move-accent: #c4a050;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--void);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 999; opacity: 0.4;
+  }
+
+  /* Ambient orbs */
+  .orb {
+    position: fixed; border-radius: 50%;
+    filter: blur(80px); pointer-events: none; z-index: 0;
+  }
+  .orb-1 { width: 400px; height: 400px; background: rgba(196,160,80,0.06); top: -100px; right: -100px; }
+  .orb-2 { width: 300px; height: 300px; background: rgba(126,184,196,0.05); bottom: 20%; left: -80px; }
+
+  /* Header */
+  header {
+    position: relative; z-index: 10;
+    padding: 3rem 2rem 2rem;
+    border-bottom: 1px solid var(--gold-border);
+    display: flex; align-items: flex-end; justify-content: space-between;
+    flex-wrap: wrap; gap: 1.5rem;
+  }
+  .brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.75rem; font-weight: 400; letter-spacing: 0.3em;
+    color: var(--gold); text-transform: uppercase;
+  }
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 300; line-height: 1;
+    color: var(--text); margin-top: 0.4rem;
+  }
+  h1 em { font-style: italic; color: var(--gold); }
+  .subtitle {
+    font-size: 0.8rem; color: var(--text-dim);
+    letter-spacing: 0.08em; margin-top: 0.5rem;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* Stats bar */
+  .stats-bar {
+    display: flex; gap: 2rem; flex-wrap: wrap;
+    background: var(--surface); border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 2px; padding: 1rem 1.5rem;
+    align-self: flex-end;
+  }
+  .stat { text-align: center; }
+  .stat-n {
+    font-family: 'DM Mono', monospace;
+    font-size: 1.6rem; font-weight: 400; line-height: 1;
+  }
+  .stat-n.week { color: var(--week-accent); }
+  .stat-n.move { color: var(--move-accent); }
+  .stat-n.total { color: var(--text-mid); }
+  .stat-n.done { color: var(--green); }
+  .stat-label { font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 2px; }
+
+  /* Tabs */
+  .tabs {
+    position: relative; z-index: 10;
+    display: flex; gap: 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    padding: 0 2rem; margin-top: 0;
+  }
+  .tab-btn {
+    background: none; border: none; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; font-size: 0.78rem;
+    font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 1.2rem 1.5rem; color: var(--text-dim);
+    border-bottom: 2px solid transparent; margin-bottom: -1px;
+    transition: all 0.2s ease; position: relative;
+  }
+  .tab-btn:hover { color: var(--text-mid); }
+  .tab-btn.week.active { color: var(--week-accent); border-color: var(--week-accent); }
+  .tab-btn.move.active { color: var(--gold); border-color: var(--gold); }
+  .tab-btn.all.active { color: var(--text); border-color: var(--text-mid); }
+  .tab-count {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 18px; height: 18px; border-radius: 50%;
+    font-size: 0.6rem; font-family: 'DM Mono', monospace;
+    margin-left: 6px; vertical-align: middle;
+  }
+  .tab-btn.week .tab-count { background: var(--week-dim); color: var(--week-accent); }
+  .tab-btn.move .tab-count { background: var(--gold-dim); color: var(--gold); }
+  .tab-btn.all .tab-count { background: rgba(255,255,255,0.05); color: var(--text-dim); }
+
+  /* Controls */
+  .controls {
+    position: relative; z-index: 10;
+    display: flex; align-items: center; gap: 1rem;
+    padding: 1rem 2rem; flex-wrap: wrap;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .search-wrap {
+    display: flex; align-items: center; gap: 0.5rem;
+    background: var(--surface); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 2px; padding: 0.5rem 0.8rem; flex: 1; min-width: 180px;
+  }
+  .search-wrap svg { color: var(--text-dim); flex-shrink: 0; }
+  .search-wrap input {
+    background: none; border: none; outline: none;
+    color: var(--text); font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem; font-weight: 300; width: 100%;
+  }
+  .search-wrap input::placeholder { color: var(--text-dim); }
+  .btn-sm {
+    background: none; border: 1px solid rgba(255,255,255,0.1);
+    color: var(--text-dim); font-family: 'DM Mono', monospace;
+    font-size: 0.68rem; letter-spacing: 0.08em; padding: 0.45rem 0.9rem;
+    cursor: pointer; border-radius: 2px; transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .btn-sm:hover { border-color: var(--gold-border); color: var(--gold); }
+  .btn-sm.danger:hover { border-color: rgba(224,92,92,0.4); color: var(--red); }
+  .progress-wrap { display: flex; align-items: center; gap: 0.6rem; margin-left: auto; }
+  .progress-bar-outer {
+    width: 120px; height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px;
+  }
+  .progress-bar-inner {
+    height: 100%; border-radius: 2px;
+    background: linear-gradient(90deg, var(--green), #6ee7a0);
+    transition: width 0.4s ease;
+  }
+  .progress-pct { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--green); }
+
+  /* Main */
+  main {
+    position: relative; z-index: 10;
+    padding: 1.5rem 2rem 4rem;
+    display: flex; flex-direction: column; gap: 0.8rem;
+  }
+
+  /* Category section */
+  .cat-section { border: 1px solid rgba(255,255,255,0.06); border-radius: 2px; overflow: hidden; }
+  .cat-section.hidden { display: none; }
+
+  .cat-header {
+    display: flex; align-items: center; gap: 0.8rem;
+    padding: 0.9rem 1.2rem; cursor: pointer;
+    background: var(--surface);
+    transition: background 0.2s;
+    user-select: none;
+  }
+  .cat-header:hover { background: var(--surface2); }
+  .cat-icon { font-size: 1.1rem; width: 24px; text-align: center; flex-shrink: 0; }
+  .cat-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem; font-weight: 400; flex: 1;
+  }
+  .cat-badges { display: flex; gap: 0.4rem; align-items: center; }
+  .badge {
+    font-family: 'DM Mono', monospace; font-size: 0.6rem;
+    padding: 2px 7px; border-radius: 1px; letter-spacing: 0.06em;
+  }
+  .badge.week { background: var(--week-dim); color: var(--week-accent); border: 1px solid rgba(126,184,196,0.2); }
+  .badge.move { background: var(--gold-dim); color: var(--gold); border: 1px solid var(--gold-border); }
+  .badge.both { background: rgba(76,175,125,0.1); color: var(--green); border: 1px solid rgba(76,175,125,0.2); }
+  .cat-progress {
+    font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--text-dim);
+    margin-left: 0.5rem;
+  }
+  .cat-toggle { color: var(--text-dim); font-size: 0.7rem; transition: transform 0.2s; }
+  .cat-section.collapsed .cat-toggle { transform: rotate(-90deg); }
+
+  /* Items list */
+  .items-list { display: flex; flex-direction: column; }
+  .cat-section.collapsed .items-list { display: none; }
+
+  /* Item */
+  .item {
+    display: flex; align-items: flex-start; gap: 0.8rem;
+    padding: 0.65rem 1.2rem 0.65rem 1.4rem;
+    border-top: 1px solid rgba(255,255,255,0.04);
+    transition: background 0.15s;
+    cursor: pointer;
+  }
+  .item:hover { background: rgba(255,255,255,0.02); }
+  .item.filtered { display: none; }
+
+  .item-check {
+    width: 16px; height: 16px; flex-shrink: 0; margin-top: 2px;
+    border: 1px solid rgba(255,255,255,0.18); border-radius: 1px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s; cursor: pointer;
+  }
+  .item.checked .item-check {
+    background: var(--green); border-color: var(--green);
+  }
+  .item.checked .item-check::after {
+    content: '✓'; color: #0a0a0a; font-size: 0.65rem; font-weight: 700;
+  }
+
+  .item-body { flex: 1; }
+  .item-name {
+    font-size: 0.83rem; color: var(--text); line-height: 1.4;
+  }
+  .item.checked .item-name { color: var(--text-dim); text-decoration: line-through; }
+  .item-note {
+    font-size: 0.71rem; color: var(--text-dim); margin-top: 2px;
+    font-style: italic; line-height: 1.4;
+  }
+  .item-tags { display: flex; gap: 4px; margin-top: 4px; flex-wrap: wrap; }
+  .item-tag {
+    font-family: 'DM Mono', monospace; font-size: 0.58rem;
+    padding: 1px 5px; border-radius: 1px; letter-spacing: 0.04em;
+  }
+  .item-tag.week { background: var(--week-dim); color: var(--week-accent); }
+  .item-tag.move { background: var(--gold-dim); color: var(--gold); }
+  .item-tag.warn {
+    background: rgba(224,92,92,0.1); color: var(--red);
+    border: 1px solid rgba(224,92,92,0.2);
+  }
+  .item-tag.tip {
+    background: rgba(76,175,125,0.08); color: #6ee7a0;
+  }
+
+  /* Alert box */
+  .alert-box {
+    position: relative; z-index: 10;
+    margin: 0 2rem 0.5rem;
+    border: 1px solid rgba(196,160,80,0.25);
+    background: rgba(196,160,80,0.04);
+    border-radius: 2px; padding: 1rem 1.2rem;
+    display: flex; gap: 0.8rem; align-items: flex-start;
+  }
+  .alert-icon { font-size: 1rem; flex-shrink: 0; }
+  .alert-text { font-size: 0.78rem; color: var(--text-mid); line-height: 1.6; }
+  .alert-text strong { color: var(--gold); font-weight: 500; }
+
+  /* Footer */
+  footer {
+    position: relative; z-index: 10;
+    text-align: center; padding: 1rem;
+    font-family: 'DM Mono', monospace; font-size: 0.65rem;
+    color: var(--text-dim); border-top: 1px solid rgba(255,255,255,0.04);
+  }
+
+  @media(max-width:600px) {
+    header { padding: 2rem 1rem 1.5rem; }
+    .tabs { padding: 0 0.5rem; }
+    .controls { padding: 0.8rem 1rem; }
+    main { padding: 1rem 1rem 3rem; }
+    .alert-box { margin: 0 1rem 0.5rem; }
+    .stats-bar { gap: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<header>
+  <div>
+    <div class="brand">Lophersson · Relocation</div>
+    <h1>Barcelos <em>Checklist</em></h1>
+    <div class="subtitle">Junio (semana) · Julio+ (traslado definitivo)</div>
+  </div>
+  <div class="stats-bar">
+    <div class="stat"><div class="stat-n week" id="stat-week">0</div><div class="stat-label">Semana</div></div>
+    <div class="stat"><div class="stat-n move" id="stat-move">0</div><div class="stat-label">Traslado</div></div>
+    <div class="stat"><div class="stat-n total" id="stat-total">0</div><div class="stat-label">Total</div></div>
+    <div class="stat"><div class="stat-n done" id="stat-done">0</div><div class="stat-label">Listos</div></div>
+  </div>
+</header>
+
+<div class="tabs">
+  <button class="tab-btn week active" data-tab="week" onclick="setTab('week',this)">Junio · 1 Semana <span class="tab-count" id="tc-week"></span></button>
+  <button class="tab-btn move" data-tab="move" onclick="setTab('move',this)">Julio · Traslado <span class="tab-count" id="tc-move"></span></button>
+  <button class="tab-btn all" data-tab="all" onclick="setTab('all',this)">Todo <span class="tab-count" id="tc-all"></span></button>
+</div>
+
+<div class="alert-box">
+  <span class="alert-icon">⚠️</span>
+  <div class="alert-text">
+    <strong>Atención electrónica:</strong> Los discos duros, portátiles y electrónica que dejes en Ferrol deben encenderse y ejercitarse <strong>al menos cada 2-3 meses</strong>. Los HDD almacenados en frío durante meses pueden desarrollar problemas de arranque. Considera pedir a alguien de confianza que los encienda periódicamente, o lleva contigo los datos críticos.
+  </div>
+</div>
+
+<div class="controls">
+  <div class="search-wrap">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="search" placeholder="Buscar ítem..." oninput="filterItems()">
+  </div>
+  <button class="btn-sm" onclick="expandAll()">Expandir todo</button>
+  <button class="btn-sm" onclick="collapseAll()">Colapsar todo</button>
+  <button class="btn-sm" onclick="markAllVisible()">✓ Marcar visibles</button>
+  <button class="btn-sm danger" onclick="clearAll()">↺ Limpiar</button>
+  <div class="progress-wrap">
+    <div class="progress-bar-outer"><div class="progress-bar-inner" id="progress-bar" style="width:0%"></div></div>
+    <span class="progress-pct" id="progress-pct">0%</span>
+  </div>
+</div>
+
+<main id="main-content">
+</main>
+
+<footer>lophersson.github.io · Ferrol → Barcelos · 2026</footer>
+
+<script>
+// ─── DATA ─────────────────────────────────────────────────────────────────────
+const categories = [
+  {
+    id: 'docs', icon: '📄', name: 'Documentación y Gestión',
+    items: [
+      { name: 'DNI / Pasaporte', tags: ['week','move'], note: 'Siempre encima. DNI español válido en Portugal.' },
+      { name: 'NIF / NIF português (NIF PT)', tags: ['move'], note: 'Solicitar en Finanças o Consulado si no tienes. Imprescindible para todo.' },
+      { name: 'Tarjeta sanitaria SERGAS + EHIC', tags: ['week','move'], note: 'EHIC (tarjeta europea) cubre hasta regularizar situación en PT.' },
+      { name: 'Permiso de conducir español', tags: ['week','move'], note: 'Válido en PT indefinidamente como residente UE.' },
+      { name: 'Documentación del coche (Nissan Note)', tags: ['week','move'], note: 'Ficha técnica, seguro, ITV vigente.' },
+      { name: 'Contrato de alquiler o carta de invitación', tags: ['move'], note: 'Para empadronamiento / Junta de Freguesia.' },
+      { name: 'Certificado de empadronamiento Ferrol', tags: ['move'], note: 'Reciente, para gestiones en PT.' },
+      { name: 'Títulos académicos y certificados profesionales', tags: ['move'], note: 'Los 4 Certificados de Nivel 3, DAW, bancarios.' },
+      { name: 'Historial laboral (vida laboral SS)', tags: ['move'], note: 'Descarga en Seguridad Social online.' },
+      { name: 'Extractos bancarios recientes', tags: ['move'], note: 'Para apertura de cuenta PT, alquiler, etc.' },
+      { name: 'Número de cuenta bancaria ES + tarjetas', tags: ['week','move'], note: 'Mantener cuenta española activa durante la transición.' },
+    ]
+  },
+  {
+    id: 'ropa', icon: '👔', name: 'Ropa y Calzado',
+    items: [
+      { name: 'Ropa interior (7 mudas)', tags: ['week'], note: 'Junio en Barcelos: 25-30°C, húmedo.' },
+      { name: 'Camisetas ligeras (5-6)', tags: ['week'] },
+      { name: 'Pantalones ligeros / shorts (3)', tags: ['week'] },
+      { name: 'Calzado cómodo para ciudad', tags: ['week'] },
+      { name: 'Calzado de repuesto / sandalias', tags: ['week'] },
+      { name: 'Chaqueta fina / sudadera', tags: ['week'], note: 'Noches de junio pueden refrescar.' },
+      { name: 'Pijama (2)', tags: ['week'] },
+      { name: 'Ropa de trabajo / entrevistas', tags: ['move'], note: 'Un outfit completo formal para entrevistas y gestiones.' },
+      { name: 'Ropa de temporada completa (verano-otoño)', tags: ['move'], note: 'A partir de julio ya es traslado definitivo.' },
+      { name: 'Abrigo / ropa de invierno', tags: ['move'], note: 'Barcelos inviernos suaves pero lluviosos. Llevar en segunda carga si es necesario.' },
+    ]
+  },
+  {
+    id: 'aseo', icon: '🧴', name: 'Higiene y Farmacia',
+    items: [
+      { name: 'Neceser completo (gel, champú, pasta, cepillo)', tags: ['week','move'] },
+      { name: 'Maquinilla de afeitar / recortadora', tags: ['week','move'] },
+      { name: 'Desodorante, colonia', tags: ['week','move'] },
+      { name: 'Medicación habitual (stock 1 mes)', tags: ['week','move'], note: 'Recetas españolas se pueden usar en PT con EHIC.' },
+      { name: 'Botiquín básico', tags: ['week'], note: 'Ibuprofeno, tiritas, antiséptico.' },
+      { name: 'Protector solar FPS 50+', tags: ['week'], note: 'Junio en el norte de PT tiene mucho sol.' },
+      { name: 'Toallas (2)', tags: ['week','move'] },
+    ]
+  },
+  {
+    id: 'tech', icon: '💻', name: 'Tecnología y Trabajo',
+    items: [
+      { name: 'Portátil principal + cargador', tags: ['week','move'], note: 'Principal herramienta de trabajo. No puede quedarse.' },
+      { name: 'Ratón y teclado externo', tags: ['move'], note: 'Si trabajas muchas horas, la ergonomía importa.' },
+      { name: 'Disco duro externo de trabajo (backups)', tags: ['week','move'], note: '⚠️ CRÍTICO: No dejar HDD sin encender más de 3 meses.' },
+      { name: 'USB/pendrive con datos importantes', tags: ['week','move'], note: 'CV, portfolios, documentos clave.' },
+      { name: 'Monitor externo', tags: ['move'], note: 'Si tienes uno portátil o pequeño, mejora mucho la productividad.' },
+      { name: 'Teléfono móvil + cargador', tags: ['week','move'] },
+      { name: 'Auriculares (con cable o BT)', tags: ['week','move'] },
+      { name: 'Cable de red ethernet + adaptador', tags: ['move'], note: 'Para instalaciones sin WiFi estable inicialmente.' },
+      { name: 'Router viaje o mini-switch', tags: ['move'], note: 'Útil si el alojamiento tiene solo ethernet.' },
+      { name: 'Regleta / ladrón con USB', tags: ['week','move'], note: 'Portugal usa enchufes tipo F iguales que España. Sin problema.' },
+      { name: 'Disco duro de entretenimiento', tags: ['move'], note: '⚠️ No dejar en Ferrol sin usar. Llevar o pedir a alguien que lo encienda.' },
+      { name: 'PS4 / PS5 + mandos', tags: ['move'], note: '⚠️ No dejar la consola guardada meses sin encender. Riesgo de polvo y condensadores. Llevar o encender periódicamente.' },
+      { name: 'Cables HDMI, USB varios', tags: ['move'] },
+    ]
+  },
+  {
+    id: 'electronicos-ferrol', icon: '⚠️', name: 'Electrónica que QUEDA en Ferrol',
+    items: [
+      { name: 'Plan de mantenimiento HDD externos en Ferrol', tags: ['move'], note: '⚠️ Encender cada 2-3 meses. Rotar. Apuntar fecha última encendida.' },
+      { name: 'Persona responsable de encender equipos', tags: ['move'], note: 'Karina u otro contacto de confianza: arrancar portátiles/HDD mensualmente.' },
+      { name: 'Backup en la nube de datos críticos', tags: ['week'], note: 'Google Drive, Mega o similar antes de salir. Gratis hasta 15-20 GB.' },
+      { name: 'Etiquetar todos los discos duros', tags: ['move'], note: 'Contenido + fecha último uso. Evita confusiones al volver.' },
+      { name: 'PS3 / consolas antiguas en modo almacenamiento', tags: ['move'], note: 'Desconectar de corriente. Guardar en bolsa antiestática si es posible. Encender al volver.' },
+      { name: 'Cámara de fotos / GoPro', tags: ['move'], note: 'Batería al 50% para almacenamiento largo. No dejar cargada ni descargada.' },
+    ]
+  },
+  {
+    id: 'coche', icon: '🚗', name: 'Vehículo — Nissan Note 1.5 dCi',
+    items: [
+      { name: 'Revisión pre-viaje: aceite, agua, neumáticos', tags: ['week'], note: 'Ferrol → Barcelos ~300km por A-52 / N-550 / A-3 aprox.' },
+      { name: 'Seguro vigente para PT (cobertura UE)', tags: ['week','move'], note: 'Verificar con aseguradora que cubre Portugal.' },
+      { name: 'ITV vigente', tags: ['week','move'] },
+      { name: 'Kit de emergencia: chaleco, triángulos, extintor', tags: ['week','move'], note: 'Obligatorio en Portugal.' },
+      { name: 'Cadenas de texto o GPS cargado con ruta', tags: ['week'] },
+      { name: 'Gasoil lleno antes de salir de Galicia', tags: ['week'], note: 'Gasoil en España suele ser más barato que en PT.' },
+      { name: 'Gestionar matrícula portuguesa (a largo plazo)', tags: ['move'], note: 'Obligatorio si resides en PT más de 6 meses. Proceso costoso: planificar con tiempo.' },
+    ]
+  },
+  {
+    id: 'finanzas', icon: '💶', name: 'Finanzas y Efectivo',
+    items: [
+      { name: 'Efectivo €200-300 para la semana', tags: ['week'], note: 'Para primeras compras, gasolineras, imprevistos.' },
+      { name: 'Tarjeta débito/crédito sin comisiones en PT', tags: ['week','move'], note: 'Revolut, Wise o N26 para evitar comisiones de cambio/divisa.' },
+      { name: 'Abrir cuenta bancaria portuguesa', tags: ['move'], note: 'Millennium BCP, Santander PT, CGD o ActivoBank (100% online). Necesitas NIF PT.' },
+      { name: 'Gestionar IBAN PT para nómina', tags: ['move'], note: 'Algunos empleadores en PT exigen cuenta PT.' },
+      { name: 'Revisar deudas/domiciliaciones en ES', tags: ['move'], note: 'Cancelar o redirigir antes de salir: seguros, suscripciones, cuotas.' },
+      { name: 'Declaración de la renta antes de salir', tags: ['move'], note: 'Si aplica: gestionar con gestor o online antes del traslado definitivo.' },
+    ]
+  },
+  {
+    id: 'alojamiento', icon: '🏠', name: 'Alojamiento y Hogar',
+    items: [
+      { name: 'Confirmar estancia con el contacto en Barcelos', tags: ['week'], note: 'Semana de junio: visita de reconocimiento.' },
+      { name: 'Sábanas, almohada fundas (juego viaje)', tags: ['week'], note: 'Si no están provistas en el alojamiento.' },
+      { name: 'Candado pequeño para maleta/mochila', tags: ['week'] },
+      { name: 'Buscar alquiler definitivo en Barcelos', tags: ['move'], note: 'Ideal tenerlo confirmado antes de traslado de julio. OLX, Idealista PT, Imovirtual.' },
+      { name: 'Ajuar básico de cocina', tags: ['move'], note: 'Cafetera, 1-2 sartenes, set básico si el piso no viene equipado.' },
+      { name: 'Ropa de cama completa', tags: ['move'] },
+      { name: 'Set de limpieza básico', tags: ['move'], note: 'Fregona, escoba, productos básicos. Comprar allí al llegar.' },
+      { name: 'Inventario de lo que dejas en Ferrol', tags: ['move'], note: 'Foto o lista de todos los muebles y objetos. Para seguros y organización de futuras cargas.' },
+    ]
+  },
+  {
+    id: 'trabajo', icon: '💼', name: 'Búsqueda de Empleo / Freelance',
+    items: [
+      { name: 'CV actualizado en PT/EN (PDF)', tags: ['week','move'], note: 'lophersson.github.io/2026 — versión descargable preparada.' },
+      { name: 'Portfolio digital accesible online', tags: ['week','move'], note: 'Proyectos CFO Dashboard, FinTech, Modelo 3, etc.' },
+      { name: 'Carta de presentación en PT y EN', tags: ['move'] },
+      { name: 'Perfil LinkedIn actualizado', tags: ['week','move'] },
+      { name: 'Registro en portales de empleo PT', tags: ['move'], note: 'Net-Empregos, Indeed PT, IEFP, LinkedIn Jobs.' },
+      { name: 'Contactar empresas FinTech / Banca en Braga/Porto', tags: ['move'], note: 'BragaValley, zona Porto tiene ecosistema tech creciente.' },
+      { name: 'Verificar equivalencia titulaciones en PT', tags: ['move'], note: 'DGES Portugal. Para titulaciones universitarias puede hacer falta reconocimiento.' },
+    ]
+  },
+  {
+    id: 'personal', icon: '🎒', name: 'Personal y Bienestar',
+    items: [
+      { name: 'Mochila de cabina + maleta (semana)', tags: ['week'], note: 'Viaje en coche: no hay límite de peso, pero menos bultos = más cómodo.' },
+      { name: 'Cargador powerbank', tags: ['week','move'] },
+      { name: 'Gafas de sol', tags: ['week'] },
+      { name: 'Libros, audiolibros, contenido offline', tags: ['week'], note: 'Para el viaje y noches tranquilas.' },
+      { name: 'Contactos de confianza en Ferrol activos', tags: ['move'], note: 'Para gestionar correo, emergencias, y encender equipos electrónicos.' },
+      { name: 'Plan de comunicación con Karina', tags: ['week','move'], note: 'Si el traslado es escalonado, coordinar fases.' },
+      { name: 'Guía de servicios esenciales en Barcelos', tags: ['move'], note: 'Médico de familia (Centro de Saúde), farmacia, supermercados, transporte.' },
+      { name: 'App STCP / FlixBus / Rede Expressos guardada', tags: ['week'], note: 'Por si el coche tiene algún problema.' },
+    ]
+  },
+];
+
+// ─── STATE ────────────────────────────────────────────────────────────────────
+let checked = JSON.parse(localStorage.getItem('bcl-checked') || '{}');
+let currentTab = 'week';
+
+function save() { localStorage.setItem('bcl-checked', JSON.stringify(checked)); }
+
+// ─── RENDER ───────────────────────────────────────────────────────────────────
+function render() {
+  const main = document.getElementById('main-content');
+  main.innerHTML = '';
+
+  categories.forEach(cat => {
+    const section = document.createElement('div');
+    section.className = 'cat-section';
+    section.dataset.catId = cat.id;
+
+    // Filter items for current tab
+    const tabItems = cat.items.filter(it => {
+      if (currentTab === 'all') return true;
+      return it.tags.includes(currentTab);
+    });
+    if (tabItems.length === 0) { section.classList.add('hidden'); main.appendChild(section); return; }
+
+    const done = tabItems.filter(it => checked[cat.id + '::' + it.name]).length;
+
+    // Determine category badges
+    const hasWeek = cat.items.some(i => i.tags.includes('week'));
+    const hasMove = cat.items.some(i => i.tags.includes('move'));
+    let badgeHtml = '';
+    if (hasWeek && hasMove) badgeHtml = '<span class="badge both">ambos</span>';
+    else if (hasWeek) badgeHtml = '<span class="badge week">junio</span>';
+    else badgeHtml = '<span class="badge move">julio+</span>';
+
+    section.innerHTML = `
+      <div class="cat-header" onclick="toggleCat(this)">
+        <span class="cat-icon">${cat.icon}</span>
+        <span class="cat-name">${cat.name}</span>
+        <div class="cat-badges">${badgeHtml}</div>
+        <span class="cat-progress">${done}/${tabItems.length}</span>
+        <span class="cat-toggle">▾</span>
+      </div>
+      <div class="items-list">
+        ${tabItems.map(it => {
+          const key = cat.id + '::' + it.name;
+          const isChecked = !!checked[key];
+          const tagHtml = it.tags.map(t => `<span class="item-tag ${t}">${t === 'week' ? 'junio' : 'julio+'}</span>`).join('');
+          const warnTag = it.note && it.note.startsWith('⚠️') ? '<span class="item-tag warn">⚠ atención</span>' : '';
+          return `<div class="item ${isChecked ? 'checked' : ''}" data-key="${key}" onclick="toggleItem(this)">
+            <div class="item-check"></div>
+            <div class="item-body">
+              <div class="item-name">${it.name}</div>
+              ${it.note ? `<div class="item-note">${it.note}</div>` : ''}
+              <div class="item-tags">${currentTab === 'all' ? tagHtml : ''}${warnTag}</div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    `;
+    main.appendChild(section);
+  });
+
+  updateStats();
+  updateTabCounts();
+}
+
+function toggleItem(el) {
+  const key = el.dataset.key;
+  checked[key] = !checked[key];
+  if (checked[key]) el.classList.add('checked'); else el.classList.remove('checked');
+  save();
+  updateStats();
+  updateCatProgress(el.closest('.cat-section'));
+}
+
+function toggleCat(header) {
+  header.closest('.cat-section').classList.toggle('collapsed');
+}
+
+function updateCatProgress(section) {
+  if (!section) return;
+  const items = section.querySelectorAll('.item:not(.filtered)');
+  const done = [...items].filter(i => i.classList.contains('checked')).length;
+  const prog = section.querySelector('.cat-progress');
+  if (prog) prog.textContent = `${done}/${items.length}`;
+}
+
+function updateStats() {
+  let weekTotal=0, moveTotal=0, total=0, done=0;
+  categories.forEach(cat => {
+    cat.items.forEach(it => {
+      const key = cat.id + '::' + it.name;
+      const isChecked = !!checked[key];
+      if (it.tags.includes('week')) weekTotal++;
+      if (it.tags.includes('move')) moveTotal++;
+      total++;
+      if (isChecked) done++;
+    });
+  });
+  document.getElementById('stat-week').textContent = weekTotal;
+  document.getElementById('stat-move').textContent = moveTotal;
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('stat-done').textContent = done;
+  const pct = Math.round((done/total)*100);
+  document.getElementById('progress-bar').style.width = pct + '%';
+  document.getElementById('progress-pct').textContent = pct + '%';
+}
+
+function updateTabCounts() {
+  let week=0, move=0, all=0;
+  categories.forEach(cat => {
+    cat.items.forEach(it => {
+      if (it.tags.includes('week')) week++;
+      if (it.tags.includes('move')) move++;
+      all++;
+    });
+  });
+  document.getElementById('tc-week').textContent = week;
+  document.getElementById('tc-move').textContent = move;
+  document.getElementById('tc-all').textContent = all;
+}
+
+function setTab(tab, btn) {
+  currentTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('search').value = '';
+  render();
+}
+
+function filterItems() {
+  const q = document.getElementById('search').value.toLowerCase();
+  document.querySelectorAll('.item').forEach(el => {
+    const text = el.querySelector('.item-name').textContent.toLowerCase();
+    const note = el.querySelector('.item-note')?.textContent.toLowerCase() || '';
+    el.classList.toggle('filtered', q && !text.includes(q) && !note.includes(q));
+  });
+  document.querySelectorAll('.cat-section').forEach(sec => {
+    const visible = [...sec.querySelectorAll('.item')].some(i => !i.classList.contains('filtered'));
+    sec.classList.toggle('hidden', !visible && sec.dataset.catId !== undefined);
+    updateCatProgress(sec);
+  });
+}
+
+function expandAll() { document.querySelectorAll('.cat-section').forEach(s => s.classList.remove('collapsed')); }
+function collapseAll() { document.querySelectorAll('.cat-section').forEach(s => s.classList.add('collapsed')); }
+function markAllVisible() {
+  document.querySelectorAll('.item:not(.filtered):not(.checked)').forEach(el => {
+    checked[el.dataset.key] = true;
+    el.classList.add('checked');
+  });
+  save(); updateStats();
+  document.querySelectorAll('.cat-section').forEach(s => updateCatProgress(s));
+}
+function clearAll() {
+  if (!confirm('¿Limpiar todos los checks?')) return;
+  checked = {}; save(); render();
+}
+
+// Init
+render();
+</script>
+</body>
+</html>
