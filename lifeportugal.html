@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lophersson · Nueva Vida en Portugal</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0c;
+    --bg2: #0f0f14;
+    --card: rgba(255,255,255,0.04);
+    --card-border: rgba(255,255,255,0.08);
+    --gold: #c4a050;
+    --gold-dim: rgba(196,160,80,0.15);
+    --gold-glow: rgba(196,160,80,0.08);
+    --green: #4caf7d;
+    --green-dim: rgba(76,175,125,0.12);
+    --amber: #e8a020;
+    --amber-dim: rgba(232,160,32,0.12);
+    --red: #e05a4e;
+    --red-dim: rgba(224,90,78,0.12);
+    --blue: #5b9bd5;
+    --blue-dim: rgba(91,155,213,0.12);
+    --text: #e8e4d8;
+    --text-dim: rgba(232,228,216,0.55);
+    --text-muted: rgba(232,228,216,0.3);
+    --font-display: 'Cormorant Garamond', serif;
+    --font-body: 'DM Sans', sans-serif;
+    --font-mono: 'DM Mono', monospace;
+  }
+  [data-theme="light"] {
+    --bg: #f5f2eb;
+    --bg2: #edeadf;
+    --card: rgba(0,0,0,0.03);
+    --card-border: rgba(0,0,0,0.1);
+    --gold: #9a7830;
+    --gold-dim: rgba(154,120,48,0.12);
+    --gold-glow: rgba(154,120,48,0.06);
+    --green: #2e7d52;
+    --green-dim: rgba(46,125,82,0.1);
+    --amber: #b8700a;
+    --amber-dim: rgba(184,112,10,0.1);
+    --red: #c0392b;
+    --red-dim: rgba(192,57,43,0.1);
+    --blue: #2a6fa8;
+    --blue-dim: rgba(42,111,168,0.1);
+    --text: #1a1812;
+    --text-dim: rgba(26,24,18,0.6);
+    --text-muted: rgba(26,24,18,0.35);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grain */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6;
+  }
+
+  /* Orbs */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .orb-1 { width: 600px; height: 600px; background: var(--gold-glow); top: -200px; right: -100px; }
+  .orb-2 { width: 400px; height: 400px; background: rgba(76,175,125,0.04); bottom: 10%; left: -150px; }
+
+  /* Controls bar */
+  .controls {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 100;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 40px;
+    padding: 6px 10px;
+    backdrop-filter: blur(12px);
+  }
+  .ctrl-btn {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 20px;
+    transition: all 0.2s;
+    letter-spacing: 0.04em;
+  }
+  .ctrl-btn:hover, .ctrl-btn.active { background: var(--gold-dim); color: var(--gold); }
+  .ctrl-sep { width: 1px; height: 16px; background: var(--card-border); }
+
+  /* Layout */
+  .wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 80px 24px 80px;
+  }
+
+  /* Header */
+  header {
+    margin-bottom: 56px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards;
+  }
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  header h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    font-weight: 300;
+    line-height: 1.12;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+  header h1 em { font-style: italic; color: var(--gold); }
+  .subtitle {
+    color: var(--text-dim);
+    font-size: 14px;
+    max-width: 540px;
+  }
+
+  /* Progress bar */
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--gold), var(--green));
+    width: 0%;
+    z-index: 200;
+    transition: width 0.1s;
+  }
+
+  /* Steps */
+  .steps { display: flex; flex-direction: column; gap: 12px; }
+
+  .step {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .step.visible { animation: fadeUp 0.5s ease forwards; }
+  .step:hover { border-color: rgba(196,160,80,0.2); box-shadow: 0 4px 32px rgba(196,160,80,0.06); }
+
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 20px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .step-num {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    min-width: 24px;
+  }
+
+  .step-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .step-icon.green { background: var(--green-dim); }
+  .step-icon.amber { background: var(--amber-dim); }
+  .step-icon.blue { background: var(--blue-dim); }
+  .step-icon.red { background: var(--red-dim); }
+  .step-icon.gold { background: var(--gold-dim); }
+
+  .step-title {
+    flex: 1;
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 400;
+    color: var(--text);
+    line-height: 1.2;
+  }
+
+  .step-badge {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 20px;
+    flex-shrink: 0;
+  }
+  .badge-first { background: var(--gold-dim); color: var(--gold); border: 1px solid rgba(196,160,80,0.2); }
+  .badge-key   { background: var(--green-dim); color: var(--green); border: 1px solid rgba(76,175,125,0.2); }
+  .badge-warn  { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(232,160,32,0.2); }
+  .badge-info  { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(91,155,213,0.2); }
+
+  .step-chevron {
+    color: var(--text-muted);
+    font-size: 12px;
+    transition: transform 0.3s;
+    flex-shrink: 0;
+  }
+  .step.open .step-chevron { transform: rotate(180deg); }
+
+  .step-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1);
+  }
+  .step.open .step-body { max-height: 600px; }
+
+  .step-inner {
+    padding: 0 20px 20px 74px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .step-desc {
+    color: var(--text-dim);
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  .checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13.5px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+  .check-item::before {
+    content: '—';
+    color: var(--gold);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+
+  .callout {
+    border-left: 2px solid var(--gold);
+    padding: 10px 14px;
+    background: var(--gold-glow);
+    border-radius: 0 8px 8px 0;
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+  .callout strong { color: var(--gold); font-weight: 500; }
+
+  .callout-warn {
+    border-left-color: var(--amber);
+    background: var(--amber-dim);
+  }
+  .callout-warn strong { color: var(--amber); }
+
+  .callout-danger {
+    border-left-color: var(--red);
+    background: var(--red-dim);
+  }
+  .callout-danger strong { color: var(--red); }
+
+  .callout-green {
+    border-left-color: var(--green);
+    background: var(--green-dim);
+  }
+  .callout-green strong { color: var(--green); }
+
+  /* Sub-options */
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .option {
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+  .option.opt-amber { background: var(--amber-dim); border: 1px solid rgba(232,160,32,0.15); }
+  .option.opt-green { background: var(--green-dim); border: 1px solid rgba(76,175,125,0.15); }
+  .option-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .opt-amber .option-label { color: var(--amber); }
+  .opt-green .option-label { color: var(--green); }
+  .option p { color: var(--text-dim); line-height: 1.5; }
+
+  /* Phone step */
+  .phone-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .phone-input-row {
+    display: flex;
+    gap: 8px;
+    align-items: stretch;
+  }
+  .phone-prefix {
+    background: var(--gold-dim);
+    border: 1px solid rgba(196,160,80,0.25);
+    border-radius: 8px;
+    padding: 0 12px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .phone-input {
+    flex: 1;
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .phone-input:focus { border-color: rgba(196,160,80,0.4); }
+  .phone-input::placeholder { color: var(--text-muted); }
+  .phone-btn {
+    background: var(--gold);
+    color: #0a0a0c;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-weight: 500;
+    transition: opacity 0.2s, transform 0.15s;
+    flex-shrink: 0;
+  }
+  .phone-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+  .phone-btn:active { transform: translateY(0); }
+  .phone-result {
+    display: none;
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 13px;
+    gap: 8px;
+    align-items: center;
+    font-family: var(--font-mono);
+  }
+  .phone-result.valid { background: var(--green-dim); border: 1px solid rgba(76,175,125,0.2); color: var(--green); display: flex; }
+  .phone-result.invalid { background: var(--red-dim); border: 1px solid rgba(224,90,78,0.2); color: var(--red); display: flex; }
+  .phone-select {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--text);
+    outline: none;
+    cursor: pointer;
+    width: 100%;
+    transition: border-color 0.2s;
+  }
+  .phone-select:focus { border-color: rgba(196,160,80,0.4); }
+  .phone-select option { background: #1a1a20; }
+
+  /* Summary */
+  .summary {
+    margin-top: 24px;
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 24px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.3s forwards;
+  }
+  .summary-title {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 300;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 8px;
+  }
+  .summary-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: var(--bg2);
+    border-radius: 8px;
+    font-size: 12.5px;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .summary-item:hover { background: var(--gold-dim); color: var(--text); }
+  .summary-item .s-num {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--gold);
+    min-width: 16px;
+  }
+
+  /* Tip banner */
+  .tip-banner {
+    margin-top: 12px;
+    border-radius: 12px;
+    padding: 20px 24px;
+    background: linear-gradient(135deg, rgba(196,160,80,0.08), rgba(76,175,125,0.06));
+    border: 1px solid rgba(196,160,80,0.15);
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.5s forwards;
+  }
+  .tip-banner p {
+    font-size: 13.5px;
+    color: var(--text-dim);
+    line-height: 1.65;
+  }
+  .tip-banner strong { color: var(--gold); }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .step-inner { padding: 0 14px 16px 14px; }
+    .controls { top: 10px; right: 10px; padding: 4px 8px; }
+    .phone-input-row { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<!-- Controls -->
+<div class="controls">
+  <button class="ctrl-btn active" onclick="setLang('es')" id="lang-es">ES</button>
+  <button class="ctrl-btn" onclick="setLang('pt')" id="lang-pt">PT</button>
+  <button class="ctrl-btn" onclick="setLang('en')" id="lang-en">EN</button>
+  <div class="ctrl-sep"></div>
+  <button class="ctrl-btn" onclick="toggleTheme()" id="themeBtn">◑</button>
+  <div class="ctrl-sep"></div>
+  <button class="ctrl-btn" onclick="setFont(-1)">A−</button>
+  <button class="ctrl-btn" onclick="setFont(0)">A</button>
+  <button class="ctrl-btn" onclick="setFont(1)">A+</button>
+</div>
+
+<div class="wrapper">
+  <header>
+    <div class="eyebrow" data-i18n="eyebrow">Lophersson · Guía de Reubicación</div>
+    <h1 data-i18n="title">Nueva Vida en<br><em>Portugal</em></h1>
+    <p class="subtitle" data-i18n="subtitle">Todo lo que debes hacer cuando consigas trabajo — en orden lógico y con tu coche español.</p>
+  </header>
+
+  <div class="steps" id="stepsContainer">
+
+    <!-- Step 1: NIF -->
+    <div class="step" data-step="1">
+      <div class="step-header" onclick="toggle(this)">
+        <span class="step-num">01</span>
+        <div class="step-icon green">🪪</div>
+        <div class="step-title" data-i18n="s1title">NIF — Número de Identificación Fiscal</div>
+        <span class="step-badge badge-first" data-i18n="badge-first">Primero</span>
+        <span class="step-chevron">▼</span>
+      </div>
+      <div class="step-body">
+        <div class="step-inner">
+          <p class="step-desc" data-i18n="s1desc">Lo primero que necesitas, incluso antes de firmar contrato. Se solicita en la Autoridade Tributária e Aduaneira (AT).</p>
+          <div class="checklist">
+            <div class="check-item" data-i18n="s1c1">Equivalente al DNI fiscal español</div>
+            <div class="check-item" data-i18n="s1c2">Puedes usar la dirección de tu pareja en Portugal</div>
+            <div class="check-item" data-i18n="s1c3">Sin NIF no puedes trabajar ni firmar contratos</div>
+          </div>
+          <div class="callout">
+            <strong data-i18n="tip">💡 Consejo:</strong> <span data-i18n="s1tip">Solicítalo en cuanto tengas una dirección portuguesa, aunque sea temporal.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: NISS -->
+    <div class="step" data-step="2">
+      <div class="step-header" onclick="toggle(this)">
+        <span class="step-num">02</span>
+        <div class="step-icon green">🛡️</div>
+        <div class="step-title" data-i18n="s2title">NISS — Número de Seguridad Social</div>
+        <span class="step-badge badge-key" data-i18n="badge-req">Necesario</span>
+        <span class="step-chevron">▼</span>
+      </div>
+      <div class="step-body">
+        <div class="step-inner">
+          <p class="step-desc" data-i18n="s2desc">Necesario para trabajar legalmente en Portugal. Equivalente a la Seguridad Social española.</p>
+          <div class="checklist">
+            <div class="check-item" data-i18n="s2c1">Normalmente la empresa lo solicita por ti</div>
+            <div class="check-item" data-i18n="s2c2">Si no, puedes pedirlo en la Segurança Social</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3: Contrato -->
+    <div class="step" data-step="3">
+      <div class="step-header" onclick="toggle(this)">
+        <span class="step-num">03</span>
+        <div class="step-icon gold">📄</div>
+        <div class="step-title" data-i18n="s3title">Firmar el Contrato de Trabajo</div>
+        <span class="step-badge badge-key" data-i18n="badge-req">Necesario</span>
+        <span class="step-chevron">▼</span>
+      </div>
+      <div class="step-body">
+        <div class="step-inner">
+          <p class="step-desc" data-i18n="s3desc">Con NIF y NISS ya puedes formalizar tu relación laboral sin problema.</p>
+          <div class="checklist">
+            <div class="check-item" data-i18n="s3c1">Verifica que tienes NIF activo</div>
+            <div class="check-item" data-i18n="s3c2">Verifica que tienes NISS asignado</div>
+            <div class="check-item" data-i18n="s3c3">Guarda copia del contrato firmado</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4: Registro UE -->
+    <div class="step" data-step="4">
+      <div class="step-header" onclick="toggle(this)">
+        <span class="step-num">04</span>
+        <div class="step-icon blue">🇪🇺</div>
+        <div class="step-title" data-i18n="s4title">Certificado de Registro UE</div>
+        <span class="step-badge badge-warn" data-i18n="badge-90d">+90 días</span>
+        <span class="step-chevron">▼</span>
+      </div>
+      <div class="step-body">
+        <div class="step-inner">
+          <p class="step-desc" data-i18n="s4desc">Paso clave tras los 90 días en Portugal. Se solicita en la Câmara Municipal.</p>
+          <div class="checklist">
+            <div class="check-item" data-i18n="s4c1">DNI español vigente</div>
+            <div class="check-item" data-i18n="s4c2">Dirección en Portugal (domicilio de Karina)</div>
+            <div class="check-item" data-i18n="s4c3">Declaración de que trabajas o tienes medios</div>
+          </div>
+          <div class="callout callout-green">
+            <strong>✓</strong> <span data-i18n="s4tip">Proceso rápido, a veces el mismo día. Válido por 5 años.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 5: Empadronamiento -->
+    <div class="step" data-step="5">
+      <div class="step-header" onclick="toggle(this)">
+        <span class="step-num">05</span>
+        <div class="step-icon blue">🏘️</div>
+        <div class="step-title" data-i18n="s5title">Empadronamiento — Atestado de Residência</div>
+        <span class="step-badge badge-info" data-i18n="badge-admin">Admin</span>
+        <span class="step-chevron">▼</span>
+      </div>
+      <div class="step-body">
+        <div class="step-inner">
+          <p class="step-desc" data-i18n="s5desc">Necesario para múltiples trámites administrativos posteriores.</p>
+          <div class="checklist">
+            <div class="check-item" data-i18n="s5c1">Se tramita en la Junta de Freguesia</div>
+            <div class="check-item" data-i18n="s5c2">Karina puede actuar como testigo si convives con ella</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 6: Cuenta bancaria -->
+    <div class="step" data-step="6">
+      <div class="step-header" onclick="toggle(this)">
+        <span class="step-num">06</span>
+        <div class="step-icon gold">🏦</div>
+        <div class="step-title" data-i18n="s6title">Cuenta Bancaria Portuguesa</div>
+        <span class="step-badge badge-info" data-i18n="badge-rec">Recomendado</span>
+        <span class="step-chevron">▼</span>
+      </div>
+      <div class="step-body">
+        <div class="step-inner">
+          <p class="step-desc" data-i18n="s6desc">Muy recomendable para cobrar nómina y evitar comisiones de cambio.</p>
+          <div class="checklist">
+            <div class="check-item" data-i18n="s6c1">Bancos habituales: CGD, Millennium BCP, Novo Banco</div>
+            <div class="check-item" data-i18n="s6c2">Necesitas NIF + DNI + prueba de dirección</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 6b: Teléfono portugués (NUEVO) -->
+    <div class="step" data-step="6b">
+      <div class="step-header" onclick="toggle(this)">
+        <span class="step-num">06b</span>
+        <div class="step-icon green">📱</div>
+        <div class="step-title" data-i18n="s6btitle">Alta de Número de Teléfono Portugués</div>
+        <span class="step-badge badge-key" data-i18n="badge-useful">Útil</span>
+        <span class="step-chevron">▼</span>
+      </div>
+      <div class="step-body">
+        <div class="step-inner">
+          <p class="step-desc" data-i18n="s6bdesc">Tener un número portugués facilita trámites, entrevistas y comunicación local. Puedes portarte o contratar desde cero.</p>
+          <div class="checklist">
+            <div class="check-item" data-i18n="s6bc1">Principales operadoras: MEO, NOS, Vodafone Portugal, NOWO</div>
+            <div class="check-item" data-i18n="s6bc2">Para contrato necesitas NIF + DNI + IBAN portugués</div>
+            <div class="check-item" data-i18n="s6bc3">Tarjeta prepago disponible solo con DNI (sin NIF)</div>
+            <div class="check-item" data-i18n="s6bc4">Prefijo nacional: +351 — móviles empiezan por 9</div>
+          </div>
+          <div class="callout callout-warn">
+            <strong data-i18n="s6bwarn-title">⚠️ Portabilidad desde España:</strong> <span data-i18n="s6bwarn">Avisa a tu operadora española antes de salir si quieres mantener el número. La portabilidad entre países no está disponible.</span>
+          </div>
+
+          <!-- Validador de número -->
+          <div class="phone-form">
+            <p style="font-size:12px; color:var(--text-muted); font-family:var(--font-mono); letter-spacing:0.06em; text-transform:uppercase;" data-i18n="phoneValidatorLabel">Verificar formato de número portugués</p>
+            <select class="phone-select" id="phoneOperator">
+              <option value="" data-i18n="phoneOpPlaceholder">— Selecciona operadora —</option>
+              <option value="MEO">MEO</option>
+              <option value="NOS">NOS</option>
+              <option value="Vodafone">Vodafone Portugal</option>
+              <option value="NOWO">NOWO</option>
+            </select>
+            <div class="phone-input-row">
+              <div class="phone-prefix">+351</div>
+              <input class="phone-input" id="phoneInput" type="tel" maxlength="9" placeholder="9X XXX XXXX" oninput="formatPhone(this)" data-i18n-placeholder="phonePlaceholder">
+              <button class="phone-btn" onclick="validatePhone()" data-i18n="phoneBtn">Validar</button>
+            </div>
+            <div class="phone-result" id="phoneResult"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 7: Coche -->
+    <div class="step" data-step="7">
+      <div class="step-header" onclick="toggle(this)">
+        <span class="step-num">07</span>
+        <div class="step-icon amber">🚗</div>
+        <div class="step-title" data-i18n="s7title">Tu Nissan Note Español en Portugal</div>
+        <span class="step-badge badge-warn" data-i18n="badge-imp">Importante</span>
+        <span class="step-chevron">▼</span>
+      </div>
+      <div class="step-body">
+        <div class="step-inner">
+          <p class="step-desc" data-i18n="s7desc">Este trámite tiene implicaciones económicas importantes. Evalúalo con calma.</p>
+          <div class="options">
+            <div class="option opt-amber">
+              <div class="option-label" data-i18n="s7opt-a-label">Opción A — Temporal</div>
+              <p data-i18n="s7opt-a">Puedes circular con matrícula española sin problema mientras no seas residente oficial.</p>
+            </div>
+            <div class="option opt-green">
+              <div class="option-label" data-i18n="s7opt-b-label">Opción B — Residencia oficial ✓</div>
+              <p data-i18n="s7opt-b">Debes matricularlo en Portugal. Plazo: hasta 6 meses desde que eres residente. Pasos: IPO portuguesa → pago ISV → nueva matrícula.</p>
+            </div>
+          </div>
+          <div class="callout callout-danger">
+            <strong data-i18n="s7warn-label">⚠️ Coste ISV:</strong> <span data-i18n="s7warn">Puede ser elevado según el modelo, año y cilindrada. Consulta la calculadora de ISV de la AT antes de decidir.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 8: Sanidad -->
+    <div class="step" data-step="8">
+      <div class="step-header" onclick="toggle(this)">
+        <span class="step-num">08</span>
+        <div class="step-icon green">🏥</div>
+        <div class="step-title" data-i18n="s8title">Sanidad Pública — SNS</div>
+        <span class="step-badge badge-key" data-i18n="badge-right">Derecho</span>
+        <span class="step-chevron">▼</span>
+      </div>
+      <div class="step-body">
+        <div class="step-inner">
+          <p class="step-desc" data-i18n="s8desc">Con contrato de trabajo tienes derecho a sanidad pública portuguesa desde el primer día.</p>
+          <div class="checklist">
+            <div class="check-item" data-i18n="s8c1">Regístrate en el Centro de Saúde más cercano</div>
+            <div class="check-item" data-i18n="s8c2">Necesitas NIF + prueba de residencia</div>
+            <div class="check-item" data-i18n="s8c3">Solicita el Número de Utente del SNS</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 9: Impuestos -->
+    <div class="step" data-step="9">
+      <div class="step-header" onclick="toggle(this)">
+        <span class="step-num">09</span>
+        <div class="step-icon gold">🧾</div>
+        <div class="step-title" data-i18n="s9title">Impuestos — IRS Portugués</div>
+        <span class="step-badge badge-info" data-i18n="badge-annual">Anual</span>
+        <span class="step-chevron">▼</span>
+      </div>
+      <div class="step-body">
+        <div class="step-inner">
+          <p class="step-desc" data-i18n="s9desc">Al trabajar en Portugal pasas a tributar allí. El convenio de doble imposición España-Portugal evita pagar dos veces.</p>
+          <div class="checklist">
+            <div class="check-item" data-i18n="s9c1">Declaración anual en la AT (modelo IRS / Modelo 3)</div>
+            <div class="check-item" data-i18n="s9c2">Informa a la AEAT de tu cambio de residencia fiscal</div>
+            <div class="check-item" data-i18n="s9c3">Consulta el régimen NHR si aplica a tu perfil</div>
+          </div>
+          <div class="callout">
+            <strong data-i18n="s9tip-label">💡 NHR:</strong> <span data-i18n="s9tip">El régimen de Residente No Habitual puede ofrecerte ventajas fiscales importantes los primeros 10 años.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /steps -->
+
+  <!-- Summary -->
+  <div class="summary">
+    <div class="summary-title" data-i18n="summaryTitle">Resumen — orden de acción</div>
+    <div class="summary-grid" id="summaryGrid">
+      <div class="summary-item" onclick="openStep(1)"><span class="s-num">01</span><span data-i18n="sum1">NIF</span></div>
+      <div class="summary-item" onclick="openStep(2)"><span class="s-num">02</span><span data-i18n="sum2">NISS</span></div>
+      <div class="summary-item" onclick="openStep(3)"><span class="s-num">03</span><span data-i18n="sum3">Contrato</span></div>
+      <div class="summary-item" onclick="openStep(4)"><span class="s-num">04</span><span data-i18n="sum4">Registro UE</span></div>
+      <div class="summary-item" onclick="openStep(5)"><span class="s-num">05</span><span data-i18n="sum5">Empadronamiento</span></div>
+      <div class="summary-item" onclick="openStep(6)"><span class="s-num">06</span><span data-i18n="sum6">Cuenta bancaria</span></div>
+      <div class="summary-item" onclick="openStep('6b')"><span class="s-num">6b</span><span data-i18n="sum6b">Teléfono PT</span></div>
+      <div class="summary-item" onclick="openStep(7)"><span class="s-num">07</span><span data-i18n="sum7">Coche</span></div>
+      <div class="summary-item" onclick="openStep(8)"><span class="s-num">08</span><span data-i18n="sum8">Sanidad</span></div>
+      <div class="summary-item" onclick="openStep(9)"><span class="s-num">09</span><span data-i18n="sum9">Impuestos</span></div>
+    </div>
+  </div>
+
+  <div class="tip-banner">
+    <p data-i18n="tipBanner">✔️ <strong>Orden clave:</strong> NIF → trabajo → NISS → registro → resto. No te compliques con el coche al inicio — úsalo normal y lo regularizas cuando veas que te quedas.</p>
+  </div>
+
+</div><!-- /wrapper -->
+
+<script>
+// ─── i18n ───────────────────────────────────────────────
+const langs = {
+  es: {
+    eyebrow: 'Lophersson · Guía de Reubicación',
+    title: 'Nueva Vida en<br><em>Portugal</em>',
+    subtitle: 'Todo lo que debes hacer cuando consigas trabajo — en orden lógico y con tu coche español.',
+    's1title': 'NIF — Número de Identificación Fiscal',
+    's1desc': 'Lo primero que necesitas, incluso antes de firmar contrato. Se solicita en la Autoridade Tributária e Aduaneira (AT).',
+    's1c1': 'Equivalente al DNI fiscal español',
+    's1c2': 'Puedes usar la dirección de tu pareja en Portugal',
+    's1c3': 'Sin NIF no puedes trabajar ni firmar contratos',
+    's1tip': 'Solicítalo en cuanto tengas una dirección portuguesa, aunque sea temporal.',
+    's2title': 'NISS — Número de Seguridad Social',
+    's2desc': 'Necesario para trabajar legalmente en Portugal. Equivalente a la Seguridad Social española.',
+    's2c1': 'Normalmente la empresa lo solicita por ti',
+    's2c2': 'Si no, puedes pedirlo en la Segurança Social',
+    's3title': 'Firmar el Contrato de Trabajo',
+    's3desc': 'Con NIF y NISS ya puedes formalizar tu relación laboral sin problema.',
+    's3c1': 'Verifica que tienes NIF activo',
+    's3c2': 'Verifica que tienes NISS asignado',
+    's3c3': 'Guarda copia del contrato firmado',
+    's4title': 'Certificado de Registro UE',
+    's4desc': 'Paso clave tras los 90 días en Portugal. Se solicita en la Câmara Municipal.',
+    's4c1': 'DNI español vigente',
+    's4c2': 'Dirección en Portugal',
+    's4c3': 'Declaración de que trabajas o tienes medios',
+    's4tip': 'Proceso rápido, a veces el mismo día. Válido por 5 años.',
+    's5title': 'Empadronamiento — Atestado de Residência',
+    's5desc': 'Necesario para múltiples trámites administrativos posteriores.',
+    's5c1': 'Se tramita en la Junta de Freguesia',
+    's5c2': 'Karina puede actuar como testigo si convives con ella',
+    's6title': 'Cuenta Bancaria Portuguesa',
+    's6desc': 'Muy recomendable para cobrar nómina y evitar comisiones de cambio.',
+    's6c1': 'Bancos habituales: CGD, Millennium BCP, Novo Banco',
+    's6c2': 'Necesitas NIF + DNI + prueba de dirección',
+    's6btitle': 'Alta de Número de Teléfono Portugués',
+    's6bdesc': 'Tener un número portugués facilita trámites, entrevistas y comunicación local. Puedes portarte o contratar desde cero.',
+    's6bc1': 'Principales operadoras: MEO, NOS, Vodafone Portugal, NOWO',
+    's6bc2': 'Para contrato necesitas NIF + DNI + IBAN portugués',
+    's6bc3': 'Tarjeta prepago disponible solo con DNI (sin NIF)',
+    's6bc4': 'Prefijo nacional: +351 — móviles empiezan por 9',
+    's6bwarn-title': '⚠️ Portabilidad desde España:',
+    's6bwarn': 'Avisa a tu operadora española antes de salir si quieres mantener el número. La portabilidad entre países no está disponible.',
+    phoneValidatorLabel: 'Verificar formato de número portugués',
+    phoneOpPlaceholder: '— Selecciona operadora —',
+    phonePlaceholder: '9X XXX XXXX',
+    phoneBtn: 'Validar',
+    's7title': 'Tu Nissan Note Español en Portugal',
+    's7desc': 'Este trámite tiene implicaciones económicas importantes. Evalúalo con calma.',
+    's7opt-a-label': 'Opción A — Temporal',
+    's7opt-a': 'Puedes circular con matrícula española sin problema mientras no seas residente oficial.',
+    's7opt-b-label': 'Opción B — Residencia oficial ✓',
+    's7opt-b': 'Debes matricularlo en Portugal. Plazo: hasta 6 meses desde que eres residente. Pasos: IPO portuguesa → pago ISV → nueva matrícula.',
+    's7warn-label': '⚠️ Coste ISV:',
+    's7warn': 'Puede ser elevado según el modelo, año y cilindrada. Consulta la calculadora de ISV de la AT antes de decidir.',
+    's8title': 'Sanidad Pública — SNS',
+    's8desc': 'Con contrato de trabajo tienes derecho a sanidad pública portuguesa desde el primer día.',
+    's8c1': 'Regístrate en el Centro de Saúde más cercano',
+    's8c2': 'Necesitas NIF + prueba de residencia',
+    's8c3': 'Solicita el Número de Utente del SNS',
+    's9title': 'Impuestos — IRS Portugués',
+    's9desc': 'Al trabajar en Portugal pasas a tributar allí. El convenio de doble imposición España-Portugal evita pagar dos veces.',
+    's9c1': 'Declaración anual en la AT (modelo IRS / Modelo 3)',
+    's9c2': 'Informa a la AEAT de tu cambio de residencia fiscal',
+    's9c3': 'Consulta el régimen NHR si aplica a tu perfil',
+    's9tip-label': '💡 NHR:',
+    's9tip': 'El régimen de Residente No Habitual puede ofrecerte ventajas fiscales importantes los primeros 10 años.',
+    'badge-first': 'Primero', 'badge-req': 'Necesario', 'badge-90d': '+90 días',
+    'badge-admin': 'Admin', 'badge-rec': 'Recomendado', 'badge-useful': 'Útil',
+    'badge-imp': 'Importante', 'badge-right': 'Derecho', 'badge-annual': 'Anual', 'badge-info': 'Info', tip: '💡 Consejo:',
+    summaryTitle: 'Resumen — orden de acción',
+    sum1:'NIF', sum2:'NISS', sum3:'Contrato', sum4:'Registro UE',
+    sum5:'Empadronamiento', sum6:'Cuenta bancaria', sum6b:'Teléfono PT',
+    sum7:'Coche', sum8:'Sanidad', sum9:'Impuestos',
+    tipBanner: '✔️ <strong>Orden clave:</strong> NIF → trabajo → NISS → registro → resto. No te compliques con el coche al inicio — úsalo normal y lo regularizas cuando veas que te quedas.',
+    phoneValid: '✓ Número válido · Formato correcto (+351)',
+    phoneInvalid: '✗ Número inválido · Debe tener 9 dígitos y empezar por 9',
+  },
+  pt: {
+    eyebrow: 'Lophersson · Guia de Relocalização',
+    title: 'Nova Vida em<br><em>Portugal</em>',
+    subtitle: 'Tudo o que tens de fazer quando conseguires trabalho — por ordem lógica e com o teu carro espanhol.',
+    's1title': 'NIF — Número de Identificação Fiscal',
+    's1desc': 'O primeiro passo, mesmo antes de assinar contrato. Solicitado na Autoridade Tributária e Aduaneira (AT).',
+    's1c1': 'Equivalente ao número fiscal espanhol',
+    's1c2': 'Podes usar a morada da tua parceira em Portugal',
+    's1c3': 'Sem NIF não podes trabalhar nem assinar contratos',
+    's1tip': 'Pede-o assim que tiveres uma morada portuguesa, mesmo que temporária.',
+    's2title': 'NISS — Número de Segurança Social',
+    's2desc': 'Necessário para trabalhar legalmente em Portugal.',
+    's2c1': 'Normalmente a empresa trata disso por ti',
+    's2c2': 'Se não, podes pedir na Segurança Social',
+    's3title': 'Assinar o Contrato de Trabalho',
+    's3desc': 'Com NIF e NISS já podes formalizar a tua relação laboral.',
+    's3c1': 'Verifica que tens NIF ativo',
+    's3c2': 'Verifica que tens NISS atribuído',
+    's3c3': 'Guarda uma cópia do contrato assinado',
+    's4title': 'Certificado de Registo de Cidadão da UE',
+    's4desc': 'Passo fundamental após os 90 dias em Portugal. Solicitado na Câmara Municipal.',
+    's4c1': 'BI/CC espanhol válido',
+    's4c2': 'Morada em Portugal',
+    's4c3': 'Declaração de que trabalhas ou tens meios de subsistência',
+    's4tip': 'Processo rápido, por vezes no mesmo dia. Válido por 5 anos.',
+    's5title': 'Atestado de Residência',
+    's5desc': 'Necessário para vários trâmites administrativos posteriores.',
+    's5c1': 'Trata-se na Junta de Freguesia',
+    's5c2': 'A Karina pode ser testemunha se viveres com ela',
+    's6title': 'Conta Bancária Portuguesa',
+    's6desc': 'Muito recomendável para receber salário.',
+    's6c1': 'Bancos habituais: CGD, Millennium BCP, Novo Banco',
+    's6c2': 'Necessitas NIF + BI + comprovativo de morada',
+    's6btitle': 'Alta de Número de Telefone Português',
+    's6bdesc': 'Ter um número português facilita trâmites, entrevistas e comunicação local.',
+    's6bc1': 'Principais operadoras: MEO, NOS, Vodafone Portugal, NOWO',
+    's6bc2': 'Para contrato precisas de NIF + BI + IBAN português',
+    's6bc3': 'Cartão pré-pago disponível apenas com BI (sem NIF)',
+    's6bc4': 'Prefixo nacional: +351 — telemóveis começam por 9',
+    's6bwarn-title': '⚠️ Portabilidade de Espanha:',
+    's6bwarn': 'Avisa a tua operadora espanhola antes de sair se quiseres manter o número. A portabilidade entre países não está disponível.',
+    phoneValidatorLabel: 'Verificar formato de número português',
+    phoneOpPlaceholder: '— Seleciona operadora —',
+    phonePlaceholder: '9X XXX XXXX',
+    phoneBtn: 'Validar',
+    's7title': 'O Teu Nissan Note Espanhol em Portugal',
+    's7desc': 'Este passo tem implicações económicas importantes.',
+    's7opt-a-label': 'Opção A — Temporário',
+    's7opt-a': 'Podes circular com matrícula espanhola enquanto não fores residente oficial.',
+    's7opt-b-label': 'Opção B — Residência oficial ✓',
+    's7opt-b': 'Deves matriculá-lo em Portugal. Prazo: até 6 meses após ser residente. Passos: IPO portuguesa → pagamento ISV → nova matrícula.',
+    's7warn-label': '⚠️ Custo ISV:',
+    's7warn': 'Pode ser elevado dependendo do modelo, ano e cilindrada.',
+    's8title': 'Saúde Pública — SNS',
+    's8desc': 'Com contrato de trabalho tens direito ao SNS desde o primeiro dia.',
+    's8c1': 'Regista-te no Centro de Saúde mais próximo',
+    's8c2': 'Necessitas NIF + comprovativo de morada',
+    's8c3': 'Solicita o Número de Utente do SNS',
+    's9title': 'Impostos — IRS Português',
+    's9desc': 'Ao trabalhar em Portugal passas a tributar aí. O acordo de dupla tributação evita pagar duas vezes.',
+    's9c1': 'Declaração anual na AT (Modelo 3)',
+    's9c2': 'Informa a AEAT da tua mudança de residência fiscal',
+    's9c3': 'Consulta o regime NHR se aplicável',
+    's9tip-label': '💡 NHR:',
+    's9tip': 'O regime de Residente Não Habitual pode oferecer-te vantagens fiscais importantes nos primeiros 10 anos.',
+    'badge-first': 'Primeiro', 'badge-req': 'Necessário', 'badge-90d': '+90 dias',
+    'badge-admin': 'Admin', 'badge-rec': 'Recomendado', 'badge-useful': 'Útil',
+    'badge-imp': 'Importante', 'badge-right': 'Direito', 'badge-annual': 'Anual', 'badge-info': 'Info', tip: '💡 Conselho:',
+    summaryTitle: 'Resumo — ordem de ação',
+    sum1:'NIF', sum2:'NISS', sum3:'Contrato', sum4:'Registo UE',
+    sum5:'Atestado', sum6:'Conta bancária', sum6b:'Telefone PT',
+    sum7:'Carro', sum8:'Saúde', sum9:'Impostos',
+    tipBanner: '✔️ <strong>Ordem chave:</strong> NIF → trabalho → NISS → registo → resto. Não te compliques com o carro no início — usa-o normalmente e regulariza quando confirmares que ficas.',
+    phoneValid: '✓ Número válido · Formato correto (+351)',
+    phoneInvalid: '✗ Número inválido · Deve ter 9 dígitos e começar por 9',
+  },
+  en: {
+    eyebrow: 'Lophersson · Relocation Guide',
+    title: 'New Life in<br><em>Portugal</em>',
+    subtitle: 'Everything you need to do once you get a job — in logical order, including your Spanish car.',
+    's1title': 'NIF — Tax Identification Number',
+    's1desc': 'The first thing you need, even before signing a contract. Requested at the Tax Authority (AT).',
+    's1c1': 'Equivalent to the Spanish fiscal ID',
+    's1c2': 'You can use your partner\'s address in Portugal',
+    's1c3': 'Without NIF you cannot work or sign contracts',
+    's1tip': 'Request it as soon as you have a Portuguese address, even if temporary.',
+    's2title': 'NISS — Social Security Number',
+    's2desc': 'Required to work legally in Portugal.',
+    's2c1': 'Usually your employer handles this for you',
+    's2c2': 'Otherwise, request it at Segurança Social',
+    's3title': 'Sign the Employment Contract',
+    's3desc': 'With NIF and NISS in hand you can formalize your employment.',
+    's3c1': 'Confirm your NIF is active',
+    's3c2': 'Confirm your NISS has been assigned',
+    's3c3': 'Keep a signed copy of the contract',
+    's4title': 'EU Citizen Registration Certificate',
+    's4desc': 'Key step after 90 days in Portugal. Apply at the Câmara Municipal.',
+    's4c1': 'Valid Spanish ID',
+    's4c2': 'Address in Portugal',
+    's4c3': 'Declaration of employment or sufficient means',
+    's4tip': 'Fast process, sometimes same day. Valid for 5 years.',
+    's5title': 'Local Registration — Atestado de Residência',
+    's5desc': 'Required for various administrative procedures.',
+    's5c1': 'Done at the Junta de Freguesia',
+    's5c2': 'Karina can act as witness if you live with her',
+    's6title': 'Portuguese Bank Account',
+    's6desc': 'Highly recommended for receiving your salary.',
+    's6c1': 'Main banks: CGD, Millennium BCP, Novo Banco',
+    's6c2': 'You need NIF + ID + proof of address',
+    's6btitle': 'Portuguese Phone Number Registration',
+    's6bdesc': 'Having a Portuguese number simplifies paperwork, job interviews and local communication.',
+    's6bc1': 'Main carriers: MEO, NOS, Vodafone Portugal, NOWO',
+    's6bc2': 'For a contract you need NIF + ID + Portuguese IBAN',
+    's6bc3': 'Prepaid SIM available with ID only (no NIF required)',
+    's6bc4': 'Country code: +351 — mobile numbers start with 9',
+    's6bwarn-title': '⚠️ Porting from Spain:',
+    's6bwarn': 'Notify your Spanish carrier before leaving if you want to keep your number. Cross-country porting is not available.',
+    phoneValidatorLabel: 'Verify Portuguese number format',
+    phoneOpPlaceholder: '— Select carrier —',
+    phonePlaceholder: '9X XXX XXXX',
+    phoneBtn: 'Validate',
+    's7title': 'Your Spanish Nissan Note in Portugal',
+    's7desc': 'This has significant financial implications. Evaluate carefully.',
+    's7opt-a-label': 'Option A — Temporary',
+    's7opt-a': 'You can drive with Spanish plates while you\'re not an official resident.',
+    's7opt-b-label': 'Option B — Official residency ✓',
+    's7opt-b': 'You must register it in Portugal within 6 months of residency. Steps: Portuguese IPO → ISV tax → new plates.',
+    's7warn-label': '⚠️ ISV cost:',
+    's7warn': 'Can be expensive depending on model, year and engine size. Use the AT\'s ISV calculator before deciding.',
+    's8title': 'Public Healthcare — SNS',
+    's8desc': 'With a work contract you are entitled to public healthcare from day one.',
+    's8c1': 'Register at the nearest Centro de Saúde',
+    's8c2': 'You need NIF + proof of residence',
+    's8c3': 'Request your SNS Número de Utente',
+    's9title': 'Taxes — Portuguese IRS',
+    's9desc': 'Working in Portugal means you tax there. The Spain-Portugal double taxation agreement prevents paying twice.',
+    's9c1': 'Annual declaration at AT (Modelo 3)',
+    's9c2': 'Notify AEAT of your change of tax residence',
+    's9c3': 'Check the NHR regime if it applies to your profile',
+    's9tip-label': '💡 NHR:',
+    's9tip': 'The Non-Habitual Resident regime can offer significant tax benefits for the first 10 years.',
+    'badge-first': 'First', 'badge-req': 'Required', 'badge-90d': '+90 days',
+    'badge-admin': 'Admin', 'badge-rec': 'Recommended', 'badge-useful': 'Useful',
+    'badge-imp': 'Important', 'badge-right': 'Right', 'badge-annual': 'Annual', 'badge-info': 'Info', tip: '💡 Tip:',
+    summaryTitle: 'Summary — action order',
+    sum1:'NIF', sum2:'NISS', sum3:'Contract', sum4:'EU Registration',
+    sum5:'Local registration', sum6:'Bank account', sum6b:'Phone PT',
+    sum7:'Car', sum8:'Healthcare', sum9:'Taxes',
+    tipBanner: '✔️ <strong>Key order:</strong> NIF → job → NISS → registration → rest. Don\'t stress about the car at first — use it normally and sort it out once you know you\'re staying.',
+    phoneValid: '✓ Valid number · Correct format (+351)',
+    phoneInvalid: '✗ Invalid number · Must have 9 digits and start with 9',
+  }
+};
+
+let currentLang = 'es';
+let fontSize = 0;
+
+function setLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.ctrl-btn[id^=lang]').forEach(b => b.classList.remove('active'));
+  document.getElementById('lang-' + lang).classList.add('active');
+  applyLang();
+}
+
+function applyLang() {
+  const t = langs[currentLang];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if (t[key] !== undefined) el.innerHTML = t[key];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.dataset.i18nPlaceholder;
+    if (t[key]) el.placeholder = t[key];
+  });
+  document.querySelectorAll('select option[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if (t[key]) el.textContent = t[key];
+  });
+}
+
+// ─── Theme ─────────────────────────────────────────────
+function toggleTheme() {
+  const html = document.documentElement;
+  const isLight = html.getAttribute('data-theme') === 'light';
+  html.setAttribute('data-theme', isLight ? '' : 'light');
+}
+
+// ─── Font size ──────────────────────────────────────────
+const fontSizes = [14, 15, 16.5];
+function setFont(dir) {
+  if (dir === 0) fontSize = 0;
+  else fontSize = Math.max(0, Math.min(2, fontSize + dir));
+  document.body.style.fontSize = fontSizes[fontSize] + 'px';
+}
+
+// ─── Accordion ─────────────────────────────────────────
+function toggle(header) {
+  const step = header.closest('.step');
+  const isOpen = step.classList.contains('open');
+  // close all
+  document.querySelectorAll('.step.open').forEach(s => s.classList.remove('open'));
+  if (!isOpen) step.classList.add('open');
+}
+
+function openStep(num) {
+  const step = document.querySelector(`.step[data-step="${num}"]`);
+  if (!step) return;
+  document.querySelectorAll('.step.open').forEach(s => s.classList.remove('open'));
+  step.classList.add('open');
+  step.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+// ─── Intersection observer ──────────────────────────────
+const io = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.step').forEach((s, i) => {
+  s.style.animationDelay = (i * 0.05) + 's';
+  io.observe(s);
+});
+
+// ─── Progress bar ──────────────────────────────────────
+window.addEventListener('scroll', () => {
+  const el = document.documentElement;
+  const pct = (el.scrollTop / (el.scrollHeight - el.clientHeight)) * 100;
+  document.getElementById('progressBar').style.width = pct + '%';
+});
+
+// ─── Phone validator ───────────────────────────────────
+function formatPhone(input) {
+  let val = input.value.replace(/\D/g, '').slice(0, 9);
+  input.value = val;
+}
+
+function validatePhone() {
+  const val = document.getElementById('phoneInput').value.replace(/\D/g, '');
+  const res = document.getElementById('phoneResult');
+  const t = langs[currentLang];
+  const valid = /^9[1236]\d{7}$/.test(val);
+  res.className = 'phone-result ' + (valid ? 'valid' : 'invalid');
+  res.textContent = valid ? t.phoneValid : t.phoneInvalid;
+}
+
+// Enter key triggers validate
+document.getElementById('phoneInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') validatePhone();
+});
+
+// ─── Init ───────────────────────────────────────────────
+applyLang();
+</script>
+</body>
+</html>
