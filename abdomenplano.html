@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alimentos · Volumen Abdominal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&family=Fira+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body: 'Lato', sans-serif;
+    --font-label: 'Fira Sans', sans-serif;
+  }
+
+  /* ── DARK MODE (purple/electric blue/pink) ── */
+  [data-theme="dark"] {
+    --bg-start:     #1a0030;
+    --bg-mid:       #0d0a3e;
+    --bg-end:       #1f0028;
+    --orb-1:        rgba(160, 32, 220, 0.28);
+    --orb-2:        rgba(0, 100, 255, 0.22);
+    --orb-3:        rgba(220, 30, 140, 0.20);
+    --card-bg:      rgba(255,255,255,0.055);
+    --card-border:  rgba(180,100,255,0.22);
+    --card-hover:   rgba(255,255,255,0.09);
+    --text-primary: #f0e8ff;
+    --text-secondary: #c4b0e8;
+    --text-muted:   #8a72b8;
+    --accent-1:     #bf5fff;
+    --accent-2:     #3a8dff;
+    --accent-3:     #ff3fa6;
+    --tag-bg:       rgba(180,60,255,0.18);
+    --tag-border:   rgba(180,60,255,0.4);
+    --divider:      rgba(180,100,255,0.18);
+    --toggle-bg:    rgba(255,255,255,0.12);
+    --toggle-knob:  #bf5fff;
+    --header-glow:  rgba(191,95,255,0.25);
+    --pill-gradient: linear-gradient(90deg, #bf5fff22, #3a8dff22, #ff3fa622);
+  }
+
+  /* ── LIGHT MODE (beige/brown/gold) ── */
+  [data-theme="light"] {
+    --bg-start:     #fdf6ec;
+    --bg-mid:       #f5e9d0;
+    --bg-end:       #ede0c4;
+    --orb-1:        rgba(200,160,80,0.18);
+    --orb-2:        rgba(160,100,40,0.12);
+    --orb-3:        rgba(220,180,100,0.16);
+    --card-bg:      rgba(255,250,240,0.80);
+    --card-border:  rgba(180,130,60,0.25);
+    --card-hover:   rgba(255,248,230,0.95);
+    --text-primary: #3b2a0e;
+    --text-secondary: #6b4c1e;
+    --text-muted:   #9e7a3e;
+    --accent-1:     #b8872a;
+    --accent-2:     #8b5e1a;
+    --accent-3:     #d4a044;
+    --tag-bg:       rgba(180,130,50,0.12);
+    --tag-border:   rgba(180,130,50,0.35);
+    --divider:      rgba(160,110,40,0.18);
+    --toggle-bg:    rgba(160,110,40,0.18);
+    --toggle-knob:  #b8872a;
+    --header-glow:  rgba(184,135,42,0.15);
+    --pill-gradient: linear-gradient(90deg, #b8872a22, #8b5e1a22, #d4a04422);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--text-primary);
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--bg-start) 0%, var(--bg-mid) 50%, var(--bg-end) 100%);
+    background-attachment: fixed;
+    transition: background 0.5s, color 0.4s;
+    overflow-x: hidden;
+  }
+
+  /* ── Orbs de ambiente ── */
+  .orbs {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    overflow: hidden;
+  }
+  .orb {
+    position: absolute; border-radius: 50%;
+    filter: blur(80px);
+    animation: drift 18s ease-in-out infinite alternate;
+  }
+  .orb-1 {
+    width: 420px; height: 420px;
+    background: var(--orb-1);
+    top: -80px; left: -100px;
+    animation-delay: 0s;
+  }
+  .orb-2 {
+    width: 350px; height: 350px;
+    background: var(--orb-2);
+    top: 40%; right: -80px;
+    animation-delay: -6s;
+  }
+  .orb-3 {
+    width: 300px; height: 300px;
+    background: var(--orb-3);
+    bottom: -60px; left: 30%;
+    animation-delay: -12s;
+  }
+  @keyframes drift {
+    from { transform: translate(0, 0) scale(1); }
+    to   { transform: translate(30px, 40px) scale(1.08); }
+  }
+
+  .page {
+    position: relative; z-index: 1;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 28px 18px 48px;
+  }
+
+  /* ── Header ── */
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 28px;
+    gap: 12px;
+  }
+  .header-text h1 {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    font-weight: 700;
+    color: var(--accent-1);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    text-shadow: 0 0 30px var(--header-glow);
+  }
+  .header-text p {
+    font-family: var(--font-label);
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+    font-weight: 300;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  /* ── Toggle ── */
+  .toggle-wrap {
+    display: flex; align-items: center; gap: 7px; flex-shrink: 0;
+    margin-top: 6px;
+  }
+  .toggle-label {
+    font-family: var(--font-label);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    user-select: none;
+  }
+  .toggle {
+    position: relative; width: 44px; height: 24px; cursor: pointer;
+  }
+  .toggle input { display: none; }
+  .toggle-track {
+    position: absolute; inset: 0;
+    background: var(--toggle-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    transition: background 0.35s;
+  }
+  .toggle-knob-el {
+    position: absolute;
+    top: 3px; left: 3px;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--toggle-knob);
+    transition: transform 0.3s cubic-bezier(.4,0,.2,1), background 0.3s;
+    box-shadow: 0 0 8px var(--toggle-knob);
+  }
+  .toggle input:checked + .toggle-track + .toggle-knob-el {
+    transform: translateX(20px);
+  }
+
+  /* ── Introducción ── */
+  .intro {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-bottom: 24px;
+    backdrop-filter: blur(10px);
+  }
+  .intro p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+  .intro strong { color: var(--accent-1); font-weight: 600; }
+
+  /* ── Secciones ── */
+  .section { margin-bottom: 22px; }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--accent-1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--divider);
+    letter-spacing: -0.01em;
+  }
+  .section-title .icon {
+    font-size: 1rem;
+    opacity: 0.85;
+  }
+
+  /* ── Grid de tarjetas ── */
+  .food-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 8px;
+  }
+
+  .food-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 10px 12px;
+    backdrop-filter: blur(8px);
+    transition: background 0.25s, transform 0.2s, border-color 0.25s;
+    cursor: default;
+  }
+  .food-card:hover {
+    background: var(--card-hover);
+    transform: translateY(-2px);
+    border-color: var(--accent-1);
+  }
+  .food-name {
+    font-family: var(--font-label);
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+    text-transform: capitalize;
+  }
+  .food-benefit {
+    font-size: 0.76rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    font-weight: 300;
+  }
+  .food-tags {
+    display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px;
+  }
+  .tag {
+    font-family: var(--font-label);
+    font-size: 0.65rem;
+    font-weight: 500;
+    padding: 2px 7px;
+    border-radius: 20px;
+    background: var(--tag-bg);
+    border: 1px solid var(--tag-border);
+    color: var(--accent-2);
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+  [data-theme="dark"] .tag { color: var(--accent-2); }
+  [data-theme="light"] .tag { color: var(--accent-2); }
+
+  /* ── Tag colores por tipo ── */
+  .tag-anti  { --tag-bg: rgba(255,63,166,0.14); --tag-border: rgba(255,63,166,0.35); color: #ff3fa6 !important; }
+  .tag-fibra { --tag-bg: rgba(58,141,255,0.14); --tag-border: rgba(58,141,255,0.35); color: #3a8dff !important; }
+  .tag-prot  { --tag-bg: rgba(191,95,255,0.16); --tag-border: rgba(191,95,255,0.4);  color: #bf5fff !important; }
+  .tag-bact  { --tag-bg: rgba(0,220,180,0.14);  --tag-border: rgba(0,220,180,0.35); color: #00dcb4 !important; }
+  .tag-diur  { --tag-bg: rgba(255,190,50,0.14); --tag-border: rgba(255,190,50,0.35); color: #ffbe32 !important; }
+  .tag-metab { --tag-bg: rgba(255,100,80,0.14); --tag-border: rgba(255,100,80,0.35); color: #ff6450 !important; }
+  .tag-gras  { --tag-bg: rgba(80,220,120,0.14); --tag-border: rgba(80,220,120,0.35); color: #50dc78 !important; }
+
+  [data-theme="light"] .tag-anti  { color: #c0185a !important; }
+  [data-theme="light"] .tag-fibra { color: #1a5eb8 !important; }
+  [data-theme="light"] .tag-prot  { color: #7a2db8 !important; }
+  [data-theme="light"] .tag-bact  { color: #0a8a6a !important; }
+  [data-theme="light"] .tag-diur  { color: #a07a00 !important; }
+  [data-theme="light"] .tag-metab { color: #b03020 !important; }
+  [data-theme="light"] .tag-gras  { color: #1a8040 !important; }
+
+  /* ── Footer ── */
+  footer {
+    margin-top: 28px;
+    padding-top: 14px;
+    border-top: 1px solid var(--divider);
+    text-align: center;
+  }
+  footer p {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-family: var(--font-label);
+    font-weight: 300;
+  }
+
+  @media (max-width: 480px) {
+    .food-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+    header { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+<div class="orbs">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
+<div class="page">
+
+  <header>
+    <div class="header-text">
+      <h1>Nutrición Abdominal</h1>
+      <p>Alimentos que reducen el volumen &amp; la inflamación</p>
+    </div>
+    <div class="toggle-wrap">
+      <span class="toggle-label" id="mode-label">Oscuro</span>
+      <label class="toggle">
+        <input type="checkbox" id="theme-toggle">
+        <div class="toggle-track"></div>
+        <div class="toggle-knob-el"></div>
+      </label>
+    </div>
+  </header>
+
+  <div class="intro">
+    <p>Estos alimentos ayudan a <strong>reducir la inflamación intestinal</strong>, mejorar el tránsito, equilibrar la flora y acelerar el metabolismo de las grasas viscerales. No se trata de una dieta restrictiva, sino de integrar aliados naturales en tu día a día.</p>
+  </div>
+
+  <!-- SECCIÓN 1: Base diaria -->
+  <div class="section">
+    <div class="section-title"><span class="icon">🥣</span> Base diaria — Desayuno &amp; Hidratación</div>
+    <div class="food-grid">
+
+      <div class="food-card">
+        <div class="food-name">Aguacate</div>
+        <div class="food-benefit">Grasas monoinsaturadas que reducen la grasa visceral.</div>
+        <div class="food-tags"><span class="tag tag-gras">Grasas buenas</span><span class="tag tag-anti">Antiinflamatorio</span></div>
+      </div>
+
+      <div class="food-card">
+        <div class="food-name">Yogur natural</div>
+        <div class="food-benefit">Probióticos que equilibran la microbiota y reducen el gas.</div>
+        <div class="food-tags"><span class="tag tag-bact">Probiótico</span><span class="tag tag-prot">Proteína</span></div>
+      </div>
+
+      <div class="food-card">
+        <div class="food-name">Avena</div>
+        <div class="food-benefit">Beta-glucanos que regulan el tránsito y sacian sin inflamar.</div>
+        <div class="food-tags"><span class="tag tag-fibra">Fibra</span><span class="tag tag-metab">Saciedad</span></div>
+      </div>
+
+      <div class="food-card">
+        <div class="food-name">Agua con limón</div>
+        <div class="food-benefit">Estimula la digestión y el drenaje linfático al despertar.</div>
+        <div class="food-tags"><span class="tag tag-diur">Drenante</span><span class="tag tag-metab">Metab.</span></div>
+      </div>
+
+      <div class="food-card">
+        <div class="food-name">Semillas de chía</div>
+        <div class="food-benefit">Fibra soluble + omega-3; forman gel que frena el vaciado gástrico.</div>
+        <div class="food-tags"><span class="tag tag-fibra">Fibra</span><span class="tag tag-gras">Omega-3</span></div>
+      </div>
+
+      <div class="food-card">
+        <div class="food-name">Semillas de lino</div>
+        <div class="food-benefit">Lignanos y fibra que regulan el tránsito y el estrógeno.</div>
+        <div class="food-tags"><span class="tag tag-fibra">Fibra</span><span class="tag tag-anti">Antiinflamatorio</span></div>
+      </div>
+
+      <div class="food-card">
+        <div class="food-name">Crema de cacahuete</div>
+        <div class="food-benefit">Proteína y grasas insaturadas; saciedad duradera sin picos de insulina.</div>
+        <div class="food-tags"><span class="tag tag-prot">Proteína</span><span class="tag tag-gras">Grasas buenas</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SECCIÓN 2: Bebidas funcionales -->
+  <div class="section">
+    <div class="section-title"><span class="icon">🍵</span> Bebidas funcionales</div>
+    <div class="food-grid">
+
+      <div class="food-card">
+        <div class="food-name">Té verde</div>
+        <div class="food-benefit">Catequinas EGCG que potencian la oxidación de grasa abdominal.</div>
+        <div class="food-tags"><span class="tag tag-metab">Metab.</span><span class="tag tag-anti">Antiinflamatorio</span></div>
+      </div>
+
+      <div class="food-card">
+        <div class="food-name">Té blanco</div>
+        <div class="food-benefit">Alta concentración antioxidante, mínima oxidación; efecto drenante suave.</div>
+        <div class="food-tags"><span class="tag tag-diur">Drenante</span><span class="tag tag-anti">Antioxidante</span></div>
+      </div>
+
+      <div class="food-card">
+        <div class="food-name">Té matcha / Moringa</div>
+        <div class="food-benefit">Clorofila, L-teanina y minerales; regulan cortisol y glucosa.</div>
+        <div class="food-tags"><span class="tag tag-metab">Cortisol</span><span class="tag tag-anti">Antiinflamatorio</span></div>
+      </div>
+
+      <div class="food-card">
+        <div class="food-name">Kombucha</div>
+        <div class="food-benefit">Bebida fermentada con probióticos vivos y ácidos orgánicos digestivos.</div>
+        <div class="food-tags"><span class="tag tag-bact">Probiótico</span><span class="tag tag-diur">Digestivo</span></div>
+      </div>
+
+      <div class="food-card">
+        <div class="food-name">Vinagre de manzana</div>
+        <div class="food-benefit">Ácido acético que mejora la sensibilidad a la insulina y frena el apetito.</div>
+        <div class="food-tags"><span class="tag tag-metab">Insulina</span><span class="tag tag-bact">Enzimas</span></div>
+      </div>
+
+      <div class="food-card">
+        <div class="food-name">Cayena</div>
+        <div class="food-benefit">Capsaicina termogénica; aumenta el gasto calórico postingesta.</div>
+        <div class="food-tags"><span class="tag tag-metab">Termogénico</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SECCIÓN 3: Frutas -->
+  <div class="section">
+    <div class="section-title"><span class="icon">🍓</span> Frutas desinflamantes</div>
+    <div class="food-grid">
+
+      <div class="food-card">
+        <div class="food-name">Fresas</div>
+        <div class="food-benefit">Antocianinas que reducen la inflamación y el índice glucémico post-comida.</div>
+        <div class="food-tags"><span class="tag tag-anti">Antiinflamatorio</span><span class="tag tag-fibra">Fibra</span></div>
+      </div>
+
+      <div class="food-card">
+        <div class="food-name">Frutos rojos</div>
+        <div class="food-benefit">Polifenoles que inhiben la acumulación de grasa visceral.</div>
+        <div class="food-tags"><span class="tag tag-anti">Antioxidante</span><span class="tag tag-metab">Grasa visceral</span></div>
+      </div>
+
+      <div class="food-card">
+        <div class="food-name">Naranja</div>
+        <div class="food-benefit">Vitamina C + flavonoides; mejoran la absorción de hierro y el cortisol.</div>
+        <div class="food-tags"><span class="tag tag-anti">Vit. C</span><span class="tag tag-diur">Drenante</span></div>
+      </div>
+
+      <div class="food-card">
+        <div class="food-name">Sandía</div>
+        <div class="food-benefit">Alto contenido en agua y L-citrulina; acción diurética natural.</div>
+        <div class="food-tags"><span class="tag tag-diur">Diurético</span><span class="tag tag-anti">Antiinflamatorio</span></div>
+      </div>
+
+      <div class="food-card">
+        <div class="food-name">Manzana</div>
+        <div class="food-benefit">Pectina (fibra soluble) que alimenta la microbiota y reduce gases.</div>
+        <div class="food-tags"><span class="tag tag-fibra">Pectina</span><span class="tag tag-bact">Prebiótico</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SECCIÓN 4: Verduras -->
+  <div class="section">
+    <div class="section-title"><span class="icon">🥦</span> Verduras &amp; Vegetales</div>
+    <div class="food-grid">
+
+      <div class="food-card">
+        <div class="food-name">Espinaca</div>
+        <div class="food-benefit">Magnesio y clorofila; reducen retención hídrica y la inflamación.</div>
+        <div class="food-tags"><span class="tag tag-anti">Antiinflamatorio</span><span class="tag tag-diur">Diurético</span></div>
+      </div>
+
+      <div class="food-card">
+        <div class="food-name">Brócoli</div>
+        <div class="food-benefit">Sulforafano y fibra insoluble; apoya la detoxificación hepática.</div>
+        <div class="food-tags"><span class="tag tag-fibra">Fibra</span><span class="tag tag-anti">Detox</span></div>
+      </div>
+
+      <div class="food-card">
+        <div class="food-name">Espárragos</div>
+        <div class="food-benefit">Potente diurético natural; alivia la hinchazón abdominal rápidamente.</div>
+        <div class="food-tags"><span class="tag tag-diur">Diurético</span><span class="tag tag-bact">Prebiótico</span></div>
+      </div>
+
+      <div class="food-card">
+        <div class="food-name">Calabacín</div>
+        <div class="food-benefit">Muy bajo en calorías, alta densidad de agua y potasio.</div>
+        <div class="food-tags"><span class="tag tag-diur">Drenante</span><span class="tag tag-fibra">Fibra</span></div>
+      </div>
+
+      <div class="food-card">
+        <div class="food-name">Zanahoria</div>
+        <div class="food-benefit">Betacarotenos y fibra; promueve el peristaltismo intestinal.</div>
+        <div class="food-tags"><span class="tag tag-fibra">Fibra</span><span class="tag tag-anti">Antioxidante</span></div>
+      </div>
+
+      <div class="food-card">
+        <div class="food-name">Hongos / Setas</div>
+        <div class="food-benefit">Beta-glucanos inmunomoduladores y muy bajo aporte calórico.</div>
+        <div class="food-tags"><span class="tag tag-anti">Inmunomodulador</span><span class="tag tag-fibra">Fibra</span></div>
+      </div>
+
+      <div class="food-card">
+        <div class="food-name">Guisantes</div>
+        <div class="food-benefit">Proteína vegetal + fibra; índice glucémico bajo y alta saciedad.</div>
+        <div class="food-tags"><span class="tag tag-prot">Proteína</span><span class="tag tag-fibra">Fibra</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SECCIÓN 5: Proteínas y carbohidratos -->
+  <div class="section">
+    <div class="section-title"><span class="icon">🍳</span> Proteínas &amp; Carbohidratos de calidad</div>
+    <div class="food-grid">
+
+      <div class="food-card">
+        <div class="food-name">Salmón</div>
+        <div class="food-benefit">Omega-3 EPA/DHA; reducen el cortisol y la inflamación crónica.</div>
+        <div class="food-tags"><span class="tag tag-gras">Omega-3</span><span class="tag tag-anti">Antiinflamatorio</span></div>
+      </div>
+
+      <div class="food-card">
+        <div class="food-name">Atún</div>
+        <div class="food-benefit">Proteína magra de alta biodisponibilidad; preserva masa muscular.</div>
+        <div class="food-tags"><span class="tag tag-prot">Proteína</span><span class="tag tag-gras">Omega-3</span></div>
+      </div>
+
+      <div class="food-card">
+        <div class="food-name">Pavo</div>
+        <div class="food-benefit">Carne blanca magra rica en triptófano; favorece el sueño y reduce el cortisol.</div>
+        <div class="food-tags"><span class="tag tag-prot">Proteína</span><span class="tag tag-metab">Cortisol</span></div>
+      </div>
+
+      <div class="food-card">
+        <div class="food-name">Huevo</div>
+        <div class="food-benefit">Proteína completa + colina; esencial para el metabolismo de grasas hepáticas.</div>
+        <div class="food-tags"><span class="tag tag-prot">Proteína</span><span class="tag tag-metab">Colina</span></div>
+      </div>
+
+      <div class="food-card">
+        <div class="food-name">Lentejas</div>
+        <div class="food-benefit">Proteína vegetal + hierro + fibra; mantienen la glucosa estable.</div>
+        <div class="food-tags"><span class="tag tag-prot">Proteína</span><span class="tag tag-fibra">Fibra</span><span class="tag tag-bact">Prebiótico</span></div>
+      </div>
+
+      <div class="food-card">
+        <div class="food-name">Arroz integral</div>
+        <div class="food-benefit">Carbohidrato complejo con fibra; evita los picos de insulina y retención.</div>
+        <div class="food-tags"><span class="tag tag-fibra">Fibra</span><span class="tag tag-metab">Insulina</span></div>
+      </div>
+
+      <div class="food-card">
+        <div class="food-name">Patata cocida</div>
+        <div class="food-benefit">Almidón resistente (tras enfriar) que alimenta la microbiota beneficiosa.</div>
+        <div class="food-tags"><span class="tag tag-bact">Prebiótico</span><span class="tag tag-metab">Almidón resist.</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SECCIÓN 6: Frutos secos y especias -->
+  <div class="section">
+    <div class="section-title"><span class="icon">🌰</span> Frutos secos, especias &amp; AOVE</div>
+    <div class="food-grid">
+
+      <div class="food-card">
+        <div class="food-name">Nueces</div>
+        <div class="food-benefit">Mayor ratio omega-3/omega-6 entre los frutos secos; antiinflamatorio sistémico.</div>
+        <div class="food-tags"><span class="tag tag-gras">Omega-3</span><span class="tag tag-anti">Antiinflamatorio</span></div>
+      </div>
+
+      <div class="food-card">
+        <div class="food-name">Almendras</div>
+        <div class="food-benefit">Vitamina E + magnesio; reducen el cortisol y la retención hídrica.</div>
+        <div class="food-tags"><span class="tag tag-gras">Vit. E</span><span class="tag tag-metab">Cortisol</span></div>
+      </div>
+
+      <div class="food-card">
+        <div class="food-name">Avellanas</div>
+        <div class="food-benefit">Ácido oleico y vitamina E; perfil similar al AOVE en fruto seco.</div>
+        <div class="food-tags"><span class="tag tag-gras">Grasas buenas</span><span class="tag tag-anti">Antioxidante</span></div>
+      </div>
+
+      <div class="food-card">
+        <div class="food-name">Pistachos</div>
+        <div class="food-benefit">Pistachos: luteína + fibra + proteína; snack saciante y antiinflamatorio.</div>
+        <div class="food-tags"><span class="tag tag-fibra">Fibra</span><span class="tag tag-prot">Proteína</span></div>
+      </div>
+
+      <div class="food-card">
+        <div class="food-name">AOVE</div>
+        <div class="food-benefit">Oleocantal con efecto anti-COX similar al ibuprofeno; reduce grasa visceral.</div>
+        <div class="food-tags"><span class="tag tag-gras">Grasas buenas</span><span class="tag tag-anti">Antiinflamatorio</span></div>
+      </div>
+
+      <div class="food-card">
+        <div class="food-name">Canela</div>
+        <div class="food-benefit">Mejora la sensibilidad a la insulina y reduce picos glucémicos post-comida.</div>
+        <div class="food-tags"><span class="tag tag-metab">Insulina</span><span class="tag tag-anti">Antiinflamatorio</span></div>
+      </div>
+
+      <div class="food-card">
+        <div class="food-name">Jengibre</div>
+        <div class="food-benefit">Gingeroles termogénicos; alivian el gas, náuseas y la inflamación intestinal.</div>
+        <div class="food-tags"><span class="tag tag-metab">Termogénico</span><span class="tag tag-anti">Antiinflamatorio</span></div>
+      </div>
+
+      <div class="food-card">
+        <div class="food-name">Cúrcuma</div>
+        <div class="food-benefit">Curcumina; uno de los antiinflamatorios naturales más estudiados.</div>
+        <div class="food-tags"><span class="tag tag-anti">Antiinflamatorio</span><span class="tag tag-metab">Detox</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>
+    <p>Uso orientativo · Consulta a un profesional de la salud para una pauta personalizada.<br>Web realizada por @Lophersson con amor ♡ 💕 😘 - Ferrol - Spain</p>
+  </footer>
+
+</div>
+
+<script>
+  const toggle = document.getElementById('theme-toggle');
+  const label  = document.getElementById('mode-label');
+  const html   = document.documentElement;
+
+  toggle.addEventListener('change', () => {
+    if (toggle.checked) {
+      html.setAttribute('data-theme', 'light');
+      label.textContent = 'Claro';
+    } else {
+      html.setAttribute('data-theme', 'dark');
+      label.textContent = 'Oscuro';
+    }
+  });
+</script>
+</body>
+</html>
