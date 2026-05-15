@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asesorías & Gestorías · A Coruña</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #c4a050;
+    --gold-light: #dfc07a;
+    --gold-dim: rgba(196,160,80,0.18);
+    --bg: #0a0a0b;
+    --surface: rgba(255,255,255,0.04);
+    --surface-hover: rgba(196,160,80,0.07);
+    --border: rgba(196,160,80,0.15);
+    --text: #e8e0d0;
+    --text-dim: rgba(232,224,208,0.5);
+    --text-muted: rgba(232,224,208,0.3);
+    --tag-bg: rgba(196,160,80,0.12);
+    --fs: 1rem;
+  }
+  .light-mode {
+    --bg: #f5f0e8;
+    --surface: rgba(255,255,255,0.7);
+    --surface-hover: rgba(196,160,80,0.08);
+    --border: rgba(196,160,80,0.25);
+    --text: #1a1610;
+    --text-dim: rgba(26,22,16,0.55);
+    --text-muted: rgba(26,22,16,0.35);
+    --tag-bg: rgba(196,160,80,0.15);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { font-size: var(--fs); scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    overflow-x: hidden;
+    transition: background 0.35s, color 0.35s;
+  }
+
+  /* ─── GRAIN ─── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0; opacity: 0.5;
+  }
+
+  /* ─── ORBS ─── */
+  .orb {
+    position: fixed; border-radius: 50%;
+    filter: blur(100px); pointer-events: none; z-index: 0;
+    animation: orb-drift 18s ease-in-out infinite alternate;
+  }
+  .orb-1 { width: 520px; height: 520px; top: -120px; right: -80px; background: radial-gradient(circle, rgba(196,160,80,0.09) 0%, transparent 70%); animation-duration: 20s; }
+  .orb-2 { width: 400px; height: 400px; bottom: 5%; left: -100px; background: radial-gradient(circle, rgba(196,160,80,0.06) 0%, transparent 70%); animation-duration: 25s; animation-delay: -8s; }
+  @keyframes orb-drift { from { transform: translate(0,0) scale(1); } to { transform: translate(30px,20px) scale(1.05); } }
+
+  /* ─── TOPBAR ─── */
+  .topbar {
+    position: sticky; top: 0; z-index: 100;
+    backdrop-filter: blur(20px);
+    background: rgba(10,10,11,0.8);
+    border-bottom: 1px solid var(--border);
+    padding: 0.6rem 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem;
+    transition: background 0.35s;
+  }
+  .light-mode .topbar { background: rgba(245,240,232,0.85); }
+
+  .topbar-brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem; font-weight: 300; letter-spacing: 0.12em;
+    color: var(--gold); white-space: nowrap;
+    text-decoration: none;
+  }
+  .topbar-brand span { color: var(--text-dim); font-style: italic; font-weight: 300; }
+
+  .topbar-controls { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+
+  .ctrl-btn {
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--text-dim); padding: 0.28rem 0.65rem;
+    border-radius: 4px; cursor: pointer; font-family: 'DM Mono', monospace;
+    font-size: 0.72rem; transition: all 0.2s; line-height: 1;
+  }
+  .ctrl-btn:hover, .ctrl-btn.active { background: var(--gold-dim); border-color: var(--gold); color: var(--gold); }
+
+  /* ─── HERO ─── */
+  .hero {
+    position: relative; z-index: 1;
+    text-align: center; padding: 4rem 2rem 2.5rem;
+  }
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace; font-size: 0.7rem;
+    letter-spacing: 0.25em; color: var(--gold); text-transform: uppercase;
+    margin-bottom: 0.9rem;
+    animation: fadeUp 0.6s ease both;
+  }
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    font-weight: 300; line-height: 1.08;
+    color: var(--text);
+    animation: fadeUp 0.7s 0.08s ease both;
+  }
+  .hero-title em { font-style: italic; color: var(--gold); }
+  .hero-sub {
+    margin-top: 0.8rem; color: var(--text-dim);
+    font-size: 0.9rem; max-width: 520px; margin-inline: auto;
+    animation: fadeUp 0.7s 0.16s ease both;
+  }
+  .hero-line {
+    width: 60px; height: 1px; background: var(--gold);
+    margin: 1.6rem auto 0; opacity: 0.5;
+    animation: fadeUp 0.7s 0.22s ease both;
+  }
+
+  /* ─── STATS BAR ─── */
+  .stats-bar {
+    position: relative; z-index: 1;
+    display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap;
+    padding: 0 2rem 2rem;
+    animation: fadeUp 0.7s 0.28s ease both;
+  }
+  .stat { text-align: center; }
+  .stat-n {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem; font-weight: 300; color: var(--gold);
+    line-height: 1;
+  }
+  .stat-l { font-size: 0.72rem; color: var(--text-muted); letter-spacing: 0.08em; margin-top: 0.2rem; }
+
+  /* ─── TOOLBAR ─── */
+  .toolbar {
+    position: relative; z-index: 1;
+    padding: 0 2rem 1.6rem;
+    display: flex; flex-wrap: wrap; gap: 0.8rem; align-items: center;
+    animation: fadeUp 0.7s 0.32s ease both;
+  }
+
+  .search-wrap {
+    flex: 1; min-width: 220px; max-width: 380px;
+    position: relative;
+  }
+  .search-icon {
+    position: absolute; left: 0.8rem; top: 50%; transform: translateY(-50%);
+    color: var(--text-muted); font-size: 0.8rem; pointer-events: none;
+  }
+  #searchInput {
+    width: 100%; padding: 0.6rem 0.9rem 0.6rem 2.2rem;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 6px; color: var(--text);
+    font-family: 'DM Sans', sans-serif; font-size: 0.85rem;
+    outline: none; transition: border-color 0.2s, background 0.2s;
+  }
+  #searchInput::placeholder { color: var(--text-muted); }
+  #searchInput:focus { border-color: var(--gold); background: var(--surface-hover); }
+
+  .filter-group { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+  .pill {
+    padding: 0.3rem 0.8rem; border-radius: 20px;
+    border: 1px solid var(--border); background: var(--surface);
+    color: var(--text-dim); font-size: 0.75rem; cursor: pointer;
+    transition: all 0.18s; white-space: nowrap;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .pill:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
+  .pill.active { border-color: var(--gold); color: var(--bg); background: var(--gold); font-weight: 500; }
+
+  /* ─── GRID ─── */
+  .grid-wrap {
+    position: relative; z-index: 1;
+    padding: 0 1.5rem 4rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.2rem;
+  }
+
+  /* ─── CARD ─── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.4rem 1.5rem;
+    transition: border-color 0.22s, background 0.22s, transform 0.22s, box-shadow 0.22s;
+    cursor: default;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.5s ease forwards;
+    display: flex; flex-direction: column; gap: 0.8rem;
+  }
+  .card:hover {
+    border-color: rgba(196,160,80,0.4);
+    background: var(--surface-hover);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(196,160,80,0.08);
+  }
+
+  .card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; }
+
+  .card-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.18rem; font-weight: 400; color: var(--text);
+    line-height: 1.2;
+  }
+
+  .rating {
+    display: flex; flex-direction: column; align-items: flex-end;
+    gap: 0.1rem; flex-shrink: 0;
+  }
+  .stars {
+    font-size: 0.7rem; color: var(--gold); letter-spacing: 1px; line-height: 1;
+  }
+  .rating-score {
+    font-family: 'DM Mono', monospace; font-size: 0.72rem;
+    color: var(--text-dim);
+  }
+
+  .card-type-badge {
+    display: inline-block;
+    font-family: 'DM Mono', monospace; font-size: 0.62rem;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 0.18rem 0.55rem; border-radius: 3px;
+    background: var(--gold-dim); color: var(--gold);
+    border: 1px solid rgba(196,160,80,0.2);
+    width: fit-content;
+  }
+
+  .card-address {
+    display: flex; align-items: flex-start; gap: 0.4rem;
+    color: var(--text-dim); font-size: 0.82rem; line-height: 1.4;
+  }
+  .card-address-icon { color: var(--gold); opacity: 0.7; font-size: 0.75rem; margin-top: 1px; flex-shrink: 0; }
+
+  .card-phone {
+    display: flex; align-items: center; gap: 0.4rem;
+    font-family: 'DM Mono', monospace; font-size: 0.8rem; color: var(--gold);
+    text-decoration: none;
+    transition: color 0.18s;
+  }
+  .card-phone:hover { color: var(--gold-light); }
+
+  .card-web {
+    display: flex; align-items: center; gap: 0.35rem;
+    font-size: 0.76rem; color: var(--text-muted);
+    text-decoration: none; transition: color 0.18s;
+    word-break: break-all;
+  }
+  .card-web:hover { color: var(--gold); }
+
+  .card-desc {
+    font-size: 0.82rem; color: var(--text-dim);
+    line-height: 1.55; border-top: 1px solid var(--border);
+    padding-top: 0.7rem;
+  }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+  .tag {
+    font-size: 0.68rem; padding: 0.18rem 0.55rem;
+    border-radius: 20px; background: var(--tag-bg);
+    color: var(--text-dim); border: 1px solid var(--border);
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  /* ─── EMPTY ─── */
+  .empty {
+    grid-column: 1/-1;
+    text-align: center; padding: 4rem 2rem;
+    color: var(--text-muted);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem; font-style: italic;
+    opacity: 0;
+    animation: fadeUp 0.4s 0.1s ease forwards;
+  }
+
+  /* ─── FOOTER ─── */
+  .footer {
+    position: relative; z-index: 1;
+    text-align: center; padding: 1.5rem 2rem 2.5rem;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted); font-size: 0.72rem;
+    font-family: 'DM Mono', monospace; letter-spacing: 0.06em;
+  }
+  .footer a { color: var(--gold); text-decoration: none; opacity: 0.7; }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* count badge */
+  #countBadge {
+    font-family: 'DM Mono', monospace; font-size: 0.72rem;
+    color: var(--text-muted); margin-left: auto;
+  }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+  @media (max-width: 600px) {
+    .topbar { padding: 0.5rem 1rem; }
+    .hero { padding: 2.5rem 1rem 1.5rem; }
+    .toolbar { padding: 0 1rem 1.2rem; }
+    .grid-wrap { padding: 0 1rem 3rem; grid-template-columns: 1fr; }
+    .stats-bar { gap: 1.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ORBS -->
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<!-- TOPBAR -->
+<nav class="topbar">
+  <a class="topbar-brand" href="#">Lophersson <span>· Directorio</span></a>
+  <div class="topbar-controls">
+    <!-- Idioma -->
+    <button class="ctrl-btn active" onclick="setLang('es')" id="btn-es">ES</button>
+    <button class="ctrl-btn" onclick="setLang('gl')" id="btn-gl">GL</button>
+    <button class="ctrl-btn" onclick="setLang('en')" id="btn-en">EN</button>
+    <!-- Tamaño -->
+    <button class="ctrl-btn" onclick="setFs(-1)">A−</button>
+    <button class="ctrl-btn" onclick="setFs(0)">A</button>
+    <button class="ctrl-btn" onclick="setFs(1)">A+</button>
+    <!-- Tema -->
+    <button class="ctrl-btn" onclick="toggleMode()" id="modeBtn">☀</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow" data-es="Directorio Profesional · A Coruña, Galicia" data-gl="Directorio Profesional · A Coruña, Galicia" data-en="Professional Directory · A Coruña, Galicia">
+    Directorio Profesional · A Coruña, Galicia
+  </div>
+  <h1 class="hero-title" data-es="Asesorías &amp; <em>Gestorías</em>" data-gl="Asosorías &amp; <em>Xestorías</em>" data-en="Advisory &amp; <em>Consultancy</em> Firms">
+    Asesorías &amp; <em>Gestorías</em>
+  </h1>
+  <p class="hero-sub" data-es="Directorio completo de despachos y gestorías en la ciudad de A Coruña — servicios fiscal, laboral, contable, jurídico y administrativo." data-gl="Directorio completo de despachos e xestorías na cidade da Coruña — servizos fiscal, laboral, contable, xurídico e administrativo." data-en="Complete directory of advisory firms and administrative consultancies in the city of A Coruña.">
+    Directorio completo de despachos y gestorías en la ciudad de A Coruña — servicios fiscal, laboral, contable, jurídico y administrativo.
+  </p>
+  <div class="hero-line"></div>
+</header>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat"><div class="stat-n" id="statTotal">22</div><div class="stat-l" data-es="Despachos" data-gl="Despachos" data-en="Firms">Despachos</div></div>
+  <div class="stat"><div class="stat-n">7</div><div class="stat-l" data-es="Especialidades" data-gl="Especialidades" data-en="Specialties">Especialidades</div></div>
+  <div class="stat"><div class="stat-n">15001–15011</div><div class="stat-l" data-es="CPs cubiertos" data-gl="CPs cubertos" data-en="Postcodes">CPs cubiertos</div></div>
+  <div class="stat"><div class="stat-n">4.6★</div><div class="stat-l" data-es="Valoración media" data-gl="Valoración media" data-en="Avg. rating">Valoración media</div></div>
+</div>
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <div class="search-wrap">
+    <span class="search-icon">⌕</span>
+    <input id="searchInput" type="text" placeholder="Buscar por nombre, calle…" oninput="applyFilters()">
+  </div>
+  <div class="filter-group" id="pillGroup">
+    <button class="pill active" data-filter="all" onclick="setPill(this,'all')" data-es="Todos" data-gl="Todos" data-en="All">Todos</button>
+    <button class="pill" data-filter="fiscal" onclick="setPill(this,'fiscal')" data-es="Fiscal" data-gl="Fiscal" data-en="Tax">Fiscal</button>
+    <button class="pill" data-filter="laboral" onclick="setPill(this,'laboral')" data-es="Laboral" data-gl="Laboral" data-en="Labour">Laboral</button>
+    <button class="pill" data-filter="contable" onclick="setPill(this,'contable')" data-es="Contable" data-gl="Contable" data-en="Accounting">Contable</button>
+    <button class="pill" data-filter="juridico" onclick="setPill(this,'juridico')" data-es="Jurídico" data-gl="Xurídico" data-en="Legal">Jurídico</button>
+    <button class="pill" data-filter="administrativo" onclick="setPill(this,'administrativo')" data-es="Administrativo" data-gl="Administrativo" data-en="Administrative">Administrativo</button>
+    <button class="pill" data-filter="trafico" onclick="setPill(this,'trafico')" data-es="Tráfico/Vehículos" data-gl="Tráfico/Vehículos" data-en="Traffic/Vehicles">Tráfico/Vehículos</button>
+    <button class="pill" data-filter="seguros" onclick="setPill(this,'seguros')" data-es="Seguros" data-gl="Seguros" data-en="Insurance">Seguros</button>
+  </div>
+  <span id="countBadge"></span>
+</div>
+
+<!-- GRID -->
+<main class="grid-wrap" id="grid"></main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <span data-es="Datos recopilados de fuentes públicas: Negocioos, Páginas Amarillas, Gestorias.es · 2025" data-gl="Datos recompilados de fontes públicas · 2025" data-en="Data compiled from public sources: Negocioos, Páginas Amarillas, Gestorias.es · 2025">
+    Datos recopilados de fuentes públicas: Negocioos, Páginas Amarillas, Gestorias.es · 2025
+  </span>
+  &nbsp;·&nbsp;
+  <a href="https://lophersson.github.io/2026" target="_blank">Lophersson Portfolio</a>
+</footer>
+
+<script>
+/* ============================================================
+   DATA — Asesorías & Gestorías de A Coruña
+   ============================================================ */
+const FIRMS = [
+  {
+    name: "Asesoría SFL",
+    type: "Asesoría",
+    address: "Rúa Marqués de Amboage, 20 · 15006 A Coruña",
+    phone: "881 89 56 06",
+    web: "",
+    rating: 5.0,
+    reviews: 45,
+    desc: { es: "Más de 10 años de experiencia. Servicios integrales de asesoría fiscal, contable y laboral para empresas y particulares con atención personalizada.", gl: "Máis de 10 anos de experiencia. Servizos integrais de asesoría fiscal, contable e laboral.", en: "Over 10 years of experience. Comprehensive tax, accounting and labour advisory services." },
+    tags: ["fiscal","laboral","contable"],
+    delay: 0
+  },
+  {
+    name: "Gestoría Poncet",
+    type: "Gestoría",
+    address: "Rúa Juan Flórez, 36, 1ºL · 15004 A Coruña",
+    phone: "981 14 38 68",
+    web: "",
+    rating: 5.0,
+    reviews: 11,
+    desc: { es: "Gestoría administrativa con alta valoración en A Coruña. Trámites para empresas, autónomos y particulares.", gl: "Xestoría administrativa con alta valoración na Coruña.", en: "Administrative consultancy with top rating in A Coruña." },
+    tags: ["administrativo","fiscal"],
+    delay: 1
+  },
+  {
+    name: "Xurixestión",
+    type: "Asesoría",
+    address: "Rúa Antonio Viñes, 18, Bj D · 15007 A Coruña",
+    phone: "981 23 01 33",
+    web: "",
+    rating: 4.9,
+    reviews: 101,
+    desc: { es: "Servicios integrales de asesoría fiscal, laboral y contable para empresas, autónomos y particulares, con soluciones personalizadas que optimizan recursos.", gl: "Servizos integrais de asesoría fiscal, laboral e contable para empresas, autónomos e particulares.", en: "Comprehensive advisory services for companies, self-employed and individuals." },
+    tags: ["fiscal","laboral","contable"],
+    delay: 2
+  },
+  {
+    name: "Gestoría Martí",
+    type: "Gestoría",
+    address: "Rúa do Socorro, 61, 1º dcha · 15003 A Coruña",
+    phone: "981 22 24 33",
+    web: "",
+    rating: 4.7,
+    reviews: 12,
+    desc: { es: "Servicios integrales de gestoría laboral, fiscal y contable con atención personalizada. Trámites administrativos, nóminas y declaraciones fiscales.", gl: "Servizos de xestoría laboral, fiscal e contable con atención personalizada.", en: "Comprehensive labour, tax and accounting management with personalised attention." },
+    tags: ["laboral","fiscal","contable","administrativo"],
+    delay: 3
+  },
+  {
+    name: "Auto Gestión",
+    type: "Gestoría",
+    address: "Av. de Oza, Nº1, 1º · 15006 A Coruña",
+    phone: "981 17 37 62",
+    web: "",
+    rating: 4.6,
+    reviews: 38,
+    desc: { es: "Especialistas en trámites vehiculares y asesoramiento fiscal. Matriculaciones, transferencias, tarjetas de transporte y homologaciones.", gl: "Especialistas en trámites de vehículos e asesoramento fiscal.", en: "Specialists in vehicle formalities and tax advisory." },
+    tags: ["trafico","fiscal","administrativo"],
+    delay: 4
+  },
+  {
+    name: "Gestoria Cotelo",
+    type: "Gestoría",
+    address: "Rúa Emilia Pardo Bazán, 42, 1º · 15005 A Coruña",
+    phone: "981 16 86 20",
+    web: "",
+    rating: 4.6,
+    reviews: 28,
+    desc: { es: "Servicios integrales de gestoría administrativa, asesoría fiscal, laboral y contable, con atención rápida y personalizada para empresas y particulares.", gl: "Servizos integrais de xestoría administrativa, asesoría fiscal, laboral e contable.", en: "Comprehensive administrative, tax, labour and accounting management services." },
+    tags: ["administrativo","fiscal","laboral","contable","seguros"],
+    delay: 5
+  },
+  {
+    name: "Gestoría Naveira",
+    type: "Gestoría",
+    address: "Avda. Alcalde Pérez Ardá, 51-53 bajo · 15009 A Coruña",
+    phone: "981 28 00 28",
+    web: "gestorianaveira.es",
+    rating: 4.5,
+    reviews: 0,
+    desc: { es: "Gestoría con muchos años de experiencia en asesoramiento empresarial. Servicios de asesoramiento fiscal, contable, laboral, gestión administrativa y seguros.", gl: "Xestoría con moitos anos de experiencia en asesoramento empresarial.", en: "Long-established management firm with comprehensive business advisory services." },
+    tags: ["fiscal","contable","laboral","seguros","administrativo"],
+    delay: 6
+  },
+  {
+    name: "Gestoría Patricia Fernández",
+    type: "Gestoría",
+    address: "Rúa Alcalde Suárez Ferrín, 1, entresuelo · 15011 A Coruña",
+    phone: "881 00 81 30",
+    web: "",
+    rating: 4.0,
+    reviews: 53,
+    desc: { es: "Asesoría integral fiscal, laboral y administrativa para empresas y particulares. Trámites de sucesiones, transmisiones de vehículos y gestión de impuestos.", gl: "Asesoría integral fiscal, laboral e administrativa para empresas e particulares.", en: "Comprehensive tax, labour and administrative advisory for companies and individuals." },
+    tags: ["fiscal","laboral","administrativo","trafico"],
+    delay: 7
+  },
+  {
+    name: "Gestoría Pousa y Rodríguez, S.L.",
+    type: "Gestoría",
+    address: "Rda. de Outeiro, 222 · 15007 A Coruña",
+    phone: "981 24 79 11",
+    web: "",
+    rating: 4.2,
+    reviews: 121,
+    desc: { es: "Más de 25 años de experiencia. Asesoría integral en gestión administrativa, laboral, fiscal, tráfico y correduría de seguros.", gl: "Máis de 25 anos de experiencia en xestión administrativa, laboral, fiscal e seguros.", en: "Over 25 years of experience in administrative, labour, tax, traffic management and insurance." },
+    tags: ["laboral","fiscal","trafico","seguros","administrativo"],
+    delay: 8
+  },
+  {
+    name: "Asesoría Coruña",
+    type: "Asesoría",
+    address: "Rúa San Agustín, 21, 1º Izq. · 15001 A Coruña",
+    phone: "981 25 80 58",
+    web: "asesoriacoruna.es",
+    rating: null,
+    reviews: 0,
+    desc: { es: "Servicios de asesoramiento fiscal, laboral, creación de empresas, emprendedores, extranjería, protección de datos y más.", gl: "Servizos de asesoramento fiscal, laboral, creación de empresas, estranxeiría e protección de datos.", en: "Tax, labour, company formation, immigration and data protection advisory services." },
+    tags: ["fiscal","laboral","juridico","administrativo"],
+    delay: 9
+  },
+  {
+    name: "Asesoría Juan Aneiros",
+    type: "Asesoría",
+    address: "Rúa Cantón Grande, 6, 3º F · 15003 A Coruña",
+    phone: "981 22 00 21",
+    web: "asesoriajuananeiros.es",
+    rating: null,
+    reviews: 0,
+    desc: { es: "Asesoría fiscal, laboral y contable. Liderada por graduado social colegiado nº 645 con formación continua y actualización legislativa constante.", gl: "Asesoría fiscal, laboral e contable liderada por graduado social colexiado.", en: "Tax, labour and accounting advisory led by a certified social graduate." },
+    tags: ["fiscal","laboral","contable"],
+    delay: 10
+  },
+  {
+    name: "Gestoría Matogrande",
+    type: "Gestoría",
+    address: "R. Enrique Mariñas Romero, 6, Bajo Izq. · 15009 A Coruña",
+    phone: "981 10 03 80",
+    web: "gestoriamatogrande.es",
+    rating: null,
+    reviews: 0,
+    desc: { es: "Servicios integrales para empresas, pymes y autónomos. Trámites administrativos, obligaciones fiscales, contables, mercantiles y laborales.", gl: "Servizos integrais para empresas, pemes e autónomos.", en: "Comprehensive services for companies, SMEs and freelancers." },
+    tags: ["administrativo","fiscal","contable","laboral"],
+    delay: 11
+  },
+  {
+    name: "Gestoría Otero",
+    type: "Gestoría",
+    address: "Rúa Juan Flórez (Entresuelo) · 15003 A Coruña",
+    phone: "981 21 64 35",
+    web: "gestoriaotero.com",
+    rating: null,
+    reviews: 0,
+    desc: { es: "Gestoría administrativa reconocida en A Coruña. Gestión administrativa y empresarial con atención personalizada y soluciones a medida.", gl: "Xestoría administrativa recoñecida na Coruña.", en: "Recognised administrative management firm with personalised attention." },
+    tags: ["administrativo","fiscal","laboral"],
+    delay: 12
+  },
+  {
+    name: "Hermida y Campos Asesores",
+    type: "Asesoría",
+    address: "Rúa San Andrés, 139, 3º Dcha. · 15003 A Coruña",
+    phone: "981 12 15 94",
+    web: "",
+    rating: null,
+    reviews: 0,
+    desc: { es: "Asesoría laboral, fiscal y contable para empresas y particulares. Herencias, donaciones e inspecciones de trabajo y hacienda.", gl: "Asesoría laboral, fiscal e contable. Herdanzas e doazóns.", en: "Labour, tax and accounting advisory. Inheritance, donations and tax/labour inspections." },
+    tags: ["laboral","fiscal","contable","juridico"],
+    delay: 13
+  },
+  {
+    name: "Asesoría Tecla, S.L.",
+    type: "Asesoría",
+    address: "A Coruña",
+    phone: "",
+    web: "",
+    rating: null,
+    reviews: 0,
+    desc: { es: "Fundada hace más de 50 años. Servicios socio-laborales, fiscales, contables y gestoría administrativa. Colaboradores externos en propiedad industrial, seguros y servicios jurídicos.", gl: "Fundada hai máis de 50 anos. Servizos laboral-sociais, fiscais, contables e xestoría administrativa.", en: "Founded over 50 years ago. Labour, tax, accounting and administrative management services." },
+    tags: ["laboral","fiscal","contable","administrativo"],
+    delay: 14
+  },
+  {
+    name: "Hércules Gestión",
+    type: "Gestoría",
+    address: "A Coruña",
+    phone: "",
+    web: "",
+    rating: null,
+    reviews: 0,
+    desc: { es: "Gestoría de reconocido prestigio en la ciudad de A Coruña. Servicios de asesoría con máximo grado de profesionalidad y seriedad.", gl: "Xestoría de recoñecido prestixio na cidade da Coruña.", en: "Prestigious management firm in A Coruña offering professional advisory services." },
+    tags: ["administrativo","fiscal"],
+    delay: 15
+  },
+  {
+    name: "Eyfe Consultoría",
+    type: "Consultoría",
+    address: "C/ Sinforiano López, 37, Entrep. · 15005 A Coruña",
+    phone: "",
+    web: "",
+    rating: null,
+    reviews: 0,
+    desc: { es: "Consultores especializados en el área financiera y fiscal. Asesoramiento integral personalizado para grandes, medianas y pequeñas empresas y autónomos.", gl: "Consultores especializados na área financeira e fiscal.", en: "Specialists in financial and tax consulting for large and small businesses." },
+    tags: ["fiscal","laboral","juridico","contable"],
+    delay: 16
+  },
+  {
+    name: "Aclunia Asesores",
+    type: "Asesoría",
+    address: "A Coruña",
+    phone: "",
+    web: "",
+    rating: null,
+    reviews: 0,
+    desc: { es: "Despacho jurídico-financiero orientado al asesoramiento integral de emprendedores, empresas y profesionales.", gl: "Despacho xurídico-financeiro orientado ao asesoramento integral.", en: "Legal-financial firm focused on comprehensive advisory for entrepreneurs and businesses." },
+    tags: ["juridico","fiscal","contable"],
+    delay: 17
+  },
+  {
+    name: "Verdía Asesores y Consultores",
+    type: "Consultoría",
+    address: "A Coruña",
+    phone: "",
+    web: "",
+    rating: null,
+    reviews: 0,
+    desc: { es: "Asesoramiento tributario, contable, económico-financiero, jurídico y laboral. Proyectos singulares, captación de ayudas y subvenciones. Cobertura aseguradora, auditoría e intermediación financiera.", gl: "Asesoramento tributario, contable, xurídico e laboral. Captación de axudas e subvencións.", en: "Tax, accounting, financial, legal and labour advisory. Grant support, auditing and financial intermediation." },
+    tags: ["fiscal","contable","juridico","laboral","seguros"],
+    delay: 18
+  },
+  {
+    name: "Ahorro Fiscal",
+    type: "Asesoría Online",
+    address: "A Coruña (servicio online)",
+    phone: "",
+    web: "",
+    rating: null,
+    reviews: 0,
+    desc: { es: "Asesoría 360º online y sin papeles: fiscal, contable, laboral, jurídico-laboral y protección patrimonial. Soluciones personalizadas para autónomos y empresas.", gl: "Asesoría 360º online: fiscal, contable, laboral e protección patrimonial.", en: "Fully online 360° advisory: tax, accounting, labour and wealth protection." },
+    tags: ["fiscal","contable","laboral","juridico"],
+    delay: 19
+  },
+  {
+    name: "Gestoría Raposo",
+    type: "Gestoría",
+    address: "A Coruña",
+    phone: "",
+    web: "",
+    rating: null,
+    reviews: 0,
+    desc: { es: "Empresa con larga experiencia. Asesoramiento profesional, subvenciones y gestión de vehículos.", gl: "Empresa con longa traxectoria. Asesoramento profesional, subvencións e xestión de vehículos.", en: "Long-established firm. Professional advisory, grants and vehicle management." },
+    tags: ["administrativo","trafico"],
+    delay: 20
+  },
+  {
+    name: "CE Consulting",
+    type: "Consultoría",
+    address: "Calle Venezuela · A Coruña",
+    phone: "",
+    web: "ceconsulting.es",
+    rating: null,
+    reviews: 0,
+    desc: { es: "Proveedor global de una amplia gama de servicios de asesoría. Integral empresarial, fiscal y laboral.", gl: "Proveedor global de asesoría integral empresarial, fiscal e laboral.", en: "Global provider of comprehensive business, tax and labour advisory services." },
+    tags: ["fiscal","laboral","contable","administrativo"],
+    delay: 21
+  }
+];
+
+/* ============================================================
+   STATE
+   ============================================================ */
+let activeLang = 'es';
+let activeFilter = 'all';
+let darkMode = true;
+let fsSizes = ['0.88rem','1rem','1.12rem'];
+let fsIndex = 1;
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+function starsHTML(rating) {
+  if (!rating) return '';
+  const full = Math.round(rating);
+  return '★'.repeat(full) + '☆'.repeat(5 - full);
+}
+
+function renderCards() {
+  const q = document.getElementById('searchInput').value.toLowerCase().trim();
+  const grid = document.getElementById('grid');
+
+  const filtered = FIRMS.filter(f => {
+    const matchFilter = activeFilter === 'all' || f.tags.includes(activeFilter);
+    const matchSearch = !q
+      || f.name.toLowerCase().includes(q)
+      || f.address.toLowerCase().includes(q)
+      || (f.web && f.web.toLowerCase().includes(q))
+      || f.tags.some(t => t.includes(q));
+    return matchFilter && matchSearch;
+  });
+
+  document.getElementById('statTotal').textContent = filtered.length;
+  document.getElementById('countBadge').textContent = filtered.length + ' resultado' + (filtered.length !== 1 ? 's' : '');
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `<div class="empty" data-es="Sin resultados para esta búsqueda" data-en="No results found" data-gl="Sen resultados">Sin resultados para esta búsqueda</div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map((f, i) => {
+    const delay = (i * 0.05).toFixed(2);
+    const desc = f.desc[activeLang] || f.desc.es;
+    const tagLabels = {
+      fiscal: { es:'Fiscal', gl:'Fiscal', en:'Tax' },
+      laboral: { es:'Laboral', gl:'Laboral', en:'Labour' },
+      contable: { es:'Contable', gl:'Contable', en:'Accounting' },
+      juridico: { es:'Jurídico', gl:'Xurídico', en:'Legal' },
+      administrativo: { es:'Administrativo', gl:'Administrativo', en:'Administrative' },
+      trafico: { es:'Tráfico', gl:'Tráfico', en:'Traffic' },
+      seguros: { es:'Seguros', gl:'Seguros', en:'Insurance' }
+    };
+
+    return `<article class="card" style="animation-delay:${delay}s">
+      <div class="card-header">
+        <div class="card-name">${f.name}</div>
+        ${f.rating ? `<div class="rating">
+          <div class="stars">${starsHTML(f.rating)}</div>
+          <div class="rating-score">${f.rating.toFixed(1)}${f.reviews ? ' · ' + f.reviews + ' reseñas' : ''}</div>
+        </div>` : ''}
+      </div>
+      <div class="card-type-badge">${f.type}</div>
+      <div class="card-address">
+        <span class="card-address-icon">◈</span>
+        <span>${f.address}</span>
+      </div>
+      ${f.phone ? `<a class="card-phone" href="tel:${f.phone.replace(/\s/g,'')}">
+        <span>☏</span> ${f.phone}
+      </a>` : ''}
+      ${f.web ? `<a class="card-web" href="https://${f.web}" target="_blank" rel="noopener">
+        <span>↗</span> ${f.web}
+      </a>` : ''}
+      <p class="card-desc">${desc}</p>
+      <div class="tags">${f.tags.map(t => `<span class="tag">${tagLabels[t]?.[activeLang]||t}</span>`).join('')}</div>
+    </article>`;
+  }).join('');
+}
+
+/* ============================================================
+   FILTERS
+   ============================================================ */
+function setPill(el, filter) {
+  activeFilter = filter;
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  applyFilters();
+}
+
+function applyFilters() { renderCards(); }
+
+/* ============================================================
+   LANG
+   ============================================================ */
+function setLang(lang) {
+  activeLang = lang;
+  document.querySelectorAll('[data-es]').forEach(el => {
+    const txt = el.getAttribute('data-' + lang) || el.getAttribute('data-es');
+    if (el.tagName === 'H1') {
+      el.innerHTML = txt;
+    } else {
+      el.textContent = txt;
+    }
+  });
+  ['btn-es','btn-gl','btn-en'].forEach(id => document.getElementById(id).classList.remove('active'));
+  document.getElementById('btn-' + lang).classList.add('active');
+  document.getElementById('searchInput').placeholder =
+    lang === 'en' ? 'Search by name, street…' : lang === 'gl' ? 'Buscar por nome, rúa…' : 'Buscar por nombre, calle…';
+  renderCards();
+}
+
+/* ============================================================
+   THEME / FONT
+   ============================================================ */
+function toggleMode() {
+  darkMode = !darkMode;
+  document.body.classList.toggle('light-mode', !darkMode);
+  document.getElementById('modeBtn').textContent = darkMode ? '☀' : '☾';
+}
+
+function setFs(dir) {
+  if (dir === 0) fsIndex = 1;
+  else fsIndex = Math.max(0, Math.min(2, fsIndex + dir));
+  document.documentElement.style.setProperty('--fs', fsSizes[fsIndex]);
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+renderCards();
+</script>
+</body>
+</html>
