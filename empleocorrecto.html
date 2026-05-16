@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Coste de Devaluarse · Lophersson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400;1,600&family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:          #f5ede0;
+    --bg-alt:      #ede0ce;
+    --bg-card:     #faf4eb;
+    --text-main:   #2e1e0f;
+    --text-body:   #4a3320;
+    --text-muted:  #7a5c3e;
+    --accent:      #9a6c28;
+    --accent-deep: #6b4515;
+    --gold:        #c4903a;
+    --gold-light:  #e8c06a;
+    --border:      #d4b07a;
+    --border-light:#e8d5b0;
+    --pull-bg:     #f0e4cc;
+    --shadow:      rgba(100,60,10,0.12);
+
+    /* dark mode toggle button */
+    --btn-dm-1: #7c3aed;
+    --btn-dm-2: #3b82f6;
+    --btn-dm-3: #ec4899;
+
+    /* lang buttons */
+    --btn-lang-bg: #d4b07a;
+    --btn-lang-hover: #9a6c28;
+  }
+
+  [data-theme="dark"] {
+    --bg:          #0f0a05;
+    --bg-alt:      #1a1005;
+    --bg-card:     #1f1408;
+    --text-main:   #f0dfc0;
+    --text-body:   #d4bc96;
+    --text-muted:  #9a7d58;
+    --accent:      #c4903a;
+    --accent-deep: #e8c06a;
+    --gold:        #d4a84a;
+    --gold-light:  #f0cc7a;
+    --border:      #4a3010;
+    --border-light:#3a2008;
+    --pull-bg:     #1f1408;
+    --shadow:      rgba(0,0,0,0.4);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Lora', Georgia, serif;
+    background: var(--bg);
+    color: var(--text-body);
+    min-height: 100vh;
+    transition: background 0.4s, color 0.4s;
+    line-height: 1.8;
+  }
+
+  /* ── HEADER BAR ── */
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.7rem 2rem;
+    gap: 1rem;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 2px 12px var(--shadow);
+  }
+
+  .topbar-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .topbar-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .lang-btn {
+    padding: 0.3rem 0.75rem;
+    border: 1.5px solid var(--btn-lang-bg);
+    background: transparent;
+    color: var(--accent);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+
+  .lang-btn:hover, .lang-btn.active {
+    background: var(--btn-lang-hover);
+    border-color: var(--btn-lang-hover);
+    color: #fff;
+  }
+
+  .dm-btn {
+    padding: 0.3rem 0.9rem;
+    border: none;
+    background: linear-gradient(135deg, var(--btn-dm-1), var(--btn-dm-2), var(--btn-dm-3));
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: opacity 0.25s, transform 0.2s;
+  }
+
+  .dm-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+
+  /* ── HERO ── */
+  .hero {
+    max-width: 780px;
+    margin: 4rem auto 0;
+    padding: 0 2rem;
+    text-align: center;
+    animation: fadeUp 0.7s ease both;
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.2rem;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    font-weight: 800;
+    color: var(--text-main);
+    line-height: 1.18;
+    margin-bottom: 1.4rem;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .hero-sub {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    max-width: 600px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.7;
+  }
+
+  .divider-ornament {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    margin: 2rem auto;
+    color: var(--gold);
+  }
+
+  .divider-ornament::before,
+  .divider-ornament::after {
+    content: '';
+    flex: 1;
+    max-width: 80px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold));
+  }
+  .divider-ornament::after {
+    background: linear-gradient(to left, transparent, var(--gold));
+  }
+
+  /* ── ARTICLE BODY ── */
+  .article-wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 1rem 2rem 6rem;
+  }
+
+  .section {
+    margin-bottom: 3.5rem;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .section:nth-child(2) { animation-delay: 0.1s; }
+  .section:nth-child(3) { animation-delay: 0.2s; }
+  .section:nth-child(4) { animation-delay: 0.3s; }
+  .section:nth-child(5) { animation-delay: 0.4s; }
+  .section:nth-child(6) { animation-delay: 0.5s; }
+
+  .section-number {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.4rem;
+  }
+
+  .section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.55rem;
+    font-weight: 700;
+    color: var(--text-main);
+    line-height: 1.3;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1.5px solid var(--border-light);
+  }
+
+  .section p {
+    margin-bottom: 1.1rem;
+    font-size: 1.01rem;
+    color: var(--text-body);
+  }
+
+  .section p:last-child { margin-bottom: 0; }
+
+  /* Pull quote */
+  .pull-quote {
+    background: var(--pull-bg);
+    border-left: 4px solid var(--gold);
+    border-radius: 0 6px 6px 0;
+    padding: 1.4rem 1.8rem;
+    margin: 2rem 0;
+    position: relative;
+  }
+
+  .pull-quote::before {
+    content: '\201C';
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem;
+    color: var(--gold-light);
+    opacity: 0.5;
+    position: absolute;
+    top: -0.5rem;
+    left: 1rem;
+    line-height: 1;
+  }
+
+  .pull-quote p {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.08rem;
+    color: var(--accent-deep);
+    margin: 0;
+    padding-left: 1.2rem;
+  }
+
+  [data-theme="dark"] .pull-quote p {
+    color: var(--gold-light);
+  }
+
+  /* Concept box */
+  .concept-box {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.4rem 1.8rem;
+    margin: 2rem 0;
+  }
+
+  .concept-box .concept-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+
+  .concept-box .concept-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 0.7rem;
+  }
+
+  .concept-box p {
+    font-size: 0.95rem;
+    margin-bottom: 0;
+  }
+
+  /* Key point list */
+  .key-list {
+    list-style: none;
+    margin: 1.2rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .key-list li {
+    display: flex;
+    gap: 0.8rem;
+    align-items: flex-start;
+    font-size: 0.98rem;
+    color: var(--text-body);
+  }
+
+  .key-list li::before {
+    content: '◆';
+    color: var(--gold);
+    font-size: 0.6rem;
+    margin-top: 0.38rem;
+    flex-shrink: 0;
+  }
+
+  /* Analogy card */
+  .analogy-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.6rem 2rem;
+    margin: 2rem 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .analogy-side {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .analogy-side .label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .analogy-side .value {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--text-main);
+    font-weight: 600;
+  }
+
+  .analogy-side p {
+    font-size: 0.9rem;
+    margin: 0;
+  }
+
+  .analogy-divider {
+    grid-column: 1 / -1;
+    height: 1px;
+    background: var(--border-light);
+  }
+
+  /* Closing */
+  .closing {
+    text-align: center;
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-light);
+  }
+
+  .closing p {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--text-muted);
+  }
+
+  .closing .sig {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-top: 1rem;
+  }
+
+  /* Highlight inline */
+  strong { color: var(--accent-deep); font-weight: 600; }
+  [data-theme="dark"] strong { color: var(--gold-light); }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .topbar { padding: 0.6rem 1rem; }
+    .hero, .article-wrap { padding-left: 1.2rem; padding-right: 1.2rem; }
+    .analogy-card { grid-template-columns: 1fr; }
+    .analogy-divider { display: none; }
+  }
+
+  /* Hidden language sections */
+  [data-lang] { display: none; }
+  [data-lang].visible { display: block; }
+</style>
+</head>
+<body data-theme="light">
+
+<!-- TOP BAR -->
+<header class="topbar">
+  <span class="topbar-brand">Análisis · Carrera Profesional</span>
+  <div class="topbar-controls">
+    <button class="lang-btn active" onclick="setLang('es', this)">ES</button>
+    <button class="lang-btn" onclick="setLang('pt', this)">PT</button>
+    <button class="lang-btn" onclick="setLang('en', this)">EN</button>
+    <button class="dm-btn" onclick="toggleDark()" id="dmBtn">◑ Modo Oscuro</button>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════ ESPAÑOL ══ -->
+<div data-lang="es" class="visible">
+
+  <div class="hero">
+    <p class="hero-eyebrow">Psicología del Trabajo · Estrategia Profesional</p>
+    <h1>El Coste de <em>Devaluarse</em>:<br>Por Qué el Empleo Urgente<br>No Siempre Es el Empleo Correcto</h1>
+    <p class="hero-sub">Aceptar cualquier trabajo por el simple hecho de estar empleado puede parecer prudente. Pero para perfiles especializados, la urgencia mal gestionada tiene un precio que no siempre aparece en la nómina.</p>
+    <div class="divider-ornament">✦</div>
+  </div>
+
+  <div class="article-wrap">
+
+    <div class="section">
+      <p class="section-number">01 — Premisa</p>
+      <h2>Buscar empleo no es sinónimo de aceptar cualquier cosa</h2>
+      <p>Existe una confusión cultural profundamente arraigada entre <strong>disponibilidad laboral</strong> y <strong>adecuación profesional</strong>. La presión social y, con frecuencia, la familiar, tienden a equiparar el hecho de no trabajar con la obligación de aceptar cualquier oferta disponible, independientemente de su naturaleza, remuneración o alineación con el perfil del candidato.</p>
+      <p>Esta premisa, además de ser económicamente discutible, tiene fundamentos psicológicos y estratégicos que merece la pena examinar con rigor. Una persona especializada en análisis financiero, control de gestión o tecnología de datos no se convierte, por el mero hecho de estar en búsqueda activa, en un perfil genérico apto para cualquier puesto. Del mismo modo en que un cirujano ortopédico en paro temporal no sería la primera opción para un puesto de administrativo, un analista financiero con años de formación acumulada no debería orientarse reflexivamente hacia empleos de baja cualificación como si su trayectoria no existiera.</p>
+
+      <div class="pull-quote">
+        <p>La búsqueda de empleo estratégica no es arrogancia. Es la aplicación del mismo principio con el que cualquier empresa gestiona sus activos: maximizar el retorno sobre la inversión realizada.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <p class="section-number">02 — Teoría del Capital Humano</p>
+      <h2>La especialización como activo depreciable: el riesgo del subempleo voluntario</h2>
+      <p>La <strong>teoría del capital humano</strong>, formulada por Gary Becker (Premio Nobel de Economía, 1992), establece que la formación y la experiencia son inversiones cuyo retorno se materializa a lo largo del tiempo en forma de mayor productividad, empleabilidad y salario. Este capital no es estático: se aprecia con el uso continuado en el sector correcto y se deprecia con el abandono o la subutilización.</p>
+      <p>El subempleo voluntario —aceptar un puesto muy por debajo de las capacidades y formación de una persona— genera lo que los economistas del trabajo denominan <strong>skill fade</strong> o atrofia de competencias. Las habilidades técnicas altamente especializadas (modelización financiera, programación, análisis de datos, auditoría) requieren práctica activa y entornos estimulantes para mantenerse vigentes. Un período prolongado alejado del sector cualificado no solo no desarrolla estas capacidades: las erosiona.</p>
+
+      <div class="concept-box">
+        <p class="concept-label">Concepto clave</p>
+        <p class="concept-title">Skill Fade — Atrofia de Competencias</p>
+        <p>Proceso por el cual habilidades técnicas adquiridas mediante formación y experiencia se deterioran progresivamente cuando no se ejercitan en el entorno profesional adecuado. Documentado ampliamente en estudios de economía laboral como factor que penaliza la reinserción de trabajadores desempleados de larga duración en su sector original.</p>
+      </div>
+
+      <p>Más allá del plano técnico, el subempleo crónico genera lo que la psicología organizacional denomina <strong>disonancia de rol</strong>: la divergencia entre la identidad profesional interiorizada de una persona y las funciones que desempeña efectivamente. Esta disonancia está asociada a reducción de autoestima laboral, aumento del síndrome de burnout atípico (no por exceso de trabajo, sino por falta de significado) y dificultades para reintegrarse con confianza en el mercado cualificado.</p>
+    </div>
+
+    <div class="section">
+      <p class="section-number">03 — Economía Laboral</p>
+      <h2>El coste de oportunidad real: lo que no aparece en la nómina</h2>
+      <p>La racionalidad económica convencional sugiere que cualquier ingreso es mejor que ninguno. Esta lógica, válida en contextos de subsistencia, falla sistemáticamente cuando se aplica a perfiles cualificados con perspectivas reales de inserción en su sector. El análisis correcto no es <em>«algo es mejor que nada»</em>, sino <strong>«¿cuánto me cuesta esta decisión a doce, veinticuatro y treinta y seis meses?»</strong></p>
+
+      <ul class="key-list">
+        <li><strong>Coste de señalización negativa:</strong> el mercado laboral interpreta los movimientos en el CV. Un período en un puesto muy alejado del perfil no se lee como resiliencia: con frecuencia se lee como desconexión del sector, lo que puede generar dudas en futuros empleadores sobre el compromiso y la vigencia del conocimiento técnico.</li>
+        <li><strong>Coste salarial diferencial:</strong> la diferencia entre el salario de un analista financiero junior-medio y el Salario Mínimo Interprofesional puede representar entre 600 y 1.200 euros mensuales. Multiplicado por doce meses, supone entre 7.200 y 14.400 euros de renta bruta renunciada, sin contar cotizaciones a la seguridad social y bases de futura pensión.</li>
+        <li><strong>Coste de red profesional:</strong> los entornos laborales son los principales generadores de contactos de valor. Trabajar en un sector ajeno desconecta de la red de profesionales, empresas y proyectos que son los canales reales de movilidad laboral en sectores especializados.</li>
+        <li><strong>Coste cognitivo:</strong> la jornada laboral, incluso en puestos de baja cualificación, ocupa tiempo y energía mental. La fatiga que genera limita la capacidad de formación continua, preparación de entrevistas técnicas y búsqueda activa de oportunidades cualificadas.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <p class="section-number">04 — Psicología Cognitiva</p>
+      <h2>Identidad profesional, autoestima y el sesgo de la urgencia</h2>
+      <p>La <strong>Teoría de la Identidad Social</strong> (Tajfel y Turner, 1979) propone que una parte significativa del autoconcepto de las personas deriva de su pertenencia a grupos sociales y profesionales. Para individuos con alta inversión en formación especializada, la identidad profesional no es un accesorio: es un componente central de cómo se perciben y de cómo interpretan su valor en el mundo.</p>
+      <p>La aceptación de empleos sistemáticamente por debajo del perfil puede activar lo que los psicólogos cognitivos denominan <strong>autoesquemas negativos</strong>: estructuras mentales que reinterpretan las circunstancias como evidencia de incapacidad o fracaso, aunque la causa real sea estructural (ciclo económico, geografía, sector). Esta reinterpretación, si se consolida, genera un efecto de profecía autocumplida: la persona reduce sus expectativas, transmite menor confianza en entrevistas y acepta condiciones progresivamente inferiores.</p>
+
+      <div class="pull-quote">
+        <p>La urgencia económica es un factor real que merece toda la consideración. Pero la urgencia también es un estado cognitivo que distorsiona la evaluación de opciones, comprima los horizontes temporales y favorece decisiones subóptimas a largo plazo.</p>
+      </div>
+
+      <p>El psicólogo Daniel Kahneman, en su distinción entre <em>Sistema 1</em> (pensamiento rápido, emocional) y <em>Sistema 2</em> (pensamiento lento, deliberado), documentó extensamente cómo la presión y la ansiedad activan preferentemente el Sistema 1, generando decisiones impulsivas que priorizan el alivio inmediato sobre el beneficio sostenido. La búsqueda de empleo estratégica requiere exactamente lo contrario: sostener la incomodidad de la espera para tomar decisiones de mayor calidad.</p>
+    </div>
+
+    <div class="section">
+      <p class="section-number">05 — Estrategia Profesional</p>
+      <h2>El perfil especializado exige una búsqueda diferente, no una búsqueda desesperada</h2>
+      <p>Los perfiles generalistas y los perfiles especializados no comparten los mismos mecanismos de inserción laboral. Un perfil generalista puede insertarse con relativa rapidez en múltiples sectores porque su valor radica precisamente en la adaptabilidad. Un perfil especializado —técnico-financiero, tecnológico, analítico— tiene un mercado objetivo más estrecho pero con <strong>mayor valor unitario</strong>: menor volumen de oportunidades, pero oportunidades de mayor calidad relativa.</p>
+      <p>Esta diferencia estructural implica que la métrica correcta no es el número de candidaturas enviadas ni la velocidad de obtención de una oferta, sino la <strong>tasa de adecuación entre oferta y perfil</strong>. Una búsqueda de mayor duración que concluye en un puesto alineado con la formación y la experiencia produce resultados cuantificablemente superiores, tanto en salario inicial como en progresión a tres, cinco y diez años.</p>
+
+      <div class="analogy-card">
+        <div class="analogy-side">
+          <span class="label">Activo empresarial</span>
+          <span class="value">Maquinaria especializada</span>
+          <p>Una empresa no liquida su maquinaria de precisión a precio de chatarra solo porque no esté produciendo temporalmente. Espera el momento o cliente adecuado para maximizar el valor de venta o alquiler.</p>
+        </div>
+        <div class="analogy-divider"></div>
+        <div class="analogy-side">
+          <span class="label">Capital humano especializado</span>
+          <span class="value">Perfil técnico cualificado</span>
+          <p>Un profesional especializado no debería aceptar cualquier empleo a cualquier precio solo por estar en búsqueda. Su conocimiento acumulado tiene un valor de mercado que merece ser negociado, no liquidado.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <p class="section-number">06 — Matiz Necesario</p>
+      <h2>Flexibilidad táctica frente a rendición estratégica</h2>
+      <p>Este análisis no pretende construir un argumento contra la flexibilidad laboral, ni contra quienes trabajan en sectores distintos al de su formación. Cada situación personal tiene variables únicas —presión económica, cargas familiares, plazos— que ningún análisis general puede evaluar completamente. Existen circunstancias reales en las que aceptar temporalmente un empleo fuera del perfil es la decisión más racional disponible, y hacerlo con inteligencia —manteniendo la búsqueda activa, usando el período para formarse o para ahorrar— es perfectamente legítimo.</p>
+      <p>La distinción crítica es entre <strong>flexibilidad táctica</strong> —una decisión consciente, temporal y acotada— y <strong>rendición estratégica</strong> —la aceptación pasiva de cualquier condición como si la trayectoria acumulada fuera irrelevante. La primera es adaptación inteligente. La segunda es una forma de autolesión profesional que el entorno social a veces presenta, equivocadamente, como madurez o responsabilidad.</p>
+
+      <ul class="key-list">
+        <li>Nadie cuestiona la resiliencia de quien adapta su búsqueda ante condiciones adversas. Lo que merece cuestionarse es la narrativa que equipara especialización con inflexibilidad.</li>
+        <li>La paciencia estratégica en la búsqueda de empleo no es pasividad: es la inversión de tiempo en encontrar la mejor opción posible, no la primera opción disponible.</li>
+        <li>El mercado laboral, como cualquier mercado, recompensa a quienes conocen su valor y lo defienden con criterio. La autodepreciación no genera respeto ni mejores condiciones: genera precedentes desfavorables.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <p class="section-number">07 — Conclusión</p>
+      <h2>Rentabilizar el capital humano es un acto de inteligencia, no de orgullo</h2>
+      <p>La presión social que lleva a equiparar desempleo con obligación de aceptar cualquier cosa descansa en una concepción estática e indiferenciada del trabajo. Ignora que el mercado laboral es heterogéneo, que los perfiles tienen valores distintos, y que las decisiones de inserción tienen consecuencias que se extienden mucho más allá del mes en que se toman.</p>
+      <p>Defender el propio valor de mercado, buscar con criterio, y rechazar empleos que deterioran el perfil o agotan recursos sin compensación adecuada no es arrogancia. Es la misma lógica con la que cualquier agente económico racional gestiona sus recursos escasos: intentando obtener el mayor retorno posible sobre la inversión realizada.</p>
+      <p>Años de formación, experiencia sectorial y conocimientos técnicos especializados son un capital real, invisible en el balance personal pero cuantificable en el mercado. Tratarlo como si no tuviera valor porque las circunstancias son adversas es, paradójicamente, la peor decisión que puede tomarse precisamente cuando más importa tomar decisiones correctas.</p>
+
+      <div class="pull-quote">
+        <p>La diferencia entre quienes se recuperan de una crisis profesional y quienes no suele residir menos en el talento y más en la capacidad de sostener una búsqueda de calidad bajo presión, sin capitular ante la primera opción disponible.</p>
+      </div>
+    </div>
+
+    <div class="closing">
+      <p>El trabajo correcto no siempre es el trabajo inmediato.<br>Pero el trabajo inmediato correcto es seguir buscando el correcto.</p>
+      <p class="sig">— Lophersson · Análisis Profesional</p>
+    </div>
+
+  </div>
+</div>
+<!-- ═══════════════════════════════════════════════ FIM ES ══ -->
+
+
+<!-- ═══════════════════════════════════════════════ PORTUGUÊS ══ -->
+<div data-lang="pt">
+
+  <div class="hero">
+    <p class="hero-eyebrow">Psicologia do Trabalho · Estratégia Profissional</p>
+    <h1>O Custo de <em>Se Desvalorizar</em>:<br>Por Que o Emprego Urgente<br>Nem Sempre É o Emprego Certo</h1>
+    <p class="hero-sub">Aceitar qualquer trabalho pelo simples facto de estar empregado pode parecer prudente. Mas para perfis especializados, a urgência mal gerida tem um preço que nem sempre aparece no recibo de vencimento.</p>
+    <div class="divider-ornament">✦</div>
+  </div>
+
+  <div class="article-wrap">
+
+    <div class="section">
+      <p class="section-number">01 — Premissa</p>
+      <h2>Procurar emprego não é sinónimo de aceitar qualquer coisa</h2>
+      <p>Existe uma confusão cultural profundamente enraizada entre <strong>disponibilidade laboral</strong> e <strong>adequação profissional</strong>. A pressão social — e frequentemente familiar — tende a equiparar o facto de não trabalhar com a obrigação de aceitar qualquer oferta disponível, independentemente da sua natureza, remuneração ou alinhamento com o perfil do candidato.</p>
+      <p>Esta premissa, além de ser economicamente discutível, tem fundamentos psicológicos e estratégicos que merecem ser examinados com rigor. Uma pessoa especializada em análise financeira, controlo de gestão ou tecnologia de dados não se transforma, pelo simples facto de estar em busca activa, num perfil genérico apto para qualquer posto. Tal como um cirurgião ortopédico temporariamente desempregado não seria a primeira escolha para um posto administrativo, um analista financeiro com anos de formação acumulada não deveria orientar-se reflexivamente para empregos de baixa qualificação como se a sua trajectória não existisse.</p>
+
+      <div class="pull-quote">
+        <p>A procura estratégica de emprego não é arrogância. É a aplicação do mesmo princípio com que qualquer empresa gere os seus activos: maximizar o retorno sobre o investimento realizado.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <p class="section-number">02 — Teoria do Capital Humano</p>
+      <h2>A especialização como activo depreciável: o risco do subemprego voluntário</h2>
+      <p>A <strong>teoria do capital humano</strong>, formulada por Gary Becker (Prémio Nobel de Economia, 1992), estabelece que a formação e a experiência são investimentos cujo retorno se materializa ao longo do tempo em maior produtividade, empregabilidade e salário. Este capital não é estático: aprecia-se com o uso continuado no sector correcto e deprecia-se com o abandono ou a subutilização.</p>
+      <p>O subemprego voluntário — aceitar um posto muito abaixo das capacidades e formação de uma pessoa — gera o que os economistas do trabalho denominam <strong>skill fade</strong> ou atrofia de competências. As competências técnicas altamente especializadas requerem prática activa e ambientes estimulantes para se manterem actualizadas. Um período prolongado afastado do sector qualificado não só não desenvolve estas capacidades: erosiona-as.</p>
+
+      <div class="concept-box">
+        <p class="concept-label">Conceito-chave</p>
+        <p class="concept-title">Skill Fade — Atrofia de Competências</p>
+        <p>Processo pelo qual competências técnicas adquiridas mediante formação e experiência se deterioram progressivamente quando não são exercidas no ambiente profissional adequado. Documentado amplamente em estudos de economia laboral como factor que penaliza a reintegração de trabalhadores desempregados de longa duração no seu sector original.</p>
+      </div>
+
+      <p>Para além do plano técnico, o subemprego crónico gera o que a psicologia organizacional denomina <strong>dissonância de papel</strong>: a divergência entre a identidade profissional interiorizada de uma pessoa e as funções que desempenha efectivamente. Esta dissonância está associada à redução da autoestima laboral, ao aumento da síndrome de burnout atípico e a dificuldades para reintegrar com confiança o mercado qualificado.</p>
+    </div>
+
+    <div class="section">
+      <p class="section-number">03 — Economia Laboral</p>
+      <h2>O custo de oportunidade real: o que não aparece no recibo</h2>
+      <p>A racionalidade económica convencional sugere que qualquer rendimento é melhor do que nenhum. Esta lógica, válida em contextos de subsistência, falha sistematicamente quando aplicada a perfis qualificados com perspectivas reais de inserção no seu sector. A análise correcta não é <em>«algo é melhor que nada»</em>, mas <strong>«quanto me custa esta decisão a doze, vinte e quatro e trinta e seis meses?»</strong></p>
+
+      <ul class="key-list">
+        <li><strong>Custo de sinalização negativa:</strong> o mercado laboral interpreta os movimentos no CV. Um período num posto muito afastado do perfil não é lido como resiliência: frequentemente é lido como desconexão do sector.</li>
+        <li><strong>Custo salarial diferencial:</strong> a diferença entre o salário de um analista financeiro e o Salário Mínimo pode representar centenas de euros mensais, com implicações directas na progressão da carreira e nas contribuições para a segurança social.</li>
+        <li><strong>Custo de rede profissional:</strong> os ambientes laborais são os principais geradores de contactos de valor. Trabalhar num sector alheio desconecta da rede de profissionais e empresas que são os canais reais de mobilidade laboral.</li>
+        <li><strong>Custo cognitivo:</strong> mesmo em postos de baixa qualificação, a jornada laboral ocupa tempo e energia mental, limitando a capacidade de formação contínua e a procura activa de oportunidades qualificadas.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <p class="section-number">04 — Psicologia Cognitiva</p>
+      <h2>Identidade profissional, autoestima e o viés da urgência</h2>
+      <p>A <strong>Teoria da Identidade Social</strong> (Tajfel e Turner, 1979) propõe que uma parte significativa do autoconceito das pessoas deriva da sua pertença a grupos sociais e profissionais. Para indivíduos com elevado investimento em formação especializada, a identidade profissional não é um acessório: é um componente central de como se percebem e interpretam o seu valor no mundo.</p>
+      <p>A aceitação de empregos sistematicamente abaixo do perfil pode activar o que os psicólogos cognitivos denominam <strong>autoesquemas negativos</strong>: estruturas mentais que reinterpretam as circunstâncias como evidência de incapacidade ou fracasso, gerando um efeito de profecia autocumprida que leva a reduzir progressivamente as expectativas.</p>
+
+      <div class="pull-quote">
+        <p>A urgência económica é um factor real que merece toda a consideração. Mas a urgência também é um estado cognitivo que distorce a avaliação de opções, comprime os horizontes temporais e favorece decisões subóptimas a longo prazo.</p>
+      </div>
+
+      <p>O psicólogo Daniel Kahneman documentou como a pressão e a ansiedade activam o pensamento rápido e emocional em detrimento do pensamento deliberado. A procura estratégica de emprego requer exactamente o contrário: sustentar o desconforto da espera para tomar decisões de maior qualidade.</p>
+    </div>
+
+    <div class="section">
+      <p class="section-number">05 — Estratégia Profissional</p>
+      <h2>O perfil especializado exige uma procura diferente, não uma procura desesperada</h2>
+      <p>Os perfis generalistas e os especializados não partilham os mesmos mecanismos de inserção laboral. Um perfil especializado tem um mercado-alvo mais estreito mas com <strong>maior valor unitário</strong>: menor volume de oportunidades, mas oportunidades de maior qualidade relativa.</p>
+
+      <div class="analogy-card">
+        <div class="analogy-side">
+          <span class="label">Activo empresarial</span>
+          <span class="value">Maquinaria especializada</span>
+          <p>Uma empresa não liquida a sua maquinaria de precisão a preço de sucata só porque não está a produzir temporariamente. Aguarda o momento ou cliente adequado para maximizar o valor.</p>
+        </div>
+        <div class="analogy-divider"></div>
+        <div class="analogy-side">
+          <span class="label">Capital humano especializado</span>
+          <span class="value">Perfil técnico qualificado</span>
+          <p>Um profissional especializado não deveria aceitar qualquer emprego a qualquer preço só por estar em busca. O seu conhecimento acumulado tem um valor de mercado que merece ser negociado, não liquidado.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <p class="section-number">06 — Matiz Necessário</p>
+      <h2>Flexibilidade táctica versus rendição estratégica</h2>
+      <p>A distinção crítica é entre <strong>flexibilidade táctica</strong> — uma decisão consciente, temporária e delimitada — e <strong>rendição estratégica</strong> — a aceitação passiva de qualquer condição como se a trajectória acumulada fosse irrelevante. A primeira é adaptação inteligente. A segunda é uma forma de autolesão profissional que o ambiente social apresenta, erroneamente, como maturidade ou responsabilidade.</p>
+
+      <ul class="key-list">
+        <li>A paciência estratégica na procura de emprego não é passividade: é o investimento de tempo em encontrar a melhor opção possível, não a primeira opção disponível.</li>
+        <li>O mercado laboral recompensa quem conhece o seu valor e o defende com critério. A autodepreciação não gera respeito nem melhores condições: gera precedentes desfavoráveis.</li>
+        <li>Aceitar condições temporariamente por razões de força maior é legítimo e inteligente quando a estratégia de saída para o sector qualificado está definida e activa.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <p class="section-number">07 — Conclusão</p>
+      <h2>Rentabilizar o capital humano é um acto de inteligência, não de orgulho</h2>
+      <p>Anos de formação, experiência sectorial e conhecimentos técnicos especializados são um capital real, invisível no balanço pessoal mas quantificável no mercado. Tratá-lo como se não tivesse valor porque as circunstâncias são adversas é, paradoxalmente, a pior decisão que pode ser tomada precisamente quando mais importa tomar decisões correctas.</p>
+
+      <div class="pull-quote">
+        <p>A diferença entre quem se recupera de uma crise profissional e quem não o faz reside menos no talento e mais na capacidade de sustentar uma procura de qualidade sob pressão, sem capitular perante a primeira opção disponível.</p>
+      </div>
+    </div>
+
+    <div class="closing">
+      <p>O trabalho certo nem sempre é o trabalho imediato.<br>Mas o trabalho imediato certo é continuar a procurar o certo.</p>
+      <p class="sig">— Lophersson · Análise Profissional</p>
+    </div>
+
+  </div>
+</div>
+<!-- ═══════════════════════════════════════════════ FIM PT ══ -->
+
+
+<!-- ═══════════════════════════════════════════════ ENGLISH ══ -->
+<div data-lang="en">
+
+  <div class="hero">
+    <p class="hero-eyebrow">Work Psychology · Professional Strategy</p>
+    <h1>The Cost of <em>Devaluing Yourself</em>:<br>Why the Urgent Job<br>Is Not Always the Right Job</h1>
+    <p class="hero-sub">Accepting any job simply to be employed may seem prudent. But for specialised profiles, poorly managed urgency carries a price that doesn't always show up on the paycheck.</p>
+    <div class="divider-ornament">✦</div>
+  </div>
+
+  <div class="article-wrap">
+
+    <div class="section">
+      <p class="section-number">01 — Premise</p>
+      <h2>Looking for work is not the same as accepting anything</h2>
+      <p>There is a deeply ingrained cultural confusion between <strong>labour availability</strong> and <strong>professional suitability</strong>. Social pressure — and often family pressure — tends to equate not working with an obligation to accept any available offer, regardless of its nature, pay, or alignment with the candidate's profile.</p>
+      <p>This premise, besides being economically questionable, has psychological and strategic foundations worth examining rigorously. A person specialised in financial analysis, management control, or data technology does not become, merely by virtue of being in active job search, a generic profile suitable for any position. Just as an orthopaedic surgeon temporarily unemployed would not be the first choice for an administrative post, a financial analyst with years of accumulated training should not reflexively orient themselves toward low-skilled employment as if their career trajectory did not exist.</p>
+
+      <div class="pull-quote">
+        <p>Strategic job searching is not arrogance. It is the application of the same principle by which any company manages its assets: maximising the return on investment made.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <p class="section-number">02 — Human Capital Theory</p>
+      <h2>Specialisation as a depreciable asset: the risk of voluntary underemployment</h2>
+      <p><strong>Human capital theory</strong>, formulated by Gary Becker (Nobel Prize in Economics, 1992), establishes that education and experience are investments whose return materialises over time in the form of greater productivity, employability, and wages. This capital is not static: it appreciates through continued use in the right sector and depreciates through abandonment or underutilisation.</p>
+      <p>Voluntary underemployment — accepting a position far below a person's capabilities and training — generates what labour economists call <strong>skill fade</strong>. Highly specialised technical skills require active practice and stimulating environments to remain current. A prolonged period away from the qualified sector does not just fail to develop these capabilities: it actively erodes them.</p>
+
+      <div class="concept-box">
+        <p class="concept-label">Key concept</p>
+        <p class="concept-title">Skill Fade — Competency Atrophy</p>
+        <p>The process by which technical skills acquired through training and experience progressively deteriorate when not exercised in the appropriate professional environment. Widely documented in labour economics research as a factor that penalises the reintegration of long-term unemployed workers into their original sector.</p>
+      </div>
+
+      <p>Beyond the technical dimension, chronic underemployment generates what organisational psychology calls <strong>role dissonance</strong>: the divergence between a person's internalised professional identity and the functions they actually perform. This dissonance is associated with reduced occupational self-esteem, increased atypical burnout syndrome (caused not by overwork but by lack of meaning), and difficulty re-entering the qualified market with confidence.</p>
+    </div>
+
+    <div class="section">
+      <p class="section-number">03 — Labour Economics</p>
+      <h2>The real opportunity cost: what doesn't appear on the paycheck</h2>
+      <p>Conventional economic rationality suggests that any income is better than none. This logic, valid in subsistence contexts, systematically fails when applied to qualified profiles with realistic prospects of placement in their sector. The correct analysis is not <em>"something is better than nothing"</em>, but <strong>"what does this decision cost me at twelve, twenty-four, and thirty-six months?"</strong></p>
+
+      <ul class="key-list">
+        <li><strong>Negative signalling cost:</strong> the labour market interprets CV movements. A period in a role far removed from one's profile is not read as resilience: it is frequently read as sector disconnection, raising doubts about the currency of one's technical knowledge.</li>
+        <li><strong>Differential wage cost:</strong> the difference between a junior-to-mid financial analyst's salary and the minimum wage can represent hundreds of euros monthly, with direct implications for career progression and pension contributions.</li>
+        <li><strong>Professional network cost:</strong> work environments are the primary generators of valuable contacts. Working in an unrelated sector disconnects from the network of professionals and companies that are the real channels of labour mobility in specialised fields.</li>
+        <li><strong>Cognitive cost:</strong> even in low-skilled positions, the working day consumes time and mental energy, limiting the capacity for continuous training, technical interview preparation, and active search for qualified opportunities.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <p class="section-number">04 — Cognitive Psychology</p>
+      <h2>Professional identity, self-esteem, and the urgency bias</h2>
+      <p><strong>Social Identity Theory</strong> (Tajfel and Turner, 1979) proposes that a significant part of people's self-concept derives from their belonging to social and professional groups. For individuals with high investment in specialised training, professional identity is not an accessory: it is a central component of how they perceive themselves and interpret their value in the world.</p>
+      <p>The systematic acceptance of jobs below one's profile can activate what cognitive psychologists call <strong>negative self-schemas</strong>: mental structures that reinterpret circumstances as evidence of incapacity or failure, generating a self-fulfilling prophecy that leads to progressively reducing expectations and transmitting less confidence in interviews.</p>
+
+      <div class="pull-quote">
+        <p>Economic urgency is a real factor that deserves full consideration. But urgency is also a cognitive state that distorts the evaluation of options, compresses time horizons, and favours suboptimal long-term decisions.</p>
+      </div>
+
+      <p>Psychologist Daniel Kahneman, in his distinction between System 1 (fast, emotional thinking) and System 2 (slow, deliberate thinking), extensively documented how pressure and anxiety preferentially activate System 1, generating impulsive decisions that prioritise immediate relief over sustained benefit. Strategic job searching requires exactly the opposite: sustaining the discomfort of waiting in order to make higher-quality decisions.</p>
+    </div>
+
+    <div class="section">
+      <p class="section-number">05 — Professional Strategy</p>
+      <h2>A specialised profile demands a different search, not a desperate one</h2>
+      <p>Generalist and specialist profiles do not share the same job insertion mechanisms. A specialised profile has a narrower target market but with <strong>higher unit value</strong>: a lower volume of opportunities, but opportunities of relatively higher quality. The correct metric is not the number of applications sent but the <strong>fit rate between offer and profile</strong>.</p>
+
+      <div class="analogy-card">
+        <div class="analogy-side">
+          <span class="label">Corporate asset</span>
+          <span class="value">Specialised machinery</span>
+          <p>A company does not liquidate its precision machinery at scrap price simply because it is temporarily idle. It waits for the right moment or buyer to maximise the value of the asset.</p>
+        </div>
+        <div class="analogy-divider"></div>
+        <div class="analogy-side">
+          <span class="label">Specialised human capital</span>
+          <span class="value">Qualified technical profile</span>
+          <p>A specialised professional should not accept any job at any price simply for being in search mode. Their accumulated knowledge has a market value that deserves to be negotiated, not liquidated.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <p class="section-number">06 — Necessary Nuance</p>
+      <h2>Tactical flexibility versus strategic surrender</h2>
+      <p>The critical distinction is between <strong>tactical flexibility</strong> — a conscious, temporary, and bounded decision — and <strong>strategic surrender</strong> — the passive acceptance of any conditions as if the accumulated career trajectory were irrelevant. The former is intelligent adaptation. The latter is a form of professional self-harm that the social environment sometimes presents, mistakenly, as maturity or responsibility.</p>
+
+      <ul class="key-list">
+        <li>Strategic patience in job searching is not passivity: it is the investment of time in finding the best possible option, not the first available one.</li>
+        <li>The labour market rewards those who know their value and defend it with discernment. Self-depreciation does not generate respect or better conditions: it generates unfavourable precedents.</li>
+        <li>Temporarily accepting conditions out of force majeure is legitimate and intelligent when an exit strategy toward the qualified sector is defined and active.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <p class="section-number">07 — Conclusion</p>
+      <h2>Monetising human capital is an act of intelligence, not of pride</h2>
+      <p>Years of training, sector experience, and specialised technical knowledge constitute real capital — invisible on the personal balance sheet but quantifiable in the market. Treating it as if it had no value because circumstances are adverse is, paradoxically, the worst decision that can be made precisely when making correct decisions matters most.</p>
+
+      <div class="pull-quote">
+        <p>The difference between those who recover from a professional crisis and those who do not lies less in talent and more in the capacity to sustain a quality search under pressure, without capitulating to the first available option.</p>
+      </div>
+    </div>
+
+    <div class="closing">
+      <p>The right job is not always the immediate job.<br>But the right immediate job is to keep searching for the right one.</p>
+      <p class="sig">— Lophersson · Professional Analysis</p>
+    </div>
+
+  </div>
+</div>
+<!-- ═══════════════════════════════════════════════ END EN ══ -->
+
+<script>
+  function setLang(lang, btn) {
+    document.querySelectorAll('[data-lang]').forEach(el => el.classList.remove('visible'));
+    document.querySelector('[data-lang="' + lang + '"]').classList.add('visible');
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.documentElement.lang = lang === 'pt' ? 'pt' : lang === 'en' ? 'en' : 'es';
+    const dmBtn = document.getElementById('dmBtn');
+    const labels = {
+      es: ['◑ Modo Oscuro', '☀ Modo Claro'],
+      pt: ['◑ Modo Escuro', '☀ Modo Claro'],
+      en: ['◑ Dark Mode',   '☀ Light Mode']
+    };
+    const isDark = document.body.getAttribute('data-theme') === 'dark';
+    window._dmLabels = labels[lang];
+    dmBtn.textContent = isDark ? labels[lang][1] : labels[lang][0];
+  }
+
+  function toggleDark() {
+    const body = document.body;
+    const isDark = body.getAttribute('data-theme') === 'dark';
+    body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    const labels = window._dmLabels || ['◑ Modo Oscuro', '☀ Modo Claro'];
+    document.getElementById('dmBtn').textContent = isDark ? labels[0] : labels[1];
+  }
+
+  window._dmLabels = ['◑ Modo Oscuro', '☀ Modo Claro'];
+</script>
+</body>
+</html>
