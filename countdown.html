@@ -1,12 +1,10 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="pt">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cuenta Atrás</title>
+<title>Conta Decrescente</title>
 <style>
-  /* ── CONFIG ── cambia TARGET_DATE en el JS ── */
-
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap');
 
   :root {
@@ -37,7 +35,6 @@
     position: relative;
   }
 
-  /* ── Fondo suave con gradiente animado ── */
   body::before {
     content: '';
     position: fixed;
@@ -54,7 +51,7 @@
     to   { opacity: 1; }
   }
 
-  /* ── Corazones flotantes ── */
+  /* ── Corazones / Corações flotantes ── */
   .hearts-container {
     position: fixed;
     inset: 0;
@@ -80,7 +77,7 @@
     100% { transform: translateY(-100vh) translateX(-10px) scale(0.6) rotate(-5deg); opacity: 0; }
   }
 
-  /* ── Wrapper principal ── */
+  /* ── Layout ── */
   .wrapper {
     position: relative;
     z-index: 1;
@@ -91,7 +88,6 @@
     gap: 1.5rem;
   }
 
-  /* ── Tarjeta base ── */
   .card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -109,7 +105,6 @@
   .card:nth-child(2) { animation-delay: 0.15s; }
   .card:nth-child(3) { animation-delay: 0.28s; }
 
-  /* ── Título de sección ── */
   .section-label {
     font-family: 'DM Sans', sans-serif;
     font-size: 0.70rem;
@@ -120,7 +115,7 @@
     margin-bottom: 0.9rem;
   }
 
-  /* ── Bloque de hora actual ── */
+  /* ── Relógio / Reloj ── */
   .now-time {
     font-family: 'Playfair Display', serif;
     font-size: clamp(3rem, 14vw, 4.2rem);
@@ -144,7 +139,7 @@
     margin-top: 0.4rem;
   }
 
-  /* ── Objetivo ── */
+  /* ── Target ── */
   .target-row {
     display: flex;
     align-items: center;
@@ -171,7 +166,7 @@
     color: var(--accent);
   }
 
-  /* ── Countdown grid ── */
+  /* ── Grid conta ── */
   .countdown-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -223,7 +218,6 @@
     margin-top: 0.35rem;
   }
 
-  /* ── Mensaje final ── */
   .finished-msg {
     font-family: 'Playfair Display', serif;
     font-style: italic;
@@ -235,16 +229,43 @@
     display: none;
   }
 
-  /* ── Footer discreto ── */
-  .footer-note {
-    text-align: center;
+  /* ── Botão de idioma ── */
+  .lang-btn {
+    position: fixed;
+    top: 1.2rem;
+    right: 1.2rem;
+    z-index: 10;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 999px;
+    padding: 0.42rem 1rem;
+    font-family: 'DM Sans', sans-serif;
     font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
     color: var(--muted);
-    opacity: 0.7;
-    margin-top: 0.5rem;
+    cursor: pointer;
+    box-shadow: 0 2px 8px var(--shadow);
+    transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    user-select: none;
   }
 
-  /* Línea separadora fina */
+  .lang-btn:hover {
+    background: var(--accent-light);
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: scale(1.04);
+  }
+
+  .lang-btn .flag {
+    font-size: 1rem;
+    line-height: 1;
+  }
+
   .divider {
     width: 40px;
     height: 2px;
@@ -253,25 +274,35 @@
     margin: 0.9rem 0;
     opacity: 0.4;
   }
+
+  .footer-note {
+    text-align: center;
+    font-size: 0.72rem;
+    color: var(--muted);
+    opacity: 0.7;
+    margin-top: 0.5rem;
+  }
 </style>
 </head>
 <body>
 
-<!-- Corazones flotantes -->
+<button class="lang-btn" id="langBtn" onclick="toggleLang()">
+  <span class="flag" id="langFlag">🇪🇸</span>
+  <span id="langBtnText">Español</span>
+</button>
+
 <div class="hearts-container" id="heartsContainer"></div>
 
 <div class="wrapper">
 
-  <!-- Tarjeta 1: Ahora -->
   <div class="card">
-    <div class="section-label">Ahora mismo</div>
+    <div class="section-label" id="labelNow">Agora mesmo</div>
     <div class="now-time" id="nowTime">--:--:--</div>
-    <div class="now-date" id="nowDate">cargando...</div>
+    <div class="now-date" id="nowDate">a carregar...</div>
   </div>
 
-  <!-- Tarjeta 2: Cuenta atrás -->
   <div class="card">
-    <div class="section-label">Humberto en Barcelos con Karina 😍</div>
+    <div class="section-label" id="labelCountdown">Humberto em Barcelos com a Karina 😍</div>
     <div class="target-row">
       <span class="target-heart">❤️</span>
       <span class="target-datetime" id="targetLabel">--</span>
@@ -280,58 +311,119 @@
     <div class="countdown-grid">
       <div class="unit-box">
         <span class="unit-value" id="cdDays">--</span>
-        <span class="unit-label">días</span>
+        <span class="unit-label" id="lblDays">dias</span>
       </div>
       <div class="unit-box">
         <span class="unit-value" id="cdHours">--</span>
-        <span class="unit-label">horas</span>
+        <span class="unit-label" id="lblHours">horas</span>
       </div>
       <div class="unit-box">
         <span class="unit-value" id="cdMinutes">--</span>
-        <span class="unit-label">min</span>
+        <span class="unit-label" id="lblMinutes">min</span>
       </div>
       <div class="unit-box">
         <span class="unit-value" id="cdSeconds">--</span>
-        <span class="unit-label">seg</span>
+        <span class="unit-label" id="lblSeconds">seg</span>
       </div>
     </div>
-    <div class="finished-msg" id="finishedMsg">¡Ha llegado el momento! ❤️</div>
+    <div class="finished-msg" id="finishedMsg">Chegou o momento! ❤️</div>
   </div>
 
 </div>
 
-<div class="footer-note">La hora se obtiene de tu dispositivo</div>
+<div class="footer-note" id="footerNote">A hora é obtida do teu dispositivo</div>
 
 <script>
-  // ════════════════════════════════════════
-  //   ✏️  MODIFICA AQUÍ LA FECHA OBJETIVO
-  // ════════════════════════════════════════
+  // ════════════════════════════════
+  //   DATA OBJETIVO / DATA ALVO
+  // ════════════════════════════════
   const TARGET_DATE = new Date(2026, 6, 14, 11, 20, 0);
-  //  new Date(año, mes-1, día, hora, min, seg)
-  //  ej: 14 julio 2026 a las 11:20 → (2026, 6, 14, 11, 20, 0)
-  // ════════════════════════════════════════
+  // 14 de julho / julio de 2026 às/a las 11:20
+  // ════════════════════════════════
 
-  // ── Mostrar fecha objetivo ──
-  const months = ['enero','febrero','marzo','abril','mayo','junio',
-                  'julio','agosto','septiembre','octubre','noviembre','diciembre'];
-  const days   = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+  // ── Traducciones / Traduções ──
+  const i18n = {
+    pt: {
+      lang: 'pt',
+      labelNow: 'Agora mesmo',
+      labelCountdown: 'Humberto em Barcelos com a Karina 😍',
+      finished: 'Chegou o momento! ❤️',
+      footer: 'A hora é obtida do teu dispositivo',
+      days: 'dias',
+      hours: 'horas',
+      min: 'min',
+      seg: 'seg',
+      months: ['janeiro','fevereiro','março','abril','maio','junho',
+               'julho','agosto','setembro','outubro','novembro','dezembro'],
+      weekdays: ['domingo','segunda-feira','terça-feira','quarta-feira',
+                 'quinta-feira','sexta-feira','sábado'],
+      targetFmt: (d) =>
+        `${d.getDate()} de ${['janeiro','fevereiro','março','abril','maio','junho',
+        'julho','agosto','setembro','outubro','novembro','dezembro'][d.getMonth()]} de ${d.getFullYear()} · ${pad(d.getHours())}:${pad(d.getMinutes())}`,
+      dateFmt: (d) =>
+        `${['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'][d.getDay()]}, ${d.getDate()} de ${['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'][d.getMonth()]} de ${d.getFullYear()}`,
+      btnFlag: '🇪🇸',
+      btnText: 'Español',
+    },
+    es: {
+      lang: 'es',
+      labelNow: 'Ahora mismo',
+      labelCountdown: 'Humberto en Barcelos con Karina 😍',
+      finished: '¡Ha llegado el momento! ❤️',
+      footer: 'La hora se obtiene de tu dispositivo',
+      days: 'días',
+      hours: 'horas',
+      min: 'min',
+      seg: 'seg',
+      months: ['enero','febrero','marzo','abril','mayo','junio',
+               'julio','agosto','septiembre','octubre','noviembre','diciembre'],
+      weekdays: ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'],
+      targetFmt: (d) =>
+        `${d.getDate()} de ${['enero','febrero','marzo','abril','mayo','junio',
+        'julio','agosto','septiembre','octubre','noviembre','diciembre'][d.getMonth()]} de ${d.getFullYear()} · ${pad(d.getHours())}:${pad(d.getMinutes())}`,
+      dateFmt: (d) =>
+        `${['domingo','lunes','martes','miércoles','jueves','viernes','sábado'][d.getDay()]}, ${d.getDate()} de ${['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'][d.getMonth()]} de ${d.getFullYear()}`,
+      btnFlag: '🇵🇹',
+      btnText: 'Português',
+    }
+  };
+
+  let currentLang = 'pt';
 
   function pad(n){ return String(n).padStart(2,'0'); }
 
-  document.getElementById('targetLabel').textContent =
-    `${TARGET_DATE.getDate()} de ${months[TARGET_DATE.getMonth()]} de ${TARGET_DATE.getFullYear()} · ${pad(TARGET_DATE.getHours())}:${pad(TARGET_DATE.getMinutes())}`;
-
-  // ── Reloj actual ──
-  function updateClock(){
-    const now = new Date();
-    document.getElementById('nowTime').textContent =
-      `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
-    document.getElementById('nowDate').textContent =
-      `${days[now.getDay()]}, ${now.getDate()} de ${months[now.getMonth()]} de ${now.getFullYear()}`;
+  function applyLang(lang) {
+    const t = i18n[lang];
+    document.documentElement.lang = lang;
+    document.getElementById('labelNow').textContent        = t.labelNow;
+    document.getElementById('labelCountdown').textContent  = t.labelCountdown;
+    document.getElementById('finishedMsg').textContent     = t.finished;
+    document.getElementById('footerNote').textContent      = t.footer;
+    document.getElementById('lblDays').textContent         = t.days;
+    document.getElementById('lblHours').textContent        = t.hours;
+    document.getElementById('lblMinutes').textContent      = t.min;
+    document.getElementById('lblSeconds').textContent      = t.seg;
+    document.getElementById('targetLabel').textContent     = t.targetFmt(TARGET_DATE);
+    document.getElementById('langFlag').textContent        = t.btnFlag;
+    document.getElementById('langBtnText').textContent     = t.btnText;
+    // Forzar actualización de fecha/hora inmediata
+    updateClock();
   }
 
-  // ── Cuenta atrás ──
-  let prevSec = -1;
+  function toggleLang() {
+    currentLang = currentLang === 'pt' ? 'es' : 'pt';
+    applyLang(currentLang);
+  }
+
+  // ── Reloj / Relógio ──
+  function updateClock(){
+    const now = new Date();
+    const t = i18n[currentLang];
+    document.getElementById('nowTime').textContent = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+    document.getElementById('nowDate').textContent = t.dateFmt(now);
+  }
+
+  // ── Conta decrescente / Cuenta atrás ──
   function updateCountdown(){
     const now  = new Date();
     const diff = TARGET_DATE - now;
@@ -356,7 +448,7 @@
       if(el.textContent !== formatted){
         el.textContent = formatted;
         el.classList.remove('bump');
-        void el.offsetWidth; // reflow
+        void el.offsetWidth;
         el.classList.add('bump');
       }
     };
@@ -367,7 +459,7 @@
     setUnit('cdSeconds', s);
   }
 
-  // ── Corazones flotantes ──
+  // ── Corazones / Corações ──
   const container = document.getElementById('heartsContainer');
   const HEARTS = ['❤️','💘','❤️‍🔥','💝','💖'];
 
@@ -384,11 +476,12 @@
     setTimeout(() => el.remove(), (dur + 2) * 1000);
   }
 
-  // Lanza corazones periódicamente
   spawnHeart();
   setInterval(spawnHeart, 3300);
 
-  // ── Tick principal ──
+  // ── Init ──
+  applyLang('pt');
+
   function tick(){
     updateClock();
     updateCountdown();
