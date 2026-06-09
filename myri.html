@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Mujer Laberinto — Lophersson Editorial</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #1a1714;
+    --ash: #2e2a27;
+    --mist: #f5f2ee;
+    --paper: #faf8f5;
+    --rose: #d4788a;
+    --rose-pale: #f0d0d7;
+    --caption: #7a746e;
+    --rule: #e0dbd4;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--ink);
+    padding: 18px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 1.1rem;
+    letter-spacing: 0.18em;
+    color: var(--mist);
+    text-transform: uppercase;
+  }
+
+  .logo span {
+    color: var(--rose);
+  }
+
+  nav {
+    display: flex;
+    gap: 32px;
+  }
+
+  nav a {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #9e9890;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  nav a:hover { color: var(--rose-pale); }
+
+  /* ── HERO ── */
+  .hero {
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    min-height: calc(100vh - 62px);
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 80px 48px;
+    gap: 80px;
+    align-items: center;
+  }
+
+  /* ── COVER ── */
+  .cover-wrap {
+    position: relative;
+  }
+
+  .cover-shadow {
+    position: absolute;
+    inset: 0;
+    box-shadow:
+      12px 20px 60px rgba(26,23,20,0.45),
+      4px 8px 20px rgba(26,23,20,0.3);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .cover-img {
+    width: 100%;
+    display: block;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cover-badge {
+    position: absolute;
+    bottom: -16px;
+    right: -16px;
+    background: var(--rose);
+    color: white;
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    z-index: 3;
+  }
+
+  /* ── META ── */
+  .meta {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .eyebrow {
+    font-size: 0.68rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--rose);
+    font-weight: 500;
+  }
+
+  .book-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.8rem, 5vw, 4.2rem);
+    font-weight: 300;
+    line-height: 1.05;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+
+  .book-title em {
+    font-style: italic;
+    color: var(--rose);
+  }
+
+  .author-line {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .author-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ash);
+  }
+
+  .author-sep {
+    width: 32px;
+    height: 1px;
+    background: var(--rose);
+  }
+
+  .editorial-tag {
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--caption);
+  }
+
+  .divider {
+    width: 48px;
+    height: 1px;
+    background: var(--rule);
+  }
+
+  .genre-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    border: 1px solid var(--rule);
+    color: var(--caption);
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+  }
+
+  /* ── SINOPSIS ── */
+  .sinopsis-section {
+    background: var(--mist);
+    border-top: 1px solid var(--rule);
+  }
+
+  .sinopsis-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 80px 48px;
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 80px;
+  }
+
+  .section-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--rose);
+    font-weight: 500;
+    padding-top: 6px;
+  }
+
+  .sinopsis-body p {
+    font-size: 1rem;
+    line-height: 1.85;
+    color: var(--ash);
+    margin-bottom: 1.4em;
+    font-weight: 300;
+  }
+
+  .sinopsis-body p:last-child { margin-bottom: 0; }
+
+  .sinopsis-body strong {
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  /* ── QUOTE ── */
+  .quote-strip {
+    background: var(--ink);
+    padding: 64px 48px;
+    text-align: center;
+  }
+
+  .quote-strip blockquote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-style: italic;
+    font-weight: 300;
+    color: var(--mist);
+    max-width: 720px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  .quote-strip blockquote::before {
+    content: '\201C';
+    color: var(--rose);
+    font-size: 3em;
+    line-height: 0;
+    vertical-align: -0.4em;
+    margin-right: 4px;
+  }
+
+  .quote-strip blockquote::after {
+    content: '\201D';
+    color: var(--rose);
+    font-size: 3em;
+    line-height: 0;
+    vertical-align: -0.4em;
+    margin-left: 4px;
+  }
+
+  /* ── FICHA TÉCNICA ── */
+  .ficha-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 80px 48px;
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 80px;
+    border-top: 1px solid var(--rule);
+  }
+
+  .ficha-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+
+  .ficha-item {}
+
+  .ficha-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--caption);
+    margin-bottom: 6px;
+  }
+
+  .ficha-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: var(--ink);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ash);
+    padding: 32px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 0.95rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #7a746e;
+  }
+
+  .footer-logo span { color: var(--rose); }
+
+  .footer-copy {
+    font-size: 0.65rem;
+    color: #5a5650;
+    letter-spacing: 0.08em;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .hero {
+      grid-template-columns: 1fr;
+      padding: 48px 24px;
+      gap: 48px;
+    }
+    .cover-wrap { max-width: 320px; margin: 0 auto; }
+    .sinopsis-inner, .ficha-section {
+      grid-template-columns: 1fr;
+      padding: 48px 24px;
+      gap: 24px;
+    }
+    header { padding: 16px 24px; }
+    nav { gap: 20px; }
+    footer { padding: 24px; flex-direction: column; gap: 12px; text-align: center; }
+    .ficha-grid { grid-template-columns: repeat(2, 1fr); }
+    .quote-strip { padding: 48px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Lophersson <span>Editorial</span></div>
+  <nav>
+    <a href="#">Catálogo</a>
+    <a href="#">Autores</a>
+    <a href="#">Novedades</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="cover-wrap">
+    <div class="cover-shadow"></div>
+    <img
+      class="cover-img"
+      src="https://lophersson.github.io/2026/lamujerlaberinto.png"
+      alt="Portada de La Mujer Laberinto"
+      onerror="this.onerror=null; this.src='/mnt/user-data/uploads/292500.png';"
+    >
+    <div class="cover-badge">La Novela</div>
+  </div>
+
+  <div class="meta">
+    <div class="eyebrow">Ficción psicológica</div>
+
+    <h1 class="book-title">La mujer<br><em>laberinto</em></h1>
+
+    <div class="author-line">
+      <div class="author-sep"></div>
+      <div class="author-name">Humberto López Rodríguez</div>
+      <div class="editorial-tag">Lophersson Editorial</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="genre-tags">
+      <span class="tag">Psicología emocional</span>
+      <span class="tag">Drama contemporáneo</span>
+      <span class="tag">Amor no declarado</span>
+    </div>
+  </div>
+</section>
+
+<section class="sinopsis-section">
+  <div class="sinopsis-inner">
+    <div class="section-label">Sinopsis</div>
+    <div class="sinopsis-body">
+      <p>Myri lleva años construyendo muros. No por frialdad, sino por <strong>arquitectura de supervivencia</strong>: cada relación anterior dejó grietas que aprendió a tapar con distancia, con ironía, con esa mirada intensa y contenida que la gente confunde con fortaleza y que en realidad es el rostro del miedo más sofisticado: el miedo a ser completamente vista.</p>
+      <p>Cuando conoce a Humberto, algo se descoloca. Él no intenta conquistarla. No fuerza puertas. Simplemente... permanece. Le habla como si tuviera tiempo. La escucha como si sus contradicciones no fueran defectos sino geografía interesante.</p>
+      <p>Y precisamente eso la aterra.</p>
+      <p>Porque Myri sabe reconocer el peligro cuando lo siente, y esto —esta calma, esta seguridad nueva que Humberto le provoca— es el <strong>peligro más serio que ha enfrentado</strong>. Podría ser feliz. Lo sabe con una certeza que casi duele. Y sin embargo, elige el borde. La amistad con sus bordes difusos. Las noches largas hablando de todo excepto de lo que ambos sienten. Los silencios cargados que ninguno de los dos nombra.</p>
+      <p><em>La mujer laberinto</em> es un retrato psicológico de la paradoja más humana: elegir el sufrimiento conocido antes que la felicidad incierta. Un análisis sin concesiones del sabotaje emocional, de los mecanismos de autoprotección que terminan convirtiéndose en prisiones, y de esa zona ambigua entre la amistad profunda y el amor no declarado donde algunos prefieren vivir indefinidamente antes que arriesgarse a perderlo todo.</p>
+      <p>Una novela sobre el laberinto que construimos dentro de nosotros mismos, y sobre la única salida posible: <strong>decidir</strong>.</p>
+    </div>
+  </div>
+</section>
+
+<div class="quote-strip">
+  <blockquote>Hay personas que no huyen del amor. Huyen de lo que el amor les revela sobre ellas mismas.</blockquote>
+</div>
+
+<section class="ficha-section">
+  <div class="section-label">Ficha técnica</div>
+  <div class="ficha-grid">
+    <div class="ficha-item">
+      <div class="ficha-label">Género</div>
+      <div class="ficha-value">Ficción psicológica</div>
+    </div>
+    <div class="ficha-item">
+      <div class="ficha-label">Editorial</div>
+      <div class="ficha-value">Lophersson Editorial</div>
+    </div>
+    <div class="ficha-item">
+      <div class="ficha-label">Año</div>
+      <div class="ficha-value">2026</div>
+    </div>
+    <div class="ficha-item">
+      <div class="ficha-label">Idioma</div>
+      <div class="ficha-value">Español</div>
+    </div>
+    <div class="ficha-item">
+      <div class="ficha-label">Autor</div>
+      <div class="ficha-value">Humberto López Rodríguez</div>
+    </div>
+    <div class="ficha-item">
+      <div class="ficha-label">Colección</div>
+      <div class="ficha-value">La Novela</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Lophersson <span>Editorial</span></div>
+  <div class="footer-copy">© 2026 Lophersson Editorial · Todos los derechos reservados</div>
+</footer>
+
+</body>
+</html>
