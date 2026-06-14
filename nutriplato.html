@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>7 Jantares Rápidos & Nutritivos · NutriPlato by Lophersson</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream:    #F7F3EC;
+    --beige:    #EDE5D8;
+    --sand:     #D9CEBC;
+    --green:    #7BAE7F;
+    --green-lt: #B8D8BA;
+    --green-dk: #4E7E52;
+    --orange:   #E8875A;
+    --orange-lt:#F5C4A6;
+    --orange-dk:#C05F31;
+    --text:     #3A3228;
+    --muted:    #7A6E63;
+    --white:    #FDFAF6;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── LANG TOGGLE ── */
+  .lang-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--white);
+    border-bottom: 1px solid var(--sand);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.65rem 2rem;
+    gap: 1rem;
+  }
+  .lang-bar .brand {
+    font-family: 'Fraunces', serif;
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--green-dk);
+    letter-spacing: 0.03em;
+  }
+  .lang-btn {
+    display: flex;
+    gap: 0.35rem;
+    background: var(--beige);
+    border-radius: 999px;
+    padding: 0.25rem;
+  }
+  .lang-btn button {
+    border: none;
+    background: transparent;
+    padding: 0.35rem 0.9rem;
+    border-radius: 999px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--muted);
+    transition: all .2s;
+    letter-spacing: 0.04em;
+  }
+  .lang-btn button.active {
+    background: var(--green);
+    color: var(--white);
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, var(--green-lt) 0%, var(--beige) 55%, var(--orange-lt) 100%);
+    padding: 4.5rem 2rem 3.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    width: 420px; height: 420px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(123,174,127,.18) 0%, transparent 70%);
+    top: -80px; left: -80px;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(232,135,90,.15) 0%, transparent 70%);
+    bottom: -60px; right: -40px;
+  }
+  .hero-eyebrow {
+    display: inline-block;
+    background: var(--orange);
+    color: var(--white);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    padding: 0.3rem 1rem;
+    margin-bottom: 1.2rem;
+  }
+  .hero h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    font-weight: 300;
+    line-height: 1.15;
+    color: var(--text);
+    max-width: 640px;
+    margin: 0 auto 1rem;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--green-dk);
+  }
+  .hero p.sub {
+    color: var(--muted);
+    font-size: 1rem;
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    margin-top: 2.5rem;
+    flex-wrap: wrap;
+  }
+  .stat {
+    background: rgba(255,255,255,.65);
+    backdrop-filter: blur(6px);
+    border-radius: 16px;
+    padding: 0.85rem 1.4rem;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,.8);
+  }
+  .stat strong {
+    display: block;
+    font-family: 'Fraunces', serif;
+    font-size: 1.7rem;
+    font-weight: 500;
+    color: var(--green-dk);
+    line-height: 1;
+  }
+  .stat span {
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    max-width: 900px;
+    margin: 3rem auto 1.5rem;
+    padding: 0 1.5rem;
+  }
+  .section-label span {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--orange);
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--sand);
+  }
+
+  /* ── CARDS GRID ── */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+    max-width: 960px;
+    margin: 0 auto 4rem;
+    padding: 0 1.5rem;
+  }
+
+  .card {
+    background: var(--white);
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid var(--sand);
+    transition: transform .2s, box-shadow .2s;
+    position: relative;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(58,50,40,.09);
+  }
+
+  .card-thumb {
+    height: 9px;
+  }
+  .card:nth-child(7n+1) .card-thumb { background: linear-gradient(90deg, var(--green), var(--green-lt)); }
+  .card:nth-child(7n+2) .card-thumb { background: linear-gradient(90deg, var(--orange), var(--orange-lt)); }
+  .card:nth-child(7n+3) .card-thumb { background: linear-gradient(90deg, var(--green-dk), var(--green)); }
+  .card:nth-child(7n+4) .card-thumb { background: linear-gradient(90deg, var(--orange-dk), var(--orange)); }
+  .card:nth-child(7n+5) .card-thumb { background: linear-gradient(90deg, var(--green-lt), var(--green-dk)); }
+  .card:nth-child(7n+6) .card-thumb { background: linear-gradient(90deg, var(--orange-lt), var(--orange-dk)); }
+  .card:nth-child(7n+7) .card-thumb { background: linear-gradient(90deg, var(--green), var(--orange)); }
+
+  .card-day {
+    position: absolute;
+    top: 1rem; left: 1rem;
+    width: 30px; height: 30px;
+    background: var(--text);
+    color: var(--white);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+
+  .card-body {
+    padding: 2.5rem 1.25rem 1.25rem;
+  }
+
+  .card-emoji {
+    font-size: 2rem;
+    margin-bottom: 0.6rem;
+    display: block;
+  }
+
+  .card h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    line-height: 1.3;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+  }
+
+  .card-desc {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.55;
+    margin-bottom: 1rem;
+  }
+
+  .card-meta {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+  }
+
+  .pill {
+    font-size: 0.7rem;
+    font-weight: 500;
+    border-radius: 999px;
+    padding: 0.22rem 0.65rem;
+    letter-spacing: 0.02em;
+  }
+  .pill-time { background: var(--green-lt); color: var(--green-dk); }
+  .pill-kcal { background: var(--orange-lt); color: var(--orange-dk); }
+  .pill-tag  { background: var(--beige); color: var(--muted); }
+
+  .card-divider {
+    height: 1px;
+    background: var(--beige);
+    margin: 0.85rem 0;
+  }
+
+  .card-ingr-label {
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.45rem;
+  }
+
+  .card-ingr {
+    font-size: 0.78rem;
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  .card-macros {
+    display: flex;
+    gap: 0.4rem;
+    margin-top: 1rem;
+  }
+  .macro {
+    flex: 1;
+    background: var(--beige);
+    border-radius: 10px;
+    padding: 0.45rem 0.3rem;
+    text-align: center;
+  }
+  .macro strong {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--green-dk);
+  }
+  .macro span {
+    font-size: 0.62rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--text);
+    color: var(--sand);
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.78rem;
+  }
+  footer strong { color: var(--orange-lt); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .lang-bar { padding: 0.6rem 1rem; }
+    .hero { padding: 3rem 1.25rem 2.5rem; }
+    .cards { padding: 0 1rem; }
+    .section-label { padding: 0 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LANG BAR -->
+<div class="lang-bar">
+  <span class="brand">NutriPlato by Lophersson</span>
+  <div class="lang-btn">
+    <button id="btn-pt" class="active" onclick="setLang('pt')">PT</button>
+    <button id="btn-es" onclick="setLang('es')">ES</button>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow" data-pt="Guia Semanal" data-es="Guía Semanal">Guia Semanal</div>
+  <h1 data-pt="7 Jantares <em>rápidos</em> e completos" data-es="7 Cenas <em>rápidas</em> y completas">7 Jantares <em>rápidos</em> e completos</h1>
+  <p class="sub" data-pt="Prontos em menos de 30 minutos, com todos os nutrientes que o teu corpo precisa ao final do dia." data-es="Listos en menos de 30 minutos, con todos los nutrientes que tu cuerpo necesita al final del día.">
+    Prontos em menos de 30 minutos, com todos os nutrientes que o teu corpo precisa ao final do dia.
+  </p>
+  <div class="hero-stats">
+    <div class="stat">
+      <strong>≤30</strong>
+      <span data-pt="min preparo" data-es="min prep">min preparo</span>
+    </div>
+    <div class="stat">
+      <strong>7</strong>
+      <span data-pt="receitas" data-es="recetas">receitas</span>
+    </div>
+    <div class="stat">
+      <strong>400–600</strong>
+      <span data-pt="kcal / jantar" data-es="kcal / cena">kcal / jantar</span>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION LABEL -->
+<div class="section-label">
+  <span data-pt="As receitas da semana" data-es="Las recetas de la semana">As receitas da semana</span>
+</div>
+
+<!-- CARDS -->
+<div class="cards">
+
+  <!-- DIA 1 -->
+  <article class="card">
+    <div class="card-thumb"></div>
+    <div class="card-day">1</div>
+    <div class="card-body">
+      <span class="card-emoji">🐟</span>
+      <h2 data-pt="Salmão com Quinoa e Espargos" data-es="Salmón con Quinoa y Espárragos">Salmão com Quinoa e Espargos</h2>
+      <p class="card-desc" data-pt="Proteína nobre, carboidrato completo e fibra vegetal — equilíbrio perfeito." data-es="Proteína noble, carbohidrato completo y fibra vegetal — equilibrio perfecto.">Proteína nobre, carboidrato completo e fibra vegetal — equilíbrio perfeito.</p>
+      <div class="card-meta">
+        <span class="pill pill-time">⏱ 20 min</span>
+        <span class="pill pill-kcal">🔥 480 kcal</span>
+        <span class="pill pill-tag" data-pt="Sem glúten" data-es="Sin gluten">Sem glúten</span>
+      </div>
+      <div class="card-divider"></div>
+      <div class="card-ingr-label" data-pt="Ingredientes" data-es="Ingredientes">Ingredientes</div>
+      <div class="card-ingr" data-pt="150g salmão · 80g quinoa · 100g espargos · azeite · limão · alho · sal" data-es="150g salmón · 80g quinoa · 100g espárragos · aceite oliva · limón · ajo · sal">150g salmão · 80g quinoa · 100g espargos · azeite · limão · alho · sal</div>
+      <div class="card-macros">
+        <div class="macro"><strong>38g</strong><span data-pt="Prot." data-es="Prot.">Prot.</span></div>
+        <div class="macro"><strong>42g</strong><span data-pt="Carb." data-es="Carb.">Carb.</span></div>
+        <div class="macro"><strong>14g</strong><span data-pt="Gord." data-es="Gras.">Gord.</span></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- DIA 2 -->
+  <article class="card">
+    <div class="card-thumb"></div>
+    <div class="card-day">2</div>
+    <div class="card-body">
+      <span class="card-emoji">🥚</span>
+      <h2 data-pt="Fritada de Vegetais com Ovo" data-es="Frittata de Verduras con Huevo">Fritada de Vegetais com Ovo</h2>
+      <p class="card-desc" data-pt="Rica em proteína e micronutrientes. Ideal para quando o frigorífico está quase vazio." data-es="Rica en proteínas y micronutrientes. Ideal para cuando la nevera está casi vacía.">Rica em proteína e micronutrientes. Ideal para quando o frigorífico está quase vazio.</p>
+      <div class="card-meta">
+        <span class="pill pill-time">⏱ 15 min</span>
+        <span class="pill pill-kcal">🔥 410 kcal</span>
+        <span class="pill pill-tag" data-pt="Vegetariano" data-es="Vegetariano">Vegetariano</span>
+      </div>
+      <div class="card-divider"></div>
+      <div class="card-ingr-label" data-pt="Ingredientes" data-es="Ingredientes">Ingredientes</div>
+      <div class="card-ingr" data-pt="3 ovos · espinafres · tomate cereja · cebola · pimento · azeite · queijo feta" data-es="3 huevos · espinacas · tomates cherry · cebolla · pimiento · aceite · queso feta">3 ovos · espinafres · tomate cereja · cebola · pimento · azeite · queijo feta</div>
+      <div class="card-macros">
+        <div class="macro"><strong>28g</strong><span data-pt="Prot." data-es="Prot.">Prot.</span></div>
+        <div class="macro"><strong>18g</strong><span data-pt="Carb." data-es="Carb.">Carb.</span></div>
+        <div class="macro"><strong>22g</strong><span data-pt="Gord." data-es="Gras.">Gord.</span></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- DIA 3 -->
+  <article class="card">
+    <div class="card-thumb"></div>
+    <div class="card-day">3</div>
+    <div class="card-body">
+      <span class="card-emoji">🍗</span>
+      <h2 data-pt="Frango ao Limão com Grão e Rúcula" data-es="Pollo al Limón con Garbanzos y Rúcula">Frango ao Limão com Grão e Rúcula</h2>
+      <p class="card-desc" data-pt="Leguminosas como base de fibra, folhas verdes para os minerais, frango magro para a proteína." data-es="Legumbres como base de fibra, hojas verdes para los minerales, pollo magro para la proteína.">Leguminosas como base de fibra, folhas verdes para os minerais, frango magro para a proteína.</p>
+      <div class="card-meta">
+        <span class="pill pill-time">⏱ 25 min</span>
+        <span class="pill pill-kcal">🔥 520 kcal</span>
+        <span class="pill pill-tag" data-pt="Alto proteína" data-es="Alto proteína">Alto proteína</span>
+      </div>
+      <div class="card-divider"></div>
+      <div class="card-ingr-label" data-pt="Ingredientes" data-es="Ingredientes">Ingredientes</div>
+      <div class="card-ingr" data-pt="160g peito frango · 120g grão cozido · rúcula · limão · alho · azeite · paprika" data-es="160g pechuga pollo · 120g garbanzos cocidos · rúcula · limón · ajo · aceite · paprika">160g peito frango · 120g grão cozido · rúcula · limão · alho · azeite · paprika</div>
+      <div class="card-macros">
+        <div class="macro"><strong>45g</strong><span data-pt="Prot." data-es="Prot.">Prot.</span></div>
+        <div class="macro"><strong>38g</strong><span data-pt="Carb." data-es="Carb.">Carb.</span></div>
+        <div class="macro"><strong>12g</strong><span data-pt="Gord." data-es="Gras.">Gord.</span></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- DIA 4 -->
+  <article class="card">
+    <div class="card-thumb"></div>
+    <div class="card-day">4</div>
+    <div class="card-body">
+      <span class="card-emoji">🫘</span>
+      <h2 data-pt="Bowl de Lentilhas com Cenoura Assada" data-es="Bowl de Lentejas con Zanahoria Asada">Bowl de Lentilhas com Cenoura Assada</h2>
+      <p class="card-desc" data-pt="Ferro vegetal, betacaroteno e uma base cremosa de tahini. Sabor fundo e reconfortante." data-es="Hierro vegetal, betacaroteno y una base cremosa de tahini. Sabor profundo y reconfortante.">Ferro vegetal, betacaroteno e uma base cremosa de tahini. Sabor fundo e reconfortante.</p>
+      <div class="card-meta">
+        <span class="pill pill-time">⏱ 30 min</span>
+        <span class="pill pill-kcal">🔥 455 kcal</span>
+        <span class="pill pill-tag" data-pt="Vegan" data-es="Vegano">Vegan</span>
+      </div>
+      <div class="card-divider"></div>
+      <div class="card-ingr-label" data-pt="Ingredientes" data-es="Ingredientes">Ingredientes</div>
+      <div class="card-ingr" data-pt="150g lentilhas verdes · 2 cenouras · tahini · cominho · cúrcuma · limão · coentros" data-es="150g lentejas verdes · 2 zanahorias · tahini · comino · cúrcuma · limón · cilantro">150g lentilhas verdes · 2 cenouras · tahini · cominho · cúrcuma · limão · coentros</div>
+      <div class="card-macros">
+        <div class="macro"><strong>22g</strong><span data-pt="Prot." data-es="Prot.">Prot.</span></div>
+        <div class="macro"><strong>52g</strong><span data-pt="Carb." data-es="Carb.">Carb.</span></div>
+        <div class="macro"><strong>10g</strong><span data-pt="Gord." data-es="Gras.">Gord.</span></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- DIA 5 -->
+  <article class="card">
+    <div class="card-thumb"></div>
+    <div class="card-day">5</div>
+    <div class="card-body">
+      <span class="card-emoji">🌮</span>
+      <h2 data-pt="Tacos de Atum com Abacate e Milho" data-es="Tacos de Atún con Aguacate y Maíz">Tacos de Atum com Abacate e Milho</h2>
+      <p class="card-desc" data-pt="Ómega-3 do atum, gordura boa do abacate e a fibra do milho. Montagem em 10 minutos." data-es="Omega-3 del atún, grasa buena del aguacate y la fibra del maíz. Listo en 10 minutos.">Ómega-3 do atum, gordura boa do abacate e a fibra do milho. Montagem em 10 minutos.</p>
+      <div class="card-meta">
+        <span class="pill pill-time">⏱ 10 min</span>
+        <span class="pill pill-kcal">🔥 470 kcal</span>
+        <span class="pill pill-tag" data-pt="Sem cozinhar" data-es="Sin cocinar">Sem cozinhar</span>
+      </div>
+      <div class="card-divider"></div>
+      <div class="card-ingr-label" data-pt="Ingredientes" data-es="Ingredientes">Ingredientes</div>
+      <div class="card-ingr" data-pt="1 lata atum · 1 abacate · milho · tortilhas integral · lima · coentros · pimenta" data-es="1 lata atún · 1 aguacate · maíz · tortillas integral · lima · cilantro · pimienta">1 lata atum · 1 abacate · milho · tortilhas integral · lima · coentros · pimenta</div>
+      <div class="card-macros">
+        <div class="macro"><strong>34g</strong><span data-pt="Prot." data-es="Prot.">Prot.</span></div>
+        <div class="macro"><strong>40g</strong><span data-pt="Carb." data-es="Carb.">Carb.</span></div>
+        <div class="macro"><strong>18g</strong><span data-pt="Gord." data-es="Gras.">Gord.</span></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- DIA 6 -->
+  <article class="card">
+    <div class="card-thumb"></div>
+    <div class="card-day">6</div>
+    <div class="card-body">
+      <span class="card-emoji">🍜</span>
+      <h2 data-pt="Sopa Miso com Tofu e Algas" data-es="Sopa Miso con Tofu y Algas">Sopa Miso com Tofu e Algas</h2>
+      <p class="card-desc" data-pt="Rica em probióticos, proteína vegetal e minerais do mar. Leve e profundamente nutritiva." data-es="Rica en probióticos, proteína vegetal y minerales del mar. Ligera y profundamente nutritiva.">Rica em probióticos, proteína vegetal e minerais do mar. Leve e profundamente nutritiva.</p>
+      <div class="card-meta">
+        <span class="pill pill-time">⏱ 15 min</span>
+        <span class="pill pill-kcal">🔥 380 kcal</span>
+        <span class="pill pill-tag" data-pt="Vegan" data-es="Vegano">Vegan</span>
+      </div>
+      <div class="card-divider"></div>
+      <div class="card-ingr-label" data-pt="Ingredientes" data-es="Ingredientes">Ingredientes</div>
+      <div class="card-ingr" data-pt="pasta miso · 200g tofu firme · algas wakame · cogumelos · cebolinha · sésamo · gengibre" data-es="pasta miso · 200g tofu firme · algas wakame · setas · cebolleta · sésamo · jengibre">pasta miso · 200g tofu firme · algas wakame · cogumelos · cebolinha · sésamo · gengibre</div>
+      <div class="card-macros">
+        <div class="macro"><strong>24g</strong><span data-pt="Prot." data-es="Prot.">Prot.</span></div>
+        <div class="macro"><strong>28g</strong><span data-pt="Carb." data-es="Carb.">Carb.</span></div>
+        <div class="macro"><strong>14g</strong><span data-pt="Gord." data-es="Gras.">Gord.</span></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- DIA 7 -->
+  <article class="card">
+    <div class="card-thumb"></div>
+    <div class="card-day">7</div>
+    <div class="card-body">
+      <span class="card-emoji">🥩</span>
+      <h2 data-pt="Bife de Perú com Batata-Doce e Brócolos" data-es="Filete de Pavo con Boniato y Brócoli">Bife de Perú com Batata-Doce e Brócolos</h2>
+      <p class="card-desc" data-pt="Encerra a semana com vitamina C, antioxidantes e proteína magra. Um clássico repensado." data-es="Cierra la semana con vitamina C, antioxidantes y proteína magra. Un clásico repensado.">Encerra a semana com vitamina C, antioxidantes e proteína magra. Um clássico repensado.</p>
+      <div class="card-meta">
+        <span class="pill pill-time">⏱ 28 min</span>
+        <span class="pill pill-kcal">🔥 510 kcal</span>
+        <span class="pill pill-tag" data-pt="Sem glúten" data-es="Sin gluten">Sem glúten</span>
+      </div>
+      <div class="card-divider"></div>
+      <div class="card-ingr-label" data-pt="Ingredientes" data-es="Ingredientes">Ingredientes</div>
+      <div class="card-ingr" data-pt="170g peito peru · 1 batata-doce · brócolos · alho · azeite · tomilho · pimenta preta" data-es="170g pechuga pavo · 1 boniato · brócoli · ajo · aceite · tomillo · pimienta negra">170g peito peru · 1 batata-doce · brócolos · alho · azeite · tomilho · pimenta preta</div>
+      <div class="card-macros">
+        <div class="macro"><strong>42g</strong><span data-pt="Prot." data-es="Prot.">Prot.</span></div>
+        <div class="macro"><strong>44g</strong><span data-pt="Carb." data-es="Carb.">Carb.</span></div>
+        <div class="macro"><strong>11g</strong><span data-pt="Gord." data-es="Gras.">Gord.</span></div>
+      </div>
+    </div>
+  </article>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p><strong>NutriPlato by Lophersson</strong> &nbsp;·&nbsp; <span data-pt="Valores nutricionais aproximados. Consulta sempre um profissional de saúde." data-es="Valores nutricionales aproximados. Consulta siempre a un profesional de salud.">Valores nutricionais aproximados. Consulta sempre um profissional de saúde.</span></p>
+</footer>
+
+<script>
+  function setLang(lang) {
+    document.querySelectorAll('[data-' + lang + ']').forEach(el => {
+      el.innerHTML = el.getAttribute('data-' + lang);
+    });
+    document.getElementById('btn-pt').classList.toggle('active', lang === 'pt');
+    document.getElementById('btn-es').classList.toggle('active', lang === 'es');
+    document.documentElement.lang = lang;
+  }
+</script>
+</body>
+</html>
