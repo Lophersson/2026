@@ -1,0 +1,1826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAVARA PRIVÉ — Tailor-Made Journeys · Southeast Asia & Indian Ocean</title>
+<meta name="description" content="Ultra-private, tailor-made journeys through Southeast Asia and the Indian Ocean. Curated for those who travel beyond itineraries.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+/* ══════════════════════════════════════════
+   TOKENS
+══════════════════════════════════════════ */
+:root {
+  --jade:       #1C2E20;
+  --jade-dk:    #111a13;
+  --jade-md:    #233228;
+  --jade-lt:    #2e4535;
+  --linen:      #F0EDE6;
+  --linen-dk:   #e0dbd1;
+  --gold:       #C9A96E;
+  --gold-lt:    #d9bc8e;
+  --gold-dim:   rgba(201,169,110,0.18);
+  --ink:        rgba(240,237,230,0.82);
+  --ink-dim:    rgba(240,237,230,0.42);
+  --ink-ghost:  rgba(240,237,230,0.14);
+
+  --f-display:  'Cinzel', serif;
+  --f-body:     'Cormorant Garamond', serif;
+  --f-ui:       'DM Sans', sans-serif;
+
+  --ease-silk:  cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/* ══════════════════════════════════════════
+   RESET & BASE
+══════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  background: var(--jade-dk);
+  color: var(--linen);
+  font-family: var(--f-body);
+  font-weight: 300;
+  line-height: 1.7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { display: block; width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { cursor: pointer; border: none; background: none; font: inherit; }
+
+/* ══════════════════════════════════════════
+   SCROLL REVEAL
+══════════════════════════════════════════ */
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.9s var(--ease-silk), transform 0.9s var(--ease-silk);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+.reveal-delay-1 { transition-delay: 0.12s; }
+.reveal-delay-2 { transition-delay: 0.24s; }
+.reveal-delay-3 { transition-delay: 0.36s; }
+.reveal-delay-4 { transition-delay: 0.48s; }
+
+/* ══════════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════════ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 28px 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.5s var(--ease-silk), padding 0.4s var(--ease-silk);
+}
+nav.scrolled {
+  background: rgba(17, 26, 19, 0.93);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 18px 56px;
+  border-bottom: 0.5px solid var(--ink-ghost);
+}
+
+.nav-logo {
+  font-family: var(--f-display);
+  font-weight: 300;
+  font-size: 17px;
+  letter-spacing: 0.32em;
+  color: var(--linen);
+  padding-left: 0.32em;
+  flex-shrink: 0;
+}
+.nav-logo span { color: var(--gold); }
+
+.nav-links {
+  display: flex;
+  gap: 40px;
+  list-style: none;
+}
+.nav-links a {
+  font-family: var(--f-ui);
+  font-weight: 300;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  transition: color 0.3s;
+}
+.nav-links a:hover { color: var(--linen); }
+
+.nav-cta {
+  font-family: var(--f-ui);
+  font-weight: 300;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  border: 0.5px solid rgba(201,169,110,0.5);
+  padding: 9px 22px;
+  transition: background 0.3s, color 0.3s;
+}
+.nav-cta:hover {
+  background: var(--gold);
+  color: var(--jade-dk);
+}
+
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  padding: 4px;
+}
+.nav-hamburger span {
+  display: block;
+  width: 22px;
+  height: 0.5px;
+  background: var(--linen);
+}
+
+/* ══════════════════════════════════════════
+   HERO
+══════════════════════════════════════════ */
+#hero {
+  height: 100vh;
+  min-height: 700px;
+  background: var(--jade);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Landscape texture via CSS gradient layers */
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 120% 80% at 50% 110%, rgba(10,18,11,0.9) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 20%, rgba(201,169,110,0.06) 0%, transparent 50%),
+    radial-gradient(ellipse 80% 60% at 20% 70%, rgba(28,46,32,0.8) 0%, transparent 55%),
+    linear-gradient(160deg, #0d1a0e 0%, #1c2e20 35%, #243629 65%, #1a2b1e 100%);
+}
+
+/* Subtle bamboo-shadow stripes */
+.hero-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    100deg,
+    transparent 0px,
+    transparent 38px,
+    rgba(0,0,0,0.07) 38px,
+    rgba(0,0,0,0.07) 40px
+  );
+  opacity: 0.4;
+}
+
+/* Fine grain texture */
+.hero-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity: 0.35;
+  mix-blend-mode: overlay;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  text-align: center;
+  padding: 0 24px;
+}
+
+.hero-ornament {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  width: min(380px, 80vw);
+  margin-bottom: 40px;
+  opacity: 0;
+  animation: fadeUp 1.2s var(--ease-silk) 0.3s forwards;
+}
+.hero-orn-line {
+  flex: 1;
+  height: 0.5px;
+  background: var(--gold);
+  opacity: 0.6;
+}
+.hero-orn-diamond {
+  width: 9px; height: 9px;
+  background: var(--gold);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+  opacity: 0.8;
+}
+
+.hero-wordmark {
+  font-family: var(--f-display);
+  font-weight: 300;
+  font-size: clamp(52px, 9vw, 96px);
+  letter-spacing: 0.38em;
+  padding-left: 0.38em;
+  color: var(--linen);
+  line-height: 1;
+  opacity: 0;
+  animation: fadeUp 1.4s var(--ease-silk) 0.5s forwards;
+}
+
+.hero-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: min(220px, 55vw);
+  margin: 22px 0 18px;
+  opacity: 0;
+  animation: fadeUp 1.2s var(--ease-silk) 0.7s forwards;
+}
+.hero-div-line {
+  flex: 1;
+  height: 0.5px;
+  background: var(--gold);
+  opacity: 0.55;
+}
+.hero-div-dot {
+  width: 4px; height: 4px;
+  background: var(--gold);
+  transform: rotate(45deg);
+  opacity: 0.7;
+}
+
+.hero-subtitle {
+  font-family: var(--f-display);
+  font-weight: 300;
+  font-size: clamp(10px, 1.4vw, 13px);
+  letter-spacing: 0.65em;
+  padding-left: 0.65em;
+  color: rgba(240,237,230,0.6);
+  opacity: 0;
+  animation: fadeUp 1.2s var(--ease-silk) 0.85s forwards;
+}
+.hero-subtitle .accent { color: var(--gold); }
+
+.hero-ornament-btm {
+  margin-top: 38px;
+}
+
+.hero-tagline {
+  margin-top: 40px;
+  font-family: var(--f-body);
+  font-style: italic;
+  font-size: clamp(16px, 2vw, 21px);
+  font-weight: 300;
+  color: var(--ink-dim);
+  letter-spacing: 0.04em;
+  max-width: 520px;
+  opacity: 0;
+  animation: fadeUp 1.2s var(--ease-silk) 1.1s forwards;
+}
+
+.hero-scroll {
+  position: absolute;
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  animation: fadeUp 1s var(--ease-silk) 1.6s forwards;
+  z-index: 2;
+}
+.hero-scroll span {
+  font-family: var(--f-ui);
+  font-size: 9px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ink-ghost);
+}
+.scroll-line {
+  width: 0.5px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+  animation: scrollPulse 2.2s ease-in-out infinite 2s;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.4; transform: scaleY(1); }
+  50%       { opacity: 0.9; transform: scaleY(1.15); }
+}
+
+/* ══════════════════════════════════════════
+   SECTION COMMONS
+══════════════════════════════════════════ */
+section { position: relative; }
+
+.section-eyebrow {
+  font-family: var(--f-ui);
+  font-weight: 300;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.section-eyebrow::before {
+  content: '';
+  display: block;
+  width: 32px;
+  height: 0.5px;
+  background: var(--gold);
+  opacity: 0.7;
+}
+
+.section-title {
+  font-family: var(--f-display);
+  font-weight: 300;
+  font-size: clamp(28px, 4vw, 48px);
+  letter-spacing: 0.1em;
+  line-height: 1.25;
+  color: var(--linen);
+  margin-bottom: 20px;
+}
+
+.section-prose {
+  font-family: var(--f-body);
+  font-weight: 300;
+  font-size: clamp(16px, 1.5vw, 19px);
+  color: var(--ink);
+  line-height: 1.85;
+  max-width: 640px;
+}
+
+.gold-rule {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin: 0 auto;
+}
+.gold-rule-line { flex: 1; height: 0.5px; background: var(--gold); opacity: 0.4; }
+.gold-rule-diamond {
+  width: 7px; height: 7px;
+  background: var(--gold);
+  transform: rotate(45deg);
+  opacity: 0.6;
+  flex-shrink: 0;
+}
+
+/* ══════════════════════════════════════════
+   PHILOSOPHY (linen bg)
+══════════════════════════════════════════ */
+#philosophy {
+  background: var(--linen);
+  padding: 120px 56px;
+}
+
+.philosophy-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 80px;
+  align-items: start;
+}
+
+.philosophy-left { padding-top: 8px; }
+.philosophy-left .section-eyebrow { color: var(--jade); }
+.philosophy-left .section-eyebrow::before { background: var(--jade); }
+.philosophy-left .section-title { color: var(--jade); }
+
+.philosophy-right {
+  padding-top: 6px;
+  border-left: 0.5px solid rgba(28,46,32,0.15);
+  padding-left: 60px;
+}
+
+.philosophy-quote {
+  font-family: var(--f-body);
+  font-style: italic;
+  font-size: clamp(22px, 3vw, 32px);
+  font-weight: 300;
+  color: var(--jade);
+  line-height: 1.5;
+  margin-bottom: 36px;
+  position: relative;
+}
+.philosophy-quote::before {
+  content: '\201C';
+  font-size: 80px;
+  line-height: 0;
+  color: var(--gold);
+  position: absolute;
+  top: 20px;
+  left: -28px;
+  opacity: 0.5;
+}
+
+.philosophy-body {
+  font-family: var(--f-body);
+  font-weight: 300;
+  font-size: clamp(15px, 1.4vw, 17px);
+  color: rgba(28,46,32,0.72);
+  line-height: 1.9;
+}
+.philosophy-body p + p { margin-top: 20px; }
+
+.philosophy-pillars {
+  margin-top: 48px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  border-top: 0.5px solid rgba(28,46,32,0.12);
+  padding-top: 40px;
+}
+
+.pillar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.pillar-num {
+  font-family: var(--f-display);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+}
+.pillar-title {
+  font-family: var(--f-display);
+  font-size: 14px;
+  letter-spacing: 0.12em;
+  color: var(--jade);
+  font-weight: 300;
+}
+.pillar-text {
+  font-family: var(--f-body);
+  font-size: 14px;
+  color: rgba(28,46,32,0.6);
+  line-height: 1.7;
+}
+
+/* ══════════════════════════════════════════
+   DESTINATIONS
+══════════════════════════════════════════ */
+#destinations {
+  background: var(--jade-dk);
+  padding: 120px 56px;
+}
+
+.destinations-header {
+  max-width: 1200px;
+  margin: 0 auto 64px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.destinations-header-left { max-width: 520px; }
+
+.dest-browse {
+  font-family: var(--f-ui);
+  font-weight: 300;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  border-bottom: 0.5px solid rgba(201,169,110,0.4);
+  padding-bottom: 3px;
+  transition: border-color 0.3s;
+}
+.dest-browse:hover { border-color: var(--gold); }
+
+/* Destination grid: 1 large left + 2 stacked right + 1 wide bottom */
+.destinations-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  grid-template-rows: 460px 340px;
+  gap: 16px;
+}
+
+.dest-card {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.dest-card:nth-child(2) {
+  grid-row: 1 / 2;
+  grid-column: 2 / 3;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 16px;
+  background: none;
+}
+/* The two stacked cards inside col 2 */
+.dest-card-inner {
+  position: relative;
+  overflow: hidden;
+}
+
+.dest-card:nth-child(3) {
+  grid-column: 1 / 3;
+}
+
+/* Gradient background simulating each destination */
+.dest-bg {
+  position: absolute;
+  inset: 0;
+  transition: transform 0.9s var(--ease-silk);
+}
+.dest-card:hover .dest-bg,
+.dest-card-inner:hover .dest-bg { transform: scale(1.04); }
+
+/* Individual destination backgrounds */
+.bg-bali {
+  background:
+    radial-gradient(ellipse 80% 60% at 30% 40%, rgba(45,70,30,0.6) 0%, transparent 60%),
+    linear-gradient(145deg, #1a3a1a 0%, #2d5a1e 30%, #3d7a28 60%, #1e4a18 100%);
+}
+.bg-bali::after {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(circle at 65% 25%, rgba(201,169,110,0.12) 0%, transparent 40%),
+    radial-gradient(ellipse 100% 50% at 50% 100%, rgba(0,0,0,0.7) 0%, transparent 60%);
+}
+
+.bg-maldives {
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 30%, rgba(20,80,100,0.8) 0%, transparent 60%),
+    linear-gradient(180deg, #0d3a4a 0%, #0a2d3d 40%, #1a5565 70%, #082030 100%);
+}
+.bg-maldives::after {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 100% 40% at 50% 0%, rgba(30,160,200,0.15) 0%, transparent 50%),
+    radial-gradient(ellipse 100% 50% at 50% 100%, rgba(0,0,0,0.65) 0%, transparent 60%);
+}
+
+.bg-luang {
+  background:
+    radial-gradient(ellipse 80% 60% at 40% 30%, rgba(100,70,30,0.6) 0%, transparent 55%),
+    linear-gradient(150deg, #3a2510 0%, #5a3a18 35%, #7a5020 60%, #2a1a08 100%);
+}
+.bg-luang::after {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(circle at 70% 30%, rgba(201,169,110,0.18) 0%, transparent 40%),
+    radial-gradient(ellipse 100% 50% at 50% 100%, rgba(0,0,0,0.7) 0%, transparent 60%);
+}
+
+.bg-raja {
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 40%, rgba(0,80,90,0.7) 0%, transparent 60%),
+    linear-gradient(160deg, #0a2d35 0%, #0e3d45 35%, #1a5560 60%, #081e28 100%);
+}
+.bg-raja::after {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 30% at 40% 10%, rgba(50,200,220,0.1) 0%, transparent 45%),
+    radial-gradient(ellipse 100% 50% at 50% 100%, rgba(0,0,0,0.65) 0%, transparent 60%);
+}
+
+.bg-seychelles {
+  background:
+    radial-gradient(ellipse 70% 50% at 60% 35%, rgba(160,110,50,0.5) 0%, transparent 55%),
+    linear-gradient(140deg, #3a2808 0%, #5a4018 35%, #7a6030 55%, #2a1808 100%);
+}
+.bg-seychelles::after {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(201,169,110,0.15) 0%, transparent 40%),
+    radial-gradient(ellipse 100% 50% at 50% 100%, rgba(0,0,0,0.65) 0%, transparent 60%);
+}
+
+/* The "local phrase" watermark signature element */
+.dest-phrase {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--f-body);
+  font-style: italic;
+  font-size: clamp(28px, 3.5vw, 52px);
+  color: rgba(240,237,230,0.09);
+  text-align: center;
+  padding: 24px;
+  transition: opacity 0.6s var(--ease-silk);
+  pointer-events: none;
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+  z-index: 1;
+}
+.dest-card:hover .dest-phrase,
+.dest-card-inner:hover .dest-phrase { opacity: 0; }
+
+.dest-info {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 32px;
+  z-index: 2;
+  transform: translateY(8px);
+  transition: transform 0.5s var(--ease-silk);
+}
+.dest-card:hover .dest-info,
+.dest-card-inner:hover .dest-info { transform: none; }
+
+.dest-region {
+  font-family: var(--f-ui);
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+
+.dest-name {
+  font-family: var(--f-display);
+  font-weight: 300;
+  font-size: clamp(20px, 2.2vw, 30px);
+  letter-spacing: 0.1em;
+  color: var(--linen);
+  margin-bottom: 8px;
+}
+
+.dest-desc {
+  font-family: var(--f-body);
+  font-size: 13px;
+  color: var(--ink-dim);
+  line-height: 1.6;
+  max-width: 340px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.4s var(--ease-silk) 0.05s, transform 0.4s var(--ease-silk) 0.05s;
+}
+.dest-card:hover .dest-desc,
+.dest-card-inner:hover .dest-desc {
+  opacity: 1;
+  transform: none;
+}
+
+.dest-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  font-family: var(--f-ui);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.4s var(--ease-silk) 0.1s, transform 0.4s var(--ease-silk) 0.1s;
+}
+.dest-link::after {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 0.5px;
+  background: var(--gold);
+  transition: width 0.3s;
+}
+.dest-link:hover::after { width: 40px; }
+.dest-card:hover .dest-link,
+.dest-card-inner:hover .dest-link {
+  opacity: 1;
+  transform: none;
+}
+
+/* ══════════════════════════════════════════
+   HOW WE WORK (process)
+══════════════════════════════════════════ */
+#process {
+  background: var(--jade);
+  padding: 120px 56px;
+  border-top: 0.5px solid var(--ink-ghost);
+}
+
+.process-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.process-header {
+  text-align: center;
+  margin-bottom: 80px;
+}
+.process-header .section-eyebrow { justify-content: center; }
+.process-header .section-eyebrow::before { display: none; }
+.process-header .section-eyebrow::after {
+  content: '';
+  display: block;
+  width: 32px;
+  height: 0.5px;
+  background: var(--gold);
+  opacity: 0.7;
+}
+
+.process-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border-top: 0.5px solid var(--ink-ghost);
+}
+
+.process-step {
+  padding: 48px 40px 48px 0;
+  border-right: 0.5px solid var(--ink-ghost);
+  position: relative;
+}
+.process-step:last-child { border-right: none; padding-right: 0; }
+.process-step:not(:first-child) { padding-left: 40px; }
+
+.step-marker {
+  font-family: var(--f-display);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.step-marker::before {
+  content: '';
+  display: block;
+  width: 7px; height: 7px;
+  background: var(--gold);
+  transform: rotate(45deg);
+  opacity: 0.7;
+}
+
+.step-title {
+  font-family: var(--f-display);
+  font-weight: 300;
+  font-size: 18px;
+  letter-spacing: 0.1em;
+  color: var(--linen);
+  margin-bottom: 14px;
+}
+
+.step-text {
+  font-family: var(--f-body);
+  font-size: 15px;
+  color: var(--ink-dim);
+  line-height: 1.8;
+}
+
+/* ══════════════════════════════════════════
+   BESPOKE QUOTE SECTION
+══════════════════════════════════════════ */
+#manifesto {
+  background: var(--jade-dk);
+  padding: 100px 56px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+#manifesto::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(201,169,110,0.05) 0%, transparent 65%);
+}
+
+.manifesto-rule {
+  width: min(320px, 70vw);
+  margin: 0 auto 56px;
+}
+
+.manifesto-text {
+  font-family: var(--f-body);
+  font-style: italic;
+  font-size: clamp(22px, 3.5vw, 42px);
+  font-weight: 300;
+  color: var(--linen);
+  line-height: 1.55;
+  max-width: 860px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.manifesto-text em {
+  font-style: normal;
+  color: var(--gold);
+}
+
+.manifesto-attr {
+  margin-top: 36px;
+  font-family: var(--f-ui);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-ghost);
+  position: relative;
+  z-index: 1;
+}
+
+/* ══════════════════════════════════════════
+   EXPERIENCES (cards row)
+══════════════════════════════════════════ */
+#experiences {
+  background: var(--linen);
+  padding: 120px 56px;
+}
+
+.experiences-inner { max-width: 1200px; margin: 0 auto; }
+.experiences-inner .section-eyebrow { color: var(--jade-lt); }
+.experiences-inner .section-eyebrow::before { background: var(--jade); }
+.experiences-inner .section-title { color: var(--jade); }
+
+.exp-grid {
+  margin-top: 56px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+
+.exp-card {
+  background: var(--jade);
+  padding: 48px 36px;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.4s var(--ease-silk);
+}
+.exp-card:hover { background: var(--jade-lt); }
+
+.exp-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1.5px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s var(--ease-silk);
+}
+.exp-card:hover::before { transform: scaleX(1); }
+
+.exp-icon {
+  width: 36px;
+  height: 36px;
+  margin-bottom: 28px;
+  opacity: 0.6;
+}
+
+.exp-title {
+  font-family: var(--f-display);
+  font-weight: 300;
+  font-size: 18px;
+  letter-spacing: 0.1em;
+  color: var(--linen);
+  margin-bottom: 14px;
+}
+
+.exp-text {
+  font-family: var(--f-body);
+  font-size: 14px;
+  color: var(--ink-dim);
+  line-height: 1.8;
+}
+
+.exp-detail {
+  margin-top: 28px;
+  font-family: var(--f-ui);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+/* ══════════════════════════════════════════
+   TESTIMONIAL
+══════════════════════════════════════════ */
+#testimonial {
+  background: var(--jade-md);
+  padding: 100px 56px;
+  border-top: 0.5px solid var(--ink-ghost);
+  border-bottom: 0.5px solid var(--ink-ghost);
+}
+
+.testimonial-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.testi-quote {
+  font-family: var(--f-body);
+  font-style: italic;
+  font-size: clamp(18px, 2.5vw, 26px);
+  font-weight: 300;
+  color: var(--linen);
+  line-height: 1.7;
+  margin-bottom: 36px;
+}
+
+.testi-attr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.testi-name {
+  font-family: var(--f-display);
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  color: var(--gold);
+}
+.testi-role {
+  font-family: var(--f-ui);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+
+.testi-stars {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 32px;
+}
+.star {
+  width: 6px; height: 6px;
+  background: var(--gold);
+  transform: rotate(45deg);
+  opacity: 0.8;
+}
+
+/* ══════════════════════════════════════════
+   CONTACT
+══════════════════════════════════════════ */
+#contact {
+  background: var(--jade-dk);
+  padding: 120px 56px;
+}
+
+.contact-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+
+.contact-left { }
+.contact-left .section-prose {
+  color: var(--ink-dim);
+  margin-bottom: 40px;
+  max-width: 460px;
+}
+
+.contact-details {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.contact-detail {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+.contact-detail-label {
+  font-family: var(--f-ui);
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  flex-shrink: 0;
+  padding-top: 2px;
+  width: 70px;
+}
+.contact-detail-value {
+  font-family: var(--f-body);
+  font-size: 16px;
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+/* The form — treated as a ritual, not a form */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 0.5px solid var(--ink-ghost);
+  padding: 52px 48px;
+  position: relative;
+}
+
+.contact-form::before {
+  content: 'INICIAR CONVERSACIÓN';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--jade-dk);
+  padding: 0 20px;
+  font-family: var(--f-ui);
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+  white-space: nowrap;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+
+.form-label {
+  font-family: var(--f-ui);
+  font-size: 9px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+  background: none;
+  border: none;
+  border-bottom: 0.5px solid var(--ink-ghost);
+  padding: 10px 0;
+  font-family: var(--f-body);
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--linen);
+  outline: none;
+  transition: border-color 0.3s;
+  width: 100%;
+  -webkit-appearance: none;
+}
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus { border-color: var(--gold); }
+
+.form-select {
+  cursor: pointer;
+  background: transparent;
+}
+.form-select option { background: var(--jade-dk); color: var(--linen); }
+
+.form-textarea { resize: none; height: 80px; }
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+}
+
+.form-submit {
+  margin-top: 16px;
+  width: 100%;
+  padding: 18px;
+  background: transparent;
+  border: 0.5px solid var(--gold);
+  font-family: var(--f-display);
+  font-weight: 300;
+  font-size: 12px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gold);
+  cursor: pointer;
+  transition: background 0.35s, color 0.35s;
+  position: relative;
+  overflow: hidden;
+}
+.form-submit::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--gold);
+  transform: translateX(-101%);
+  transition: transform 0.4s var(--ease-silk);
+}
+.form-submit:hover::before { transform: none; }
+.form-submit:hover { color: var(--jade-dk); }
+.form-submit span { position: relative; z-index: 1; }
+
+.form-note {
+  margin-top: 16px;
+  font-family: var(--f-body);
+  font-style: italic;
+  font-size: 12px;
+  color: var(--ink-ghost);
+  text-align: center;
+  letter-spacing: 0.03em;
+}
+
+/* ══════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════ */
+footer {
+  background: var(--jade-dk);
+  border-top: 0.5px solid var(--ink-ghost);
+  padding: 64px 56px 40px;
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 48px;
+  margin-bottom: 56px;
+  padding-bottom: 56px;
+  border-bottom: 0.5px solid var(--ink-ghost);
+}
+
+.footer-brand {}
+.footer-logo {
+  font-family: var(--f-display);
+  font-weight: 300;
+  font-size: 20px;
+  letter-spacing: 0.3em;
+  color: var(--linen);
+  margin-bottom: 4px;
+  padding-left: 0.3em;
+}
+.footer-logo span { color: var(--gold); }
+.footer-tagline-sm {
+  font-family: var(--f-body);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--ink-dim);
+  letter-spacing: 0.04em;
+}
+
+.footer-cols {
+  display: flex;
+  gap: 72px;
+}
+.footer-col-title {
+  font-family: var(--f-ui);
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 20px;
+}
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer-col ul a {
+  font-family: var(--f-body);
+  font-size: 14px;
+  color: var(--ink-dim);
+  transition: color 0.3s;
+}
+.footer-col ul a:hover { color: var(--linen); }
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.footer-copy {
+  font-family: var(--f-ui);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--ink-ghost);
+}
+.footer-legal {
+  display: flex;
+  gap: 28px;
+}
+.footer-legal a {
+  font-family: var(--f-ui);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--ink-ghost);
+  transition: color 0.3s;
+}
+.footer-legal a:hover { color: var(--ink-dim); }
+
+/* ══════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════ */
+@media (max-width: 960px) {
+  nav { padding: 22px 28px; }
+  nav.scrolled { padding: 16px 28px; }
+  .nav-links, .nav-cta { display: none; }
+  .nav-hamburger { display: flex; }
+
+  #philosophy, #destinations, #process, #experiences,
+  #contact, #manifesto, #testimonial, footer { padding-left: 28px; padding-right: 28px; }
+
+  .philosophy-inner { grid-template-columns: 1fr; gap: 40px; }
+  .philosophy-right { border-left: none; padding-left: 0; border-top: 0.5px solid rgba(28,46,32,0.15); padding-top: 40px; }
+  .philosophy-pillars { grid-template-columns: 1fr; }
+
+  .destinations-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .destinations-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+  .dest-card:nth-child(2) { grid-row: auto; grid-column: auto; grid-template-rows: 280px 280px; }
+  .dest-card:nth-child(3) { grid-column: auto; }
+  .destinations-grid > .dest-card:first-child { height: 360px; }
+  .destinations-grid > .dest-card:last-child { height: 280px; }
+
+  .process-steps { grid-template-columns: 1fr 1fr; }
+  .process-step:nth-child(2) { border-right: 0.5px solid var(--ink-ghost); }
+  .process-step:nth-child(3) { border-top: 0.5px solid var(--ink-ghost); padding-top: 40px; }
+  .process-step:nth-child(4) { border-top: 0.5px solid var(--ink-ghost); padding-top: 40px; }
+
+  .exp-grid { grid-template-columns: 1fr; }
+
+  .contact-inner { grid-template-columns: 1fr; }
+  .contact-form { padding: 40px 28px; }
+  .form-row { grid-template-columns: 1fr; }
+
+  .footer-top { flex-direction: column; }
+  .footer-cols { flex-wrap: wrap; gap: 40px; }
+}
+
+@media (max-width: 560px) {
+  .hero-wordmark { font-size: 40px; }
+  .process-steps { grid-template-columns: 1fr; }
+  .process-step { border-right: none !important; border-top: 0.5px solid var(--ink-ghost); }
+  .process-step:first-child { border-top: none; }
+  .process-step { padding-right: 0 !important; padding-left: 0 !important; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .reveal { transition: none; opacity: 1; transform: none; }
+  .hero-wordmark, .hero-ornament, .hero-divider,
+  .hero-subtitle, .hero-tagline, .hero-scroll { animation: none; opacity: 1; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     NAVIGATION
+══════════════════════════════════════════ -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">MAVARA <span>P</span>RIVÉ</a>
+  <ul class="nav-links">
+    <li><a href="#philosophy">Philosophy</a></li>
+    <li><a href="#destinations">Destinations</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#experiences">Experiences</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Begin Your Journey</a>
+  <button class="nav-hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+
+<!-- ══════════════════════════════════════════
+     HERO
+══════════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-bg"></div>
+
+  <div class="hero-content">
+    <!-- Top ornament -->
+    <div class="hero-ornament">
+      <div class="hero-orn-line"></div>
+      <div class="hero-orn-diamond"></div>
+      <div class="hero-orn-line"></div>
+    </div>
+
+    <!-- Wordmark -->
+    <div class="hero-wordmark">MAVARA</div>
+
+    <!-- Divider -->
+    <div class="hero-divider">
+      <div class="hero-div-line"></div>
+      <div class="hero-div-dot"></div>
+      <div class="hero-div-line"></div>
+    </div>
+
+    <!-- Subtitle -->
+    <div class="hero-subtitle">P R I V<span class="accent">É</span></div>
+
+    <!-- Bottom ornament -->
+    <div class="hero-ornament hero-ornament-btm">
+      <div class="hero-orn-line"></div>
+      <div class="hero-orn-diamond"></div>
+      <div class="hero-orn-line"></div>
+    </div>
+
+    <!-- Tagline -->
+    <p class="hero-tagline">
+      Journeys beyond itineraries. For those who seek<br>what cannot be found in any catalogue.
+    </p>
+  </div>
+
+  <div class="hero-scroll">
+    <span>Explore</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     PHILOSOPHY
+══════════════════════════════════════════ -->
+<section id="philosophy">
+  <div class="philosophy-inner">
+
+    <div class="philosophy-left reveal">
+      <div class="section-eyebrow">Our Philosophy</div>
+      <h2 class="section-title">Travel as a<br>state of mind</h2>
+    </div>
+
+    <div class="philosophy-right reveal reveal-delay-1">
+      <blockquote class="philosophy-quote">
+        We do not sell destinations.<br>We orchestrate transformations.
+      </blockquote>
+      <div class="philosophy-body">
+        <p>Mavara Privé was born from a conviction that true luxury in travel is no longer about thread counts or Michelin stars. It is about encountering the world with a depth of access that only trust, patience, and genuine knowledge can provide.</p>
+        <p>We work with a deliberately small number of families and individuals each year. Not because exclusivity is a marketing device — but because intimacy is the only way to do this properly. Every journey is singular. Built once, lived once.</p>
+        <p>Our reach spans the temples of Angkor and the rice terraces of Bali, the outer atolls of the Maldives and the lesser-known islands of the Seychelles — always guided by the same principle: take you somewhere real.</p>
+      </div>
+
+      <div class="philosophy-pillars">
+        <div class="pillar">
+          <div class="pillar-num">I</div>
+          <div class="pillar-title">Intimacy</div>
+          <div class="pillar-text">A maximum of 24 journeys crafted per year. Your advisor becomes your companion.</div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-num">II</div>
+          <div class="pillar-title">Depth</div>
+          <div class="pillar-text">Months of preparation for every trip. Cultural immersion, not cultural tourism.</div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-num">III</div>
+          <div class="pillar-title">Silence</div>
+          <div class="pillar-text">No crowds, no queues. Access to places that do not appear on any map we publish.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     DESTINATIONS
+══════════════════════════════════════════ -->
+<section id="destinations">
+
+  <div class="destinations-header reveal">
+    <div class="destinations-header-left">
+      <div class="section-eyebrow">Territories</div>
+      <h2 class="section-title">Where we take<br>you</h2>
+    </div>
+    <a href="#contact" class="dest-browse">All destinations →</a>
+  </div>
+
+  <div class="destinations-grid">
+
+    <!-- Card 1: Bali (large) -->
+    <div class="dest-card reveal">
+      <div class="dest-bg bg-bali"></div>
+      <div class="dest-phrase">Rahajeng rauh ring Bali</div>
+      <div class="dest-info">
+        <div class="dest-region">Indonesia · Bali</div>
+        <div class="dest-name">Ubud & Beyond</div>
+        <div class="dest-desc">The Bali that existed before the world arrived. Private rice-terrace ceremonies, temple access at dawn, and villas where the jungle is the only neighbour.</div>
+        <a href="#contact" class="dest-link">Enquire</a>
+      </div>
+    </div>
+
+    <!-- Column 2: two stacked -->
+    <div class="dest-card" style="background:none;overflow:visible;cursor:default;">
+      <div class="dest-card-inner reveal reveal-delay-1">
+        <div class="dest-bg bg-maldives"></div>
+        <div class="dest-phrase">Hadhaa dhiya</div>
+        <div class="dest-info">
+          <div class="dest-region">Indian Ocean · Maldives</div>
+          <div class="dest-name">Outer Atolls</div>
+          <div class="dest-desc">Beyond the resort islands. Private overwater sanctuaries on atolls most visitors never reach.</div>
+          <a href="#contact" class="dest-link">Enquire</a>
+        </div>
+      </div>
+      <div class="dest-card-inner reveal reveal-delay-2">
+        <div class="dest-bg bg-luang"></div>
+        <div class="dest-phrase">ຍິນດີຕ້ອນຮັບ</div>
+        <div class="dest-info">
+          <div class="dest-region">Laos · Luang Prabang</div>
+          <div class="dest-name">The Golden City</div>
+          <div class="dest-desc">Monk processions at first light. A city that moves at the speed of the Mekong.</div>
+          <a href="#contact" class="dest-link">Enquire</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3: wide bottom (spans full width) -->
+    <div class="dest-card reveal" style="height: 340px;">
+      <div class="dest-bg" style="background: linear-gradient(135deg, #0a2d35 0%, #0e3d45 30%, #1a5565 55%, rgba(40,10,5,0.9) 100%);"></div>
+      <div class="dest-phrase" style="font-size: clamp(32px, 4vw, 64px);">ยินดีต้อนรับ</div>
+      <div class="dest-info" style="padding: 40px 52px;">
+        <div class="dest-region">Thailand · Myanmar · Cambodia</div>
+        <div class="dest-name">The Mainland Arc</div>
+        <div class="dest-desc">From the temples of Chiang Rai to the river palaces of Mandalay and the sunrise at Angkor Wat, seen in absolute solitude from a private terrace reserved months in advance.</div>
+        <a href="#contact" class="dest-link">Begin planning</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     PROCESS
+══════════════════════════════════════════ -->
+<section id="process">
+  <div class="process-inner">
+
+    <div class="process-header reveal">
+      <div class="section-eyebrow">How we work</div>
+      <h2 class="section-title" style="text-align:center;">From first conversation<br>to last memory</h2>
+    </div>
+
+    <div class="process-steps">
+      <div class="process-step reveal">
+        <div class="step-marker">The Conversation</div>
+        <div class="step-title">We listen first</div>
+        <div class="step-text">A private consultation — in person in Lisbon or Barcelona, or by secure video — where we understand not just where you want to go, but who you are when you travel. No forms, no questionnaires.</div>
+      </div>
+      <div class="process-step reveal reveal-delay-1">
+        <div class="step-marker">The Design</div>
+        <div class="step-title">We build your world</div>
+        <div class="step-text">Three to four weeks of silent work. We contact our network of private guides, property owners and local custodians. We present one proposal, precisely calibrated. Not options — a vision.</div>
+      </div>
+      <div class="process-step reveal reveal-delay-2">
+        <div class="step-marker">The Refinement</div>
+        <div class="step-title">We perfect together</div>
+        <div class="step-text">Two rounds of dialogue to adjust rhythm, depth, and pace. We do not rush. A journey planned over months is a journey felt differently once you arrive.</div>
+      </div>
+      <div class="process-step reveal reveal-delay-3">
+        <div class="step-marker">The Journey</div>
+        <div class="step-title">We travel with you</div>
+        <div class="step-text">Your advisor remains available at every hour. If something extraordinary becomes possible — a private temple access, a master artisan encounter — we open that door. Always.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     MANIFESTO QUOTE
+══════════════════════════════════════════ -->
+<section id="manifesto">
+  <div class="manifesto-rule gold-rule reveal">
+    <div class="gold-rule-line"></div>
+    <div class="gold-rule-diamond"></div>
+    <div class="gold-rule-line"></div>
+  </div>
+  <p class="manifesto-text reveal reveal-delay-1">
+    "The world's most beautiful places are not on any list.<br>
+    They are held in trust by people who know them intimately.<br>
+    <em>Our work is to introduce you.</em>"
+  </p>
+  <div class="manifesto-attr reveal reveal-delay-2">Mavara Privé · Est. 2024</div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     EXPERIENCES
+══════════════════════════════════════════ -->
+<section id="experiences">
+  <div class="experiences-inner">
+    <div class="reveal">
+      <div class="section-eyebrow">What we curate</div>
+      <h2 class="section-title" style="color: var(--jade);">Moments that<br>do not repeat</h2>
+    </div>
+
+    <div class="exp-grid">
+
+      <div class="exp-card reveal">
+        <svg class="exp-icon" viewBox="0 0 36 36" fill="none" stroke="#C9A96E" stroke-width="0.8">
+          <circle cx="18" cy="18" r="14"/>
+          <path d="M18 8 L18 28 M8 18 L28 18" stroke-dasharray="2 3"/>
+          <circle cx="18" cy="18" r="4"/>
+        </svg>
+        <div class="exp-title">Private Access</div>
+        <div class="exp-text">Temples and heritage sites opened exclusively for your group. Angkor at 4 AM, the Shwedagon terrace before dawn, the Tanah Lot clifftop at dusk without a single stranger present.</div>
+        <div class="exp-detail">Cultural & Spiritual</div>
+      </div>
+
+      <div class="exp-card reveal reveal-delay-1">
+        <svg class="exp-icon" viewBox="0 0 36 36" fill="none" stroke="#C9A96E" stroke-width="0.8">
+          <path d="M4 28 Q10 10 18 16 Q26 22 32 8"/>
+          <circle cx="18" cy="16" r="2" fill="#C9A96E" opacity="0.5"/>
+          <path d="M4 32 Q18 20 32 32" opacity="0.3"/>
+        </svg>
+        <div class="exp-title">Untouched Seas</div>
+        <div class="exp-text">Private sailing through the Banda Sea. A chartered phinisi with a marine biologist aboard, navigating reefs that receive fewer than a hundred visitors a year. The ocean as it was.</div>
+        <div class="exp-detail">Nautical & Marine</div>
+      </div>
+
+      <div class="exp-card reveal reveal-delay-2">
+        <svg class="exp-icon" viewBox="0 0 36 36" fill="none" stroke="#C9A96E" stroke-width="0.8">
+          <rect x="8" y="14" width="20" height="14" rx="0.5"/>
+          <path d="M13 14 L13 10 Q18 6 23 10 L23 14"/>
+          <path d="M15 21 L21 21 M18 18 L18 24" opacity="0.5"/>
+        </svg>
+        <div class="exp-title">The Living Table</div>
+        <div class="exp-text">A private dinner cooked by a third-generation Balinese chef in her family compound. A Thai royal court menu prepared in a teak palace. Cuisine as cultural inheritance, not performance.</div>
+        <div class="exp-detail">Gastronomic & Cultural</div>
+      </div>
+
+      <div class="exp-card reveal">
+        <svg class="exp-icon" viewBox="0 0 36 36" fill="none" stroke="#C9A96E" stroke-width="0.8">
+          <path d="M18 4 L18 32 M8 14 L28 14 M10 24 L26 24"/>
+          <circle cx="18" cy="4" r="2" fill="#C9A96E" opacity="0.5"/>
+        </svg>
+        <div class="exp-title">Master Artisans</div>
+        <div class="exp-text">A private session with a Khmer shadow-puppet maker in Siem Reap. An afternoon with a Sumatran batik master. Learning the language of a culture through its makers, not its markets.</div>
+        <div class="exp-detail">Arts & Craftsmanship</div>
+      </div>
+
+      <div class="exp-card reveal reveal-delay-1">
+        <svg class="exp-icon" viewBox="0 0 36 36" fill="none" stroke="#C9A96E" stroke-width="0.8">
+          <path d="M6 30 L12 18 L18 24 L24 12 L30 20"/>
+          <circle cx="6" cy="30" r="1.5" fill="#C9A96E" opacity="0.6"/>
+          <circle cx="30" cy="20" r="1.5" fill="#C9A96E" opacity="0.6"/>
+        </svg>
+        <div class="exp-title">Wellness Sanctuaries</div>
+        <div class="exp-text">A private retreat in the highlands of Chiang Mai. Ayurvedic programmes in a Keralan estate closed to the public. Silence as a luxury — deeply, genuinely sought.</div>
+        <div class="exp-detail">Wellness & Stillness</div>
+      </div>
+
+      <div class="exp-card reveal reveal-delay-2">
+        <svg class="exp-icon" viewBox="0 0 36 36" fill="none" stroke="#C9A96E" stroke-width="0.8">
+          <polygon points="18,4 22,14 32,14 24,21 27,32 18,25 9,32 12,21 4,14 14,14"/>
+          <circle cx="18" cy="18" r="3" opacity="0.4"/>
+        </svg>
+        <div class="exp-title">Children & Legacy</div>
+        <div class="exp-text">Journeys designed for families who believe travel is the finest education. A private wildlife field station in Borneo. A two-day river expedition in the heart of Sarawak with a naturalist guide.</div>
+        <div class="exp-detail">Family & Next Generation</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     TESTIMONIAL
+══════════════════════════════════════════ -->
+<section id="testimonial">
+  <div class="testimonial-inner">
+    <div class="testi-stars reveal">
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+    </div>
+    <blockquote class="testi-quote reveal reveal-delay-1">
+      "We have travelled with Aman and Six Senses for twenty years. Mavara did something neither of them had ever managed: they made us feel we were the first people to see what we were seeing. That temple, that sunset, that dinner — they were ours. Completely ours."
+    </blockquote>
+    <div class="testi-attr reveal reveal-delay-2">
+      <div class="testi-name">C. & M. Fontaine</div>
+      <div class="testi-role">Paris · Bali & Laos Journey, 2024</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     CONTACT
+══════════════════════════════════════════ -->
+<section id="contact">
+  <div class="contact-inner">
+
+    <div class="contact-left reveal">
+      <div class="section-eyebrow">Contact</div>
+      <h2 class="section-title">Begin your<br>conversation</h2>
+      <p class="section-prose">
+        We accept a limited number of new clients each year. If you are reading this, there is likely still time. Write to us — not to book, but to begin.
+      </p>
+
+      <div class="contact-details">
+        <div class="contact-detail">
+          <div class="contact-detail-label">Private</div>
+          <div class="contact-detail-value">privé@mavara.com</div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-label">Studio</div>
+          <div class="contact-detail-value">Lisbon · Barcelona<br><span style="font-size:13px;color:var(--ink-dim)">By appointment only</span></div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-label">Response</div>
+          <div class="contact-detail-value">Within 48 hours,<br><span style="font-size:13px;color:var(--ink-dim)">always by a human being</span></div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-label">Discretion</div>
+          <div class="contact-detail-value">Absolute. All enquiries<br><span style="font-size:13px;color:var(--ink-dim)">are held in strict confidence</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-form reveal reveal-delay-1">
+      <div class="form-row">
+        <div class="form-field">
+          <label class="form-label" for="name">Your name</label>
+          <input class="form-input" id="name" type="text" placeholder="As you wish to be addressed">
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="email">Email</label>
+          <input class="form-input" id="email" type="email" placeholder="Private address preferred">
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label class="form-label" for="destination">Region of interest</label>
+        <select class="form-select" id="destination">
+          <option value="" disabled selected>— Select a territory —</option>
+          <option>Bali & Indonesia</option>
+          <option>Maldives & Indian Ocean</option>
+          <option>Thailand & Indochina</option>
+          <option>Seychelles & Réunion</option>
+          <option>Myanmar & Laos</option>
+          <option>Multi-region journey</option>
+          <option>I am open to a suggestion</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label class="form-label" for="travel-date">Approximate period</label>
+          <input class="form-input" id="travel-date" type="text" placeholder="Season or month, year">
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="travellers">Travelling party</label>
+          <input class="form-input" id="travellers" type="text" placeholder="e.g. Couple, family of 4">
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label class="form-label" for="message">What are you looking for?</label>
+        <textarea class="form-textarea" id="message" placeholder="Tell us something true about how you travel. There are no wrong answers."></textarea>
+      </div>
+
+      <button class="form-submit" type="button" onclick="handleSubmit(this)">
+        <span>Send enquiry</span>
+      </button>
+      <p class="form-note">We will never share your details with any third party.</p>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo">MAVARA <span>P</span>RIVÉ</div>
+        <div class="footer-tagline-sm">Quietly extraordinary. Absolutely private.</div>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <div class="footer-col-title">Territories</div>
+          <ul>
+            <li><a href="#destinations">Bali & Indonesia</a></li>
+            <li><a href="#destinations">Maldives</a></li>
+            <li><a href="#destinations">Thailand & Laos</a></li>
+            <li><a href="#destinations">Cambodia</a></li>
+            <li><a href="#destinations">Seychelles</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Studio</div>
+          <ul>
+            <li><a href="#philosophy">Philosophy</a></li>
+            <li><a href="#process">How we work</a></li>
+            <li><a href="#experiences">Experiences</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Private</div>
+          <ul>
+            <li><a href="mailto:prive@mavara.com">privé@mavara.com</a></li>
+            <li><a href="#contact">Lisbon studio</a></li>
+            <li><a href="#contact">Barcelona office</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2024 Mavara Privé. All rights reserved.</div>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms & Conditions</a>
+        <a href="#">Cookie Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<!-- ══════════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════════ -->
+<script>
+/* Nav scroll state */
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 60) {
+    navbar.classList.add('scrolled');
+  } else {
+    navbar.classList.remove('scrolled');
+  }
+}, { passive: true });
+
+/* Scroll reveal */
+const revealEls = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+revealEls.forEach(el => observer.observe(el));
+
+/* Form submit */
+function handleSubmit(btn) {
+  const span = btn.querySelector('span');
+  span.textContent = 'Enquiry received';
+  btn.style.borderColor = 'rgba(201,169,110,0.4)';
+  btn.style.pointerEvents = 'none';
+
+  // Reset after delay
+  setTimeout(() => {
+    span.textContent = 'Send enquiry';
+    btn.style.borderColor = '';
+    btn.style.pointerEvents = '';
+  }, 4000);
+}
+
+/* Smooth nav links */
+document.querySelectorAll('a[href^="#"]').forEach(link => {
+  link.addEventListener('click', e => {
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+
+</body>
+</html>
