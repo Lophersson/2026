@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Balance Antes y Después del Préstamo</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Courier New", monospace;
+    background: #ffffff;
+    margin: 0;
+    padding: 20px 15px;
+    color: #000;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+h1, h2, h3 {
+    text-align: center;
+    margin: 30px 0;
+}
+
+table {
+    width: 100%;
+    margin: 0 auto 30px auto;
+    border-collapse: collapse;
+    /* Esto es la clave para que la tabla no se salga de la pantalla */
+    table-layout: fixed; 
+    background: #fff;
+}
+
+th, td {
+    border: 1px solid #000;
+    padding: 12px 10px; 
+    vertical-align: middle;
+    /* Permite que el texto haga salto de línea para no ensanchar la tabla */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+th {
+    background: #f0f0f0;
+    text-align: center;
+}
+
+/* Alineación de columnas de texto (izquierda) y cantidades (derecha) */
+.concepto {
+    text-align: left;
+    font-weight: bold;
+}
+
+td:not(.concepto) {
+    text-align: right;
+}
+
+.total {
+    font-weight: bold;
+    background: #eaeaea;
+}
+
+p {
+    line-height: 1.6;
+    text-align: justify;
+    margin-bottom: 15px;
+}
+
+.alerta {
+    border: 2px solid #000;
+    background: #f5f5f5;
+    padding: 15px 18px;
+    margin: 20px 0;
+}
+
+.alerta-titulo {
+    font-weight: bold;
+    text-decoration: underline;
+    margin-bottom: 10px;
+}
+
+.formula {
+    text-align: center;
+    font-weight: bold;
+    background: #f0f0f0;
+    border: 1px solid #000;
+    padding: 10px;
+    margin: 15px 0;
+}
+
+ul, ol {
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+li {
+    margin-bottom: 8px;
+}
+
+/* --- REGLAS PARA DISPOSITIVOS MÓVILES --- */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    h2 {
+        font-size: 1.2rem;
+    }
+
+    th, td {
+        /* Reducimos el espacio interior y la letra para que quepan las 4 columnas */
+        padding: 6px 4px;
+        font-size: 12px;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Ejemplo de Balance</h1>
+
+    <h2>ANTES DEL PRÉSTAMO</h2>
+
+    <table>
+        <tr>
+            <th colspan="2">ACTIVO</th>
+            <th colspan="2">PASIVO Y PATRIMONIO NETO</th>
+        </tr>
+        <tr>
+            <td class="concepto">Inmovilizado</td>
+            <td>15.000.000 €</td>
+            <td class="concepto">Deudas</td>
+            <td>0 €</td>
+        </tr>
+        <tr>
+            <td class="concepto">Tesorería</td>
+            <td>5.000.000 €</td>
+            <td class="concepto">Patrimonio Neto</td>
+            <td>20.000.000 €</td>
+        </tr>
+        <tr class="total">
+            <td class="concepto">TOTAL ACTIVO</td>
+            <td>20.000.000 €</td>
+            <td class="concepto">TOTAL PASIVO + PN</td>
+            <td>20.000.000 €</td>
+        </tr>
+    </table>
+
+    <h2>DESPUÉS DE RECIBIR UN PRÉSTAMO DE 10 MILLONES €</h2>
+
+    <table>
+        <tr>
+            <th colspan="2">ACTIVO</th>
+            <th colspan="2">PASIVO Y PATRIMONIO NETO</th>
+        </tr>
+        <tr>
+            <td class="concepto">Inmovilizado</td>
+            <td>15.000.000 €</td>
+            <td class="concepto">Préstamo Bancario</td>
+            <td>10.000.000 €</td>
+        </tr>
+        <tr>
+            <td class="concepto">Tesorería</td>
+            <td>15.000.000 €</td>
+            <td class="concepto">Patrimonio Neto</td>
+            <td>20.000.000 €</td>
+        </tr>
+        <tr class="total">
+            <td class="concepto">TOTAL ACTIVO</td>
+            <td>30.000.000 €</td>
+            <td class="concepto">TOTAL PASIVO + PN</td>
+            <td>30.000.000 €</td>
+        </tr>
+    </table>
+
+    <h2>Interpretación</h2>
+
+    <p>Antes del préstamo la empresa tenía activos por 20 millones de euros y ningún endeudamiento.</p>
+    <p>Al recibir el préstamo, entran 10 millones de euros en caja (tesorería), por lo que el activo aumenta de 20 a 30 millones.</p>
+    <p>Al mismo tiempo aparece una deuda financiera de 10 millones en el pasivo.</p>
+    <p>El patrimonio neto sigue siendo de 20 millones porque pedir un préstamo no genera beneficio; simplemente aumenta simultáneamente los activos y las deudas.</p>
+
+    <h2>¿Por qué no es posible vender la empresa por 10 millones o menos, que el vendedor cobre esos 10 millones, y además se lleve los 10 millones del préstamo?</h2>
+
+    <p>Partiendo del balance ya endeudado (30 millones de activo, 10 millones de deuda, 20 millones de patrimonio neto), el valor de la empresa para su dueño no es el activo total, sino lo que queda libre de deudas: el patrimonio neto. Por eso el precio de venta de las participaciones o acciones de una empresa se calcula, como mínimo, sobre ese patrimonio neto, no sobre el activo bruto.</p>
+
+    <div class="formula">
+        Valor de la empresa (Equity) = Activo Total − Deudas = 30.000.000 € − 10.000.000 € = 20.000.000 €
+    </div>
+
+    <p>Esto significa que, aunque el comprador solo "vea" o negocie un precio de 10 millones de euros, en realidad está comprando una empresa cuyo patrimonio neto sigue siendo de 20 millones, porque el efectivo del préstamo (10 millones) sigue dentro de la empresa, en tesorería, como un activo más. El comprador no puede "descontarse" ese dinero dos veces.</p>
+
+    <div class="alerta">
+        <div class="alerta-titulo">El error de origen: contar el mismo dinero dos veces</div>
+        <p>El planteamiento de pagar 10 millones y que el vendedor además se lleve los 10 millones del préstamo implica que ese dinero saldría de la empresa <strong>dos veces</strong>:</p>
+        <ol>
+            <li>Una vez como tesorería que ya forma parte del activo (y por tanto del patrimonio neto que el comprador está pagando).</li>
+            <li>Otra vez como un pago adicional, "aparte", al vendedor.</li>
+        </ol>
+        <p>Pero los 10 millones de tesorería son un activo único. No pueden estar simultáneamente dentro de la empresa (respaldando su valor) y fuera de la empresa (en el bolsillo del vendedor) sin que eso se refleje en el balance.</p>
+    </div>
+
+    <h3>Qué pasaría realmente si el vendedor se llevase los 10 millones del préstamo aparte</h3>
+
+    <p>Si antes de la venta el vendedor retira de la empresa los 10 millones que entraron por el préstamo (por ejemplo, vía dividendo extraordinario, préstamo a socios o cualquier otra salida de caja), el balance pasaría a ser el siguiente:</p>
+
+    <table>
+        <tr>
+            <th colspan="2">ACTIVO</th>
+            <th colspan="2">PASIVO Y PATRIMONIO NETO</th>
+        </tr>
+        <tr>
+            <td class="concepto">Inmovilizado</td>
+            <td>15.000.000 €</td>
+            <td class="concepto">Préstamo Bancario</td>
+            <td>10.000.000 €</td>
+        </tr>
+        <tr>
+            <td class="concepto">Tesorería</td>
+            <td>5.000.000 €</td>
+            <td class="concepto">Patrimonio Neto</td>
+            <td>10.000.000 €</td>
+        </tr>
+        <tr class="total">
+            <td class="concepto">TOTAL ACTIVO</td>
+            <td>20.000.000 €</td>
+            <td class="concepto">TOTAL PASIVO + PN</td>
+            <td>20.000.000 €</td>
+        </tr>
+    </table>
+
+    <p>Aquí sí cuadra que el comprador pague 10 millones, porque ahora el patrimonio neto real es de 10 millones (los 20 millones originales menos los 10 millones que el vendedor se llevó). Pero en este escenario el comprador está adquiriendo una empresa con la mitad de su valor original y, sobre todo, con una deuda de 10 millones que tendrá que devolver con los flujos futuros del propio negocio, mientras el vendedor ya se llevó ese dinero por adelantado.</p>
+
+    <p>En otras palabras: el comprador no estaría pagando 10 millones por una empresa de 20 millones libre de deudas; estaría pagando 10 millones por una empresa que vale 10 millones netos y que, además, carga con una deuda generada artificialmente justo antes de la venta para financiar la salida de caja del vendedor.</p>
+
+    <h3>Por qué esto es, en la práctica, un vaciamiento patrimonial</h3>
+
+    <ul>
+        <li><strong>El préstamo no es dinero "extra" para el vendedor:</strong> es deuda de la empresa. Si el vendedor lo retira para sí mismo antes de vender, la empresa que se transmite vale exactamente esos 10 millones menos.</li>
+        <li><strong>El comprador termina pagando la deuda dos veces:</strong> una vez con el menor precio que paga por una empresa empobrecida, y otra vez cuando la empresa (que él controla a partir de ese momento) tenga que devolver el préstamo al banco con su propia caja futura.</li>
+        <li><strong>El riesgo se traslada al comprador y a los acreedores:</strong> el banco prestó dinero confiando en la solvencia de la empresa con sus 20 millones de patrimonio; si ese dinero se extrae justo antes de la venta, la empresa queda descapitalizada frente a esa misma deuda.</li>
+        <li><strong>Implicaciones legales:</strong> una operación estructurada de esta forma —pedir deuda y repartirla como caja al vendedor inmediatamente antes de transmitir la empresa, dejando el pasivo dentro— puede constituir un reparto encubierto de dividendos sin respetar los requisitos legales, una distracción de activos en perjuicio de acreedores (incluido el banco prestamista) o, en función de las circunstancias, un vaciamiento patrimonial perseguible civil o penalmente, especialmente si la empresa termina en insolvencia.</li>
+    </ul>
+
+    <h3>Conclusión</h3>
+
+    <p>Por la propia identidad contable del balance (Activo = Pasivo + Patrimonio Neto), no existe ninguna combinación en la que el comprador pague 10 millones o menos, el vendedor cobre esos 10 millones o menos, <em>y</em> además el vendedor se lleve aparte los 10 millones del préstamo, sin que alguien —el comprador, el banco o los acreedores— asuma una pérdida equivalente. El dinero del préstamo solo puede tener un destino: quedarse en la empresa (y entonces forma parte de lo que el comprador paga) o salir de la empresa hacia el vendedor (y entonces el precio justo de la empresa baja en esa misma cantidad, mientras la deuda generada para financiar esa salida permanece como una carga futura sobre el comprador).</p>
+</div>
+
+</body>
+</html>
