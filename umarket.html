@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reprist Supermercados Online</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #ffffff;
+    --text: #111111;
+    --mid: #555555;
+    --light: #e8e8e8;
+    --accent: #111111;
+    --font: 'Courier New', Courier, monospace;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+    border-bottom: 2px solid var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 24px;
+  }
+
+  .brand {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .brand-name {
+    font-size: 17px;
+    font-weight: bold;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .brand-sub {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--mid);
+  }
+
+  /* CART BUTTON */
+  .cart-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--text);
+    color: var(--bg);
+    border: none;
+    padding: 8px 16px;
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: opacity 0.15s;
+    position: relative;
+  }
+
+  .cart-btn:hover { opacity: 0.8; }
+
+  .cart-icon { font-size: 18px; }
+
+  .cart-count {
+    background: var(--bg);
+    color: var(--text);
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: bold;
+  }
+
+  /* MAIN */
+  main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+  }
+
+  .intro {
+    border-bottom: 1px solid var(--light);
+    padding-bottom: 20px;
+    margin-bottom: 28px;
+    font-size: 12px;
+    color: var(--mid);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* CATEGORIES */
+  .category {
+    border-bottom: 1px solid var(--light);
+    margin-bottom: 0;
+  }
+
+  .category-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 0;
+    cursor: pointer;
+    user-select: none;
+    gap: 12px;
+  }
+
+  .category-header:hover .cat-name { text-decoration: underline; }
+
+  .cat-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+  }
+
+  .cat-name {
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .cat-badge {
+    background: var(--text);
+    color: var(--bg);
+    font-size: 10px;
+    font-weight: bold;
+    padding: 1px 6px;
+    letter-spacing: 0.04em;
+    display: none;
+  }
+
+  .cat-badge.visible { display: inline-block; }
+
+  .cat-arrow {
+    font-size: 11px;
+    color: var(--mid);
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+
+  .category.open .cat-arrow { transform: rotate(180deg); }
+
+  .category-body {
+    display: none;
+    padding-bottom: 16px;
+  }
+
+  .category.open .category-body { display: block; }
+
+  /* ITEMS GRID */
+  .items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 4px 12px;
+  }
+
+  .item-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 6px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: background 0.1s, border-color 0.1s;
+    font-size: 13px;
+  }
+
+  .item-label:hover {
+    background: #f5f5f5;
+    border-color: var(--light);
+  }
+
+  .item-label input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    border: 1.5px solid var(--text);
+    flex-shrink: 0;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .item-label input[type="checkbox"]:checked {
+    background: var(--text);
+  }
+
+  .item-label input[type="checkbox"]:checked::after {
+    content: '✓';
+    position: absolute;
+    top: -2px;
+    left: 1px;
+    color: var(--bg);
+    font-size: 11px;
+    font-weight: bold;
+  }
+
+  .item-label.checked {
+    background: #f0f0f0;
+    color: var(--mid);
+    text-decoration: line-through;
+  }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 200;
+    align-items: flex-start;
+    justify-content: flex-end;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--bg);
+    border-left: 2px solid var(--text);
+    width: 100%;
+    max-width: 400px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    animation: slideIn 0.2s ease;
+  }
+
+  @keyframes slideIn {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+  }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px;
+    border-bottom: 2px solid var(--text);
+  }
+
+  .modal-title {
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .modal-close {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--text);
+    font-family: var(--font);
+    line-height: 1;
+  }
+
+  .modal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+  }
+
+  .cart-empty {
+    color: var(--mid);
+    font-size: 13px;
+    text-align: center;
+    padding: 40px 0;
+    letter-spacing: 0.04em;
+  }
+
+  .cart-category-label {
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-top: 20px;
+    margin-bottom: 6px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--light);
+  }
+
+  .cart-category-label:first-child { margin-top: 0; }
+
+  .cart-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 0;
+    font-size: 13px;
+    border-bottom: 1px dashed var(--light);
+  }
+
+  .cart-item-name { flex: 1; }
+
+  .cart-item-remove {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--mid);
+    font-size: 14px;
+    font-family: var(--font);
+    padding: 0 4px;
+  }
+
+  .cart-item-remove:hover { color: var(--text); }
+
+  .modal-footer {
+    padding: 16px 20px;
+    border-top: 2px solid var(--text);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .cart-summary {
+    font-size: 12px;
+    color: var(--mid);
+    letter-spacing: 0.04em;
+    text-align: center;
+  }
+
+  .print-btn {
+    background: var(--text);
+    color: var(--bg);
+    border: none;
+    padding: 12px;
+    font-family: var(--font);
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    width: 100%;
+    transition: opacity 0.15s;
+  }
+
+  .print-btn:hover { opacity: 0.8; }
+
+  .clear-btn {
+    background: none;
+    color: var(--mid);
+    border: 1px solid var(--light);
+    padding: 8px;
+    font-family: var(--font);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    width: 100%;
+    transition: border-color 0.15s;
+  }
+
+  .clear-btn:hover { border-color: var(--text); color: var(--text); }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--light);
+    text-align: center;
+    padding: 20px;
+    font-size: 10px;
+    color: var(--mid);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* PRINT STYLES */
+  @media print {
+    body * { visibility: hidden; }
+    #print-area, #print-area * { visibility: visible; }
+    #print-area {
+      position: fixed;
+      inset: 0;
+      background: white;
+      padding: 40px;
+      font-family: 'Courier New', Courier, monospace;
+      color: black;
+    }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    header { padding: 12px 16px; }
+    main { padding: 20px 16px 60px; }
+    .brand-name { font-size: 14px; }
+    .items-grid { grid-template-columns: 1fr 1fr; }
+    .modal { max-width: 100%; }
+    .cart-btn { padding: 8px 12px; font-size: 12px; }
+  }
+
+  @media (max-width: 360px) {
+    .items-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <span class="brand-name">Reprist</span>
+    <span class="brand-sub">Supermercados Online</span>
+  </div>
+  <button class="cart-btn" onclick="openCart()" aria-label="Ver carrito">
+    <span class="cart-icon">🛒</span>
+    Lista
+    <span class="cart-count" id="cart-count">0</span>
+  </button>
+</header>
+
+<main>
+  <div class="intro">Selecciona los artículos que necesitas — tu lista se actualiza en tiempo real</div>
+  <div id="categories"></div>
+</main>
+
+<footer>© 2024 Reprist Supermercados Online. Todos los derechos reservados.</footer>
+
+<!-- MODAL CARRITO -->
+<div class="modal-overlay" id="modal-overlay" onclick="handleOverlayClick(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">🛒 Productos seleccionados</span>
+      <button class="modal-close" onclick="closeCart()">✕</button>
+    </div>
+    <div class="modal-body" id="cart-body">
+      <p class="cart-empty">Ningún artículo seleccionado todavía.</p>
+    </div>
+    <div class="modal-footer">
+      <div class="cart-summary" id="cart-summary"></div>
+      <button class="print-btn" onclick="printList()">⬇ Imprimir lista en PDF</button>
+      <button class="clear-btn" onclick="clearAll()">Vaciar lista</button>
+    </div>
+  </div>
+</div>
+
+<!-- ÁREA DE IMPRESIÓN (oculta) -->
+<div id="print-area" style="display:none"></div>
+
+<script>
+const DATA = [
+  {
+    cat: "Lácteos",
+    items: ["Kéfir", "Yogur griego", "Skyr"]
+  },
+  {
+    cat: "Chocolates, desayunos y meriendas",
+    items: [
+      "Tableta de chocolate negro Lindt o Dolca", "After Eight", "Nocilla Cookies & Cream",
+      "Eclairs", "Croissants rellenos choco", "Napolitanas de chocolate",
+      "Donuts de azúcar o chocolate", "American Donuts", "Brownie Milka",
+      "Galletas de chocolate Milka", "Tableta chocolate Milka 270g"
+    ]
+  },
+  {
+    cat: "Cereales",
+    items: [
+      "Bizcochitos All Bran", "Avena", "Semillas de chía", "Quinoa",
+      "Bulgur", "Arroz integral", "Cuscús", "Kellogg's", "Cereales Nestlé"
+    ]
+  },
+  {
+    cat: "Bebidas",
+    items: [
+      "Té negro Hornimans", "Cacao negro soluble en leche", "Agua de coco",
+      "Té verde", "Té moruno hierbabuena", "Té negro Twinings",
+      "Leche desnatada", "Leche de almendras"
+    ]
+  },
+  {
+    cat: "Carbohidratos",
+    items: [
+      "Pan fresco integral", "Pan de molde blanco grueso", "Crackers",
+      "Spaghetti / Rigatoni / Mafalda corta", "Ravioli / Tortelloni / Fiorellini",
+      "Galletas finas Milka", "Pan crujiente integral", "Pan de leche",
+      "Rosegones", "Pan de pasas", "Tortillas de trigo"
+    ]
+  },
+  {
+    cat: "Proteínas",
+    items: [
+      "Jamón curado", "Pechuga de pavo fresca", "Lonchas de pechuga de pavo",
+      "Pastrami", "Tofu", "Huevos", "Legumbres", "Almendras",
+      "Atún", "Salmón", "Queso", "Queso feta", "Ternera",
+      "Hamburguesa", "Morcilla", "Langostinos"
+    ]
+  },
+  {
+    cat: "Frutas",
+    items: [
+      "Kiwi", "Plátano", "Tomate", "Naranjas", "Limones",
+      "Arándanos", "Fresas", "Grosellas rojas", "Chirimoya",
+      "Manzana Granny Smith", "Pitaya", "Aguacate"
+    ]
+  },
+  {
+    cat: "Varios",
+    items: [
+      "Orégano", "Salsa de soja", "Mostaza Dijon / Ancienne",
+      "Salsa pesto", "Queso en polvo", "Queso Philadelphia",
+      "Azúcar moreno", "Sal", "Aceite de oliva", "Miel"
+    ]
+  },
+  {
+    cat: "Vegetales",
+    items: [
+      "Brócoli", "Grelos", "Espinacas", "Acelgas", "Apio",
+      "Batavia roja", "Lechuga", "Berza gallega", "Pepino",
+      "Calabacín", "Pimiento rojo", "Tatayoyo", "Zuquiolo",
+      "Chayote", "Batata / Boniato", "Flor de calabacín"
+    ]
+  }
+];
+
+// State: { "Categoría > Artículo": true/false }
+const selected = {};
+
+function slugify(str) {
+  return str.toLowerCase().replace(/[^a-z0-9]/g, '-');
+}
+
+function itemKey(cat, item) {
+  return cat + '::' + item;
+}
+
+function buildUI() {
+  const container = document.getElementById('categories');
+  DATA.forEach((section, ci) => {
+    const div = document.createElement('div');
+    div.className = 'category';
+    div.id = 'cat-' + ci;
+
+    const header = document.createElement('div');
+    header.className = 'category-header';
+    header.setAttribute('role', 'button');
+    header.setAttribute('tabindex', '0');
+    header.innerHTML = `
+      <div class="cat-left">
+        <span class="cat-name">${section.cat}</span>
+        <span class="cat-badge" id="badge-${ci}"></span>
+      </div>
+      <span class="cat-arrow">▼</span>
+    `;
+    header.addEventListener('click', () => toggleCategory(ci));
+    header.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') toggleCategory(ci); });
+
+    const body = document.createElement('div');
+    body.className = 'category-body';
+    const grid = document.createElement('div');
+    grid.className = 'items-grid';
+
+    section.items.forEach((item, ii) => {
+      const key = itemKey(section.cat, item);
+      selected[key] = false;
+      const id = `item-${ci}-${ii}`;
+
+      const label = document.createElement('label');
+      label.className = 'item-label';
+      label.htmlFor = id;
+      label.innerHTML = `<input type="checkbox" id="${id}" data-cat="${section.cat}" data-item="${item}"> ${item}`;
+
+      const cb = label.querySelector('input');
+      cb.addEventListener('change', () => handleCheck(cb, label, ci));
+
+      grid.appendChild(label);
+    });
+
+    body.appendChild(grid);
+    div.appendChild(header);
+    div.appendChild(body);
+    container.appendChild(div);
+  });
+}
+
+function toggleCategory(ci) {
+  const el = document.getElementById('cat-' + ci);
+  el.classList.toggle('open');
+}
+
+function handleCheck(cb, label, ci) {
+  const key = itemKey(cb.dataset.cat, cb.dataset.item);
+  selected[key] = cb.checked;
+  label.classList.toggle('checked', cb.checked);
+  updateBadge(ci);
+  updateCartCount();
+}
+
+function updateBadge(ci) {
+  const section = DATA[ci];
+  const count = section.items.filter(item => selected[itemKey(section.cat, item)]).length;
+  const badge = document.getElementById('badge-' + ci);
+  badge.textContent = count > 0 ? count : '';
+  badge.classList.toggle('visible', count > 0);
+}
+
+function updateCartCount() {
+  const total = Object.values(selected).filter(Boolean).length;
+  document.getElementById('cart-count').textContent = total;
+}
+
+function openCart() {
+  renderCart();
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCart() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeCart();
+}
+
+function renderCart() {
+  const body = document.getElementById('cart-body');
+  const summary = document.getElementById('cart-summary');
+  body.innerHTML = '';
+
+  let total = 0;
+  let hasAny = false;
+
+  DATA.forEach(section => {
+    const items = section.items.filter(item => selected[itemKey(section.cat, item)]);
+    if (items.length === 0) return;
+    hasAny = true;
+
+    const catLabel = document.createElement('div');
+    catLabel.className = 'cart-category-label';
+    catLabel.textContent = section.cat;
+    body.appendChild(catLabel);
+
+    items.forEach(item => {
+      total++;
+      const row = document.createElement('div');
+      row.className = 'cart-item';
+      row.innerHTML = `
+        <span class="cart-item-name">${item}</span>
+        <button class="cart-item-remove" title="Quitar" data-cat="${section.cat}" data-item="${item}">✕</button>
+      `;
+      row.querySelector('.cart-item-remove').addEventListener('click', (e) => {
+        const cat = e.target.dataset.cat;
+        const it = e.target.dataset.item;
+        const key = itemKey(cat, it);
+        selected[key] = false;
+        // uncheck checkbox
+        document.querySelectorAll(`input[data-cat="${cat}"][data-item="${it}"]`).forEach(cb => {
+          cb.checked = false;
+          cb.closest('label').classList.remove('checked');
+        });
+        // update badge
+        const ci = DATA.findIndex(s => s.cat === cat);
+        if (ci >= 0) updateBadge(ci);
+        updateCartCount();
+        renderCart();
+      });
+      body.appendChild(row);
+    });
+  });
+
+  if (!hasAny) {
+    body.innerHTML = '<p class="cart-empty">Ningún artículo seleccionado todavía.</p>';
+    summary.textContent = '';
+  } else {
+    summary.textContent = total + ' artículo' + (total !== 1 ? 's' : '') + ' en la lista';
+  }
+}
+
+function clearAll() {
+  if (!confirm('¿Vaciar toda la lista?')) return;
+  Object.keys(selected).forEach(k => selected[k] = false);
+  document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    cb.checked = false;
+    cb.closest('label').classList.remove('checked');
+  });
+  DATA.forEach((_, ci) => updateBadge(ci));
+  updateCartCount();
+  renderCart();
+}
+
+function printList() {
+  const now = new Date();
+  const fecha = now.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  const hora = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+  let html = `
+    <div style="font-family:'Courier New',Courier,monospace;color:#000;background:#fff;padding:40px;max-width:700px;margin:auto;">
+      <div style="border-bottom:2px solid #000;padding-bottom:14px;margin-bottom:20px;">
+        <div style="font-size:22px;font-weight:bold;letter-spacing:0.04em;text-transform:uppercase;">Reprist</div>
+        <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#555;margin-top:2px;">Supermercados Online</div>
+      </div>
+      <div style="font-size:12px;color:#555;margin-bottom:24px;letter-spacing:0.04em;">
+        Lista de la compra &nbsp;·&nbsp; ${fecha} &nbsp;·&nbsp; ${hora}
+      </div>
+  `;
+
+  let total = 0;
+  DATA.forEach(section => {
+    const items = section.items.filter(item => selected[itemKey(section.cat, item)]);
+    if (items.length === 0) return;
+    html += `<div style="margin-bottom:16px;">
+      <div style="font-size:10px;font-weight:bold;letter-spacing:0.12em;text-transform:uppercase;color:#555;border-bottom:1px solid #ccc;padding-bottom:4px;margin-bottom:8px;">${section.cat}</div>`;
+    items.forEach(item => {
+      total++;
+      html += `<div style="padding:4px 0;border-bottom:1px dashed #eee;font-size:13px;">☐ &nbsp;${item}</div>`;
+    });
+    html += `</div>`;
+  });
+
+  if (total === 0) {
+    alert('No hay artículos seleccionados.');
+    return;
+  }
+
+  html += `
+    <div style="margin-top:30px;border-top:2px solid #000;padding-top:12px;font-size:11px;color:#555;display:flex;justify-content:space-between;">
+      <span>Total: ${total} artículo${total !== 1 ? 's' : ''}</span>
+      <span>© Reprist Supermercados Online</span>
+    </div>
+    </div>
+  `;
+
+  const printArea = document.getElementById('print-area');
+  printArea.innerHTML = html;
+  printArea.style.display = 'block';
+
+  // Use print dialog for PDF
+  const printWindow = window.open('', '_blank', 'width=800,height=900');
+  printWindow.document.write(`<!DOCTYPE html><html><head>
+    <title>Lista de la compra – Reprist</title>
+    <style>
+      body { margin: 0; padding: 0; background: white; }
+      @media print {
+        @page { margin: 20mm; }
+      }
+    </style>
+  </head><body>${html}<script>window.onload=function(){window.print();window.onafterprint=function(){window.close();}}<\/script></body></html>`);
+  printWindow.document.close();
+}
+
+// Init
+buildUI();
+</script>
+</body>
+</html>
