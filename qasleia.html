@@ -1,23 +1,27 @@
-<html lang="es"><head>
+<!DOCTYPE html>
+<html lang="es">
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Qasleia Travel — Logo</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&amp;family=Cinzel+Decorative:wght@400;700&amp;family=Cinzel:wght@300;400&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@300;400&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --sand:        #F0DFC0;
       --sand-light:  #F7EDD8;
       --sand-mid:    #DEC49A;
-      --rose:        #D9A090;
-      --rose-light:  #ECC4B8;
-      --rose-pale:   #F5DDD6;
       --brown:       #6B3A22;
       --brown-mid:   #8C4E30;
       --brown-light: #A0623C;
       --brown-dark:  #3E1F0A;
       --bg:          #EDD8BC;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
     }
 
     body {
@@ -27,12 +31,11 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 32px;
+      gap: clamp(16px, 3vw, 32px);
       font-family: 'Cormorant Garamond', serif;
-      overflow: hidden;
     }
 
-    /* ── FONDO: luz solar que se mueve sobre arena ── */
+    /* ── FONDO: luz solar animada ── */
     body::before {
       content: '';
       position: fixed;
@@ -46,7 +49,7 @@
       z-index: 0;
     }
 
-    /* Ondas de arena / viento */
+    /* Ondas de arena */
     body::after {
       content: '';
       position: fixed;
@@ -69,17 +72,17 @@
       60%  { opacity: 0.85; transform: translate(-25px,18px) scale(0.97); }
       100% { opacity: 0.95; transform: translate(20px,-12px) scale(1.04); }
     }
-
     @keyframes sandWave {
       from { background-position: 0 0; }
       to   { background-position: 220px 110px; }
     }
 
-    /* ── CARD ── */
+    /* ── CARD: cuadrada y responsive ── */
     .card {
       position: relative;
-      width: 680px;
-      padding: 70px 80px 60px;
+      /* Cuadrado: usa el menor entre 90vw y 90vh, con máximo de 520px */
+      width:  min(90vw, 90vh, 520px);
+      height: min(90vw, 90vh, 520px);
       background: radial-gradient(ellipse at 50% 25%, #F5E8CE 0%, #EDD4B0 55%, #E0C598 100%);
       border: 1px solid rgba(107,58,34,0.25);
       box-shadow:
@@ -88,9 +91,15 @@
       animation: fadeCard 1.6s ease both;
       z-index: 1;
       overflow: hidden;
+      /* Flex para centrar el contenido interno */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(24px, 6%, 56px) clamp(20px, 8%, 64px);
     }
 
-    /* Luz que barre la tarjeta como sol de mediodía */
+    /* Luz que barre la tarjeta */
     .card-glow {
       position: absolute;
       inset: 0;
@@ -105,48 +114,60 @@
       animation: sunSweep 6s ease-in-out infinite alternate;
       pointer-events: none;
     }
-
     @keyframes sunSweep {
       0%   { transform: translateX(-70%) skewX(-8deg); opacity: 0.4; }
       100% { transform: translateX(90%) skewX(-8deg); opacity: 1; }
     }
 
-    /* Corner ornaments — en marrón */
+    /* Corner ornaments */
     .card::before, .card::after {
       content: '';
       position: absolute;
-      width: 28px; height: 28px;
+      width: clamp(18px, 4%, 28px);
+      height: clamp(18px, 4%, 28px);
       border-color: var(--brown);
       border-style: solid;
       opacity: 0;
       animation: fadeCorner 1s 1.2s ease forwards;
     }
-    .card::before { top: 16px; left: 16px; border-width: 1.5px 0 0 1.5px; }
-    .card::after  { bottom: 16px; right: 16px; border-width: 0 1.5px 1.5px 0; }
+    .card::before { top: 14px; left: 14px; border-width: 1.5px 0 0 1.5px; }
+    .card::after  { bottom: 14px; right: 14px; border-width: 0 1.5px 1.5px 0; }
 
     .corner-tr, .corner-bl {
       position: absolute;
-      width: 28px; height: 28px;
+      width: clamp(18px, 4%, 28px);
+      height: clamp(18px, 4%, 28px);
       border-color: var(--brown);
       border-style: solid;
       opacity: 0;
       animation: fadeCorner 1s 1.2s ease forwards;
       z-index: 2;
     }
-    .corner-tr { top: 16px; right: 16px; border-width: 1.5px 1.5px 0 0; }
-    .corner-bl { bottom: 16px; left: 16px; border-width: 0 0 1.5px 1.5px; }
+    .corner-tr { top: 14px; right: 14px; border-width: 1.5px 1.5px 0 0; }
+    .corner-bl { bottom: 14px; left: 14px; border-width: 0 0 1.5px 1.5px; }
 
-    /* ── TOP LINE ── */
+    /* ── INNER CONTENT (z-index sobre el glow) ── */
+    .inner { 
+      position: relative; 
+      z-index: 2; 
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    /* ── TOP RULE ── */
     .top-rule {
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 36px;
+      gap: 10px;
+      width: 100%;
+      margin-bottom: clamp(16px, 4%, 28px);
       opacity: 0;
       animation: fadeUp 0.8s 0.3s ease forwards;
-      position: relative; z-index: 2;
     }
-    .top-rule span {
+    .top-rule span, .bottom-rule span {
       flex: 1; height: 1px;
       background: linear-gradient(to right, transparent, var(--brown-mid), transparent);
     }
@@ -161,13 +182,13 @@
     .emblem {
       display: flex;
       justify-content: center;
-      margin-bottom: 28px;
+      margin-bottom: clamp(12px, 3%, 22px);
       opacity: 0;
       animation: fadeUp 0.9s 0.5s ease forwards;
-      position: relative; z-index: 2;
     }
     .emblem svg {
-      width: 90px; height: 90px;
+      width:  clamp(60px, 14vmin, 90px);
+      height: clamp(60px, 14vmin, 90px);
       filter: drop-shadow(0 2px 8px rgba(107,58,34,0.25));
     }
 
@@ -176,13 +197,13 @@
       text-align: center;
       opacity: 0;
       animation: fadeUp 0.9s 0.75s ease forwards;
-      position: relative; z-index: 2;
+      width: 100%;
     }
     .brand-name {
       font-family: 'Cinzel Decorative', serif;
-      font-size: 3.4rem;
+      font-size: clamp(3.8rem, 7vmin, 3.6rem);
       font-weight: 700;
-      letter-spacing: 0.25em;
+      letter-spacing: 0.2em;
       line-height: 1;
       background: linear-gradient(135deg, #6B3A22 0%, #8C4E30 35%, #3E1F0A 60%, #6B3A22 100%);
       -webkit-background-clip: text;
@@ -191,8 +212,8 @@
       text-transform: uppercase;
       background-size: 250% 250%;
       animation: textShimmer 6s ease-in-out infinite alternate;
+      white-space: nowrap;
     }
-
     @keyframes textShimmer {
       0%   { background-position: 0% 50%; filter: brightness(1); }
       50%  { background-position: 100% 50%; filter: brightness(1.15); }
@@ -204,19 +225,17 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 14px;
-      margin: 18px 0 16px;
+      gap: 12px;
+      margin: clamp(10px, 2.5%, 18px) 0 clamp(8px, 2%, 14px);
       opacity: 0;
       animation: fadeUp 0.8s 1s ease forwards;
-      position: relative; z-index: 2;
+      width: 100%;
     }
     .divider-line {
-      width: 80px; height: 1px;
+      width: clamp(40px, 10%, 80px); height: 1px;
       background: linear-gradient(to right, transparent, var(--brown-mid));
     }
-    .divider-line.rev {
-      background: linear-gradient(to left, transparent, var(--brown-mid));
-    }
+    .divider-line.rev { background: linear-gradient(to left, transparent, var(--brown-mid)); }
     .diamond {
       width: 7px; height: 7px;
       border: 1.5px solid var(--brown);
@@ -230,13 +249,12 @@
       text-align: center;
       opacity: 0;
       animation: fadeUp 0.8s 1.1s ease forwards;
-      position: relative; z-index: 2;
     }
     .travel-word {
       font-family: 'Cinzel', serif;
-      font-size: 0.85rem;
+      font-size: clamp(0.6rem, 1.8vmin, 0.85rem);
       font-weight: 300;
-      letter-spacing: 0.55em;
+      letter-spacing: 0.5em;
       color: var(--brown-mid);
       text-transform: uppercase;
     }
@@ -244,33 +262,30 @@
     /* ── TAGLINE ── */
     .tagline {
       text-align: center;
-      margin-top: 22px;
+      margin-top: clamp(10px, 2.5%, 20px);
       opacity: 0;
       animation: fadeUp 0.8s 1.35s ease forwards;
-      position: relative; z-index: 2;
+      width: 100%;
     }
     .tagline p {
       font-family: 'Cormorant Garamond', serif;
       font-style: italic;
       font-weight: 300;
-      font-size: 1.05rem;
-      letter-spacing: 0.12em;
+      font-size: clamp(1.05rem, 1vmin, 0.5rem);
+      letter-spacing: 0.1em;
       color: rgba(107,58,34,0.55);
+      white-space: nowrap;
     }
 
-    /* ── BOTTOM LINE ── */
+    /* ── BOTTOM RULE ── */
     .bottom-rule {
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin-top: 36px;
+      gap: 10px;
+      width: 100%;
+      margin-top: clamp(16px, 4%, 28px);
       opacity: 0;
       animation: fadeUp 0.8s 1.5s ease forwards;
-      position: relative; z-index: 2;
-    }
-    .bottom-rule span {
-      flex: 1; height: 1px;
-      background: linear-gradient(to right, transparent, var(--brown-mid), transparent);
     }
 
     /* ── KEYFRAMES ── */
@@ -279,7 +294,7 @@
       to   { opacity: 1; transform: scale(1); }
     }
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(10px); }
+      from { opacity: 0; transform: translateY(8px); }
       to   { opacity: 1; transform: translateY(0); }
     }
     @keyframes fadeCorner {
@@ -290,77 +305,11 @@
       from { transform: rotate(0deg); }
       to   { transform: rotate(360deg); }
     }
-
     .ring-outer {
       animation: rotateSlow 18s linear infinite;
       transform-origin: 45px 45px;
     }
 
-    /* ── DOWNLOAD BUTTON ── */
-    .download-wrap {
-      position: relative;
-      z-index: 10;
-      opacity: 0;
-      animation: fadeUp 0.8s 1.8s ease forwards;
-    }
-
-    .btn-download {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 14px 32px;
-      background: linear-gradient(135deg, #6B3A22, #A0623C, #6B3A22);
-      background-size: 200% 200%;
-      border: 1.5px solid var(--brown-dark);
-      color: var(--sand-light);
-      font-family: 'Cinzel', serif;
-      font-size: 0.78rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-      transition: color 0.3s, border-color 0.3s;
-      animation: btnGlow 4s ease-in-out infinite alternate;
-    }
-
-    .btn-download:hover {
-      color: #F7EDD8;
-      border-color: var(--brown-mid);
-    }
-
-    .btn-download::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(90deg, transparent, rgba(255,235,200,0.15), transparent);
-      transform: translateX(-100%);
-    }
-    .btn-download:hover::before {
-      transform: translateX(100%);
-      transition: transform 0.6s ease;
-    }
-
-    @keyframes btnGlow {
-      0%   { box-shadow: 0 2px 12px rgba(107,58,34,0.25); }
-      100% { box-shadow: 0 4px 24px rgba(107,58,34,0.45), 0 0 35px rgba(140,78,48,0.2); }
-    }
-
-    .btn-icon { width: 28px; height: 28px; flex-shrink: 0; }
-
-    .hourglass-svg { animation: hourglassPulse 2.5s ease-in-out infinite; }
-    @keyframes hourglassPulse {
-      0%, 46% { transform: rotate(0deg); }
-      50%, 96% { transform: rotate(180deg); }
-      100%     { transform: rotate(180deg); }
-    }
-
-    .sand-drop { animation: sandFall 2.5s linear infinite; }
-    @keyframes sandFall {
-      0%  { opacity: 1; transform: translateY(0); }
-      75% { opacity: 1; transform: translateY(5px); }
-      100%{ opacity: 0; transform: translateY(6px); }
-    }
   </style>
 </head>
 <body>
@@ -370,97 +319,81 @@
     <div class="corner-tr"></div>
     <div class="corner-bl"></div>
 
-    <div class="top-rule">
-      <span></span>
-      <div class="diamond-sm"></div>
-      <div class="diamond-sm"></div>
-      <div class="diamond-sm"></div>
-      <span></span>
-    </div>
+    <div class="inner">
 
-    <div class="emblem">
-      <svg viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <g class="ring-outer">
-          <circle cx="45" cy="6" r="1.2" fill="#8C4E30" opacity="0.5"></circle>
-          <circle cx="45" cy="84" r="1.2" fill="#8C4E30" opacity="0.5"></circle>
-          <circle cx="6" cy="45" r="1.2" fill="#8C4E30" opacity="0.5"></circle>
-          <circle cx="84" cy="45" r="1.2" fill="#8C4E30" opacity="0.5"></circle>
-          <circle cx="17" cy="17" r="1" fill="#6B3A22" opacity="0.4"></circle>
-          <circle cx="73" cy="73" r="1" fill="#6B3A22" opacity="0.4"></circle>
-          <circle cx="73" cy="17" r="1" fill="#6B3A22" opacity="0.4"></circle>
-          <circle cx="17" cy="73" r="1" fill="#6B3A22" opacity="0.4"></circle>
-        </g>
+      <div class="top-rule">
+        <span></span>
+        <div class="diamond-sm"></div>
+        <div class="diamond-sm"></div>
+        <div class="diamond-sm"></div>
+        <span></span>
+      </div>
 
-        <polygon points="45,10 66,18 80,36 80,54 66,72 45,80 24,72 10,54 10,36 24,18" fill="none" stroke="#8C4E30" stroke-width="0.7" opacity="0.45"></polygon>
+      <div class="emblem">
+        <svg viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g class="ring-outer">
+            <circle cx="45" cy="6"  r="1.2" fill="#8C4E30" opacity="0.5"/>
+            <circle cx="45" cy="84" r="1.2" fill="#8C4E30" opacity="0.5"/>
+            <circle cx="6"  cy="45" r="1.2" fill="#8C4E30" opacity="0.5"/>
+            <circle cx="84" cy="45" r="1.2" fill="#8C4E30" opacity="0.5"/>
+            <circle cx="17" cy="17" r="1"   fill="#6B3A22" opacity="0.4"/>
+            <circle cx="73" cy="73" r="1"   fill="#6B3A22" opacity="0.4"/>
+            <circle cx="73" cy="17" r="1"   fill="#6B3A22" opacity="0.4"/>
+            <circle cx="17" cy="73" r="1"   fill="#6B3A22" opacity="0.4"/>
+          </g>
+          <polygon points="45,10 66,18 80,36 80,54 66,72 45,80 24,72 10,54 10,36 24,18"
+            fill="none" stroke="#8C4E30" stroke-width="0.7" opacity="0.45"/>
+          <polygon points="45,22 64,45 45,68 26,45"
+            fill="rgba(107,58,34,0.06)" stroke="#6B3A22" stroke-width="0.9" opacity="0.8"/>
+          <line x1="45" y1="22" x2="45" y2="68" stroke="#8C4E30" stroke-width="0.5" opacity="0.25"/>
+          <line x1="26" y1="45" x2="64" y2="45" stroke="#8C4E30" stroke-width="0.5" opacity="0.25"/>
+          <text x="45" y="52" text-anchor="middle"
+            font-family="Cinzel Decorative, serif" font-size="22" font-weight="700"
+            fill="url(#brownGrad)" opacity="0.92">Q</text>
+          <rect x="43.5" y="8.5" width="3" height="3" fill="#6B3A22" transform="rotate(45 45 10)" opacity="0.8"/>
+          <rect x="43.5" y="78.5" width="3" height="3" fill="#6B3A22" transform="rotate(45 45 80)" opacity="0.8"/>
+          <defs>
+            <linearGradient id="brownGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%"   stop-color="#A0623C"/>
+              <stop offset="40%"  stop-color="#6B3A22"/>
+              <stop offset="75%"  stop-color="#3E1F0A"/>
+              <stop offset="100%" stop-color="#8C4E30"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
 
-        <polygon points="45,22 64,45 45,68 26,45" fill="rgba(107,58,34,0.06)" stroke="#6B3A22" stroke-width="0.9" opacity="0.8"></polygon>
+      <div class="wordmark">
+        <div class="brand-name">Qasleia</div>
+      </div>
 
-        <line x1="45" y1="22" x2="45" y2="68" stroke="#8C4E30" stroke-width="0.5" opacity="0.25"></line>
-        <line x1="26" y1="45" x2="64" y2="45" stroke="#8C4E30" stroke-width="0.5" opacity="0.25"></line>
+      <div class="divider">
+        <div class="divider-line"></div>
+        <div class="diamond"></div>
+        <div class="diamond filled"></div>
+        <div class="diamond"></div>
+        <div class="divider-line rev"></div>
+      </div>
 
-        <text x="45" y="52" text-anchor="middle" font-family="Cinzel Decorative, serif" font-size="22" font-weight="700" fill="url(#brownGrad)" opacity="0.92">Q</text>
+      <div class="travel-tag">
+        <span class="travel-word">Travel</span>
+      </div>
 
-        <rect x="43.5" y="8.5" width="3" height="3" fill="#6B3A22" transform="rotate(45 45 10)" opacity="0.8"></rect>
-        <rect x="43.5" y="78.5" width="3" height="3" fill="#6B3A22" transform="rotate(45 45 80)" opacity="0.8"></rect>
+      <div class="tagline">
+        <p>Where the extraordinary becomes your ordinary</p>
+      </div>
 
-        <defs>
-          <linearGradient id="brownGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#A0623C"></stop>
-            <stop offset="40%" stop-color="#6B3A22"></stop>
-            <stop offset="75%" stop-color="#3E1F0A"></stop>
-            <stop offset="100%" stop-color="#8C4E30"></stop>
-          </linearGradient>
-        </defs>
-      </svg>
-    </div>
+      <div class="bottom-rule">
+        <span></span>
+        <div class="diamond-sm"></div>
+        <div class="diamond-sm"></div>
+        <div class="diamond-sm"></div>
+        <span></span>
+      </div>
 
-    <div class="wordmark">
-      <div class="brand-name">Qasleia</div>
-    </div>
-
-    <div class="divider">
-      <div class="divider-line"></div>
-      <div class="diamond"></div>
-      <div class="diamond filled"></div>
-      <div class="diamond"></div>
-      <div class="divider-line rev"></div>
-    </div>
-
-    <div class="travel-tag">
-      <span class="travel-word">Travel</span>
-    </div>
-
-    <div class="tagline">
-      <p>Where the extraordinary becomes your ordinary</p>
-    </div>
-
-    <div class="bottom-rule">
-      <span></span>
-      <div class="diamond-sm"></div>
-      <div class="diamond-sm"></div>
-      <div class="diamond-sm"></div>
-      <span></span>
-    </div>
+    </div><!-- /inner -->
   </div>
 
-  <script>
-    function downloadHTML() {
-      const html = document.documentElement.outerHTML;
-      const cleanHtml = html.replace(
-        /<div class="download-wrap">[\s\S]*?<\/div>\s*(?=\s*<script)/,
-        ''
-      );
-      const blob = new Blob([cleanHtml], { type: 'text/html;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'qasleia-travel-logo.html';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }
-  </script>
 
-
-</body></html>
+</body>
+</html>
