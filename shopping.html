@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Directo de Portugal · Tu tienda de confianza, a un mensaje de distancia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700;6..12,800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+  :root{
+    --cream: #FFF6EA;
+    --cream-2: #FFEFDC;
+    --coral: #FF6F59;
+    --coral-dark: #E5543F;
+    --yellow: #FFC53D;
+    --teal: #0B7A75;
+    --teal-dark: #085E5A;
+    --ink: #2E1F27;
+    --ink-soft: #5B4A50;
+    --peach: #FFDCC2;
+    --paper: #FFFDF9;
+    --line: rgba(46,31,39,0.12);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Nunito Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.display{
+    font-family:'Fredoka', sans-serif;
+    font-weight:600;
+    letter-spacing:-0.01em;
+    margin:0;
+  }
+  .mono{ font-family:'DM Mono', monospace; }
+  a{color:inherit;}
+  img{max-width:100%;display:block;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px;}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important;}
+  }
+
+  /* ---------- textured background ---------- */
+  body{
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(46,31,39,0.06) 1.4px, transparent 0);
+    background-size: 26px 26px;
+  }
+
+  /* ---------- NAV ---------- */
+  header.nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(255,246,234,0.88);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 28px; max-width:1180px; margin:0 auto;
+  }
+  .brand{ display:flex; align-items:center; gap:10px; }
+  .brand-mark{
+    width:38px; height:38px; border-radius:11px;
+    background:linear-gradient(135deg,var(--coral),var(--yellow));
+    display:flex;align-items:center;justify-content:center;
+    font-size:19px; transform:rotate(-6deg);
+    box-shadow:0 4px 0 rgba(46,31,39,0.15);
+  }
+  .brand-name{font-family:'Fredoka';font-weight:700;font-size:20px;}
+  .brand-name span{color:var(--teal);}
+  .nav-cta{
+    background:var(--teal); color:var(--paper); font-weight:700;
+    padding:11px 20px; border-radius:100px; font-size:14.5px;
+    text-decoration:none; box-shadow:0 3px 0 var(--teal-dark);
+    transition:transform .15s ease;
+  }
+  .nav-cta:hover{ transform:translateY(-2px); }
+
+  /* ---------- HERO / CORKBOARD ---------- */
+  .hero{ padding:64px 0 40px; }
+  .hero-grid{
+    display:grid; grid-template-columns:1.05fr 1fr; gap:48px; align-items:center;
+  }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--peach); color:var(--coral-dark); font-weight:700;
+    font-size:13.5px; padding:7px 14px; border-radius:100px; margin-bottom:18px;
+  }
+  .hero h1{
+    font-size:clamp(34px,4.6vw,56px); line-height:1.05; color:var(--ink);
+  }
+  .hero h1 em{
+    font-style:normal; color:var(--coral);
+    text-decoration:underline; text-decoration-color:var(--yellow);
+    text-decoration-thickness:6px; text-underline-offset:6px;
+  }
+  .hero p.lead{
+    margin-top:20px; font-size:18px; line-height:1.6; color:var(--ink-soft);
+    max-width:46ch;
+  }
+  .hero-ctas{ display:flex; gap:14px; margin-top:30px; flex-wrap:wrap; }
+  .btn-primary{
+    background:var(--coral); color:var(--paper); font-weight:700; font-size:16px;
+    padding:15px 26px; border-radius:100px; text-decoration:none;
+    box-shadow:0 4px 0 var(--coral-dark); transition:transform .15s ease;
+    display:inline-flex; align-items:center; gap:8px;
+  }
+  .btn-primary:hover{ transform:translateY(-2px); }
+  .btn-secondary{
+    background:transparent; color:var(--ink); font-weight:700; font-size:16px;
+    padding:15px 22px; border-radius:100px; text-decoration:none;
+    border:2px solid var(--ink); transition:background .15s ease;
+  }
+  .btn-secondary:hover{ background:var(--ink); color:var(--paper); }
+
+  .trustline{ margin-top:28px; display:flex; gap:22px; flex-wrap:wrap; }
+  .trustline .item{ display:flex; align-items:center; gap:8px; font-weight:700; font-size:14px; color:var(--ink-soft); }
+  .trustline .item .n{ color:var(--teal); font-family:'Fredoka'; font-size:15px; }
+
+  /* corkboard */
+  .cork{
+    position:relative;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(255,255,255,0.15), transparent 40%),
+      repeating-linear-gradient(45deg, #C88A4E 0 2px, #C6864A 2px 4px);
+    background-color:#C88A4E;
+    border-radius:26px;
+    padding:34px;
+    min-height:440px;
+    box-shadow: inset 0 0 0 10px #B87840, 0 18px 40px rgba(46,31,39,0.25);
+  }
+  .pin-grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:16px;
+  }
+  .pin-card{
+    background:var(--paper); border-radius:14px; padding:16px 10px 14px;
+    text-align:center; position:relative;
+    box-shadow:0 10px 18px rgba(0,0,0,0.18);
+    animation:drop .55s cubic-bezier(.2,.9,.3,1.2) both;
+  }
+  .pin-card:nth-child(1){ transform:rotate(-6deg); animation-delay:.05s; }
+  .pin-card:nth-child(2){ transform:rotate(4deg); animation-delay:.12s; }
+  .pin-card:nth-child(3){ transform:rotate(-3deg); animation-delay:.19s; }
+  .pin-card:nth-child(4){ transform:rotate(5deg); animation-delay:.26s; }
+  .pin-card:nth-child(5){ transform:rotate(-5deg); animation-delay:.33s; }
+  .pin-card:nth-child(6){ transform:rotate(3deg); animation-delay:.40s; }
+  @keyframes drop{
+    from{ opacity:0; transform:translateY(-30px) rotate(0deg) scale(.85); }
+  }
+  .pin-card:hover{ transform:scale(1.06) rotate(0deg) !important; z-index:5; transition:transform .2s ease; }
+  .pin-emoji{ font-size:30px; }
+  .pin-label{ font-family:'Fredoka'; font-weight:600; font-size:12.5px; margin-top:6px; color:var(--ink); }
+  .washi{
+    position:absolute; top:-9px; left:50%; transform:translateX(-50%) rotate(-3deg);
+    width:44px; height:18px; background:rgba(255,197,61,0.85);
+    box-shadow:0 2px 3px rgba(0,0,0,0.15);
+  }
+  .pin-dot{
+    position:absolute; top:-7px; left:50%; transform:translateX(-50%);
+    width:12px; height:12px; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #fff, var(--coral) 60%, var(--coral-dark));
+    box-shadow:0 3px 4px rgba(0,0,0,0.3);
+  }
+  .cork-tag{
+    position:absolute; bottom:20px; right:24px;
+    background:var(--yellow); color:var(--ink); font-family:'Fredoka'; font-weight:600;
+    font-size:12.5px; padding:8px 14px; border-radius:10px; transform:rotate(3deg);
+    box-shadow:0 4px 0 rgba(0,0,0,0.15);
+  }
+
+  /* ---------- SECTION HEADERS ---------- */
+  .section{ padding:78px 0; }
+  .section-head{ text-align:center; max-width:640px; margin:0 auto 46px; }
+  .section-head .eyebrow{ margin-bottom:14px; }
+  .section-head h2{ font-size:clamp(28px,3.4vw,40px); color:var(--ink); }
+  .section-head p{ margin-top:14px; color:var(--ink-soft); font-size:17px; line-height:1.6; }
+
+  /* ---------- STEPS ---------- */
+  .steps{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:20px;
+  }
+  .step{
+    background:var(--paper); border-radius:20px; padding:26px 22px;
+    border:2px solid var(--line); position:relative;
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .step:hover{ transform:translateY(-6px); box-shadow:0 14px 26px rgba(46,31,39,0.12); border-color:transparent; }
+  .step .num{
+    font-family:'Fredoka'; font-weight:700; font-size:15px;
+    width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    color:var(--paper); margin-bottom:16px;
+  }
+  .step:nth-child(1) .num{ background:var(--coral); }
+  .step:nth-child(2) .num{ background:var(--yellow); color:var(--ink); }
+  .step:nth-child(3) .num{ background:var(--teal); }
+  .step:nth-child(4) .num{ background:var(--ink); }
+  .step h3{ font-size:17px; margin-bottom:8px; }
+  .step p{ font-size:14.5px; color:var(--ink-soft); line-height:1.55; margin:0; }
+  .step .icon{ position:absolute; top:22px; right:20px; font-size:22px; opacity:.7; }
+
+  /* ---------- CATEGORIES ---------- */
+  .cat-grid{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:16px;
+  }
+  .cat-card{
+    border-radius:18px; padding:22px 16px; text-align:center;
+    color:var(--paper); position:relative; overflow:hidden;
+    min-height:130px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;
+    transition:transform .2s ease;
+  }
+  .cat-card:hover{ transform:translateY(-5px) scale(1.02); }
+  .cat-card .emoji{ font-size:30px; }
+  .cat-card .label{ font-family:'Fredoka'; font-weight:600; font-size:14.5px; }
+  .cat-card.c1{ background:linear-gradient(155deg,#FF8A75,var(--coral)); }
+  .cat-card.c2{ background:linear-gradient(155deg,#FFD873,var(--yellow)); color:var(--ink); }
+  .cat-card.c3{ background:linear-gradient(155deg,#26A69E,var(--teal)); }
+  .cat-card.c4{ background:linear-gradient(155deg,#8E7CC3,#6C56A6); }
+  .cat-card.c5{ background:linear-gradient(155deg,#FF9AC4,#E8639A); }
+  .cat-card.c6{ background:linear-gradient(155deg,#7FCB8E,#3F9E5C); }
+  .cat-card.c7{ background:linear-gradient(155deg,#5FB6D9,#2E86AB); }
+  .cat-card.c8{ background:linear-gradient(155deg,#B0876A,#8A6248); }
+
+  /* ---------- PRICING ---------- */
+  .price-wrap{
+    display:grid; grid-template-columns:1fr 1fr; gap:22px;
+  }
+  .price-card{
+    background:var(--paper); border-radius:22px; padding:32px;
+    border:2px solid var(--line);
+  }
+  .price-card .top{ display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+  .price-card .top .emoji{ font-size:26px; }
+  .price-card h3{ font-size:19px; }
+  .price-big{ font-family:'Fredoka'; font-weight:700; font-size:44px; color:var(--coral); line-height:1; }
+  .price-card.alt .price-big{ color:var(--teal); }
+  .price-sub{ color:var(--ink-soft); font-size:14.5px; margin-top:6px; }
+  .price-note{
+    margin-top:18px; padding-top:16px; border-top:1px dashed var(--line);
+    font-size:13.5px; color:var(--ink-soft); line-height:1.6;
+  }
+
+  /* ---------- ENCARGOS ---------- */
+  .encargo{
+    background:linear-gradient(120deg,var(--teal),var(--teal-dark));
+    border-radius:28px; padding:48px; color:var(--paper);
+    display:grid; grid-template-columns:1.2fr 1fr; gap:36px; align-items:center;
+  }
+  .encargo h2{ font-size:clamp(24px,3vw,32px); color:var(--paper); }
+  .encargo p{ margin-top:14px; font-size:16px; line-height:1.65; opacity:.92; max-width:52ch; }
+  .encargo-list{ list-style:none; padding:0; margin:20px 0 0; display:flex; flex-direction:column; gap:10px; }
+  .encargo-list li{ display:flex; gap:10px; align-items:flex-start; font-size:14.5px; opacity:.95; }
+  .encargo-badge{
+    background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.25);
+    border-radius:20px; padding:30px; text-align:center;
+  }
+  .encargo-badge .big{ font-family:'Fredoka'; font-weight:700; font-size:38px; }
+  .encargo-badge .small{ font-size:13.5px; opacity:.85; margin-top:6px; }
+
+  /* ---------- TRUST / STATS ---------- */
+  .stats{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:20px;
+  }
+  .stat-card{
+    background:var(--peach); border-radius:20px; padding:30px 24px; text-align:center;
+  }
+  .stat-card .num{ font-family:'Fredoka'; font-weight:700; font-size:38px; color:var(--coral-dark); }
+  .stat-card .label{ font-size:14.5px; color:var(--ink-soft); margin-top:8px; font-weight:700; }
+
+  /* ---------- FOOTER CTA ---------- */
+  .final-cta{
+    background:var(--ink); border-radius:28px; padding:56px 44px; text-align:center; color:var(--paper);
+    background-image: radial-gradient(circle at 15% 20%, rgba(255,111,89,0.25), transparent 45%),
+                       radial-gradient(circle at 85% 80%, rgba(11,122,117,0.35), transparent 45%);
+  }
+  .final-cta h2{ color:var(--paper); font-size:clamp(26px,3.4vw,38px); }
+  .final-cta p{ color:rgba(255,246,234,0.75); margin-top:12px; font-size:16px; }
+  .final-cta .btn-primary{ margin-top:26px; }
+
+  footer.site{
+    padding:36px 0 50px; text-align:center; color:var(--ink-soft); font-size:13.5px;
+  }
+  footer.site .fbrand{ font-family:'Fredoka'; font-weight:700; color:var(--ink); margin-bottom:6px; }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 920px){
+    .hero-grid{ grid-template-columns:1fr; }
+    .steps{ grid-template-columns:repeat(2,1fr); }
+    .cat-grid{ grid-template-columns:repeat(2,1fr); }
+    .price-wrap{ grid-template-columns:1fr; }
+    .encargo{ grid-template-columns:1fr; padding:34px; }
+    .stats{ grid-template-columns:1fr; }
+  }
+  @media (max-width: 560px){
+    .pin-grid{ grid-template-columns:repeat(2,1fr); }
+    .hero{ padding:44px 0 30px; }
+    .section{ padding:56px 0; }
+  }
+
+  :focus-visible{ outline:3px solid var(--teal); outline-offset:3px; }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <div class="brand">
+      <div class="brand-mark">🛍️</div>
+      <div class="brand-name">Directo de <span>Portugal</span></div>
+    </div>
+    <a href="https://www.facebook.com/anakarina.marques.14" class="nav-cta">🛍️ Visita nuestra tienda en Facebook</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">✨ 10 años vendiendo con cariño desde Portugal</span>
+      <h1>Todo lo que buscas, <em>directo a tu puerta</em> desde Portugal</h1>
+      <p class="lead">Ropa y calzado para toda la familia, artículos para tu mascota, hogar, alimentación, papelería, bricolaje y coche. Lo ves en la foto, nos escribes y lo tienes en casa en pocos días.</p>
+      <div class="hero-ctas">
+        <a href="https://www.facebook.com/anakarina.marques.14" class="btn-primary">🛍️ Visita nuestra tienda en Facebook</a>
+        <a href="#como-funciona" class="btn-secondary">Ver cómo funciona</a>
+      </div>
+      <div class="trustline">
+        <div class="item"><span class="n">10</span> años de experiencia</div>
+        <div class="item"><span class="n">3–5</span> días de entrega</div>
+        <div class="item"><span class="n">🇵🇹→🇪🇸</span> envíos a toda España</div>
+      </div>
+    </div>
+
+    <div class="cork">
+      <div class="pin-grid">
+        <div class="pin-card"><div class="pin-dot"></div><div class="pin-emoji">👗</div><div class="pin-label">Mujer</div></div>
+        <div class="pin-card"><div class="washi"></div><div class="pin-emoji">👟</div><div class="pin-label">Calzado</div></div>
+        <div class="pin-card"><div class="pin-dot"></div><div class="pin-emoji">🧒</div><div class="pin-label">Niños</div></div>
+        <div class="pin-card"><div class="washi"></div><div class="pin-emoji">🐾</div><div class="pin-label">Mascotas</div></div>
+        <div class="pin-card"><div class="pin-dot"></div><div class="pin-emoji">🏠</div><div class="pin-label">Hogar</div></div>
+        <div class="pin-card"><div class="washi"></div><div class="pin-emoji">🔧</div><div class="pin-label">Bricolaje</div></div>
+      </div>
+      <div class="cork-tag">📌 así de fácil se pide</div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="como-funciona">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">📋 El proceso</span>
+      <h2>Pedir es tan fácil como mandar un mensaje</h2>
+      <p>Sigue estos cuatro pasos y tu pedido estará en camino. Te acompañamos en cada uno de ellos.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <span class="icon">📸</span>
+        <div class="num">1</div>
+        <h3>Nos escribes</h3>
+        <p>Comparte la foto del artículo por mensaje indicando cantidad, color, talla y variedad, junto a tu nombre, apellidos y dirección.</p>
+      </div>
+      <div class="step">
+        <span class="icon">✅</span>
+        <div class="num">2</div>
+        <h3>Confirmamos</h3>
+        <p>Te confirmamos el envío y te pasamos el número de cuenta bancaria donde realizar el pago.</p>
+      </div>
+      <div class="step">
+        <span class="icon">💳</span>
+        <div class="num">3</div>
+        <h3>Pagas y avisas</h3>
+        <p>Realizas el pago y nos compartes la foto del justificante en menos de 48 horas.</p>
+      </div>
+      <div class="step">
+        <span class="icon">📦</span>
+        <div class="num">4</div>
+        <h3>Recibes en casa</h3>
+        <p>Preparamos tu pedido y lo tienes en tu domicilio garantizado entre 3 y 5 días.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="categorias" style="background:var(--cream-2); border-radius:40px;">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">🗂️ Todo en un mismo sitio</span>
+      <h2>Un poco de todo para ti y los tuyos</h2>
+      <p>Cada semana publicamos novedades por Facebook. Si lo ves y te gusta, es tuyo.</p>
+    </div>
+    <div class="cat-grid">
+      <div class="cat-card c1"><div class="emoji">👗</div><div class="label">Ropa mujer</div></div>
+      <div class="cat-card c2"><div class="emoji">👞</div><div class="label">Calzado</div></div>
+      <div class="cat-card c3"><div class="emoji">👔</div><div class="label">Ropa hombre</div></div>
+      <div class="cat-card c4"><div class="emoji">🧸</div><div class="label">Niños</div></div>
+      <div class="cat-card c5"><div class="emoji">🐶</div><div class="label">Mascotas</div></div>
+      <div class="cat-card c6"><div class="emoji">🛋️</div><div class="label">Hogar</div></div>
+      <div class="cat-card c7"><div class="emoji">🥫</div><div class="label">Alimentación</div></div>
+      <div class="cat-card c8"><div class="emoji">✏️</div><div class="label">Papelería</div></div>
+      <div class="cat-card c3"><div class="emoji">🔧</div><div class="label">Bricolaje</div></div>
+      <div class="cat-card c1"><div class="emoji">🚗</div><div class="label">Coche</div></div>
+      <div class="cat-card c2"><div class="emoji">🎁</div><div class="label">Y mucho más</div></div>
+      <div class="cat-card c4"><div class="emoji">📦</div><div class="label">Encargos PT</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="precios">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">💶 Precios claros</span>
+      <h2>Sin sorpresas ni letra pequeña</h2>
+      <p>Solo pagas el precio del artículo más una pequeña comisión de gestión y el envío.</p>
+    </div>
+    <div class="price-wrap">
+      <div class="price-card">
+        <div class="top"><span class="emoji">🏷️</span><h3>Comisión por artículo</h3></div>
+        <div class="price-big">+2€</div>
+        <div class="price-sub">se añaden al precio de cada artículo pedido</div>
+        <div class="price-note">Tú ves el precio del artículo en la foto y solo sumas esta pequeña comisión de gestión por cada unidad.</div>
+      </div>
+      <div class="price-card alt">
+        <div class="top"><span class="emoji">📦</span><h3>Envío combinado</h3></div>
+        <div class="price-big">9€</div>
+        <div class="price-sub">hasta 2 kg, pudiendo incluir varios artículos en el mismo envío</div>
+        <div class="price-note">Aprovecha y pide varias cosas a la vez: mientras no superes los 2 kg, el envío te sale por el mismo precio.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="encargos">
+  <div class="wrap">
+    <div class="encargo">
+      <div>
+        <span class="eyebrow" style="background:rgba(255,255,255,0.15); color:var(--paper);">🇵🇹 Especial encargos</span>
+        <h2>¿Hay algo típico de Portugal que quieres tener?</h2>
+        <p>Si buscas un producto portugués en concreto, pídelo por encargo. Cuanto mejor lo detalles —marca, referencia, tamaño, cantidad—, más rápido y sin errores llegará a tus manos.</p>
+        <ul class="encargo-list">
+          <li>📝 Describe el artículo con el máximo detalle posible</li>
+          <li>🔍 Así evitamos confusiones y devoluciones</li>
+          <li>🚚 Se envía junto al resto de condiciones habituales</li>
+        </ul>
+      </div>
+      <div class="encargo-badge">
+        <div class="big">100%</div>
+        <div class="small">de tu pedido, hecho a tu medida</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="confianza">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">🤝 Por qué confiar en nosotras</span>
+      <h2>Una década acompañando a nuestras clientas</h2>
+    </div>
+    <div class="stats">
+      <div class="stat-card">
+        <div class="num">10 años</div>
+        <div class="label">de experiencia en Portugal</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">3–5 días</div>
+        <div class="label">de entrega garantizada en España</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">100%</div>
+        <div class="label">atención personalizada por mensaje</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="unirse">
+  <div class="wrap">
+    <div class="final-cta">
+      <h2>Tu próxima compra empieza con un mensaje</h2>
+      <p>Escríbenos por Facebook, cuéntanos qué buscas y te acompañamos en todo el proceso, paso a paso.</p>
+      <a href="https://www.facebook.com/anakarina.marques.14" class="btn-primary">🛍️ Visita nuestra tienda en Facebook</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="fbrand">Directo de Portugal</div>
+    <div>Ventas online desde Portugal a España · 10 años de experiencia · Envíos 3–5 días</div>
+  </div>
+</footer>
+
+</body>
+</html>
