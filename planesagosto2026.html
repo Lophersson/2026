@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Ruta A Coruña · Ferrolterra</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Courier New',monospace;background:#f4f1ec;color:#1a1a1a;font-size:13px;padding:10px;max-width:640px;margin:0 auto}
+  header{border-bottom:2px solid #1a1a1a;padding-bottom:8px;margin-bottom:8px}
+  h1{font-size:16px;letter-spacing:.5px}
+  .sub{font-size:11px;color:#555;margin-top:2px}
+  .meta{font-size:11px;color:#333;margin-top:6px;display:flex;justify-content:space-between}
+  .btns{display:flex;gap:6px;margin:8px 0}
+  .btns button{font-family:inherit;font-size:11px;background:#1a1a1a;color:#f4f1ec;border:none;padding:5px 9px;cursor:pointer}
+  .btns button:hover{background:#333}
+  details{border:1px solid #ccc;border-bottom:none;background:#fff}
+  details:last-of-type{border-bottom:1px solid #ccc}
+  summary{list-style:none;cursor:pointer;padding:7px 9px;display:flex;align-items:center;gap:8px;font-weight:bold;background:#e9e4da}
+  summary::-webkit-details-marker{display:none}
+  summary .arrow{transition:transform .15s;font-size:10px}
+  details[open] summary .arrow{transform:rotate(90deg)}
+  summary .day{width:78px}
+  summary .date{width:52px;color:#555;font-weight:normal}
+  summary .n{width:20px;color:#888;font-weight:normal}
+  summary .plan{flex:1;font-weight:normal;color:#333;font-size:12px}
+  .body{padding:8px 10px 10px 30px;border-top:1px dashed #ccc}
+  .row{display:flex;padding:2px 0}
+  .lab{width:70px;color:#777;flex-shrink:0}
+  .fill{flex:1}
+  .notas .fill{font-style:italic;color:#555}
+  @media print{
+    .btns{display:none}
+    body{background:#fff}
+    details{border-color:#999}
+    details, .body{display:block !important}
+    summary .arrow{display:none}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Ruta A Coruña · Ferrolterra</h1>
+  <div class="sub">Planning semanal — Comidas y actividades día a día</div>
+  <div class="meta"><span>Lunes 10 — Domingo 16</span><span>Agosto 2026</span></div>
+</header>
+
+<div class="btns">
+  <button onclick="toggleAll(true)">Abrir todo</button>
+  <button onclick="toggleAll(false)">Cerrar todo</button>
+  <button onclick="window.print()">Descargar PDF</button>
+</div>
+
+<details>
+  <summary><span class="arrow">▶</span><span class="day">Lunes</span><span class="date">10 Ago</span><span class="n"></span><span class="plan">Llegada — Día libre / llegada</span></summary>
+  <div class="body">
+    <div class="row"><span class="lab">Desayuno</span><span class="fill">-</span></div>
+    <div class="row"><span class="lab">Comida</span><span class="fill">-</span></div>
+    <div class="row"><span class="lab">Cena</span><span class="fill">-</span></div>
+    <div class="row notas"><span class="lab">Notas</span><span class="fill">-</span></div>
+  </div>
+</details>
+
+<details>
+  <summary><span class="arrow">▶</span><span class="day">Martes</span><span class="date">11 Ago</span><span class="n">1º</span><span class="plan">Ferrol Cidade y Centro Comercial Odeón</span></summary>
+  <div class="body">
+    <div class="row"><span class="lab">Desayuno</span><span class="fill">Confeitura</span></div>
+    <div class="row"><span class="lab">Aperitivo</span><span class="fill">Porto</span></div>
+    <div class="row"><span class="lab">Comida</span><span class="fill">-</span></div>
+    <div class="row"><span class="lab">Cena</span><span class="fill">-</span></div>
+    <div class="row notas"><span class="lab">Notas</span><span class="fill">-</span></div>
+  </div>
+</details>
+
+<details>
+  <summary><span class="arrow">▶</span><span class="day">Miércoles</span><span class="date">12 Ago</span><span class="n">2º</span><span class="plan">Ferrol Praias, Mirador Coto de Ancos</span></summary>
+  <div class="body">
+    <div class="row"><span class="lab">Desayuno</span><span class="fill">-</span></div>
+    <div class="row"><span class="lab">Aperitivo</span><span class="fill">Finca dos mares</span></div>
+    <div class="row"><span class="lab">Comida</span><span class="fill">Boa Onda</span></div>
+    <div class="row"><span class="lab">Cena</span><span class="fill">-</span></div>
+    <div class="row notas"><span class="lab">Notas</span><span class="fill">-</span></div>
+  </div>
+</details>
+
+<details>
+  <summary><span class="arrow">▶</span><span class="day">Jueves</span><span class="date">13 Ago</span><span class="n">3º</span><span class="plan">Mugardos, Ares, Redes, Cabanas, Pontedeume, Fragas do Eume, Mosteiro de Caaveiro, Betanzos</span></summary>
+  <div class="body">
+    <div class="row"><span class="lab">Desayuno</span><span class="fill">-</span></div>
+    <div class="row"><span class="lab">Comida</span><span class="fill">Taberna do Caaveiro</span></div>
+    <div class="row"><span class="lab">Cena</span><span class="fill">Mesón O Pote</span></div>
+    <div class="row notas"><span class="lab">Notas</span><span class="fill">-</span></div>
+  </div>
+</details>
+
+<details>
+  <summary><span class="arrow">▶</span><span class="day">Viernes</span><span class="date">14 Ago</span><span class="n">4º</span><span class="plan">A Coruña Centro y Centro Comercial Marineda</span></summary>
+  <div class="body">
+    <div class="row"><span class="lab">Desayuno</span><span class="fill">-</span></div>
+    <div class="row"><span class="lab">Comida</span><span class="fill">-</span></div>
+    <div class="row"><span class="lab">Cena</span><span class="fill">-</span></div>
+    <div class="row notas"><span class="lab">Notas</span><span class="fill">-</span></div>
+  </div>
+</details>
+
+<details>
+  <summary><span class="arrow">▶</span><span class="day">Sábado</span><span class="date">15 Ago</span><span class="n">5º</span><span class="plan">Valdoviño, Pantín, Cedeira, San Román, Gondón, Régoa, Serra da Capelada, Santo André de Teixido</span></summary>
+  <div class="body">
+    <div class="row"><span class="lab">Desayuno</span><span class="fill">Eder</span></div>
+    <div class="row"><span class="lab">Comida</span><span class="fill">Leira Antiga</span></div>
+    <div class="row"><span class="lab">Cena</span><span class="fill">-</span></div>
+    <div class="row notas"><span class="lab">Notas</span><span class="fill">-</span></div>
+  </div>
+</details>
+
+<details>
+  <summary><span class="arrow">▶</span><span class="day">Domingo</span><span class="date">16 Ago</span><span class="n">6º</span><span class="plan">Regreso a Barcelos</span></summary>
+  <div class="body">
+    <div class="row"><span class="lab">Desayuno</span><span class="fill">-</span></div>
+    <div class="row"><span class="lab">Comida</span><span class="fill">-</span></div>
+    <div class="row"><span class="lab">Cena</span><span class="fill">-</span></div>
+    <div class="row notas"><span class="lab">Notas</span><span class="fill">-</span></div>
+  </div>
+</details>
+
+<p style="font-size:10px;color:#888;margin-top:10px">Texto estático: edita el contenido de cada &lt;div class="fill"&gt; directamente en el código.</p>
+
+<script>
+function toggleAll(open){
+  document.querySelectorAll('details').forEach(d=>d.open=open);
+}
+</script>
+
+</body>
+</html>
