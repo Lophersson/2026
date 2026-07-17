@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Directo de Portugal · Ventas a España</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Fraunces:ital,wght@0,600;0,700;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F6EFE4;
+    --ink:#2B2118;
+    --clay:#B5542D;
+    --teal:#2F5D5A;
+    --line:#D8C9B0;
+    --card:#FFFCF6;
+    --muted:#7a6c58;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{
+    height:100%;
+    width:100%;
+    overflow:hidden;
+    /* mismo tono que el lienzo: sin caja gris a los lados */
+    background:var(--teal);
+  }
+  body{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  /* El lienzo mide 1080 de ancho fijo, pero el ALTO es automático:
+     crece lo que el contenido necesite. Nunca se recorta texto. */
+  .stage{
+    width:1080px;
+    height:auto;
+    flex-shrink:0;
+    transform-origin:center center;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Space Mono', monospace;
+    display:flex;
+    flex-direction:column;
+  }
+
+  /* ===== BANDA SUPERIOR (marca) ===== */
+  .top-band{
+    background:var(--teal);
+    color:var(--card);
+    padding:56px 60px 48px;
+    text-align:center;
+  }
+  .eyebrow{
+    font-size:22px;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    font-weight:700;
+    opacity:.9;
+    margin-bottom:16px;
+  }
+  h1{
+    font-family:'Fraunces', serif;
+    font-weight:700;
+    font-style:italic;
+    font-size:58px;
+    line-height:1.15;
+    margin-bottom:22px;
+  }
+  .route{
+    font-size:20px;
+    line-height:1.7;
+    opacity:.92;
+  }
+  .route b{color:#F2C9AE;}
+
+  /* ===== FRANJA DE CATEGORÍAS ===== */
+  .cats-strip{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:14px 18px;
+    padding:32px 60px;
+    background:var(--card);
+    border-bottom:1px solid var(--line);
+  }
+  .cats-strip span{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:26px;
+    padding:13px 24px;
+    font-size:17px;
+    white-space:nowrap;
+  }
+
+  /* ===== CUERPO PRINCIPAL ===== */
+  main{
+    display:flex;
+    flex-direction:column;
+    padding:44px 60px;
+    gap:32px;
+  }
+  .panel{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:38px 42px;
+  }
+  .panel h2{
+    font-family:'Fraunces', serif;
+    font-size:27px;
+    font-weight:600;
+    margin-bottom:24px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  p.lead{
+    font-size:20px;
+    line-height:1.7;
+    color:#3d3226;
+  }
+
+  .steps{
+    display:flex;
+    flex-direction:column;
+    gap:26px;
+  }
+  .step{
+    display:flex;
+    gap:22px;
+    align-items:flex-start;
+  }
+  .step .num{
+    font-family:'Fraunces', serif;
+    font-weight:700;
+    font-style:italic;
+    color:var(--clay);
+    font-size:32px;
+    width:38px;
+    flex-shrink:0;
+  }
+  .step b{
+    font-size:21px;
+    display:block;
+  }
+  .step p{
+    font-size:18px;
+    line-height:1.55;
+    color:var(--muted);
+    margin-top:6px;
+  }
+
+  .price-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:22px 0;
+    border-bottom:1px dashed var(--line);
+  }
+  .price-row:last-child{border-bottom:none;padding-bottom:0;}
+  .price-row:first-child{padding-top:0;}
+  .price-label{
+    font-size:20px;
+    max-width:62%;
+    line-height:1.5;
+  }
+  .price-label small{
+    display:block;
+    font-size:15px;
+    color:var(--muted);
+    margin-top:8px;
+  }
+  .price-tag{
+    font-family:'Fraunces', serif;
+    font-weight:700;
+    font-size:38px;
+    color:var(--teal);
+    white-space:nowrap;
+  }
+  .price-tag.hot{color:var(--clay);}
+  .badge-new{
+    display:inline-block;
+    font-size:14px;
+    background:var(--clay);
+    color:var(--card);
+    padding:5px 14px;
+    border-radius:12px;
+    margin-left:10px;
+    letter-spacing:.05em;
+    vertical-align:middle;
+  }
+
+  .stats-panel{
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+    text-align:center;
+  }
+  .stat b{
+    display:block;
+    font-family:'Fraunces', serif;
+    font-size:44px;
+    color:var(--teal);
+    line-height:1;
+    margin-bottom:8px;
+  }
+  .stat span{
+    font-size:15px;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+
+  /* ===== PIE ===== */
+  footer{
+    background:var(--ink);
+    color:var(--card);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:26px;
+    padding:52px 60px 58px;
+    text-align:center;
+  }
+  .cta{
+    background:var(--clay);
+    color:var(--card);
+    font-family:'Space Mono', monospace;
+    font-weight:700;
+    font-size:25px;
+    padding:25px 52px;
+    border-radius:10px;
+    letter-spacing:.03em;
+    text-decoration:none;
+    display:inline-block;
+    cursor:pointer;
+  }
+  .tagline{
+    font-size:17px;
+    line-height:1.7;
+    opacity:.85;
+  }
+</style>
+</head>
+<body>
+
+<div class="stage" id="stage">
+
+  <div class="top-band">
+    <div class="eyebrow">🛍️ Directo de Portugal</div>
+    <h1>Ropa, calzado y mucho más a tu puerta</h1>
+    <div class="route">
+      <b>10 años</b> vendiendo con cariño desde Portugal · 🇵🇹 → 🇪🇸 envíos 3–5 días a toda España
+    </div>
+  </div>
+
+  <div class="cats-strip">
+    <span>👗 Mujer</span>
+    <span>👟 Calzado</span>
+    <span>👔 Hombre</span>
+    <span>🧒 Niños</span>
+    <span>🐾 Mascotas</span>
+    <span>🏠 Hogar</span>
+    <span>🥫 Alimentación</span>
+    <span>🔧 Bricolaje</span>
+    <span>🚗 Coche</span>
+  </div>
+
+  <main>
+
+    <section class="panel">
+      <h2>✨ Lo que encontrarás</h2>
+      <p class="lead">Todo lo que buscas, directo a tu puerta desde Portugal: ropa y calzado para toda la familia, artículos para tu mascota, hogar, alimentación, papelería, bricolaje y artículos de coche. Lo ves en la foto, nos escribes y lo tienes en casa en pocos días.</p>
+    </section>
+
+    <section class="panel stats-panel">
+      <div class="stat"><b>10</b><span>años de experiencia</span></div>
+      <div class="stat"><b>3–5</b><span>días de entrega</span></div>
+      <div class="stat"><b>100%</b><span>a tu medida</span></div>
+    </section>
+
+    <section class="panel">
+      <h2>📋 Así de fácil se pide</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="num">1</div>
+          <div><b>📸 Nos escribes</b><p>Reenvía la foto que ves publicada y dinos que cantidad, color, talla, variedad y formato quieres junto a tus datos de envío; nombre, apellidos, dirección, código postal y ciudad.</p></div>
+        </div>
+        <div class="step">
+          <div class="num">2</div>
+          <div><b>✅ Confirmamos y pagas</b><p>Te confirmamos tu pedido y te pasamos el número de cuenta bancaria para ingresar el importe de tu compra, deberás enviar el justificante de ingreso en menos de 48h.</p></div>
+        </div>
+        <div class="step">
+          <div class="num">3</div>
+          <div><b>📦 Recibes en casa</b><p>Pedido garantizado en tu domicilio entre 3 y 5 días.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>💶 Precios claros</h2>
+      <div class="price-row">
+        <div class="price-label">🏷️ Comisión por artículo<small>se suma al precio de cada unidad pedida</small></div>
+        <div class="price-tag">+2€</div>
+      </div>
+      <div class="price-row">
+        <div class="price-label">📦 Envío combinado<small>hasta 2 kg · varios artículos en el mismo paquete</small></div>
+        <div class="price-tag hot">12,35€</div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <a class="cta" href="https://www.facebook.com/share/1Ja5nMm3ru/" target="_blank" rel="noopener">🛍️ Visita nuestra tienda en Facebook</a>
+    <div class="tagline">Directo de Portugal · Ventas online desde Portugal a España<br>10 años de experiencia · Envíos 3–5 días</div>
+  </footer>
+
+</div>
+
+<script>
+  // Mide la altura REAL del contenido (ya con las fuentes cargadas)
+  // y escala el lienzo para que quepa entero en la ventana sin recortar nada.
+  function fitStage(){
+    const stage = document.getElementById('stage');
+    stage.style.transform = 'none';
+    const naturalHeight = stage.offsetHeight;
+    const naturalWidth = stage.offsetWidth;
+    const scale = Math.min(window.innerWidth / naturalWidth, window.innerHeight / naturalHeight);
+    stage.style.transform = `scale(${scale})`;
+  }
+  window.addEventListener('resize', fitStage);
+  window.addEventListener('load', fitStage);
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(fitStage);
+  }
+  fitStage();
+</script>
+
+</body>
+</html>
