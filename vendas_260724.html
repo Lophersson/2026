@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Artigos e Pedidos</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Courier New', Courier, monospace;
+    background: #ffffff;
+    color: #000000;
+    margin: 0;
+    padding: 24px;
+    font-size: 14px;
+  }
+  h1 {
+    font-size: 14px;
+    font-weight: bold;
+    border-bottom: 2px solid #000000;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+  }
+  .toolbar {
+    margin-bottom: 18px;
+    display: flex;
+    gap: 10px;
+  }
+  button {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    background: #ffffff;
+    color: #000000;
+    border: 1px solid #000000;
+    padding: 8px 14px;
+    cursor: pointer;
+  }
+  button:hover {
+    background: #000000;
+    color: #ffffff;
+  }
+  button.active {
+    background: #000000;
+    color: #ffffff;
+  }
+  .search-bar {
+    margin-bottom: 16px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .search-bar input {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    padding: 8px 10px;
+    border: 1px solid #000000;
+    flex: 1;
+    max-width: 320px;
+  }
+  .search-bar button {
+    padding: 8px 12px;
+  }
+  .search-count {
+    font-size: 13px;
+    font-style: italic;
+    margin-bottom: 8px;
+  }
+  .article {
+    background: #ffffff;
+    border: 1px solid #000000;
+    margin-bottom: 12px;
+    padding: 10px 14px;
+  }
+  .article-title {
+    font-weight: bold;
+    font-size: 14px;
+  }
+  .article-num { font-weight: bold; }
+  .price { font-size: 14px; }
+  ul {
+    margin: 6px 0 0 0;
+    padding-left: 18px;
+  }
+  li { padding: 1px 0; font-size: 14px; }
+  .detail { font-size: 14px; }
+  .empty { font-size: 14px; font-style: italic; }
+  .client-block {
+    border: 1px solid #000000;
+    margin-bottom: 12px;
+    padding: 10px 14px;
+  }
+  .client-name {
+    font-size: 14px;
+    font-weight: bold;
+  }
+  .client-total {
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 6px;
+  }
+  .portes-line {
+    font-size: 14px;
+    margin-top: 2px;
+  }
+  .grand-total {
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 2px;
+  }
+  .comm-line {
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 6px;
+  }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+
+<h1>Artigos e Clientas Interessadas<br>Sexta Feira 24 de Julho de 2026</h1>
+
+<div class="toolbar">
+  <button id="btnArticle" class="active" onclick="showView('article')">Ver por Artigo</button>
+  <button id="btnClient" onclick="showView('client')">Ver por Clienta (Total)</button>
+</div>
+
+<div id="articleView">
+  <div class="search-bar">
+    <input type="text" id="articleSearch" placeholder="Buscar por número ou nome do artigo..." oninput="renderArticleView()">
+    <button onclick="clearArticleSearch()">Limpar</button>
+  </div>
+  <div id="articleSearchCount" class="search-count"></div>
+  <div id="articleResults"></div>
+</div>
+<div id="clientView" class="hidden">
+  <div class="search-bar">
+    <input type="text" id="clientSearch" placeholder="Buscar por nome ou apelido..." oninput="renderClientView()">
+    <button onclick="clearClientSearch()">Limpar</button>
+  </div>
+  <div id="clientSearchCount" class="search-count"></div>
+  <div id="clientResults"></div>
+</div>
+
+<script>
+// ---- Dados brutos (número, título, [preço1, preço2], clientes) ----
+const data = [
+  {num:30, title:"Sapatilhas Minnie", price:[5,2], clients:[
+    {name:"Florbela Correia", detail:"Nº22"},
+    {name:"Nuno Souza", detail:"Nº28"},
+    {name:"Cláudia Freitas", detail:"Nº24"}
+  ]},
+  {num:31, title:"Calças Bege", price:[3,2], clients:[
+    {name:"Célia Silva", detail:"M"},
+    {name:"Verónica Moniz", detail:"M"},
+    {name:"Marina Silva", detail:"L"}
+  ]},
+  {num:32, title:"Esponjas de Maquiagem", price:[0.99,0.99], clients:[
+    {name:"Tânia Pinheiro", detail:"Vermelho e Roxo", qty:2},
+    {name:"Yulimar Vieira", detail:"Roxo"}
+  ]},
+  {num:33, title:"Meias Hello Kitty", price:[3,2], clients:[
+    {name:"Emily Sousa", detail:"3-6 e 7-10", qty:2}
+  ]},
+  {num:34, title:"Meias Stitch", price:[2,1.5], clients:[
+    {name:"Marina Silva", detail:"3-6a"},
+    {name:"Ana Silva", detail:"2-3a"},
+    {name:"Sandra Macedo", detail:"3-6a"}
+  ]},
+  {num:35, title:"Camisola Love", price:[3,2], clients:[]},
+  {num:36, title:"Estojo Borboletas", price:[5,2], clients:[
+    {name:"Joana Puim", detail:"2 uni", qty:2}
+  ]},
+  {num:37, title:"Beje / capa (nome ilegível)", price:[3,2], clients:[
+    {name:"Joana Puim", detail:"Patrulha"},
+    {name:"Palmiro Oliveira", detail:"Patrulha"}
+  ]},
+  {num:38, title:"Livro Squishmallow", price:[1.60,1], clients:[
+    {name:"Marina Silva", detail:""},
+    {name:"Adriana Torres", detail:""}
+  ]},
+  {num:39, title:"Livro Atividades Rosa", price:[2.99,2], clients:[]},
+  {num:40, title:"Livro Squishmallows Stickers", price:[0.70,0.70], clients:[]},
+  {num:41, title:"Livro Comboio", price:[0.70,0.70], clients:[
+    {name:"Palmira Oliveira", detail:""},
+    {name:"Yulimar Vieira", detail:""}
+  ]},
+  {num:42, title:"Livro Stitch", price:[1.99,1], clients:[]},
+  {num:43, title:"Garrafa", price:[2,1.5], clients:[
+    {name:"Cláudia Freitas", detail:"Rosa"},
+    {name:"Alexandra Oliveira", detail:"Azul"},
+    {name:"Joana Puim", detail:"Rosa"},
+    {name:"Palmira Oliveira", detail:"Rosa"},
+    {name:"Marina Silva", detail:"Azul"}
+  ]},
+  {num:44, title:"Puzzle Fora", price:[1.99,1], clients:[
+    {name:"Emily Sousa", detail:""}
+  ]},
+  {num:45, title:"Puzzle Gabi", price:[1.99,1], clients:[
+    {name:"Marina Silva", detail:""}
+  ]},
+  {num:46, title:"Puzzle Pooh", price:[1.99,1], clients:[
+    {name:"Marina Silva", detail:""}
+  ]},
+  {num:47, title:"Puzzle Spidey", price:[1.99,1], clients:[
+    {name:"Catarina Bego", detail:""}
+  ]},
+  {num:48, title:"Kit Face Serum + Fruit Bar", price:[2.99,2], clients:[
+    {name:"Palmira Oliveira", detail:""},
+    {name:"Tânia Pinheiro", detail:""},
+    {name:"Sofia Antunes", detail:""},
+    {name:"Bernardo Erica", detail:""}
+  ]},
+  {num:49, title:"Kit Hidratante", price:[1,1], clients:[
+    {name:"Palmira Oliveira", detail:""},
+    {name:"Bernardo Erica", detail:""},
+    {name:"Tânia Pinheiro", detail:""}
+  ]},
+  {num:50, title:"Máscara de Olhos", price:[0.50,0.50], clients:[
+    {name:"Tânia Pinheiro", detail:"3 uni", qty:3},
+    {name:"Palmira Oliveira", detail:"3 uni", qty:3},
+    {name:"Marina Silva", detail:"2 uni", qty:2},
+    {name:"Fabiana Vieira", detail:"2 uni", qty:2},
+    {name:"Micaela Arruda", detail:"5 uni", qty:5},
+    {name:"Vanda Batista", detail:"2 uni", qty:2},
+    {name:"Vitória Santos", detail:""}
+  ]},
+  {num:51, title:"Pijama Pooh", price:[4,2], clients:[
+    {name:"Marlene Oliveira", detail:""}
+  ]},
+  {num:52, title:"Pijama Croissants", price:[5,2], clients:[]},
+  {num:53, title:"Pijama Breakfast", price:[5,2], clients:[]},
+  {num:54, title:"Camisola Stitch", price:[2,1.5], clients:[
+    {name:"Verónica Moniz", detail:""},
+    {name:"Marina Silva", detail:""}
+  ]},
+  {num:55, title:"Conjunto Playstation", price:[4,2], clients:[
+    {name:"Vitória Santos", detail:"8/9"},
+    {name:"Yulimar Vieira", detail:"8/9"},
+    {name:"Fabiana Vieira", detail:"5/6"}
+  ]},
+  {num:56, title:"Conjunto Minecraft", price:[6,2], clients:[
+    {name:"Carla Cruz", detail:"10/11"},
+    {name:"Ritinha Couto", detail:"11/12"}
+  ]},
+  {num:57, title:"Kit Guerreira do K-pop", price:[2.99,2], clients:[
+    {name:"Verónica Moniz", detail:""},
+    {name:"Ritinha Couto", detail:"2 uni", qty:2},
+    {name:"Vitória Santos", detail:""},
+    {name:"Sara Ficher", detail:""},
+    {name:"Catarina Rego", detail:""},
+    {name:"Tatiana Puim", detail:""},
+    {name:"Emily Sousa", detail:"(anulado — riscado)", cancelled:true},
+    {name:"Maria João Silva", detail:""},
+    {name:"Martha Pereira", detail:""}
+  ]},
+  {num:58, title:"Pijama Minnie", price:[3,2], clients:[
+    {name:"Sofia Antunes", detail:"19/21"},
+    {name:"Maria Vitorino", detail:"24/36"}
+  ]},
+  {num:59, title:"Conjunto Biscoitos", price:[4,2], clients:[
+    {name:"Palmira Oliveira", detail:"24/30"}
+  ]},
+  {num:60, title:"Meias Pretas", price:[2,1.5], clients:[
+    {name:"Carla Cruz", detail:"2-3a"}
+  ]},
+  {num:61, title:"Meias Rosa, Branca, Cinzenta", price:[2,1.5], clients:[
+    {name:"Maria Vitorino", detail:"3-4"},
+    {name:"Vitória Santos", detail:"4-5"},
+    {name:"Marina Silva", detail:"4-5"},
+    {name:"Tatiana Puim", detail:"7/8"},
+    {name:"Ritinha Couto", detail:"4/5"}
+  ]},
+  {num:62, title:"Conjunto Urso", price:[4,2], clients:[]},
+  {num:63, title:"Conjunto Pijama Minnie Margarida", price:[3,2], clients:[
+    {name:"Sofia Antunes", detail:""}
+  ]},
+  {num:64, title:"Luvas Frozen", price:[3,2], clients:[
+    {name:"Tatiana Puim", detail:""}
+  ]},
+  {num:65, title:"Pijama Pooh", price:[10,2], clients:[
+    {name:"Tatiana Puim", detail:""}
+  ]},
+  {num:66, title:"Pijama Croissant", price:[10,2], clients:[]},
+  {num:67, title:"Puzzle Stitch", price:[1.99,1], clients:[
+    {name:"Yulimar Vieira", detail:""},
+    {name:"Catarina Bego", detail:""}
+  ]},
+  {num:68, title:"Puzzle Blue", price:[], clients:[]},
+  {num:69, title:"Puzzle Homem de Ferro", price:[], clients:[
+    {name:"Catarina Bego", detail:""}
+  ]},
+  {num:70, title:"Puzzle Mickey", price:[], clients:[
+    {name:"Catarina Bego", detail:""}
+  ]},
+  {num:71, title:"Puzzle Hot Wheels", price:[], clients:[
+    {name:"Catarina Bego", detail:""}
+  ]},
+  {num:72, title:"Puzzle Rapunzel", price:[], clients:[
+    {name:"Vitória Santos", detail:""}
+  ]},
+  {num:73, title:"Porta Anéis Kitty", price:[1.5], clients:[]}
+];
+
+function fmt(n){ return n.toFixed(2).replace(".", ","); }
+function unitPrice(article){ return (article.price||[]).reduce((a,b)=>a+b,0); }
+function commissionPerUnit(article){ return article.price && article.price.length>1 ? article.price[1] : 0; }
+const PORTES_1 = 5.40;
+const PORTES_2 = 8.93;
+
+function clearArticleSearch(){
+  document.getElementById('articleSearch').value = '';
+  renderArticleView();
+}
+
+// ---- Render vista por artigo (com filtro de busca) ----
+function renderArticleView(){
+  const searchInput = document.getElementById('articleSearch');
+  const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+
+  const articles = query
+    ? data.filter(a => a.title.toLowerCase().includes(query) || String(a.num).includes(query))
+    : data;
+
+  const countEl = document.getElementById('articleSearchCount');
+  if(query){
+    countEl.textContent = `${articles.length} artigo(s) encontrado(s)`;
+  } else {
+    countEl.textContent = '';
+  }
+
+  const el = document.getElementById('articleResults');
+  let html = '';
+  if(articles.length === 0){
+    html = `<p class="empty">Nenhum artigo encontrado</p>`;
+  } else {
+    articles.forEach(a=>{
+      const priceLabel = a.price.length ? ` (${a.price.map(p=>fmt(p)).join('+')})` : '';
+      html += `<div class="article"><div class="article-title"><span class="article-num">${a.num}</span> — ${a.title}<span class="price">${priceLabel}</span></div>`;
+      const active = a.clients.filter(c=>!c.cancelled);
+      if(active.length===0){
+        html += `<p class="empty">Sem pedidos registados</p>`;
+      } else {
+        html += '<ul>';
+        a.clients.forEach(c=>{
+          const strike = c.cancelled ? 'text-decoration:line-through;' : '';
+          html += `<li style="${strike}">${c.name}${c.detail ? ` <span class="detail">— ${c.detail}</span>` : ''}</li>`;
+        });
+        html += '</ul>';
+      }
+      html += '</div>';
+    });
+  }
+  el.innerHTML = html;
+}
+
+// ---- Calcula totais por clienta ----
+function computeClientTotals(){
+  const totals = {};
+  data.forEach(a=>{
+    const up = unitPrice(a);
+    const cp = commissionPerUnit(a);
+    a.clients.forEach(c=>{
+      if(c.cancelled) return;
+      const qty = c.qty || 1;
+      if(!totals[c.name]) totals[c.name] = {items:[], total:0, commission:0};
+      totals[c.name].items.push({title:a.title, num:a.num, detail:c.detail, qty:qty, lineTotal: up*qty, unitPrice: up});
+      totals[c.name].total += up*qty;
+      totals[c.name].commission += cp*qty;
+    });
+  });
+  return Object.keys(totals).map(name=>({name, ...totals[name]}));
+}
+
+function clearClientSearch(){
+  document.getElementById('clientSearch').value = '';
+  renderClientView();
+}
+
+// ---- Render vista por clienta (com filtro de busca) ----
+function renderClientView(){
+  const allClients = computeClientTotals();
+  allClients.sort((a,b)=> b.total - a.total);
+
+  const searchInput = document.getElementById('clientSearch');
+  const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+
+  const clients = query
+    ? allClients.filter(c=> c.name.toLowerCase().includes(query))
+    : allClients;
+
+  const countEl = document.getElementById('clientSearchCount');
+  if(query){
+    countEl.textContent = `${clients.length} clienta(s) encontrada(s)`;
+  } else {
+    countEl.textContent = '';
+  }
+
+  const el = document.getElementById('clientResults');
+  let html = '';
+  if(clients.length === 0){
+    html = `<p class="empty">Nenhuma clienta encontrada</p>`;
+  } else {
+    clients.forEach((c,idx)=>{
+      html += `<div class="client-block"><div class="client-name">${idx+1}. ${c.name}</div><ul>`;
+      c.items.forEach(it=>{
+        const qtyLabel = it.qty > 1 ? ` x${it.qty}` : '';
+        const detailLabel = it.detail ? ` — ${it.detail}` : '';
+        html += `<li><span class="article-num">${it.num}</span> — ${it.title}${detailLabel}${qtyLabel} <span class="price">(${fmt(it.lineTotal)}€)</span></li>`;
+      });
+      html += `</ul>`;
+      html += `<div class="client-total">Total artigos: ${fmt(c.total)}€</div>`;
+      html += `<div class="portes-line">Portes 1: ${fmt(PORTES_1)}€</div>`;
+      html += `<div class="portes-line">Portes 2: ${fmt(PORTES_2)}€</div>`;
+      html += `<div class="grand-total">Total com Portes 1: ${fmt(c.total + PORTES_1)}€</div>`;
+      html += `<div class="grand-total">Total com Portes 2: ${fmt(c.total + PORTES_2)}€</div>`;
+      html += `<div class="comm-line">Total comissão: ${fmt(c.commission)}€</div>`;
+      html += `</div>`;
+    });
+  }
+  el.innerHTML = html;
+}
+
+function showView(view){
+  const articleView = document.getElementById('articleView');
+  const clientView = document.getElementById('clientView');
+  const btnArticle = document.getElementById('btnArticle');
+  const btnClient = document.getElementById('btnClient');
+  if(view==='article'){
+    articleView.classList.remove('hidden');
+    clientView.classList.add('hidden');
+    btnArticle.classList.add('active');
+    btnClient.classList.remove('active');
+  } else {
+    articleView.classList.add('hidden');
+    clientView.classList.remove('hidden');
+    btnArticle.classList.remove('active');
+    btnClient.classList.add('active');
+  }
+}
+
+renderArticleView();
+renderClientView();
+</script>
+
+</body>
+</html>
