@@ -76,6 +76,20 @@
     font-weight: bold;
     margin-top: 6px;
   }
+  .portes-line {
+    font-size: 14px;
+    margin-top: 2px;
+  }
+  .grand-total {
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 2px;
+  }
+  .comm-line {
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 6px;
+  }
   .hidden { display: none; }
 </style>
 </head>
@@ -190,11 +204,11 @@ const data = [
   ]},
   {num:56, title:"Conjunto Minecraft", price:[6,2], clients:[
     {name:"Carla Cruz", detail:"10/11"},
-    {name:"Bitinha Couto", detail:"11/12"}
+    {name:"Ritinha Couto", detail:"11/12"}
   ]},
   {num:57, title:"Kit Guerreira do K-pop", price:[3.99,2], clients:[
     {name:"Verónica Moniz", detail:""},
-    {name:"Martinho Couto", detail:"2 uni", qty:2},
+    {name:"Ritinha Couto", detail:"2 uni", qty:2},
     {name:"Vitória Santos", detail:""},
     {name:"Sara Ficlor", detail:""},
     {name:"Catarina Bego", detail:""},
@@ -218,7 +232,7 @@ const data = [
     {name:"Vitória Santos", detail:"4-5"},
     {name:"Marina Silva", detail:"4-5"},
     {name:"Tatiana Ruim", detail:"7/8"},
-    {name:"Bitinha Couto", detail:"4/5"}
+    {name:"Ritinha Couto", detail:"4/5"}
   ]},
   {num:62, title:"Conjunto Urso", price:[4,2], clients:[]},
   {num:63, title:"Conjunto Pijama Minnie Margarida", price:[3,2], clients:[
@@ -253,6 +267,9 @@ const data = [
 
 function fmt(n){ return n.toFixed(2).replace(".", ","); }
 function unitPrice(article){ return (article.price||[]).reduce((a,b)=>a+b,0); }
+function commissionPerUnit(article){ return article.price && article.price.length>1 ? article.price[1] : 0; }
+const PORTES_1 = 5.40;
+const PORTES_2 = 8.93;
 
 // ---- Render vista por artigo ----
 function renderArticleView(){
@@ -282,12 +299,14 @@ function renderClientView(){
   const totals = {};
   data.forEach(a=>{
     const up = unitPrice(a);
+    const cp = commissionPerUnit(a);
     a.clients.forEach(c=>{
       if(c.cancelled) return;
       const qty = c.qty || 1;
-      if(!totals[c.name]) totals[c.name] = {items:[], total:0};
+      if(!totals[c.name]) totals[c.name] = {items:[], total:0, commission:0};
       totals[c.name].items.push({title:a.title, num:a.num, detail:c.detail, qty:qty, lineTotal: up*qty, unitPrice: up});
       totals[c.name].total += up*qty;
+      totals[c.name].commission += cp*qty;
     });
   });
 
@@ -296,14 +315,21 @@ function renderClientView(){
 
   const el = document.getElementById('clientView');
   let html = '';
-  clients.forEach(c=>{
-    html += `<div class="client-block"><div class="client-name">${c.name}</div><ul>`;
+  clients.forEach((c,idx)=>{
+    html += `<div class="client-block"><div class="client-name">${idx+1}. ${c.name}</div><ul>`;
     c.items.forEach(it=>{
       const qtyLabel = it.qty > 1 ? ` x${it.qty}` : '';
       const detailLabel = it.detail ? ` — ${it.detail}` : '';
       html += `<li><span class="article-num">${it.num}</span> — ${it.title}${detailLabel}${qtyLabel} <span class="price">(${fmt(it.lineTotal)}€)</span></li>`;
     });
-    html += `</ul><div class="client-total">Total a pagar: ${fmt(c.total)}€</div></div>`;
+    html += `</ul>`;
+    html += `<div class="client-total">Total artigos: ${fmt(c.total)}€</div>`;
+    html += `<div class="portes-line">Portes 1: ${fmt(PORTES_1)}€</div>`;
+    html += `<div class="portes-line">Portes 2: ${fmt(PORTES_2)}€</div>`;
+    html += `<div class="grand-total">Total com Portes 1: ${fmt(c.total + PORTES_1)}€</div>`;
+    html += `<div class="grand-total">Total com Portes 2: ${fmt(c.total + PORTES_2)}€</div>`;
+    html += `<div class="comm-line">Total comissão: ${fmt(c.commission)}€</div>`;
+    html += `</div>`;
   });
   el.innerHTML = html;
 }
