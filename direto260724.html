@@ -5,304 +5,330 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Artigos e Pedidos</title>
 <style>
+  * { box-sizing: border-box; }
   body {
-    font-family: 'Courier New', monospace;
-    background: #faf6ee;
-    color: #2b2b2b;
+    font-family: 'Courier New', Courier, monospace;
+    background: #ffffff;
+    color: #000000;
     margin: 0;
     padding: 24px;
+    font-size: 14px;
   }
   h1 {
-    font-size: 1.3em;
-    border-bottom: 2px solid #b8860b;
+    font-size: 14px;
+    font-weight: bold;
+    border-bottom: 2px solid #000000;
     padding-bottom: 8px;
+    margin-bottom: 16px;
+  }
+  .toolbar {
+    margin-bottom: 18px;
+    display: flex;
+    gap: 10px;
+  }
+  button {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    background: #ffffff;
+    color: #000000;
+    border: 1px solid #000000;
+    padding: 8px 14px;
+    cursor: pointer;
+  }
+  button:hover {
+    background: #000000;
+    color: #ffffff;
+  }
+  button.active {
+    background: #000000;
+    color: #ffffff;
   }
   .article {
-    background: #fffdf8;
-    border: 1px solid #e0d5bd;
-    border-left: 4px solid #b8860b;
-    margin-bottom: 14px;
+    background: #ffffff;
+    border: 1px solid #000000;
+    margin-bottom: 12px;
     padding: 10px 14px;
   }
   .article-title {
     font-weight: bold;
-    font-size: 1.02em;
+    font-size: 14px;
   }
-  .article-num {
-    color: #b8860b;
-    font-weight: bold;
-  }
-  .price {
-    color: #6b6b6b;
-    font-size: 0.9em;
-  }
-  ul.clients {
+  .article-num { font-weight: bold; }
+  .price { font-size: 14px; }
+  ul {
     margin: 6px 0 0 0;
     padding-left: 18px;
   }
-  ul.clients li {
-    padding: 1px 0;
+  li { padding: 1px 0; font-size: 14px; }
+  .detail { font-size: 14px; }
+  .empty { font-size: 14px; font-style: italic; }
+  .client-block {
+    border: 1px solid #000000;
+    margin-bottom: 12px;
+    padding: 10px 14px;
   }
-  .detail {
-    color: #8a5a00;
-    font-size: 0.9em;
+  .client-name {
+    font-size: 14px;
+    font-weight: bold;
   }
-  .empty {
-    color: #999;
-    font-style: italic;
-    font-size: 0.9em;
+  .client-total {
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 6px;
   }
+  .hidden { display: none; }
 </style>
 </head>
 <body>
 
-<h1>Artigos e Clientas Interessadas
-  <br>
-  Sexta Feira 24 de Julho de 2026
-</h1>
+<h1>Artigos e Clientas Interessadas<br>Sexta Feira 24 de Julho de 2026</h1>
 
-<div class="article"><div class="article-title"><span class="article-num">30</span> — Sapatilhas Minnie <span class="price">(5+2)</span></div>
-<ul class="clients">
-<li>Florbela Correia <span class="detail">— Nº22</span></li>
-<li>Nuno Souza <span class="detail">— Nº28</span></li>
-<li>Cláudia Freitas <span class="detail">— Nº24</span></li>
-</ul></div>
+<div class="toolbar">
+  <button id="btnArticle" class="active" onclick="showView('article')">Ver por Artigo</button>
+  <button id="btnClient" onclick="showView('client')">Ver por Clienta (Total)</button>
+</div>
 
-<div class="article"><div class="article-title"><span class="article-num">31</span> — Calças Bege <span class="price">(3+2)</span></div>
-<ul class="clients">
-<li>Célia Silva <span class="detail">— M</span></li>
-<li>Verónica Moniz <span class="detail">— M</span></li>
-<li>Marina Silva <span class="detail">— L</span></li>
-</ul></div>
+<div id="articleView"></div>
+<div id="clientView" class="hidden"></div>
 
-<div class="article"><div class="article-title"><span class="article-num">32</span> — Esponjas de Maquiagem <span class="price">(0,99+0,99)</span></div>
-<ul class="clients">
-<li>Tânia Pinheiro <span class="detail">— Vermelho e Roxo</span></li>
-<li>Yulimar Vieira <span class="detail">— Roxo</span></li>
-</ul></div>
+<script>
+// ---- Dados brutos (número, título, [preço1, preço2], clientes) ----
+const data = [
+  {num:30, title:"Sapatilhas Minnie", price:[5,2], clients:[
+    {name:"Florbela Correia", detail:"Nº22"},
+    {name:"Nuno Souza", detail:"Nº28"},
+    {name:"Cláudia Freitas", detail:"Nº24"}
+  ]},
+  {num:31, title:"Calças Bege", price:[3,2], clients:[
+    {name:"Célia Silva", detail:"M"},
+    {name:"Verónica Moniz", detail:"M"},
+    {name:"Marina Silva", detail:"L"}
+  ]},
+  {num:32, title:"Esponjas de Maquiagem", price:[0.99,0.99], clients:[
+    {name:"Tânia Pinheiro", detail:"Vermelho e Roxo", qty:2},
+    {name:"Yulimar Vieira", detail:"Roxo"}
+  ]},
+  {num:33, title:"Meias Hello Kitty", price:[3,2], clients:[
+    {name:"Emily Sousa", detail:"3-6 e 7-10", qty:2}
+  ]},
+  {num:34, title:"Meias Stitch", price:[2,1.5], clients:[
+    {name:"Marina Silva", detail:"3-6a"},
+    {name:"Ana Silva", detail:"2-3a"},
+    {name:"Sandra Macedo", detail:"3-6a"}
+  ]},
+  {num:35, title:"Camisola Love", price:[3,2], clients:[]},
+  {num:36, title:"Estojo Borboletas", price:[5,2], clients:[
+    {name:"Joana Ruim", detail:"2 uni", qty:2}
+  ]},
+  {num:37, title:"Beje / capa (nome ilegível)", price:[3,2], clients:[
+    {name:"Joana Ruim", detail:"Patrulha"},
+    {name:"Palmiro Oliveira", detail:"Patrulha"}
+  ]},
+  {num:38, title:"Livro Squishmallow", price:[1.60,1], clients:[
+    {name:"Marina Silva", detail:""},
+    {name:"Adriana Torres", detail:""}
+  ]},
+  {num:39, title:"Livro Atividades Rosa", price:[2.99,2], clients:[]},
+  {num:40, title:"Livro Squishmallows Stickers", price:[0.70,0.70], clients:[]},
+  {num:41, title:"Livro Comboio", price:[0.70,0.70], clients:[
+    {name:"Palmira Oliveira", detail:""},
+    {name:"Yulimar Vieira", detail:""}
+  ]},
+  {num:42, title:"Livro Stitch", price:[1.99,1], clients:[]},
+  {num:43, title:"Garrafa", price:[2,1.5], clients:[
+    {name:"Cláudia Freitas", detail:"Rosa"},
+    {name:"Alexandra Oliveira", detail:"Azul"},
+    {name:"Joana Ruim", detail:"Rosa"},
+    {name:"Palmira Oliveira", detail:"Rosa"},
+    {name:"Marina Silva", detail:"Azul"}
+  ]},
+  {num:44, title:"Puzzle Fora", price:[1.99,1], clients:[
+    {name:"Emily Sousa", detail:""}
+  ]},
+  {num:45, title:"Puzzle Gabi", price:[1.99,1], clients:[
+    {name:"Marina Silva", detail:""}
+  ]},
+  {num:46, title:"Puzzle Pooh", price:[1.99,1], clients:[
+    {name:"Marina Silva", detail:""}
+  ]},
+  {num:47, title:"Puzzle Spidey", price:[1.99,1], clients:[
+    {name:"Catarina Bego", detail:""}
+  ]},
+  {num:48, title:"Kit Face Serum + Fruit Bar", price:[2.99,2], clients:[
+    {name:"Palmira Oliveira", detail:""},
+    {name:"Tânia Pinheiro", detail:""},
+    {name:"Sofia Antunes", detail:""},
+    {name:"Bernardo Erica", detail:""}
+  ]},
+  {num:49, title:"Kit Hidratante", price:[1,1], clients:[
+    {name:"Palmira Oliveira", detail:""},
+    {name:"Bernardo Erica", detail:""},
+    {name:"Tânia Pinheiro", detail:""}
+  ]},
+  {num:50, title:"Máscara de Olhos", price:[0.50,0.50], clients:[
+    {name:"Tânia Pinheiro", detail:"3 uni", qty:3},
+    {name:"Palmira Oliveira", detail:"3 uni", qty:3},
+    {name:"Marina Silva", detail:"2 uni", qty:2},
+    {name:"Fabiana Vieira", detail:"2 uni", qty:2},
+    {name:"Micaela Arruda", detail:"5 uni", qty:5},
+    {name:"Vanda Batista", detail:"2 uni", qty:2},
+    {name:"Vitória Santos", detail:""}
+  ]},
+  {num:51, title:"Pijama Pooh", price:[4,2], clients:[
+    {name:"Marlene Oliveira", detail:""}
+  ]},
+  {num:52, title:"Pijama Pasqueca", price:[5,2], clients:[]},
+  {num:53, title:"Pijama Breakfast", price:[5,2], clients:[]},
+  {num:54, title:"Camisola Stitch", price:[2,1.5], clients:[
+    {name:"Verónica Moniz", detail:""},
+    {name:"Marina Silva", detail:""}
+  ]},
+  {num:55, title:"Conjunto Playstation", price:[4,2], clients:[
+    {name:"Vitória Santos", detail:"8/9"},
+    {name:"Yulimar Vieira", detail:"8/9"},
+    {name:"Fabiana Vieira", detail:"5/6"}
+  ]},
+  {num:56, title:"Conjunto Minecraft", price:[6,2], clients:[
+    {name:"Carla Cruz", detail:"10/11"},
+    {name:"Bitinha Couto", detail:"11/12"}
+  ]},
+  {num:57, title:"Kit Guerreira do K-pop", price:[3.99,2], clients:[
+    {name:"Verónica Moniz", detail:""},
+    {name:"Martinho Couto", detail:"2 uni", qty:2},
+    {name:"Vitória Santos", detail:""},
+    {name:"Sara Ficlor", detail:""},
+    {name:"Catarina Bego", detail:""},
+    {name:"Tatiana Ruim", detail:""},
+    {name:"Emily Sousa", detail:"(anulado — riscado)", cancelled:true},
+    {name:"Marisa João Silva", detail:""},
+    {name:"Martha Pereira", detail:""}
+  ]},
+  {num:58, title:"Pijama Minnie", price:[3,2], clients:[
+    {name:"Sofia Antunes", detail:"19/21"},
+    {name:"Maria Vitorino", detail:"24/36"}
+  ]},
+  {num:59, title:"Conjunto Biscoitos", price:[4,2], clients:[
+    {name:"Palmira Oliveira", detail:"24/30"}
+  ]},
+  {num:60, title:"Meias Pretas", price:[2,1.5], clients:[
+    {name:"Carla Cruz", detail:"2-3a"}
+  ]},
+  {num:61, title:"Meias Rosa, Branca, Cinzenta", price:[2,1.5], clients:[
+    {name:"Maria Vitorino", detail:"3-4"},
+    {name:"Vitória Santos", detail:"4-5"},
+    {name:"Marina Silva", detail:"4-5"},
+    {name:"Tatiana Ruim", detail:"7/8"},
+    {name:"Bitinha Couto", detail:"4/5"}
+  ]},
+  {num:62, title:"Conjunto Urso", price:[4,2], clients:[]},
+  {num:63, title:"Conjunto Pijama Minnie Margarida", price:[3,2], clients:[
+    {name:"Sofia Antunes", detail:""}
+  ]},
+  {num:64, title:"Luvas Frozen", price:[3,2], clients:[
+    {name:"Tatiana Ruim", detail:""}
+  ]},
+  {num:65, title:"Pijama Pooh", price:[10,2], clients:[
+    {name:"Tatiana Ruim", detail:""}
+  ]},
+  {num:66, title:"Pijama Croissant", price:[10,2], clients:[]},
+  {num:67, title:"Puzzle Stitch", price:[1.99,1], clients:[
+    {name:"Yulimar Vieira", detail:""},
+    {name:"Catarina Bego", detail:""}
+  ]},
+  {num:68, title:"Puzzle Blue", price:[], clients:[]},
+  {num:69, title:"Puzzle Homem de Ferro", price:[], clients:[
+    {name:"Catarina Bego", detail:""}
+  ]},
+  {num:70, title:"Puzzle Mickey", price:[], clients:[
+    {name:"Catarina Bego", detail:""}
+  ]},
+  {num:71, title:"Puzzle Hot Wheels", price:[], clients:[
+    {name:"Catarina Bego", detail:""}
+  ]},
+  {num:72, title:"Puzzle Rapunzel", price:[], clients:[
+    {name:"Vitória Santos", detail:""}
+  ]},
+  {num:73, title:"Porta Anéis Kitty", price:[1.5], clients:[]}
+];
 
-<div class="article"><div class="article-title"><span class="article-num">33</span> — Meias Hello Kitty <span class="price">(3+2)</span></div>
-<ul class="clients">
-<li>Emily Sousa <span class="detail">— 3-6 e 7-10</span></li>
-</ul></div>
+function fmt(n){ return n.toFixed(2).replace(".", ","); }
+function unitPrice(article){ return (article.price||[]).reduce((a,b)=>a+b,0); }
 
-<div class="article"><div class="article-title"><span class="article-num">34</span> — Meias Stitch <span class="price">(2+1,50)</span></div>
-<ul class="clients">
-<li>Marina Silva <span class="detail">— 3-6a</span></li>
-<li>Ana Silva <span class="detail">— 2-3a</span></li>
-<li>Sandra Macedo <span class="detail">— 3-6a</span></li>
-</ul></div>
+// ---- Render vista por artigo ----
+function renderArticleView(){
+  const el = document.getElementById('articleView');
+  let html = '';
+  data.forEach(a=>{
+    const priceLabel = a.price.length ? ` (${a.price.map(p=>fmt(p)).join('+')})` : '';
+    html += `<div class="article"><div class="article-title"><span class="article-num">${a.num}</span> — ${a.title}<span class="price">${priceLabel}</span></div>`;
+    const active = a.clients.filter(c=>!c.cancelled);
+    if(active.length===0){
+      html += `<p class="empty">Sem pedidos registados</p>`;
+    } else {
+      html += '<ul>';
+      a.clients.forEach(c=>{
+        const strike = c.cancelled ? 'text-decoration:line-through;' : '';
+        html += `<li style="${strike}">${c.name}${c.detail ? ` <span class="detail">— ${c.detail}</span>` : ''}</li>`;
+      });
+      html += '</ul>';
+    }
+    html += '</div>';
+  });
+  el.innerHTML = html;
+}
 
-<div class="article"><div class="article-title"><span class="article-num">35</span> — Camisola Love <span class="price">(3+2)</span></div>
-<p class="empty">Sem pedidos registados</p></div>
+// ---- Render vista por clienta ----
+function renderClientView(){
+  const totals = {};
+  data.forEach(a=>{
+    const up = unitPrice(a);
+    a.clients.forEach(c=>{
+      if(c.cancelled) return;
+      const qty = c.qty || 1;
+      if(!totals[c.name]) totals[c.name] = {items:[], total:0};
+      totals[c.name].items.push({title:a.title, num:a.num, detail:c.detail, qty:qty, lineTotal: up*qty, unitPrice: up});
+      totals[c.name].total += up*qty;
+    });
+  });
 
-<div class="article"><div class="article-title"><span class="article-num">36</span> — Estojo Borboletas <span class="price">(5+2)</span></div>
-<ul class="clients">
-<li>Joana Ruim <span class="detail">— 2 uni</span></li>
-</ul></div>
+  const clients = Object.keys(totals).map(name=>({name, ...totals[name]}));
+  clients.sort((a,b)=> b.total - a.total);
 
-<div class="article"><div class="article-title"><span class="article-num">37</span> — Beje / capa (nome ilegível) <span class="price">(3+2)</span></div>
-<ul class="clients">
-<li>Joana Ruim <span class="detail">— Patrulha</span></li>
-<li>Palmiro Oliveira <span class="detail">— Patrulha</span></li>
-</ul></div>
+  const el = document.getElementById('clientView');
+  let html = '';
+  clients.forEach(c=>{
+    html += `<div class="client-block"><div class="client-name">${c.name}</div><ul>`;
+    c.items.forEach(it=>{
+      const qtyLabel = it.qty > 1 ? ` x${it.qty}` : '';
+      const detailLabel = it.detail ? ` — ${it.detail}` : '';
+      html += `<li><span class="article-num">${it.num}</span> — ${it.title}${detailLabel}${qtyLabel} <span class="price">(${fmt(it.lineTotal)}€)</span></li>`;
+    });
+    html += `</ul><div class="client-total">Total a pagar: ${fmt(c.total)}€</div></div>`;
+  });
+  el.innerHTML = html;
+}
 
-<div class="article"><div class="article-title"><span class="article-num">38</span> — Livro Squishmallow <span class="price">(1,60+1)</span></div>
-<ul class="clients">
-<li>Marina Silva</li>
-<li>Adriana Torres</li>
-</ul></div>
+function showView(view){
+  const articleView = document.getElementById('articleView');
+  const clientView = document.getElementById('clientView');
+  const btnArticle = document.getElementById('btnArticle');
+  const btnClient = document.getElementById('btnClient');
+  if(view==='article'){
+    articleView.classList.remove('hidden');
+    clientView.classList.add('hidden');
+    btnArticle.classList.add('active');
+    btnClient.classList.remove('active');
+  } else {
+    articleView.classList.add('hidden');
+    clientView.classList.remove('hidden');
+    btnArticle.classList.remove('active');
+    btnClient.classList.add('active');
+  }
+}
 
-<div class="article"><div class="article-title"><span class="article-num">39</span> — Livro Atividades Rosa <span class="price">(2,99+2)</span></div>
-<p class="empty">Sem pedidos registados</p></div>
-
-<div class="article"><div class="article-title"><span class="article-num">40</span> — Livro Squishmallows Stickers <span class="price">(0,70+0,70)</span></div>
-<p class="empty">Sem pedidos registados</p></div>
-
-<div class="article"><div class="article-title"><span class="article-num">41</span> — Livro Comboio <span class="price">(0,70+0,70)</span></div>
-<ul class="clients">
-<li>Palmira Oliveira</li>
-<li>Yulimar Vieira</li>
-</ul></div>
-
-<div class="article"><div class="article-title"><span class="article-num">42</span> — Livro Stitch <span class="price">(1,99+1)</span></div>
-<p class="empty">Sem pedidos registados</p></div>
-
-<div class="article"><div class="article-title"><span class="article-num">43</span> — Garrafa <span class="price">(2+1,50)</span></div>
-<ul class="clients">
-<li>Cláudia Freitas <span class="detail">— Rosa</span></li>
-<li>Alexandra Oliveira <span class="detail">— Azul</span></li>
-<li>Joana Ruim <span class="detail">— Rosa</span></li>
-<li>Palmira Oliveira <span class="detail">— Rosa</span></li>
-<li>Marina Silva <span class="detail">— Azul</span></li>
-</ul></div>
-
-<div class="article"><div class="article-title"><span class="article-num">44</span> — Puzzle Fora <span class="price">(1,99+1)</span></div>
-<ul class="clients">
-<li>Emily Sousa</li>
-</ul></div>
-
-<div class="article"><div class="article-title"><span class="article-num">45</span> — Puzzle Gabi <span class="price">(1,99+1)</span></div>
-<ul class="clients">
-<li>Marina Silva</li>
-</ul></div>
-
-<div class="article"><div class="article-title"><span class="article-num">46</span> — Puzzle Pooh <span class="price">(1,99+1)</span></div>
-<ul class="clients">
-<li>Marina Silva</li>
-</ul></div>
-
-<div class="article"><div class="article-title"><span class="article-num">47</span> — Puzzle Spidey <span class="price">(1,99+1)</span></div>
-<ul class="clients">
-<li>Catarina Bego</li>
-</ul></div>
-
-<div class="article"><div class="article-title"><span class="article-num">48</span> — Kit Face Serum + Fruit Bar <span class="price">(2,99+2)</span></div>
-<ul class="clients">
-<li>Palmira Oliveira</li>
-<li>Tânia Pinheiro</li>
-<li>Sofia Antunes</li>
-<li>Bernardo Erica</li>
-</ul></div>
-
-<div class="article"><div class="article-title"><span class="article-num">49</span> — Kit Hidratante <span class="price">(1+1)</span></div>
-<ul class="clients">
-<li>Palmira Oliveira</li>
-<li>Bernardo Erica</li>
-<li>Tânia Pinheiro</li>
-</ul></div>
-
-<div class="article"><div class="article-title"><span class="article-num">50</span> — Máscara de Olhos <span class="price">(0,50+0,50)</span></div>
-<ul class="clients">
-<li>Tânia Pinheiro <span class="detail">— 3 uni</span></li>
-<li>Palmira <span class="detail">— 3 uni</span></li>
-<li>Marina Silva <span class="detail">— 2 uni</span></li>
-<li>Fabiana Vieira <span class="detail">— 2 uni</span></li>
-<li>Micaela Arruda <span class="detail">— 5 uni</span></li>
-<li>Vanda Batista <span class="detail">— 2 uni</span></li>
-<li>Vitória Santos</li>
-</ul></div>
-
-<div class="article"><div class="article-title"><span class="article-num">51</span> — Pijama Pooh <span class="price">(4+2)</span></div>
-<ul class="clients">
-<li>Marlene Oliveira</li>
-</ul></div>
-
-<div class="article"><div class="article-title"><span class="article-num">52</span> — Pijama Pasqueca <span class="price">(5+2)</span></div>
-<p class="empty">Sem pedidos registados</p></div>
-
-<div class="article"><div class="article-title"><span class="article-num">53</span> — Pijama Breakfast <span class="price">(5+2)</span></div>
-<p class="empty">Sem pedidos registados</p></div>
-
-<div class="article"><div class="article-title"><span class="article-num">54</span> — Camisola Stitch <span class="price">(2+1,50)</span></div>
-<ul class="clients">
-<li>Verónica Moniz</li>
-<li>Marina Silva</li>
-</ul></div>
-
-<div class="article"><div class="article-title"><span class="article-num">55</span> — Conjunto Playstation <span class="price">(4+2)</span></div>
-<ul class="clients">
-<li>Vitória Santos <span class="detail">— 8/9</span></li>
-<li>Yulimar Vieira <span class="detail">— 8/9</span></li>
-<li>Fabiana Vieira <span class="detail">— 5/6</span></li>
-</ul></div>
-
-<div class="article"><div class="article-title"><span class="article-num">56</span> — Conjunto Minecraft <span class="price">(6+2)</span></div>
-<ul class="clients">
-<li>Carla Cruz <span class="detail">— 10/11</span></li>
-<li>Bitinha Couto <span class="detail">— 11/12</span></li>
-</ul></div>
-
-<div class="article"><div class="article-title"><span class="article-num">57</span> — Kit Guerreira do K-pop <span class="price">(3,99+2)</span></div>
-<ul class="clients">
-<li>Verónica Moniz</li>
-<li>Martinho Couto <span class="detail">— 2 uni</span></li>
-<li>Vitória Santos</li>
-<li>Sara Ficlor</li>
-<li>Catarina Bego</li>
-<li>Tatiana Ruim</li>
-<li>Emily Sousa <span class="detail">(anulado — riscado)</span></li>
-<li>Marisa João Silva</li>
-<li>Martha Pereira</li>
-</ul></div>
-
-<div class="article"><div class="article-title"><span class="article-num">58</span> — Pijama Minnie <span class="price">(3+2)</span></div>
-<ul class="clients">
-<li>Sofia Antunes <span class="detail">— 19/21</span></li>
-<li>Maria Vitorino <span class="detail">— 24/36</span></li>
-</ul></div>
-
-<div class="article"><div class="article-title"><span class="article-num">59</span> — Conjunto Biscoitos <span class="price">(4+2)</span></div>
-<ul class="clients">
-<li>Palmira Oliveira <span class="detail">— 24/30</span></li>
-</ul></div>
-
-<div class="article"><div class="article-title"><span class="article-num">60</span> — Meias Pretas <span class="price">(2+1,50)</span></div>
-<ul class="clients">
-<li>Carla Cruz <span class="detail">— 2-3a</span></li>
-</ul></div>
-
-<div class="article"><div class="article-title"><span class="article-num">61</span> — Meias Rosa, Branca, Cinzenta <span class="price">(2+1,50)</span></div>
-<ul class="clients">
-<li>Maria Vitorino <span class="detail">— 3-4</span></li>
-<li>Vitória Santos <span class="detail">— 4-5</span></li>
-<li>Marina Silva <span class="detail">— 4-5</span></li>
-<li>Tatiana Ruim <span class="detail">— 7/8</span></li>
-<li>Bitinha Couto <span class="detail">— 4/5</span></li>
-</ul></div>
-
-<div class="article"><div class="article-title"><span class="article-num">62</span> — Conjunto Urso <span class="price">(4+2)</span></div>
-<p class="empty">Sem pedidos registados</p></div>
-
-<div class="article"><div class="article-title"><span class="article-num">63</span> — Conjunto Pijama Minnie Margarida <span class="price">(3+2)</span></div>
-<ul class="clients">
-<li>Sofia Antunes</li>
-</ul></div>
-
-<div class="article"><div class="article-title"><span class="article-num">64</span> — Luvas Frozen <span class="price">(3+2)</span></div>
-<ul class="clients">
-<li>Tatiana Ruim</li>
-</ul></div>
-
-<div class="article"><div class="article-title"><span class="article-num">65</span> — Pijama Pooh <span class="price">(10+2)</span></div>
-<ul class="clients">
-<li>Tatiana Ruim</li>
-</ul></div>
-
-<div class="article"><div class="article-title"><span class="article-num">66</span> — Pijama Croissant <span class="price">(10+2)</span></div>
-<p class="empty">Sem pedidos registados</p></div>
-
-<div class="article"><div class="article-title"><span class="article-num">67</span> — Puzzle Stitch <span class="price">(1,99+1)</span></div>
-<ul class="clients">
-<li>Yulimar</li>
-<li>Catarina Bego</li>
-</ul></div>
-
-<div class="article"><div class="article-title"><span class="article-num">68</span> — Puzzle Blue</div>
-<p class="empty">Sem pedidos registados</p></div>
-
-<div class="article"><div class="article-title"><span class="article-num">69</span> — Puzzle Homem de Ferro</div>
-<ul class="clients">
-<li>Catarina Bego</li>
-</ul></div>
-
-<div class="article"><div class="article-title"><span class="article-num">70</span> — Puzzle Mickey</div>
-<ul class="clients">
-<li>Catarina Bego</li>
-</ul></div>
-
-<div class="article"><div class="article-title"><span class="article-num">71</span> — Puzzle Hot Wheels</div>
-<ul class="clients">
-<li>Catarina Bego</li>
-</ul></div>
-
-<div class="article"><div class="article-title"><span class="article-num">72</span> — Puzzle Rapunzel</div>
-<ul class="clients">
-<li>Vitória Santos</li>
-</ul></div>
-
-<div class="article"><div class="article-title"><span class="article-num">73</span> — Porta Anéis Kitty <span class="price">(1,5€)</span></div>
-<p class="empty">Sem pedidos registados</p></div>
+renderArticleView();
+renderClientView();
+</script>
 
 </body>
 </html>
