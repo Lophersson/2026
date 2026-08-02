@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plan de Comidas Semanal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FFFBF2;
+    --mint:#BFEBDD;
+    --mint-deep:#7FCDB3;
+    --peach:#FFD9C2;
+    --peach-deep:#F5A876;
+    --lavender:#E1D3F7;
+    --lavender-deep:#B79AE8;
+    --sky:#C6E6F7;
+    --sky-deep:#7FBBDE;
+    --butter:#FFF0AD;
+    --butter-deep:#EFC94C;
+    --coral:#FFCDD2;
+    --coral-deep:#EF8E96;
+    --ink:#3E3A4D;
+    --ink-soft:#6B6478;
+    --white:#FFFFFF;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(circle at 8% 8%, rgba(191,235,221,0.5), transparent 40%),
+      radial-gradient(circle at 92% 12%, rgba(255,217,194,0.5), transparent 40%),
+      radial-gradient(circle at 50% 95%, rgba(225,211,247,0.45), transparent 45%),
+      var(--cream);
+    font-family:'Nunito', sans-serif;
+    color:var(--ink);
+    min-height:100vh;
+    padding:28px 18px 60px;
+  }
+  .wrap{max-width:1180px;margin:0 auto;}
+
+  header{
+    text-align:center;
+    margin-bottom:34px;
+    position:relative;
+  }
+  .eyebrow{
+    display:inline-block;
+    font-family:'Fredoka',sans-serif;
+    font-weight:600;
+    font-size:0.78rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--mint-deep);
+    background:var(--white);
+    border:2px solid var(--mint);
+    padding:6px 16px;
+    border-radius:999px;
+    margin-bottom:14px;
+  }
+  h1{
+    font-family:'Fredoka', sans-serif;
+    font-weight:700;
+    font-size:clamp(2rem, 5vw, 3rem);
+    margin:0 0 8px;
+    color:var(--ink);
+  }
+  .subtitle{
+    font-size:1.05rem;
+    color:var(--ink-soft);
+    max-width:520px;
+    margin:0 auto 22px;
+  }
+
+  #langBtn{
+    font-family:'Fredoka', sans-serif;
+    font-weight:600;
+    font-size:1rem;
+    border:none;
+    cursor:pointer;
+    padding:13px 26px;
+    border-radius:999px;
+    background:linear-gradient(135deg, var(--lavender), var(--sky));
+    color:var(--ink);
+    box-shadow:0 6px 0 var(--lavender-deep);
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  #langBtn:hover{ transform:translateY(-2px); }
+  #langBtn:active{
+    transform:translateY(3px);
+    box-shadow:0 3px 0 var(--lavender-deep);
+  }
+
+  .days-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+    gap:22px;
+    margin-bottom:44px;
+  }
+
+  .day-card{
+    background:var(--white);
+    border-radius:26px;
+    padding:22px 22px 20px;
+    box-shadow:0 10px 24px rgba(62,58,77,0.08);
+    position:relative;
+    border:2px solid transparent;
+  }
+  .day-card .badge{
+    position:absolute;
+    top:-16px;
+    left:20px;
+    font-family:'Fredoka',sans-serif;
+    font-weight:600;
+    font-size:0.72rem;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--ink);
+    padding:6px 14px;
+    border-radius:999px;
+    box-shadow:0 4px 0 rgba(0,0,0,0.06);
+  }
+  .day-card h2{
+    font-family:'Fredoka', sans-serif;
+    font-size:1.35rem;
+    margin:10px 0 16px;
+    color:var(--ink);
+  }
+  .meal{margin-bottom:12px;}
+  .meal:last-child{margin-bottom:0;}
+  .meal-label{
+    display:inline-block;
+    font-family:'Fredoka', sans-serif;
+    font-weight:600;
+    font-size:0.78rem;
+    padding:3px 12px;
+    border-radius:999px;
+    margin-bottom:6px;
+    color:var(--ink);
+  }
+  .meal ul{
+    margin:0;
+    padding-left:20px;
+  }
+  .meal p{margin:0;}
+  .meal li{margin-bottom:2px; line-height:1.4;}
+
+  /* day color themes */
+  .c-mint .badge{background:var(--mint);}
+  .c-mint{border-color:var(--mint);}
+  .c-mint .meal-label{background:var(--mint);}
+
+  .c-peach .badge{background:var(--peach);}
+  .c-peach{border-color:var(--peach);}
+  .c-peach .meal-label{background:var(--peach);}
+
+  .c-lavender .badge{background:var(--lavender);}
+  .c-lavender{border-color:var(--lavender);}
+  .c-lavender .meal-label{background:var(--lavender);}
+
+  .c-sky .badge{background:var(--sky);}
+  .c-sky{border-color:var(--sky);}
+  .c-sky .meal-label{background:var(--sky);}
+
+  .c-butter .badge{background:var(--butter);}
+  .c-butter{border-color:var(--butter);}
+  .c-butter .meal-label{background:var(--butter);}
+
+  /* info panels */
+  .panels{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+    gap:22px;
+  }
+  .panel{
+    border-radius:26px;
+    padding:24px 24px 22px;
+    box-shadow:0 10px 24px rgba(62,58,77,0.08);
+  }
+  .panel h3{
+    font-family:'Fredoka', sans-serif;
+    font-size:1.15rem;
+    margin:0 0 12px;
+  }
+  .panel ul{margin:0; padding-left:20px;}
+  .panel li{margin-bottom:5px; line-height:1.4;}
+  .panel.good{background:linear-gradient(160deg, var(--mint) 0%, var(--white) 65%);}
+  .panel.ok{background:linear-gradient(160deg, var(--sky) 0%, var(--white) 65%);}
+  .panel.limit{background:linear-gradient(160deg, var(--coral) 0%, var(--white) 65%);}
+  .panel .tag{
+    font-family:'Fredoka',sans-serif;
+    font-weight:600;
+    font-size:.7rem;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    display:inline-block;
+    margin-bottom:8px;
+    color:var(--ink-soft);
+  }
+
+  footer{
+    text-align:center;
+    margin-top:44px;
+    font-size:0.85rem;
+    color:var(--ink-soft);
+  }
+
+  @media (max-width:480px){
+    body{padding:20px 12px 44px;}
+    .day-card{padding:20px 18px 18px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <span class="eyebrow" data-es="Semana completa" data-pt="Semana completa">Semana completa</span>
+    <h1 data-es="Plan de Comidas Semanal" data-pt="Plano Alimentar Semanal">Plan de Comidas Semanal</h1>
+    <p class="subtitle" data-es="Desayunos, comidas y cenas pensados para toda la semana, con opciones suaves para el estómago." data-pt="Pequenos-almoços, almoços e jantares pensados para a semana toda, com opções suaves para o estômago.">Desayunos, comidas y cenas pensados para toda la semana, con opciones suaves para el estómago.</p>
+    <button id="langBtn" data-es="🇵🇹 Traducir a Português" data-pt="🇪🇸 Traducir a Español">🇵🇹 Traducir a Português</button>
+  </header>
+
+  <section class="days-grid">
+
+    <article class="day-card c-mint">
+      <span class="badge" data-es="Lunes" data-pt="Segunda">Lunes</span>
+      <h2 data-es="Lunes" data-pt="Segunda-feira">Lunes</h2>
+      <div class="meal">
+        <span class="meal-label" data-es="Desayuno" data-pt="Pequeno-almoço">Desayuno</span>
+        <ul>
+          <li data-es="2 huevos revueltos." data-pt="2 ovos mexidos.">2 huevos revueltos.</li>
+          <li data-es="2 rebanadas de pan integral." data-pt="2 fatias de pão integral.">2 rebanadas de pan integral.</li>
+          <li data-es="1 plátano." data-pt="1 banana.">1 plátano.</li>
+        </ul>
+      </div>
+      <div class="meal">
+        <span class="meal-label" data-es="Media mañana" data-pt="Meio da manhã">Media mañana</span>
+        <ul><li data-es="Yogur natural alto en proteínas." data-pt="Iogurte natural rico em proteína.">Yogur natural alto en proteínas.</li></ul>
+      </div>
+      <div class="meal">
+        <span class="meal-label" data-es="Comida" data-pt="Almoço">Comida</span>
+        <ul>
+          <li data-es="Merluza al horno." data-pt="Pescada no forno.">Merluza al horno.</li>
+          <li data-es="Brócoli y calabacín." data-pt="Brócolos e courgette.">Brócoli y calabacín.</li>
+          <li data-es="100 g de patata cocida." data-pt="100 g de batata cozida.">100 g de patata cocida.</li>
+        </ul>
+      </div>
+      <div class="meal">
+        <span class="meal-label" data-es="Merienda" data-pt="Lanche da tarde">Merienda</span>
+        <ul><li data-es="Una pera." data-pt="Uma pera.">Una pera.</li></ul>
+      </div>
+      <div class="meal">
+        <span class="meal-label" data-es="Cena" data-pt="Jantar">Cena</span>
+        <ul>
+          <li data-es="Pechuga de pollo." data-pt="Peito de frango.">Pechuga de pollo.</li>
+          <li data-es="Judías verdes y zanahoria." data-pt="Feijão verde e cenoura.">Judías verdes y zanahoria.</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="day-card c-peach">
+      <span class="badge" data-es="Martes" data-pt="Terça">Martes</span>
+      <h2 data-es="Martes" data-pt="Terça-feira">Martes</h2>
+      <div class="meal">
+        <span class="meal-label" data-es="Desayuno" data-pt="Pequeno-almoço">Desayuno</span>
+        <ul>
+          <li data-es="Yogur natural alto en proteínas." data-pt="Iogurte natural rico em proteína.">Yogur natural alto en proteínas.</li>
+          <li data-es="Copos de avena (si los toleras; si vuelven a darte muchos gases, sustitúyelos por pan integral)." data-pt="Flocos de aveia (se os tolerar; se voltarem a causar muitos gases, substitua por pão integral).">Copos de avena (si los toleras; si vuelven a darte muchos gases, sustitúyelos por pan integral).</li>
+          <li data-es="Arándanos." data-pt="Mirtilos.">Arándanos.</li>
+        </ul>
+      </div>
+      <div class="meal">
+        <span class="meal-label" data-es="Comida" data-pt="Almoço">Comida</span>
+        <ul>
+          <li data-es="Pavo a la plancha." data-pt="Peru grelhado.">Pavo a la plancha.</li>
+          <li data-es="Arroz integral (70-80 g en crudo)." data-pt="Arroz integral (70-80 g cru).">Arroz integral (70-80 g en crudo).</li>
+          <li data-es="Verduras." data-pt="Legumes.">Verduras.</li>
+        </ul>
+      </div>
+      <div class="meal">
+        <span class="meal-label" data-es="Cena" data-pt="Jantar">Cena</span>
+        <ul>
+          <li data-es="Tortilla francesa de 2-3 huevos." data-pt="Omelete simples de 2-3 ovos.">Tortilla francesa de 2-3 huevos.</li>
+          <li data-es="Calabacín." data-pt="Courgette.">Calabacín.</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="day-card c-lavender">
+      <span class="badge" data-es="Miércoles" data-pt="Quarta">Miércoles</span>
+      <h2 data-es="Miércoles" data-pt="Quarta-feira">Miércoles</h2>
+      <div class="meal">
+        <span class="meal-label" data-es="Desayuno" data-pt="Pequeno-almoço">Desayuno</span>
+        <p data-es="Pan integral + queso fresco bajo en grasa + plátano." data-pt="Pão integral + queijo fresco magro + banana.">Pan integral + queso fresco bajo en grasa + plátano.</p>
+      </div>
+      <div class="meal">
+        <span class="meal-label" data-es="Comida" data-pt="Almoço">Comida</span>
+        <p data-es="Salmón al horno + verduras + patata cocida." data-pt="Salmão no forno + legumes + batata cozida.">Salmón al horno + verduras + patata cocida.</p>
+      </div>
+      <div class="meal">
+        <span class="meal-label" data-es="Cena" data-pt="Jantar">Cena</span>
+        <p data-es="Pollo con espinacas." data-pt="Frango com espinafres.">Pollo con espinacas.</p>
+      </div>
+    </article>
+
+    <article class="day-card c-sky">
+      <span class="badge" data-es="Jueves" data-pt="Quinta">Jueves</span>
+      <h2 data-es="Jueves" data-pt="Quinta-feira">Jueves</h2>
+      <div class="meal">
+        <span class="meal-label" data-es="Desayuno" data-pt="Pequeno-almoço">Desayuno</span>
+        <p data-es="Yogur natural + nueces (20 g)." data-pt="Iogurte natural + nozes (20 g).">Yogur natural + nueces (20 g).</p>
+      </div>
+      <div class="meal">
+        <span class="meal-label" data-es="Comida" data-pt="Almoço">Comida</span>
+        <p data-es="Lentejas con verduras (sin chorizo)." data-pt="Lentilhas com legumes (sem chouriço).">Lentejas con verduras (sin chorizo).</p>
+      </div>
+      <div class="meal">
+        <span class="meal-label" data-es="Cena" data-pt="Jantar">Cena</span>
+        <p data-es="Merluza con brócoli." data-pt="Pescada com brócolos.">Merluza con brócoli.</p>
+      </div>
+    </article>
+
+    <article class="day-card c-butter">
+      <span class="badge" data-es="Viernes" data-pt="Sexta">Viernes</span>
+      <h2 data-es="Viernes" data-pt="Sexta-feira">Viernes</h2>
+      <div class="meal">
+        <span class="meal-label" data-es="Desayuno" data-pt="Pequeno-almoço">Desayuno</span>
+        <p data-es="Tortilla de 2 huevos + pan integral." data-pt="Omelete de 2 ovos + pão integral.">Tortilla de 2 huevos + pan integral.</p>
+      </div>
+      <div class="meal">
+        <span class="meal-label" data-es="Comida" data-pt="Almoço">Comida</span>
+        <p data-es="Pechuga de pollo + arroz integral + verduras." data-pt="Peito de frango + arroz integral + legumes.">Pechuga de pollo + arroz integral + verduras.</p>
+      </div>
+      <div class="meal">
+        <span class="meal-label" data-es="Cena" data-pt="Jantar">Cena</span>
+        <p data-es="Bacalao con calabacín." data-pt="Bacalhau com courgette.">Bacalao con calabacín.</p>
+      </div>
+    </article>
+
+    <article class="day-card c-mint">
+      <span class="badge" data-es="Sábado" data-pt="Sábado">Sábado</span>
+      <h2 data-es="Sábado" data-pt="Sábado">Sábado</h2>
+      <div class="meal">
+        <span class="meal-label" data-es="Desayuno" data-pt="Pequeno-almoço">Desayuno</span>
+        <p data-es="Yogur alto en proteínas + fruta." data-pt="Iogurte rico em proteína + fruta.">Yogur alto en proteínas + fruta.</p>
+      </div>
+      <div class="meal">
+        <span class="meal-label" data-es="Comida" data-pt="Almoço">Comida</span>
+        <p data-es="Ternera magra (150 g) + verduras + patata." data-pt="Vitela magra (150 g) + legumes + batata.">Ternera magra (150 g) + verduras + patata.</p>
+      </div>
+      <div class="meal">
+        <span class="meal-label" data-es="Cena" data-pt="Jantar">Cena</span>
+        <p data-es="Tortilla francesa + espárragos." data-pt="Omelete simples + espargos.">Tortilla francesa + espárragos.</p>
+      </div>
+    </article>
+
+    <article class="day-card c-peach">
+      <span class="badge" data-es="Domingo" data-pt="Domingo">Domingo</span>
+      <h2 data-es="Domingo" data-pt="Domingo">Domingo</h2>
+      <div class="meal">
+        <span class="meal-label" data-es="Desayuno" data-pt="Pequeno-almoço">Desayuno</span>
+        <p data-es="Pan integral + pavo." data-pt="Pão integral + peru.">Pan integral + pavo.</p>
+      </div>
+      <div class="meal">
+        <span class="meal-label" data-es="Comida" data-pt="Almoço">Comida</span>
+        <p data-es="Pollo al horno + verduras." data-pt="Frango no forno + legumes.">Pollo al horno + verduras.</p>
+      </div>
+      <div class="meal">
+        <span class="meal-label" data-es="Cena" data-pt="Jantar">Cena</span>
+        <p data-es="Merluza o lenguado + verduras." data-pt="Pescada ou linguado + legumes.">Merluza o lenguado + verduras.</p>
+      </div>
+    </article>
+
+  </section>
+
+  <section class="panels">
+    <div class="panel good">
+      <span class="tag" data-es="Sí" data-pt="Sim">Sí</span>
+      <h3 data-es="🍐 Frutas recomendadas" data-pt="🍐 Frutas recomendadas">🍐 Frutas recomendadas</h3>
+      <ul>
+        <li data-es="Plátano." data-pt="Banana.">Plátano.</li>
+        <li data-es="Pera." data-pt="Pera.">Pera.</li>
+        <li data-es="Manzana." data-pt="Maçã.">Manzana.</li>
+        <li data-es="Melón." data-pt="Melão.">Melón.</li>
+      </ul>
+    </div>
+
+    <div class="panel ok">
+      <span class="tag" data-es="Toleradas" data-pt="Toleradas">Toleradas</span>
+      <h3 data-es="🥦 Verduras que suelen tolerarse bien con RGE" data-pt="🥦 Legumes geralmente bem tolerados com RGE">🥦 Verduras que suelen tolerarse bien con RGE</h3>
+      <ul>
+        <li data-es="Calabacín." data-pt="Courgette.">Calabacín.</li>
+        <li data-es="Judías verdes." data-pt="Feijão verde.">Judías verdes.</li>
+        <li data-es="Brócoli." data-pt="Brócolos.">Brócoli.</li>
+        <li data-es="Zanahoria." data-pt="Cenoura.">Zanahoria.</li>
+        <li data-es="Espinacas." data-pt="Espinafres.">Espinacas.</li>
+      </ul>
+    </div>
+
+    <div class="panel limit">
+      <span class="tag" data-es="Con cuidado" data-pt="Com cuidado">Con cuidado</span>
+      <h3 data-es="⚠️ Limita o evita si te provocan síntomas" data-pt="⚠️ Limite ou evite se provocarem sintomas">⚠️ Limita o evita si te provocan síntomas</h3>
+      <ul>
+        <li data-es="Tomate." data-pt="Tomate.">Tomate.</li>
+        <li data-es="Cítricos." data-pt="Citrinos.">Cítricos.</li>
+        <li data-es="Cebolla y ajo crudos." data-pt="Cebola e alho crus.">Cebolla y ajo crudos.</li>
+        <li data-es="Chocolate." data-pt="Chocolate.">Chocolate.</li>
+        <li data-es="Menta." data-pt="Hortelã.">Menta.</li>
+        <li data-es="Fritos y embutidos grasos." data-pt="Fritos e enchidos gordos.">Fritos y embutidos grasos.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer data-es="Ajusta las cantidades a tus necesidades. Ante cualquier duda, consulta con un profesional de nutrición." data-pt="Ajusta as quantidades às tuas necessidades. Em caso de dúvida, consulta um profissional de nutrição.">
+    Ajusta las cantidades a tus necesidades. Ante cualquier duda, consulta con un profesional de nutrición.
+  </footer>
+
+</div>
+
+<script>
+  let currentLang = 'es';
+  const btn = document.getElementById('langBtn');
+
+  function applyLang(lang){
+    document.querySelectorAll('[data-es]').forEach(el => {
+      const val = el.getAttribute('data-' + lang);
+      if(val !== null) el.textContent = val;
+    });
+    document.documentElement.lang = lang === 'pt' ? 'pt' : 'es';
+  }
+
+  btn.addEventListener('click', () => {
+    currentLang = currentLang === 'es' ? 'pt' : 'es';
+    applyLang(currentLang);
+    // update button label to the opposite-language toggle text
+    btn.textContent = currentLang === 'es' ? btn.getAttribute('data-es') : btn.getAttribute('data-pt');
+  });
+</script>
+</body>
+</html>
