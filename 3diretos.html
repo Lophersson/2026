@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clientas — Resumo Fusionado (24, 29 e 31 Julho)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf6ef;
+    --bg-card:#ffffff;
+    --bg-alt:#f3ead9;
+    --ink:#2b2420;
+    --ink-soft:#6b6055;
+    --brown:#8a6a4b;
+    --brown-deep:#5c4632;
+    --gold:#b8935a;
+    --gold-soft:#e4cfa8;
+    --border:#e6dcc8;
+    --shadow: 0 10px 30px -12px rgba(90,70,40,0.18);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'DM Sans', sans-serif;
+    padding:32px 18px 80px;
+  }
+  .wrap{max-width:980px;margin:0 auto;}
+  header{
+    text-align:center;
+    margin-bottom:28px;
+  }
+  h1{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    font-size:2.6rem;
+    letter-spacing:0.5px;
+    margin:0 0 6px;
+    color:var(--brown-deep);
+  }
+  .subtitle{
+    color:var(--ink-soft);
+    font-size:0.95rem;
+    letter-spacing:0.3px;
+  }
+  .dates{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    margin-top:14px;
+    flex-wrap:wrap;
+  }
+  .date-chip{
+    background:var(--bg-alt);
+    border:1px solid var(--border);
+    color:var(--brown-deep);
+    font-family:'DM Mono', monospace;
+    font-size:0.78rem;
+    padding:5px 12px;
+    border-radius:999px;
+  }
+
+  .summary{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:12px;
+    margin:26px 0 30px;
+  }
+  .summary .card{
+    background:var(--bg-card);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:16px 14px;
+    text-align:center;
+    box-shadow:var(--shadow);
+  }
+  .summary .card .num{
+    font-family:'Cormorant Garamond', serif;
+    font-size:1.9rem;
+    font-weight:700;
+    color:var(--gold);
+    display:block;
+  }
+  .summary .card .lbl{
+    font-size:0.72rem;
+    text-transform:uppercase;
+    letter-spacing:0.6px;
+    color:var(--ink-soft);
+  }
+
+  .controls{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    align-items:center;
+    margin-bottom:20px;
+    background:var(--bg-card);
+    border:1px solid var(--border);
+    padding:12px 14px;
+    border-radius:14px;
+    box-shadow:var(--shadow);
+  }
+  #search{
+    flex:1;
+    min-width:180px;
+    padding:9px 12px;
+    border-radius:9px;
+    border:1px solid var(--border);
+    font-family:'DM Sans', sans-serif;
+    font-size:0.9rem;
+    background:var(--bg);
+    color:var(--ink);
+  }
+  #search:focus{outline:2px solid var(--gold-soft);}
+  .toggle-btn, .sort-select{
+    padding:8px 12px;
+    border-radius:9px;
+    border:1px solid var(--border);
+    background:var(--bg-alt);
+    color:var(--brown-deep);
+    font-family:'DM Sans', sans-serif;
+    font-size:0.82rem;
+    cursor:pointer;
+    font-weight:500;
+  }
+  .toggle-btn.active{
+    background:var(--brown);
+    color:#fff;
+    border-color:var(--brown);
+  }
+
+  .client{
+    background:var(--bg-card);
+    border:1px solid var(--border);
+    border-radius:16px;
+    margin-bottom:14px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+  }
+  .client-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:16px 18px;
+    cursor:pointer;
+  }
+  .client-name-block{display:flex;flex-direction:column;gap:5px;min-width:0;}
+  .client-name{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    font-size:1.35rem;
+    color:var(--brown-deep);
+  }
+  .badges{display:flex;gap:6px;flex-wrap:wrap;}
+  .badge{
+    font-family:'DM Mono', monospace;
+    font-size:0.68rem;
+    padding:2px 8px;
+    border-radius:999px;
+    border:1px solid var(--gold-soft);
+    color:var(--brown-deep);
+    background:var(--bg-alt);
+  }
+  .badge.loyal{
+    background:linear-gradient(120deg,var(--gold),#caa15e);
+    color:#fff;
+    border-color:transparent;
+  }
+  .client-totals{
+    text-align:right;
+    flex-shrink:0;
+  }
+  .client-totals .tot{
+    font-family:'Cormorant Garamond', serif;
+    font-size:1.3rem;
+    font-weight:700;
+    color:var(--ink);
+  }
+  .client-totals .com{
+    font-size:0.75rem;
+    color:var(--gold);
+    font-weight:600;
+  }
+  .chevron{
+    color:var(--ink-soft);
+    transition:transform .2s ease;
+    flex-shrink:0;
+  }
+  .client.open .chevron{transform:rotate(180deg);}
+
+  .client-body{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .25s ease;
+    border-top:1px solid transparent;
+  }
+  .client.open .client-body{
+    border-top:1px solid var(--border);
+  }
+
+  .day-block{
+    padding:14px 18px;
+    border-bottom:1px dashed var(--border);
+  }
+  .day-block:last-child{border-bottom:none;}
+  .day-title{
+    font-family:'DM Mono', monospace;
+    font-size:0.75rem;
+    color:var(--brown);
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    margin-bottom:8px;
+    display:flex;
+    justify-content:space-between;
+  }
+  ul.items{
+    list-style:none;
+    margin:0;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+  }
+  ul.items li{
+    font-size:0.86rem;
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    padding:3px 0;
+  }
+  ul.items li .it-name{color:var(--ink);}
+  ul.items li .it-price{color:var(--ink-soft);font-family:'DM Mono', monospace;font-size:0.8rem;white-space:nowrap;}
+  .day-sub{
+    display:flex;
+    justify-content:space-between;
+    margin-top:8px;
+    padding-top:6px;
+    border-top:1px solid var(--border);
+    font-size:0.78rem;
+    color:var(--ink-soft);
+  }
+  .day-sub b{color:var(--brown-deep);}
+
+  .no-results{
+    text-align:center;
+    color:var(--ink-soft);
+    padding:40px 0;
+    font-style:italic;
+  }
+
+  footer{
+    text-align:center;
+    color:var(--ink-soft);
+    font-size:0.75rem;
+    margin-top:30px;
+  }
+
+  @media (max-width:520px){
+    h1{font-size:2.1rem;}
+    .client-head{padding:14px;}
+    .client-name{font-size:1.15rem;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Resumo Fusionado por Clienta</h1>
+    <div class="subtitle">Pedidos consolidados dos três dias de venda</div>
+    <div class="dates">
+      <span class="date-chip">24 Jul</span>
+      <span class="date-chip">29 Jul</span>
+      <span class="date-chip">31 Jul</span>
+    </div>
+  </header>
+
+  <div class="summary">
+    <div class="card"><span class="num" id="statClients">—</span><span class="lbl">Clientas únicas</span></div>
+    <div class="card"><span class="num" id="statLoyal">—</span><span class="lbl">Nos 3 dias</span></div>
+    <div class="card"><span class="num" id="statArtigos">—</span><span class="lbl">Total artigos</span></div>
+    <div class="card"><span class="num" id="statComissao">—</span><span class="lbl">Total comissão</span></div>
+  </div>
+
+  <div class="controls">
+    <input type="text" id="search" placeholder="Buscar por nome...">
+    <select id="sortSelect" class="sort-select">
+      <option value="total-desc">Ordenar: Total (maior primeiro)</option>
+      <option value="total-asc">Ordenar: Total (menor primeiro)</option>
+      <option value="days-desc">Ordenar: Nº de dias</option>
+      <option value="name-asc">Ordenar: Nome (A-Z)</option>
+    </select>
+    <button class="toggle-btn" id="loyalToggle">★ Só as 3 dias</button>
+  </div>
+
+  <div id="clientList"></div>
+  <div class="no-results" id="noResults" style="display:none;">Nenhuma clienta encontrada.</div>
+
+  <footer>Fusão automática dos relatórios de 24, 29 e 31 de julho de 2026 — nomes com pequenas variações de grafia (acentos, sobrenomes, erros de digitação) foram unificados na mesma clienta.</footer>
+</div>
+
+<script>
+const DAY_LABELS = {d1:"24 Jul", d2:"29 Jul", d3:"31 Jul"};
+
+const clients = [
+{name:"Tatiana Puim", days:{
+  d1:{items:[["Kit Guerreira do K-pop",5.99],["Meias Rosa, Branca, Cinzenta — 7/8",3.50],["Luvas Frozen",5.00],["Pijama Pooh",12.00]], total:26.49, com:7.50},
+  d2:{items:[["Polly pocket lila — 6/7",5.00]], total:5.00, com:2.00},
+  d3:{items:[["Boné lilas frozen — 4/7",2.00],["Cuecas hello kitty — 7/8",3.50],["Pijama set conchas — XXL",5.00],["Pijama cadros azuis — XXL",5.00]], total:15.50, com:6.50}
+}},
+{name:"Palmira Oliveira Furtado", days:{
+  d1:{items:[["Livro Comboio",1.40],["Garrafa — Rosa",3.50],["Kit Face Serum + Fruit Bar",4.99],["Kit Hidratante",2.00],["Máscara de Olhos x3",3.00],["Conjunto Biscoitos — 24/30",6.00]], total:20.89, com:8.70},
+  d2:{items:[["Garfield — Newborn",5.00],["Lápices ferramentas x2",2.20],["Meias castanhas x2",2.40],["Sapatilhas Minnie rosas",7.00],["Abóboras decorativas pepco x2",10.00]], total:26.60, com:10.30},
+  d3:{items:[["Ropa bebé paddington — 12/18",3.50],["Pijama set conchas — XL",5.00],["Sueter branco gato — 18/24",2.00],["Sueter rosa bolo cereijas — 18/24",2.00]], total:12.50, com:5.50}
+}},
+{name:"Emily Sousa", days:{
+  d1:{items:[["Meias Hello Kitty — 3/6",5.00],["Meias Hello Kitty — 7/10",5.00],["Puzzle Dora",2.99]], total:12.99, com:5.00},
+  d2:{items:[["Casaco amarelo capuz y zipper",5.00],["Meias castanhas",1.20],["Boné roxo S",5.00]], total:11.20, com:4.60},
+  d3:{items:[["Cuecas hello kitty — 10/11",3.50]], total:3.50, com:1.50}
+}},
+{name:"Carla Cruz", days:{
+  d1:{items:[["Conjunto Minecraft — 10/11",8.00],["Meias Pretas — 2/3a",3.50]], total:11.50, com:3.50},
+  d2:{items:[["Crema Mãos",3.50]], total:3.50, com:1.50},
+  d3:{items:[["Sueter branco gato — 18/24",2.00],["Sueter azul maças — 18/24",2.00]], total:4.00, com:2.00}
+}},
+{name:"Marlene Oliveira", days:{
+  d1:{items:[["Pijama Pooh",6.00]], total:6.00, com:2.00},
+  d2:{items:[["Garrafa Azul Stitch",3.50]], total:3.50, com:1.50},
+  d3:{items:[["Garrafa stitch riscas rosas",3.50]], total:3.50, com:1.50}
+}},
+{name:"Alexandra Oliveira", days:{
+  d1:{items:[["Garrafa — Azul",3.50]], total:3.50, com:1.50},
+  d2:{items:[["Chinelos Marrón, Azul y Verde — Nº41 Marrón",6.00],["Chinelos Marrón, Azul y Verde — Nº41 Verde",6.00]], total:12.00, com:4.00},
+  d3:{items:[["Garrafa stitch riscas rosas",3.50]], total:3.50, com:1.50}
+}},
+{name:"Marina Silva", days:{
+  d1:{items:[["Calças Bege — L",5.00],["Meias Stitch — 3/6a",3.50],["Livro Squishmallow",2.60],["Garrafa — Azul",3.50],["Puzzle Gabi",2.99],["Puzzle Pooh",2.99],["Máscara de Olhos x2",2.00],["Camisola Stitch",3.50],["Meias Rosa, Branca, Cinzenta — 4/5",3.50]], total:29.58, com:12.00},
+  d2:{items:[["Bolso Minnie negro x2",18.00],["Boneca Gabbi Dollhouse",14.00]], total:32.00, com:6.00}
+}},
+{name:"Ritinha Couto", days:{
+  d1:{items:[["Conjunto Minecraft — 11/12",8.00],["Kit Guerreira do K-pop x2",11.98],["Meias Rosa, Branca, Cinzenta — 4/5",3.50]], total:23.48, com:7.50},
+  d3:{items:[["Top stitch azul — 9/10",3.50],["Meias con sola castanho — 25",3.50],["Meias con sola castanho — 26",3.50],["Calças minecraft — 14/15",5.00]], total:15.50, com:6.50}
+}},
+{name:"Sara Joao Pacheco", days:{
+  d2:{items:[["Meias con sola pato Lefties — Nº22",3.50],["Crema Mãos",3.50],["Garrafa Roxo Hello Kitty",3.50],["Garrafa Azul Stitch",3.50]], total:14.00, com:6.00},
+  d3:{items:[["Garrafa stitch riscas rosas",3.50],["Conjunto rey león — 3/6",5.00],["Top stitch azul — 11/12",3.50],["Meias con sola mickey — 23",3.50],["Conjunto k-pop huntrix — 11/12",8.00],["Kit de labios",2.00]], total:25.50, com:9.50}
+}},
+{name:"Maria João Silva", days:{
+  d1:{items:[["Kit Guerreira do K-pop",5.99]], total:5.99, com:2.00},
+  d2:{items:[["Bolso Pooh Branco",9.00],["Conjunto Stitch rosa",9.00],["Garrafa Roxo Hello Kitty",3.50]], total:21.50, com:5.50}
+}},
+{name:"Vitória Santos", days:{
+  d1:{items:[["Máscara de Olhos",1.00],["Conjunto Playstation — 8/9",6.00],["Kit Guerreira do K-pop",5.99],["Meias Rosa, Branca, Cinzenta — 4/5",3.50],["Puzzle Rapunzel",2.99]], total:19.48, com:7.00},
+  d3:{items:[["Ropa bebé paddington — 3/6",3.50],["Pijama bambi — 8/9",5.00]], total:8.50, com:3.50}
+}},
+{name:"Maria Sacramento", days:{
+  d2:{items:[["Polo verde escuro homem — 2XL",5.00],["Polo azul — 2XL",5.00],["Conjunto branco riscas azuis",6.00]], total:16.00, com:6.00},
+  d3:{items:[["Sueter rosa bolo cereijas — 18/24",2.00],["Sueter azul maças — 18/24",2.00]], total:4.00, com:2.00}
+}},
+{name:"Josefina M. F. Ponte", days:{
+  d2:{items:[["Garfield — 3/6",5.00],["Leggings Bege",5.00]], total:10.00, com:4.00},
+  d3:{items:[["Boné lilas frozen — 2/4",2.00],["T-shirt interiores menina morangos — 5/6",3.50],["Meias con sola mickey — 25",3.50],["Kit de labios",2.00]], total:11.00, com:5.00}
+}},
+{name:"Sofia Antunes", days:{
+  d1:{items:[["Kit Face Serum + Fruit Bar",4.99],["Pijama Minnie — 19/21",5.00],["Conjunto Pijama Minnie Margarida",5.00]], total:14.99, com:6.00},
+  d3:{items:[["Sueter azul maças — 18/24",2.00]], total:2.00, com:1.00}
+}},
+{name:"Maria Vitorino", days:{
+  d1:{items:[["Pijama Minnie — 24/36",5.00],["Meias Rosa, Branca, Cinzenta — 3/4",3.50]], total:8.50, com:3.50},
+  d3:{items:[["Boné lilas frozen — 2/4",2.00],["Meias con sola mickey — 23",3.50]], total:5.50, com:2.50}
+}},
+{name:"Catarina Rego", days:{
+  d1:{items:[["Kit Guerreira do K-pop",5.99]], total:5.99, com:2.00},
+  d3:{items:[["Sueter one piece verde — 7/8",5.00]], total:5.00, com:2.00}
+}},
+{name:"Micaela Arruda", days:{
+  d1:{items:[["Máscara de Olhos x5",5.00]], total:5.00, com:2.50},
+  d3:{items:[["Calças bluey — 2/3",5.00]], total:5.00, com:2.00}
+}},
+{name:"Liliana Couto", days:{
+  d2:{items:[["Calças jogger pretas homem",7.00]], total:7.00, com:2.00},
+  d3:{items:[["Sueter branco gato — 18/24",2.00],["Sueter rosa bolo cereijas — 18/24",2.00]], total:4.00, com:2.00}
+}},
+{name:"Adriana Tavares", days:{
+  d2:{items:[["Meias con sola pato Lefties — Nº23",3.50]], total:3.50, com:1.50},
+  d3:{items:[["Ropa bebé paddington — 6/9",3.50]], total:3.50, com:1.50}
+}},
+
+{name:"Diana Cristiano", days:{
+  d2:{items:[["Calças Yale",8.00],["Pack x2 Pijama Bluey verde",9.00],["Pack x2 Pijama Bluey Azul escuro",7.00],["Garrafa Roxo Hello Kitty",3.50]], total:27.50, com:7.50}
+}},
+{name:"Ana Botelho", days:{
+  d3:{items:[["Ropa bebé paddington — 0/1",3.50],["Boné lilas frozen — 2/4 x3",6.00],["Boné lilas frozen — 7/10",2.00],["Boné lilas frozen — 4/7 x2",4.00],["Pijama set conchas — M",5.00],["Pijama set conchas — L",5.00]], total:25.50, com:11.50}
+}},
+{name:"Michelle Tiago Melo", days:{
+  d3:{items:[["Boné lilas frozen — 4/7",2.00],["Cuecas hello kitty — 10/11",3.50],["Pijama bambi — 7/8",5.00],["Top stitch azul — 8/9",3.50],["Casaco dinossauros azul",5.00],["Escoba de cabelo",3.50],["Sueter stitch celeste",5.00]], total:27.50, com:11.50}
+}},
+{name:"Susana Medeiros", days:{
+  d3:{items:[["Garrafa stitch riscas rosas x2",7.00],["Boné lilas frozen — 4/7",2.00],["T-shirt interiores menina morangos — 6/7",3.50],["Cuecas urso — 3/6",3.50],["Pijama bambi — 6/7",5.00]], total:21.00, com:9.00}
+}},
+{name:"Joana Puim", days:{
+  d1:{items:[["Estojo Borboletas x2",14.00],["Rede banho brinquedos crianças — Patrulha",5.00],["Garrafa — Rosa",3.50]], total:22.50, com:7.50}
+}},
+{name:"Maria Barroso", days:{
+  d2:{items:[["Meias con sola pato Lefties — Nº21",3.50],["Sapatillas sport menino pretas — Nº41",7.00],["Gorro y luvas Mickey",9.00]], total:19.50, com:5.50}
+}},
+{name:"Catarina Arruda", days:{
+  d2:{items:[["Meias con sola pato Lefties — Nº25",3.50],["Pijama verde Minecraft",8.00],["Sapatilhas Minnie rosas",7.00]], total:18.50, com:5.50}
+}},
+{name:"Filipe Catia Pacheco", days:{
+  d3:{items:[["Cuecas hello kitty — 10/11",3.50],["Pijama set conchas — L",5.00],["Pijama bambi — 10/11",5.00],["Top stitch azul — 10/11",3.50]], total:17.00, com:7.00}
+}},
+{name:"Valter E Sandra Teves", days:{
+  d2:{items:[["Meias play station x3",6.00],["Sapatillas rosas",3.50],["Garrafa Azul Stitch",3.50],["Dino Dart Set",2.70]], total:15.70, com:7.00}
+}},
+{name:"Catarina Bego", days:{
+  d1:{items:[["Puzzle Spidey",2.99],["Puzzle Stitch",2.99],["Puzzle Homem de Ferro",2.99],["Puzzle Mickey",2.99],["Puzzle Hot Wheels",2.99]], total:14.95, com:5.00}
+}},
+{name:"Verónica Moniz", days:{
+  d1:{items:[["Calças Bege — M",5.00],["Camisola Stitch",3.50],["Kit Guerreira do K-pop",5.99]], total:14.49, com:5.50}
+}},
+{name:"Tânia Pinheiro", days:{
+  d1:{items:[["Esponjas de Maquiagem — Vermelho",1.98],["Esponjas de Maquiagem — Roxo",1.98],["Kit Face Serum + Fruit Bar",4.99],["Kit Hidratante",2.00],["Máscara de Olhos x3",3.00]], total:13.95, com:6.48}
+}},
+{name:"Yulimar Vieira", days:{
+  d1:{items:[["Esponjas de Maquiagem — Roxo",1.98],["Livro Comboio",1.40],["Conjunto Playstation — 8/9",6.00],["Puzzle Stitch",2.99]], total:12.37, com:4.69}
+}},
+{name:"Adelia Cordeiro", days:{
+  d3:{items:[["Garrafa stitch riscas rosas",3.50],["T-shirt interiores menina morangos — 10/11",3.50],["Cuecas hello kitty — 10/11",3.50],["Kit de labios",2.00]], total:12.50, com:5.50}
+}},
+{name:"Bianca Calouro", days:{
+  d3:{items:[["Garrafa stitch riscas rosas",3.50],["T-shirt interiores menina morangos — 8/9",3.50],["Sueter azul baleia — 24/36",5.00]], total:12.00, com:5.00}
+}},
+{name:"Cláudia Freitas", days:{
+  d1:{items:[["Sapatilhas Minnie — Nº24",7.00],["Garrafa — Rosa",3.50]], total:10.50, com:3.50}
+}},
+{name:"Marcia Raposo", days:{
+  d3:{items:[["Sueter play station everything — 6/7",5.00],["Sueter polly pocket lilas",5.00]], total:10.00, com:4.00}
+}},
+{name:"Fabiana Vieira", days:{
+  d1:{items:[["Máscara de Olhos x2",2.00],["Conjunto Playstation — 5/6",6.00]], total:8.00, com:3.00}
+}},
+{name:"Emiliana Tavares", days:{
+  d3:{items:[["Garrafa stitch riscas rosas",3.50],["Conjunto rey león — 3/6",5.00]], total:8.50, com:3.50}
+}},
+{name:"Odilia Farias", days:{
+  d2:{items:[["Conjunto garfield",7.99]], total:7.99, com:2.00}
+}},
+{name:"Florbela Correia", days:{
+  d1:{items:[["Sapatilhas Minnie — Nº22",7.00]], total:7.00, com:2.00}
+}},
+{name:"Nuno Souza", days:{
+  d1:{items:[["Sapatilhas Minnie — Nº28",7.00]], total:7.00, com:2.00}
+}},
+{name:"Julia Medeiros", days:{
+  d2:{items:[["Sapatilhas stitch",7.00]], total:7.00, com:2.00}
+}},
+{name:"Maria Figueirido", days:{
+  d2:{items:[["Calções kappa",7.00]], total:7.00, com:2.00}
+}},
+{name:"Bernardo Erica", days:{
+  d1:{items:[["Kit Face Serum + Fruit Bar",4.99],["Kit Hidratante",2.00]], total:6.99, com:3.00}
+}},
+{name:"Sara Ficher", days:{
+  d1:{items:[["Kit Guerreira do K-pop",5.99]], total:5.99, com:2.00}
+}},
+{name:"Martha Pereira", days:{
+  d1:{items:[["Kit Guerreira do K-pop",5.99]], total:5.99, com:2.00}
+}},
+{name:"Célia Silva", days:{
+  d1:{items:[["Calças Bege — M",5.00]], total:5.00, com:2.00}
+}},
+{name:"Palmiro Oliveira", days:{
+  d1:{items:[["Rede banho brinquedos crianças — Patrulha",5.00]], total:5.00, com:2.00}
+}},
+{name:"Rafaela Botelho", days:{
+  d2:{items:[["Sueter stitch azul",5.00]], total:5.00, com:2.00}
+}},
+{name:"Esperança Pereira", days:{
+  d2:{items:[["Garfield — 0/3",5.00]], total:5.00, com:2.00}
+}},
+{name:"Wera Raposo", days:{
+  d3:{items:[["Pijama bambi — 9/10",5.00]], total:5.00, com:2.00}
+}},
+{name:"Ana Silva", days:{
+  d1:{items:[["Meias Stitch — 2/3a",3.50]], total:3.50, com:1.50}
+}},
+{name:"Sandra Macedo", days:{
+  d1:{items:[["Meias Stitch — 3/6a",3.50]], total:3.50, com:1.50}
+}},
+{name:"Daniela Medeiros", days:{
+  d2:{items:[["Meias con sola pato Lefties — Nº20",3.50]], total:3.50, com:1.50}
+}},
+{name:"Beatriz Silva", days:{
+  d2:{items:[["Garrafa Azul Stitch",3.50]], total:3.50, com:1.50}
+}},
+{name:"Adriana Torres", days:{
+  d1:{items:[["Livro Squishmallow",2.60]], total:2.60, com:1.00}
+}},
+{name:"Vanda Batista", days:{
+  d1:{items:[["Máscara de Olhos x2",2.00]], total:2.00, com:1.00}
+}}
+];
+
+// compute derived fields
+clients.forEach(c=>{
+  let total=0, com=0, dayCount=0;
+  Object.values(c.days).forEach(d=>{ total+=d.total; com+=d.com; dayCount++; });
+  c.total = Math.round(total*100)/100;
+  c.com = Math.round(com*100)/100;
+  c.dayCount = dayCount;
+});
+
+const fmt = n => n.toFixed(2).replace('.',',') + '€';
+
+const listEl = document.getElementById('clientList');
+const searchEl = document.getElementById('search');
+const sortEl = document.getElementById('sortSelect');
+const loyalBtn = document.getElementById('loyalToggle');
+let loyalOnly = false;
+
+function render(){
+  const q = searchEl.value.trim().toLowerCase();
+  let data = clients.filter(c => c.name.toLowerCase().includes(q));
+  if(loyalOnly) data = data.filter(c => c.dayCount===3);
+
+  const sortMode = sortEl.value;
+  data.sort((a,b)=>{
+    if(sortMode==='total-desc') return b.total-a.total;
+    if(sortMode==='total-asc') return a.total-b.total;
+    if(sortMode==='days-desc') return b.dayCount-a.dayCount || b.total-a.total;
+    if(sortMode==='name-asc') return a.name.localeCompare(b.name,'pt');
+    return 0;
+  });
+
+  listEl.innerHTML = '';
+  document.getElementById('noResults').style.display = data.length? 'none':'block';
+
+  data.forEach(c=>{
+    const el = document.createElement('div');
+    el.className = 'client';
+    const badges = Object.keys(c.days).map(k=>`<span class="badge">${DAY_LABELS[k]}</span>`).join('');
+    const loyalBadge = c.dayCount===3 ? '<span class="badge loyal">★ 3 dias</span>' : '';
+    el.innerHTML = `
+      <div class="client-head">
+        <div class="client-name-block">
+          <div class="client-name">${c.name}</div>
+          <div class="badges">${loyalBadge}${badges}</div>
+        </div>
+        <div class="client-totals">
+          <div class="tot">${fmt(c.total)}</div>
+          <div class="com">comissão ${fmt(c.com)}</div>
+        </div>
+        <svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </div>
+      <div class="client-body">
+        ${Object.entries(c.days).map(([k,d])=>`
+          <div class="day-block">
+            <div class="day-title"><span>${DAY_LABELS[k]}</span><span>${fmt(d.total)}</span></div>
+            <ul class="items">
+              ${d.items.map(([n,p])=>`<li><span class="it-name">${n}</span><span class="it-price">${fmt(p)}</span></li>`).join('')}
+            </ul>
+            <div class="day-sub"><span>Comissão do dia</span><b>${fmt(d.com)}</b></div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    el.querySelector('.client-head').addEventListener('click', ()=>{
+      const body = el.querySelector('.client-body');
+      const isOpen = el.classList.contains('open');
+      if(isOpen){
+        body.style.maxHeight = null;
+        el.classList.remove('open');
+      } else {
+        el.classList.add('open');
+        body.style.maxHeight = body.scrollHeight + 'px';
+      }
+    });
+    listEl.appendChild(el);
+  });
+}
+
+searchEl.addEventListener('input', render);
+sortEl.addEventListener('change', render);
+loyalBtn.addEventListener('click', ()=>{
+  loyalOnly = !loyalOnly;
+  loyalBtn.classList.toggle('active', loyalOnly);
+  render();
+});
+
+// summary stats
+const totalArtigos = clients.reduce((s,c)=>s+c.total,0);
+const totalCom = clients.reduce((s,c)=>s+c.com,0);
+const loyalCount = clients.filter(c=>c.dayCount===3).length;
+document.getElementById('statClients').textContent = clients.length;
+document.getElementById('statLoyal').textContent = loyalCount;
+document.getElementById('statArtigos').textContent = fmt(totalArtigos);
+document.getElementById('statComissao').textContent = fmt(totalCom);
+
+render();
+</script>
+</body>
+</html>
