@@ -43,6 +43,47 @@
     letter-spacing:0.08em;
     text-transform:uppercase;
   }
+  .grand-totals{
+    max-width:760px;
+    margin:0 auto 28px;
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+  .grand-totals .gt-card{
+    flex:1;
+    min-width:160px;
+    background:var(--card);
+    border:2px solid var(--line);
+    border-radius:6px;
+    padding:12px 16px;
+    text-align:center;
+  }
+  .grand-totals .gt-label{
+    font-family:'DM Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--ink-dim);
+    margin-bottom:4px;
+  }
+  .grand-totals .gt-value{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:700;
+    font-size:26px;
+    color:var(--ink);
+  }
+  .grand-totals .gt-card.final{
+    background:var(--ink);
+    border-color:var(--ink);
+  }
+  .grand-totals .gt-card.final .gt-label{
+    color:#d9cdb2;
+  }
+  .grand-totals .gt-card.final .gt-value{
+    color:var(--paper);
+  }
   #container{
     max-width:760px;
     margin:0 auto;
@@ -150,6 +191,8 @@
   <h1>Resumo de Compras por Clienta</h1>
   <div class="sub">Direto 2 agosto 2026</div>
 </header>
+
+<div class="grand-totals" id="grandTotals"></div>
 
 <div id="container"></div>
 
@@ -355,6 +398,27 @@ function copyToClipboard(text, btn){
 }
 
 const container = document.getElementById('container');
+
+// ---- Totais gerais (todas as clientas) ----
+const grandArticles = clients.reduce((s, c) => s + c.items.reduce((si, u) => si + u.price, 0), 0);
+const grandComm = clients.reduce((s, c) => s + c.items.reduce((si, u) => si + u.comm, 0), 0);
+const grandTotal = grandArticles + grandComm;
+
+const grandTotalsDiv = document.getElementById('grandTotals');
+grandTotalsDiv.innerHTML = `
+  <div class="gt-card">
+    <div class="gt-label">Soma dos artigos</div>
+    <div class="gt-value">${fmt(grandArticles)}</div>
+  </div>
+  <div class="gt-card">
+    <div class="gt-label">Soma das comissões</div>
+    <div class="gt-value">${fmt(grandComm)}</div>
+  </div>
+  <div class="gt-card final">
+    <div class="gt-label">Artigos + comissões</div>
+    <div class="gt-value">${fmt(grandTotal)}</div>
+  </div>
+`;
 
 clients.forEach(client => {
   const items = client.items;
