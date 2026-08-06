@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -15,6 +16,7 @@
     --gold:#a9752c;
     --card:#ffffff;
     --green:#3f7a3f;
+    --amber:#a9752c;
   }
   *{box-sizing:border-box;}
   body{
@@ -42,6 +44,27 @@
     color:var(--ink-dim);
     letter-spacing:0.08em;
     text-transform:uppercase;
+  }
+  .top-actions{
+    max-width:760px;
+    margin:0 auto 20px;
+    display:flex;
+    justify-content:center;
+  }
+  .top-actions button{
+    font-family:'DM Sans', sans-serif;
+    font-size:13px;
+    font-weight:700;
+    padding:10px 18px;
+    border-radius:5px;
+    border:2px solid var(--ink);
+    background:var(--ink);
+    color:var(--paper);
+    cursor:pointer;
+  }
+  .top-actions button:hover{
+    background:var(--paper);
+    color:var(--ink);
   }
   .grand-totals{
     max-width:760px;
@@ -155,6 +178,22 @@
     margin-top:4px;
     padding-top:6px;
   }
+  .client-card .totals .trow.internal{
+    color:var(--amber);
+    font-style:italic;
+  }
+  .client-card .totals .internal-tag{
+    font-family:'DM Sans', sans-serif;
+    font-size:9px;
+    font-style:normal;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    background:#f1e4c9;
+    color:var(--amber);
+    border-radius:3px;
+    padding:1px 5px;
+    margin-left:6px;
+  }
   .client-card .copy-row{
     display:flex;
     gap:10px;
@@ -183,18 +222,142 @@
     color:#fff;
     border-color:var(--green);
   }
+
+  /* ---- Modal: vista por artigo ---- */
+  .modal-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(28,26,22,0.55);
+    z-index:100;
+    padding:24px 12px;
+    overflow-y:auto;
+  }
+  .modal-overlay.open{ display:block; }
+  .modal{
+    max-width:760px;
+    margin:0 auto;
+    background:var(--paper);
+    border:2px solid var(--ink);
+    border-radius:8px;
+    overflow:hidden;
+  }
+  .modal-head{
+    background:var(--ink);
+    color:var(--paper);
+    padding:16px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+  }
+  .modal-head h2{
+    font-family:'Cormorant Garamond', serif;
+    font-size:24px;
+    margin:0;
+  }
+  .modal-head .modal-close{
+    font-family:'DM Sans', sans-serif;
+    font-weight:700;
+    font-size:13px;
+    background:transparent;
+    border:1px solid var(--paper);
+    color:var(--paper);
+    border-radius:4px;
+    padding:6px 12px;
+    cursor:pointer;
+  }
+  .modal-head .modal-close:hover{
+    background:var(--paper);
+    color:var(--ink);
+  }
+  .modal-body{
+    padding:16px 20px 24px;
+  }
+  .article-group{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:6px;
+    margin-bottom:14px;
+    overflow:hidden;
+  }
+  .article-group .ag-head{
+    background:#efe4cd;
+    padding:9px 16px;
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    flex-wrap:wrap;
+    gap:6px;
+  }
+  .article-group .ag-head .agname{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:700;
+    font-size:17px;
+  }
+  .article-group .ag-head .agcount{
+    font-family:'DM Mono', monospace;
+    font-size:11px;
+    color:var(--ink-dim);
+  }
+  .article-group .ag-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:13px;
+    padding:7px 16px;
+    border-bottom:1px dashed #e0d5bd;
+    gap:8px;
+    flex-wrap:wrap;
+  }
+  .article-group .ag-row:last-child{ border-bottom:none; }
+  .article-group .ag-row .agclient{
+    color:var(--ink);
+    font-weight:500;
+  }
+  .article-group .ag-row .agsize{
+    font-family:'DM Mono', monospace;
+    font-size:11px;
+    color:var(--ink-dim);
+    margin-left:6px;
+  }
+  .article-group .ag-row .agnums{
+    font-family:'DM Mono', monospace;
+    font-size:12px;
+    white-space:nowrap;
+    color:var(--ink-dim);
+  }
+  .article-group .ag-row .agnums b{
+    color:var(--amber);
+    font-weight:700;
+  }
 </style>
 </head>
 <body>
 
 <header>
   <h1>Resumo de Compras por Clienta</h1>
-  <div class="sub">Direto 5 agosto 2026</div>
+  <div class="sub">Direto 2 agosto 2026</div>
 </header>
+
+<div class="top-actions">
+  <button id="openArticlesBtn">Ver artigos vendidos (por clienta)</button>
+</div>
 
 <div class="grand-totals" id="grandTotals"></div>
 
 <div id="container"></div>
+
+<div class="modal-overlay" id="articlesOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>Artigos vendidos</h2>
+      <button class="modal-close" id="closeArticlesBtn">Fechar ✕</button>
+    </div>
+    <div class="modal-body" id="articlesBody"></div>
+  </div>
+</div>
 
 <script>
 const PAYMENT_INFO = `Dados de pagamento:
@@ -367,6 +530,7 @@ const clients = [
   },
 ];
 
+// ---- Texto que se copia: informação apenas para a clienta (sem comissões separadas) ----
 function buildCopyText(clientName, items, subtotal, portes){
   const lines = items.map(u => {
     const total = u.price + u.comm;
@@ -423,6 +587,8 @@ grandTotalsDiv.innerHTML = `
 clients.forEach(client => {
   const items = client.items;
   const subtotal = items.reduce((s, u) => s + u.price + u.comm, 0);
+  const commTotal = items.reduce((s, u) => s + u.comm, 0);
+  const articlesTotal = items.reduce((s, u) => s + u.price, 0);
 
   const card = document.createElement('div');
   card.className = 'client-card';
@@ -445,7 +611,8 @@ clients.forEach(client => {
   const totalsDiv = document.createElement('div');
   totalsDiv.className = 'totals';
   totalsDiv.innerHTML = `
-    <div class="trow sub"><span>Subtotal artigos</span><span>${fmt(subtotal)}</span></div>
+    <div class="trow sub"><span>Subtotal artigos</span><span>${fmt(articlesTotal)}</span></div>
+    <div class="trow internal"><span>Comissão total<span class="internal-tag">interno</span></span><span>${fmt(commTotal)}</span></div>
     <div class="trow final"><span>Total com portes 5,40€</span><span>${fmt(subtotal + PORTES_A)}</span></div>
     <div class="trow final"><span>Total com portes 8,93€</span><span>${fmt(subtotal + PORTES_B)}</span></div>
   `;
@@ -467,6 +634,54 @@ clients.forEach(client => {
 
   container.appendChild(card);
 });
+
+// ---- Vista por artigo: quem comprou cada artigo, ordenado por número ascendente ----
+function buildArticlesView(){
+  const groups = {};
+  clients.forEach(client => {
+    client.items.forEach(u => {
+      if(!groups[u.num]){
+        groups[u.num] = { name:u.name, entries:[] };
+      }
+      groups[u.num].entries.push({
+        client: client.name,
+        size: u.size,
+        price: u.price,
+        comm: u.comm
+      });
+    });
+  });
+
+  const orderedNums = Object.keys(groups).map(Number).sort((a,b) => a - b);
+
+  const body = document.getElementById('articlesBody');
+  body.innerHTML = orderedNums.map(num => {
+    const g = groups[num];
+    const rows = g.entries.map(e => {
+      const total = e.price + e.comm;
+      return `
+        <div class="ag-row">
+          <span class="agclient">${e.client}${e.size ? `<span class="agsize">${e.size}</span>` : ''}</span>
+          <span class="agnums">${fmt(e.price)} + ${fmt(e.comm)} = <b>${fmt(total)}</b></span>
+        </div>`;
+    }).join('');
+    return `
+      <div class="article-group">
+        <div class="ag-head">
+          <span class="agname">#${num} ${g.name}</span>
+          <span class="agcount">${g.entries.length} venda${g.entries.length>1?'s':''}</span>
+        </div>
+        ${rows}
+      </div>`;
+  }).join('');
+}
+
+buildArticlesView();
+
+const overlay = document.getElementById('articlesOverlay');
+document.getElementById('openArticlesBtn').addEventListener('click', () => overlay.classList.add('open'));
+document.getElementById('closeArticlesBtn').addEventListener('click', () => overlay.classList.remove('open'));
+overlay.addEventListener('click', (e) => { if(e.target === overlay) overlay.classList.remove('open'); });
 </script>
 </body>
 </html>
