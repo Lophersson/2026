@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DIRETO — Fichas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --void:#ffffff;
+    --panel:#ffffff;
+    --gold:#000000;
+    --gold-dim:#333333;
+    --ink:#000000;
+    --ink-dim:#555555;
+    --red:#c62b32;
+    --line:#000000;
+    --card-bg:#ffffff;
+    --card-ink:#000000;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;height:100%;}
+  body{
+    background:#ffffff;
+    color:var(--ink);
+    font-family:'DM Sans', sans-serif;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:14px 16px;
+    overflow:hidden;
+  }
+
+  .stage{
+    width:100%;
+    max-width:99vw;
+    height:100%;
+    max-height:98vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+  }
+
+  /* ---- HEADER ---- */
+  header{
+    width:100%;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    flex:0 0 auto;
+    margin-bottom:clamp(6px, 1.8vh, 16px);
+  }
+  .clock{
+    position:absolute;
+    top:0;
+    right:0;
+    text-align:right;
+    font-family:'DM Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.06em;
+    color:var(--ink-dim);
+    line-height:1.5;
+    text-transform:uppercase;
+  }
+  .clock .time{
+    color:var(--ink);
+    font-size:13px;
+    font-weight:700;
+  }
+  .title-row{
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .live-dot{
+    width:11px;
+    height:11px;
+    border-radius:50%;
+    background:var(--red);
+    box-shadow:0 0 10px 2px rgba(198,43,50,0.5);
+    animation:dotpulse 1.4s ease-in-out infinite;
+    flex-shrink:0;
+  }
+  @keyframes dotpulse{
+    0%,100%{opacity:1; transform:scale(1);}
+    50%{opacity:0.35; transform:scale(0.8);}
+  }
+  h1.directo{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:700;
+    font-size:clamp(30px, 4.6vh, 54px);
+    letter-spacing:0.14em;
+    margin:0;
+    color:var(--ink);
+    animation:blink 1.6s ease-in-out infinite;
+  }
+  @keyframes blink{
+    0%,45%,100%{opacity:1;}
+    50%,90%{opacity:0.22;}
+  }
+  .subline{
+    font-family:'DM Mono', monospace;
+    font-size:20px;
+    letter-spacing:0.28em;
+    text-transform:uppercase;
+    color:var(--ink-dim);
+    margin-top:2px;
+  }
+
+  /* ---- FICHA ---- */
+  main{
+    width:100%;
+    flex:1 1 auto;
+    min-height:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .ficha-wrap{
+    width:100%;
+    max-width:none;
+    flex:1 1 auto;
+    min-height:0;
+    display:flex;
+    align-items:stretch;
+  }
+
+  table.ficha{
+    width:100%;
+    border-collapse:collapse;
+    border:5px solid var(--line);
+    table-layout:fixed;
+    background:var(--card-bg);
+    color:var(--card-ink);
+  }
+  table.ficha td{
+    border:5px solid var(--line);
+    padding:0;
+  }
+  .num-cell{
+    width:34%;
+    text-align:center;
+    vertical-align:middle;
+    padding:10px;
+  }
+  .num-cell .num{
+    font-family:'DM Mono', monospace;
+    font-weight:700;
+    font-size:clamp(300px, 15vh, 150px);
+    line-height:1;
+    color:var(--card-ink);
+    letter-spacing:-0.02em;
+  }
+  .name-cell{
+    text-align:center;
+    vertical-align:middle;
+    padding:clamp(10px, 2vh, 22px) 20px;
+  }
+  .name-cell .art-name{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:700;
+    font-size:clamp(80px, 5.6vh, 52px);
+    line-height:1.15;
+    outline:none;
+  }
+  .price-cell{
+    text-align:center;
+    vertical-align:middle;
+    padding:clamp(8px, 1.6vh, 16px) 20px;
+    font-family:'DM Mono', monospace;
+  }
+  .price-cell .row{
+    display:flex;
+    justify-content:space-between;
+    font-size:clamp(60px, 2vh, 18px);
+    padding:clamp(2px, 0.6vh, 6px) 6px;
+    color:#000000;
+  }
+  .price-cell .row span:last-child{
+    outline:none;
+    min-width:70px;
+    text-align:right;
+  }
+  .price-cell .row.total{
+    margin-top:clamp(4px, 0.8vh, 8px);
+    padding-top:clamp(6px, 1vh, 10px);
+    border-top:2px solid var(--card-ink);
+    font-weight:700;
+    font-size:clamp(60px, 2.4vh, 22px);
+    color:var(--card-ink);
+  }
+
+  [contenteditable="true"]:focus{
+    background:rgba(0,0,0,0.06);
+  }
+
+  /* ---- NAV ---- */
+  .nav{
+    display:flex;
+    align-items:center;
+    gap:22px;
+    flex:0 0 auto;
+    margin-top:clamp(8px, 1.6vh, 16px);
+  }
+  .arrow-btn{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    border:2px solid #000000;
+    background:transparent;
+    color:#000000;
+    font-size:17px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:background 0.18s, transform 0.12s;
+  }
+  .arrow-btn:hover{
+    background:rgba(0,0,0,0.08);
+  }
+  .arrow-btn:active{
+    transform:scale(0.92);
+  }
+  .arrow-btn:disabled{
+    opacity:0.25;
+    cursor:default;
+  }
+  .arrow-btn:disabled:hover{
+    background:transparent;
+  }
+  .position{
+    font-family:'DM Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.1em;
+    color:var(--ink-dim);
+    min-width:70px;
+    text-align:center;
+  }
+  .position b{
+    color:#000000;
+  }
+
+  .jump{
+    margin-top:clamp(6px, 1vh, 10px);
+    font-family:'DM Mono', monospace;
+    font-size:11px;
+    color:var(--ink-dim);
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .jump input{
+    width:64px;
+    background:#ffffff;
+    border:1px solid #000000;
+    color:#000000;
+    font-family:'DM Mono', monospace;
+    font-size:12px;
+    padding:4px 8px;
+    text-align:center;
+    border-radius:2px;
+  }
+  .jump button{
+    background:transparent;
+    border:1px solid #000000;
+    color:#000000;
+    font-family:'DM Sans', sans-serif;
+    font-size:11px;
+    padding:4px 10px;
+    border-radius:2px;
+    cursor:pointer;
+  }
+  .jump button:hover{
+    background:rgba(0,0,0,0.06);
+  }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <header>
+    <div class="clock">
+      <div class="date" id="dateOut">—</div>
+      <div class="time" id="timeOut">—</div>
+    </div>
+    <div class="title-row">
+      <span class="live-dot"></span>
+      <h1 class="directo">DIRETO</h1>
+    </div>
+    <div class="subline">Emissão em curso</div>
+  </header>
+
+  <main>
+    <div class="ficha-wrap">
+      <table class="ficha">
+        <tr>
+          <td class="num-cell" rowspan="2"><span class="num" id="numOut">30</span></td>
+          <td class="name-cell"><span class="art-name" contenteditable="true" id="nameOut">Nome do artigo</span></td>
+        </tr>
+        <tr>
+          <td class="price-cell">
+            <div class="row"><span>Preço</span><span contenteditable="true" id="priceOut">0,00 €</span></div>
+            <div class="row"><span>Comissão</span><span contenteditable="true" id="commOut">0,00 €</span></div>
+            <div class="row total"><span>Total a pagar</span><span id="totalOut">0,00 €</span></div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="nav">
+      <button class="arrow-btn" id="prevBtn" aria-label="Ficha anterior">←</button>
+      <div class="position"><b id="posOut">1</b> / <span id="countOut">51</span></div>
+      <button class="arrow-btn" id="nextBtn" aria-label="Ficha seguinte">→</button>
+    </div>
+
+    <div class="jump">
+      <span>Ir ao nº</span>
+      <input type="number" id="jumpInput" min="30" max="100" value="30">
+      <button id="jumpBtn">Ir</button>
+    </div>
+  </main>
+</div>
+
+<script>
+  // ---- Relógio em direto ----
+  const dateOut = document.getElementById('dateOut');
+  const timeOut = document.getElementById('timeOut');
+  function tickClock(){
+    const now = new Date();
+    dateOut.textContent = now.toLocaleDateString('pt-PT', { day:'2-digit', month:'2-digit', year:'numeric' });
+    timeOut.textContent = now.toLocaleTimeString('pt-PT', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+  }
+  tickClock();
+  setInterval(tickClock, 1000);
+
+  // ---- Dados das fichas (30 → 100) ----
+  const START = 30;
+  const END = 100;
+
+  // Artigos já carregados (30-100). O total é calculado por JS: preço + comissão.
+  const datos = {
+    30: { name:'conjunto blanco riscas azuis', price:3.00, comm:2.00 },
+    31: { name:'garrafa stitch riscas rosas', price:2.00, comm:1.50 },
+    32: { name:'ropa bebé paddington', price:2.00, comm:1.50 },
+    33: { name:'boné lilas frozen', price:1.00, comm:1.00 },
+    34: { name:'t-shirt interiores menina morangos', price:2.00, comm:1.50 },
+    35: { name:'cuecas hello kitty', price:2.00, comm:1.50 },
+    36: { name:'cuecas urso', price:2.00, comm:1.50 },
+    37: { name:'conjunto rey león', price:3.00, comm:2.00 },
+    38: { name:'pijama set conchas', price:3.00, comm:2.00 },
+    39: { name:'pijama bambi', price:3.00, comm:2.00 },
+    40: { name:'calças mickey', price:3.00, comm:2.00 },
+    41: { name:'calças super mario', price:3.00, comm:2.00 },
+    42: { name:'calças bluey', price:3.00, comm:2.00 },
+    43: { name:'pijama cadros azuis', price:3.00, comm:2.00 },
+    44: { name:'top stitch azul', price:2.00, comm:1.50 },
+    45: { name:'meias con sola castanho', price:2.00, comm:1.50 },
+    46: { name:'meias con sola mickey', price:2.00, comm:1.50 },
+    47: { name:'sueter play station everything', price:3.00, comm:2.00 },
+    48: { name:'calças minecraft', price:3.00, comm:2.00 },
+    49: { name:'conjunto k-pop huntrix', price:6.00, comm:2.00 },
+    50: { name:'sueter one piece verde', price:3.00, comm:2.00 },
+    51: { name:'sueter sonic azul', price:3.00, comm:2.00 },
+    52: { name:'sueter stitch celeste', price:3.00, comm:2.00 },
+    53: { name:'sueter polly pocket lilas', price:3.00, comm:2.00 },
+    54: { name:'casaco dinossauros azul', price:3.00, comm:2.00 },
+    55: { name:'crema maos matcha', price:2.00, comm:1.50 },
+    56: { name:'escoba de cabelo', price:2.00, comm:1.50 },
+    57: { name:'kit de labios', price:1.00, comm:1.00 },
+    58: { name:'sueter branco gato', price:1.00, comm:1.00 },
+    59: { name:'sueter rosa bolo cereijas', price:1.00, comm:1.00 },
+    60: { name:'sueter azul maças', price:1.00, comm:1.00 },
+    61: { name:'sueter azul baleia', price:3.00, comm:2.00 },
+    62: { name:'conjunto paris', price:3.00, comm:2.00 },
+  };
+
+  const fichas = [];
+  for(let n = START; n <= END; n++){
+    if(datos[n]){
+      fichas.push({ num:n, name:datos[n].name, price:datos[n].price, comm:datos[n].comm });
+    } else {
+      fichas.push({ num:n, name:'Nome do artigo', price:0, comm:0 });
+    }
+  }
+
+  let idx = 0;
+
+  const numOut = document.getElementById('numOut');
+  const nameOut = document.getElementById('nameOut');
+  const priceOut = document.getElementById('priceOut');
+  const commOut = document.getElementById('commOut');
+  const totalOut = document.getElementById('totalOut');
+  const posOut = document.getElementById('posOut');
+  const countOut = document.getElementById('countOut');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const jumpInput = document.getElementById('jumpInput');
+  const jumpBtn = document.getElementById('jumpBtn');
+
+  countOut.textContent = fichas.length;
+
+  function parseMoney(str){
+    const clean = str.replace(/[^\d,.-]/g,'').replace(',', '.');
+    const val = parseFloat(clean);
+    return isNaN(val) ? 0 : val;
+  }
+  function fmtMoney(val){
+    return val.toLocaleString('pt-PT', { minimumFractionDigits:2, maximumFractionDigits:2 }) + ' €';
+  }
+
+  function saveCurrentEdits(){
+    const f = fichas[idx];
+    f.name = nameOut.textContent.trim() || 'Nome do artigo';
+    f.price = parseMoney(priceOut.textContent);
+    f.comm = parseMoney(commOut.textContent);
+  }
+
+  function render(){
+    const f = fichas[idx];
+    numOut.textContent = f.num;
+    nameOut.textContent = f.name;
+    priceOut.textContent = fmtMoney(f.price);
+    commOut.textContent = fmtMoney(f.comm);
+    totalOut.textContent = fmtMoney(f.price + f.comm);
+    posOut.textContent = idx + 1;
+    jumpInput.value = f.num;
+    prevBtn.disabled = idx === 0;
+    nextBtn.disabled = idx === fichas.length - 1;
+  }
+
+  function goTo(newIdx){
+    saveCurrentEdits();
+    idx = Math.max(0, Math.min(fichas.length - 1, newIdx));
+    render();
+  }
+
+  prevBtn.addEventListener('click', () => goTo(idx - 1));
+  nextBtn.addEventListener('click', () => goTo(idx + 1));
+
+  jumpBtn.addEventListener('click', () => {
+    const target = parseInt(jumpInput.value, 10);
+    if(!isNaN(target)){
+      const found = fichas.findIndex(f => f.num === target);
+      if(found !== -1) goTo(found);
+    }
+  });
+
+  // recalcula o total em tempo real ao editar preço/comissão
+  [priceOut, commOut].forEach(el => {
+    el.addEventListener('input', () => {
+      const p = parseMoney(priceOut.textContent);
+      const c = parseMoney(commOut.textContent);
+      totalOut.textContent = fmtMoney(p + c);
+    });
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'ArrowLeft') goTo(idx - 1);
+    if(e.key === 'ArrowRight') goTo(idx + 1);
+  });
+
+  render();
+</script>
+</body>
+</html>
