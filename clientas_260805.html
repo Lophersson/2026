@@ -1,687 +1,111 @@
-
 <!DOCTYPE html>
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Resumo de Compras por Clienta</title>
-<link rel="preconnect" href="https://googleapis.com">
-<link href="https://googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Clientas · 05 Ago 2026</title>
 <style>
-  :root{
-    --paper:#F6EFE4;
-    --ink:#1c1a16;
-    --ink-dim:#6b6355;
-    --line:#1c1a16;
-    --gold:#a9752c;
-    --card:#ffffff;
-    --green:#3f7a3f;
-    --amber:#a9752c;
-  }
-  *{box-sizing:border-box;}
   body{
+    font-family: Arial, Helvetica, sans-serif;
+    background:#fdf7f2;
+    color:#5c4a52;
     margin:0;
-    background:var(--paper);
-    color:var(--ink);
-    font-family:'DM Sans', sans-serif;
-    padding:24px 16px 80px;
-  }
-  header{
-    max-width:760px;
-    margin:0 auto 28px;
-    text-align:center;
+    padding:30px 16px;
   }
   h1{
-    font-family:'Cormorant Garamond', serif;
-    font-weight:700;
-    font-size:36px;
-    margin:0 0 4px;
-    letter-spacing:0.02em;
-  }
-  .sub{
-    font-family:'DM Mono', monospace;
-    font-size:12px;
-    color:var(--ink-dim);
-    letter-spacing:0.08em;
-    text-transform:uppercase;
-  }
-  .top-actions{
-    max-width:760px;
-    margin:0 auto 20px;
-    display:flex;
-    justify-content:center;
-  }
-  .top-actions button{
-    font-family:'DM Sans', sans-serif;
-    font-size:13px;
-    font-weight:700;
-    padding:10px 18px;
-    border-radius:5px;
-    border:2px solid var(--ink);
-    background:var(--ink);
-    color:var(--paper);
-    cursor:pointer;
-  }
-  .top-actions button:hover{
-    background:var(--paper);
-    color:var(--ink);
-  }
-  .grand-totals{
-    max-width:760px;
-    margin:0 auto 28px;
-    display:flex;
-    gap:12px;
-    flex-wrap:wrap;
-    justify-content:center;
-  }
-  .grand-totals .gt-card{
-    flex:1;
-    min-width:160px;
-    background:var(--card);
-    border:2px solid var(--line);
-    border-radius:6px;
-    padding:12px 16px;
     text-align:center;
-  }
-  .grand-totals .gt-label{
-    font-family:'DM Mono', monospace;
-    font-size:11px;
-    letter-spacing:0.06em;
-    text-transform:uppercase;
-    color:var(--ink-dim);
+    color:#7a5566;
+    font-size:1.5rem;
     margin-bottom:4px;
   }
-  .grand-totals .gt-value{
-    font-family:'Cormorant Garamond', serif;
-    font-weight:700;
-    font-size:26px;
-    color:var(--ink);
+  p.sub{
+    text-align:center;
+    color:#8a7783;
+    margin-top:0;
+    margin-bottom:22px;
+    font-size:0.9rem;
   }
-  .grand-totals .gt-card.final{
-    background:var(--ink);
-    border-color:var(--ink);
-  }
-  .grand-totals .gt-card.final .gt-label{
-    color:#d9cdb2;
-  }
-  .grand-totals .gt-card.final .gt-value{
-    color:var(--paper);
-  }
-  #container{
-    max-width:760px;
+  table{
+    width:100%;
+    max-width:640px;
     margin:0 auto;
-  }
-  .client-card{
-    background:var(--card);
-    border:2px solid var(--line);
-    border-radius:6px;
-    margin-bottom:20px;
+    border-collapse:collapse;
+    background:#fffdfb;
+    box-shadow:0 6px 18px rgba(150,110,130,0.15);
+    border-radius:10px;
     overflow:hidden;
   }
-  .client-card .head{
-    background:var(--ink);
-    color:var(--paper);
-    padding:12px 18px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    flex-wrap:wrap;
-    gap:8px;
+  th, td{
+    padding:10px 14px;
+    text-align:left;
+    font-size:0.95rem;
   }
-  .client-card .head .cname{
-    font-family:'Cormorant Garamond', serif;
-    font-weight:700;
-    font-size:21px;
-  }
-  .client-card .head .csub{
-    font-family:'DM Mono', monospace;
-    font-size:11px;
-    color:#d9cdb2;
-  }
-  .client-card .items{
-    padding:14px 18px 4px;
-  }
-  .client-card .item-row{
-    display:flex;
-    justify-content:space-between;
-    font-size:13px;
-    padding:5px 0;
-    border-bottom:1px dashed #e0d5bd;
-  }
-  .client-card .item-row .iname{ color:var(--ink); }
-  .client-card .item-row .isize{
-    font-family:'DM Mono', monospace;
-    font-size:11px;
-    color:var(--ink-dim);
-    margin-left:6px;
-  }
-  .client-card .item-row .iprice{
-    font-family:'DM Mono', monospace;
-    white-space:nowrap;
-    padding-left:10px;
-  }
-  .client-card .totals{
-    padding:12px 18px 14px;
-    font-family:'DM Mono', monospace;
-    font-size:13px;
-  }
-  .client-card .totals .trow{
-    display:flex;
-    justify-content:space-between;
-    padding:2px 0;
-  }
-  .client-card .totals .trow.sub{ color:var(--ink-dim); }
-  .client-card .totals .trow.final{
-    font-weight:700;
-    font-size:14px;
-    border-top:1px solid var(--line);
-    margin-top:4px;
-    padding-top:6px;
-  }
-  .client-card .totals .trow.internal{
-    color:var(--amber);
-    font-style:italic;
-  }
-  .client-card .totals .internal-tag{
-    font-family:'DM Sans', sans-serif;
-    font-size:9px;
-    font-style:normal;
-    letter-spacing:0.06em;
+  th{
+    background:#f6c9d3;
+    color:#5c4a52;
     text-transform:uppercase;
-    background:#f1e4c9;
-    color:var(--amber);
-    border-radius:3px;
-    padding:1px 5px;
-    margin-left:6px;
+    font-size:0.75rem;
+    letter-spacing:0.05em;
   }
-  .client-card .copy-row{
-    display:flex;
-    gap:10px;
-    padding:0 18px 18px;
-    flex-wrap:wrap;
+  tr:nth-child(even) td{
+    background:#faf3ef;
   }
-  .client-card .copy-row button{
-    flex:1;
-    min-width:160px;
-    font-family:'DM Sans', sans-serif;
-    font-size:12px;
-    font-weight:700;
-    padding:9px 10px;
-    border-radius:4px;
-    border:1px solid var(--ink);
-    background:transparent;
-    color:var(--ink);
-    cursor:pointer;
-  }
-  .client-card .copy-row button:hover{
-    background:var(--ink);
-    color:var(--paper);
-  }
-  .client-card .copy-row button.copied{
-    background:var(--green);
-    color:#fff;
-    border-color:var(--green);
-  }
-
-  /* ---- Modal: vista por artigo ---- */
-  .modal-overlay{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(28,26,22,0.55);
-    z-index:100;
-    padding:24px 12px;
-    overflow-y:auto;
-  }
-  .modal-overlay.open{ display:block; }
-  .modal{
-    max-width:760px;
-    margin:0 auto;
-    background:var(--paper);
-    border:2px solid var(--ink);
-    border-radius:8px;
-    overflow:hidden;
-  }
-  .modal-head{
-    background:var(--ink);
-    color:var(--paper);
-    padding:16px 20px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    position:sticky;
-    top:0;
-  }
-  .modal-head h2{
-    font-family:'Cormorant Garamond', serif;
-    font-size:24px;
-    margin:0;
-  }
-  .modal-head .modal-close{
-    font-family:'DM Sans', sans-serif;
-    font-weight:700;
-    font-size:13px;
-    background:transparent;
-    border:1px solid var(--paper);
-    color:var(--paper);
-    border-radius:4px;
-    padding:6px 12px;
-    cursor:pointer;
-  }
-  .modal-head .modal-close:hover{
-    background:var(--paper);
-    color:var(--ink);
-  }
-  .modal-body{
-    padding:16px 20px 24px;
-  }
-  .article-group{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:6px;
-    margin-bottom:14px;
-    overflow:hidden;
-  }
-  .article-group .ag-head{
-    background:#efe4cd;
-    padding:9px 16px;
-    display:flex;
-    justify-content:space-between;
-    align-items:baseline;
-    flex-wrap:wrap;
-    gap:6px;
-  }
-  .article-group .ag-head .agname{
-    font-family:'Cormorant Garamond', serif;
-    font-weight:700;
-    font-size:17px;
-  }
-  .article-group .ag-head .agcount{
-    font-family:'DM Mono', monospace;
-    font-size:11px;
-    color:var(--ink-dim);
-  }
-  .article-group .ag-row{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    font-size:13px;
-    padding:7px 16px;
-    border-bottom:1px dashed #e0d5bd;
-    gap:8px;
-    flex-wrap:wrap;
-  }
-  .article-group .ag-row:last-child{ border-bottom:none; }
-  .article-group .ag-row .agclient{
-    color:var(--ink);
-    font-weight:500;
-  }
-  .article-group .ag-row .agsize{
-    font-family:'DM Mono', monospace;
-    font-size:11px;
-    color:var(--ink-dim);
-    margin-left:6px;
-  }
-  .article-group .ag-row .agnums{
-    font-family:'DM Mono', monospace;
-    font-size:12px;
-    white-space:nowrap;
-    color:var(--ink-dim);
-  }
-  .article-group .ag-row .agnums b{
-    color:var(--amber);
-    font-weight:700;
+  td:first-child, th:first-child{
+    width:60px;
+    text-align:center;
+    font-weight:bold;
   }
 </style>
 </head>
 <body>
 
-<header>
-  <h1>Resumo de Compras por Clienta</h1>
-  <div class="sub">Direto 5 de agosto de 2026</div>
-</header>
+<h1>Clientas</h1>
+<p class="sub">Direto 05 Ago 2026</p>
 
-<div class="top-actions">
-  <button id="openArticlesBtn">Ver artigos vendidos (por clienta)</button>
-</div>
+<table>
+  <tr><th>Nº</th><th>Cliente</th><th>Tamanho</th></tr>
+  <tr><td>30</td><td>Palmira Oliveira Furtado</td><td>XL</td></tr>
+  <tr><td>30</td><td>Caterina Rego</td><td>L</td></tr>
+  <tr><td>32</td><td>Jéssica Silva</td><td></td></tr>
+  <tr><td>34</td><td>Paula Carreiro</td><td></td></tr>
+  <tr><td>35</td><td>Carina Costa</td><td>6/9 e 12/18</td></tr>
+  <tr><td>37</td><td>Palmira Oliveira Furtado</td><td>18/24</td></tr>
+  <tr><td>37</td><td>Carina Costa</td><td>12/18</td></tr>
+  <tr><td>37</td><td>Ana Silva</td><td>24/36</td></tr>
+  <tr><td>37</td><td>Carla Cruz</td><td>12/18</td></tr>
+  <tr><td>37</td><td>Palmira Oliveira Furtado</td><td>12/18</td></tr>
+  <tr><td>38</td><td>Catarina Rego</td><td>7/10</td></tr>
+  <tr><td>38</td><td>Micaela Arruda Maia</td><td>7/10</td></tr>
+  <tr><td>38</td><td>Sara João Pacheco</td><td>7/10</td></tr>
+  <tr><td>38</td><td>Adélia Cordeiro</td><td>11+</td></tr>
+  <tr><td>38</td><td>Micael e Vitória Barão</td><td>7/10</td></tr>
+  <tr><td>38</td><td>Carina Costa</td><td>11+</td></tr>
+  <tr><td>38</td><td>Ana Karina Marques</td><td>11+</td></tr>
+  <tr><td>38</td><td>Ana Karina Marques</td><td>7/10</td></tr>
+  <tr><td>39</td><td>Sara Ventura</td><td>7/8</td></tr>
+  <tr><td>39</td><td>Sara Fischer</td><td>7/8</td></tr>
+  <tr><td>42</td><td>Catarina Rego</td><td></td></tr>
+  <tr><td>43</td><td>Micaela Arruda Maia</td><td></td></tr>
+  <tr><td>46</td><td>Maria Vitorino</td><td>10/11</td></tr>
+  <tr><td>46</td><td>Ana Botelho</td><td>11/12</td></tr>
+  <tr><td>51</td><td>Marlene Oliveira</td><td>12/18</td></tr>
+  <tr><td>52</td><td>Maria Sacramento</td><td></td></tr>
+  <tr><td>53</td><td>Maria Sacramento</td><td>18/24</td></tr>
+  <tr><td>55</td><td>Liliana Couto</td><td></td></tr>
+  <tr><td>56</td><td>Lúcia Vieira</td><td></td></tr>
+  <tr><td>60</td><td>Maria Vitorino</td><td></td></tr>
+  <tr><td>66</td><td>Micael e Vitória Barão</td><td></td></tr>
+  <tr><td>67</td><td>Lúcia Vieira</td><td></td></tr>
+  <tr><td>68</td><td>Palmira Oliveira Furtado</td><td></td></tr>
+  <tr><td>69</td><td>Odília Farias</td><td></td></tr>
+  <tr><td>70</td><td>Palmira Oliveira Furtado</td><td>4/5</td></tr>
+  <tr><td>71</td><td>Palmira Oliveira Furtado</td><td>3/4 x2</td></tr>
+  <tr><td>72</td><td>Odília Farias</td><td></td></tr>
+  <tr><td>73</td><td>Joana Silva</td><td></td></tr>
+  <tr><td>76</td><td>Odília Farias</td><td></td></tr>
+  <tr><td>80</td><td>Sara João Pacheco</td><td></td></tr>
+  <tr><td>81</td><td>Joana Silva</td><td></td></tr>
+</table>
 
-<div class="grand-totals" id="grandTotals"></div>
-
-<div id="container"></div>
-
-<div class="modal-overlay" id="articlesOverlay">
-  <div class="modal">
-    <div class="modal-head">
-      <h2>Artigos vendidos</h2>
-      <button class="modal-close" id="closeArticlesBtn">Fechar ✕</button>
-    </div>
-    <div class="modal-body" id="articlesBody"></div>
-  </div>
-</div>
-
-<script>
-const PAYMENT_INFO = `Dados de pagamento:
-Vendedora: Ana Karina Marques.
-Titular: Leonor Dias.
-Banco CTT: PT50 0193 0000 1051 6586 2107 7.
-MB Way: +351 967 401 340.
-O Pagamento deve ser feito em menos de 48 horas. Caso contrário, será aplicado um cargo de 2€ por dia de atraso.
-Obrigada pela sua encomenda! ❤️`;
-
-const PORTES_A = 5.40;
-const PORTES_B = 8.93;
-
-const fmt = v => v.toLocaleString('pt-PT',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' €';
-
-// ---- Dados de clientas e artigos ----
-const clients = [
-  {
-    name:'Adelia Cordeiro',
-    items:[
-      {num:38,name:'meias cars & toy story pixar',size:'11+',price:1.00,comm:1.00},
-    ]
-  },
-  {
-    name:'Ana Botelho',
-    items:[
-      {num:46,name:'sueter spiderman marvel',size:'11/12',price:5.00,comm:2.00},
-    ]
-  },
-  {
-    name:'Ana Karina Marques',
-    items:[
-      {num:38,name:'meias cars & toy story pixar',size:'11+',price:1.00,comm:1.00},
-      {num:38,name:'meias cars & toy story pixar',size:'7/10',price:1.00,comm:1.00},
-    ]
-  },
-  {
-    name:'Ana Silva',
-    items:[
-      {num:37,name:'calças pack x2',size:'24/36',price:1.30,comm:1.00},
-    ]
-  },
-  {
-    name:'Carina Costa',
-    items:[
-      {num:35,name:'casaco patrulha pata',size:'6/9',price:3.50,comm:2.00},
-      {num:35,name:'casaco patrulha pata',size:'12/18',price:3.50,comm:2.00},
-      {num:37,name:'calças pack x2',size:'12/18',price:1.30,comm:1.00},
-      {num:38,name:'meias cars & toy story pixar',size:'11+',price:1.00,comm:1.00},
-    ]
-  },
-  {
-    name:'Carla Cruz',
-    items:[
-      {num:37,name:'calças pack x2',size:'12/18',price:1.30,comm:1.00},
-    ]
-  },
-  {
-    name:'Catarina Rego',
-    items:[
-      {num:30,name:'pyjama Marie Disney',size:'L',price:7.00,comm:2.00},
-      {num:38,name:'meias cars & toy story pixar',size:'7/10',price:1.00,comm:1.00},
-      {num:42,name:'casaco minekraft preto e verde',size:null,price:6.00,comm:2.00},
-    ]
-  },
-  {
-    name:'Jéssica Silva',
-    items:[
-      {num:32,name:'kit escolar K-pop demon hunters',size:null,price:3.99,comm:2.00},
-    ]
-  },
-  {
-    name:'Joana Silva',
-    items:[
-      {num:73,name:'sueter Mickey con babete',size:null,price:8.00,comm:2.00},
-      {num:81,name:'t-shirt mickey, goofy y donald',size:null,price:3.00,comm:2.00},
-    ]
-  },
-  {
-    name:'Liliana Couto',
-    items:[
-      {num:55,name:'casaco rosa c&a',size:null,price:5.00,comm:2.00},
-    ]
-  },
-  {
-    name:'Lucia Vieira',
-    items:[
-      {num:56,name:'pyjama mickey & minnie azul',size:null,price:5.00,comm:2.00},
-      {num:67,name:'babygrow garfield',size:null,price:3.00,comm:2.00},
-    ]
-  },
-  {
-    name:'Maria Sacramento',
-    items:[
-      {num:52,name:'t-shirt bambi preta',size:null,price:3.99,comm:2.00},
-      {num:53,name:'conjunto menina happy',size:'18/24',price:4.00,comm:2.00},
-    ]
-  },
-  {
-    name:'Maria Vitorino',
-    items:[
-      {num:46,name:'sueter spiderman marvel',size:'10/11',price:5.00,comm:2.00},
-      {num:60,name:'disfraz Batman menino',size:null,price:8.00,comm:2.00},
-    ]
-  },
-  {
-    name:'Marlene Oliveira',
-    items:[
-      {num:51,name:'conjunto rosa inverno',size:'12/18',price:5.00,comm:2.00},
-    ]
-  },
-  {
-    name:'Micaela Arruda Maia',
-    items:[
-      {num:38,name:'meias cars & toy story pixar',size:'7/10',price:1.00,comm:1.00},
-      {num:43,name:'camisolas pack x2',size:null,price:3.99,comm:2.00},
-    ]
-  },
-  {
-    name:'Micael E Vitória Barão',
-    items:[
-      {num:38,name:'meias cars & toy story pixar',size:'7/10',price:1.00,comm:1.00},
-      {num:66,name:'fato treino preto dinossauros',size:null,price:12.00,comm:2.00},
-    ]
-  },
-  {
-    name:'Odilia Farias',
-    items:[
-      {num:69,name:'t-shirt snoopy happy camper',size:null,price:3.99,comm:2.00},
-      {num:72,name:'conjunto lion king',size:null,price:10.00,comm:2.00},
-      {num:76,name:'t-shirt palmeras wave chasers',size:null,price:4.00,comm:2.00},
-    ]
-  },
-  {
-    name:'Palmira Oliveira Furtado',
-    items:[
-      {num:30,name:'pyjama Marie Disney',size:'XL',price:7.00,comm:2.00},
-      {num:37,name:'calças pack x2',size:'18/24',price:1.30,comm:1.00},
-      {num:37,name:'calças pack x2',size:'12/18',price:1.30,comm:1.00},
-      {num:68,name:'pyjama Mickey',size:null,price:5.00,comm:2.00},
-      {num:70,name:'t-shirt Stitch azul',size:'4/5',price:4.00,comm:2.00},
-      {num:71,name:'pyjama calças cuadrados verde e azuis',size:'3/4',price:5.00,comm:2.00},
-      {num:71,name:'pyjama calças cuadrados verde e azuis',size:'3/4',price:5.00,comm:2.00},
-    ]
-  },
-  {
-    name:'Paula Carreiro',
-    items:[
-      {num:34,name:'pyjama Monsters, Inc. Pixar',size:null,price:4.00,comm:2.00},
-    ]
-  },
-  {
-    name:'Sara Fischer',
-    items:[
-      {num:39,name:'meias calças pepco kids',size:'7/8',price:1.60,comm:1.00},
-    ]
-  },
-  {
-    name:'Sara Joao Pacheco',
-    items:[
-      {num:38,name:'meias cars & toy story pixar',size:'7/10',price:1.00,comm:1.00},
-      {num:80,name:'calças fato treino sport azul',size:null,price:5.00,comm:2.00},
-    ]
-  },
-  {
-    name:'Sara Ventura',
-    items:[
-      {num:39,name:'meias calças pepco kids',size:'7/8',price:1.60,comm:1.00},
-    ]
-  },
-];
-
-// ---- Texto que se copia: informação apenas para a clienta (sem comissões separadas) ----
-function buildCopyText(clientName, items, subtotal, portes){
-  const lines = items.map(u => {
-    const total = u.price + u.comm;
-    return u.size
-      ? `#${u.num} ${u.name} — ${u.size} — ${fmt(total)}`
-      : `#${u.num} ${u.name} — ${fmt(total)}`;
-  });
-  const total = subtotal + portes;
-  return `Resumo de compra — ${clientName}
-
-${lines.join('\n')}
-
-Subtotal artigos: ${fmt(subtotal)}
-Portes: ${fmt(portes)}
-Total a pagar: ${fmt(total)}
-
-${PAYMENT_INFO}`;
-}
-
-function copyToClipboard(text, btn){
-  navigator.clipboard.writeText(text).then(() => {
-    const original = btn.textContent;
-    btn.textContent = 'Copiado ✓';
-    btn.classList.add('copied');
-    setTimeout(() => { btn.textContent = original; btn.classList.remove('copied'); }, 1600);
-  }).catch(() => {
-    alert('Não foi possível copiar automaticamente. Copia manualmente o texto.');
-  });
-}
-
-const container = document.getElementById('container');
-
-// ---- Totais gerais (todas as clientas) ----
-const grandArticles = clients.reduce((s, c) => s + c.items.reduce((si, u) => si + u.price, 0), 0);
-const grandComm = clients.reduce((s, c) => s + c.items.reduce((si, u) => si + u.comm, 0), 0);
-const grandTotal = grandArticles + grandComm;
-
-const grandTotalsDiv = document.getElementById('grandTotals');
-grandTotalsDiv.innerHTML = `
-  <div class="gt-card">
-    <div class="gt-label">Soma dos artigos</div>
-    <div class="gt-value">${fmt(grandArticles)}</div>
-  </div>
-  <div class="gt-card">
-    <div class="gt-label">Soma das comissões</div>
-    <div class="gt-value">${fmt(grandComm)}</div>
-  </div>
-  <div class="gt-card final">
-    <div class="gt-label">Artigos + comissões</div>
-    <div class="gt-value">${fmt(grandTotal)}</div>
-  </div>
-`;
-
-clients.forEach(client => {
-  const items = client.items;
-  const subtotal = items.reduce((s, u) => s + u.price + u.comm, 0);
-  const commTotal = items.reduce((s, u) => s + u.comm, 0);
-  const articlesTotal = items.reduce((s, u) => s + u.price, 0);
-
-  const card = document.createElement('div');
-  card.className = 'client-card';
-
-  const head = document.createElement('div');
-  head.className = 'head';
-  head.innerHTML = `<span class="cname">${client.name}</span><span class="csub">${items.length} artigo${items.length>1?'s':''} · Subtotal ${fmt(subtotal)}</span>`;
-  card.appendChild(head);
-
-  const itemsDiv = document.createElement('div');
-  itemsDiv.className = 'items';
-  items.forEach(u => {
-    const row = document.createElement('div');
-    row.className = 'item-row';
-    row.innerHTML = `<span class="iname">#${u.num} ${u.name}${u.size ? `<span class="isize">${u.size}</span>` : ''}</span><span class="iprice">${fmt(u.price)} + ${fmt(u.comm)} = ${fmt(u.price + u.comm)}</span>`;
-    itemsDiv.appendChild(row);
-  });
-  card.appendChild(itemsDiv);
-
-  const totalsDiv = document.createElement('div');
-  totalsDiv.className = 'totals';
-  totalsDiv.innerHTML = `
-    <div class="trow sub"><span>Subtotal artigos</span><span>${fmt(articlesTotal)}</span></div>
-    <div class="trow internal"><span>Comissão total<span class="internal-tag">interno</span></span><span>${fmt(commTotal)}</span></div>
-    <div class="trow final"><span>Total com portes 5,40€</span><span>${fmt(subtotal + PORTES_A)}</span></div>
-    <div class="trow final"><span>Total com portes 8,93€</span><span>${fmt(subtotal + PORTES_B)}</span></div>
-  `;
-  card.appendChild(totalsDiv);
-
-  const copyRow = document.createElement('div');
-  copyRow.className = 'copy-row';
-
-  const btnA = document.createElement('button');
-  btnA.textContent = `Copiar (portes 5,40€)`;
-  btnA.addEventListener('click', () => copyToClipboard(buildCopyText(client.name, items, subtotal, PORTES_A), btnA));
-
-  const btnB = document.createElement('button');
-  btnB.textContent = `Copiar (portes 8,93€)`;
-  btnB.addEventListener('click', () => copyToClipboard(buildCopyText(client.name, items, subtotal, PORTES_B), btnB));
-
-  copyRow.append(btnA, btnB);
-  card.appendChild(copyRow);
-
-  container.appendChild(card);
-});
-
-// ---- Vista por artigo: quem comprou cada artigo, ordenado por número ascendente ----
-function buildArticlesView(){
-  const groups = {};
-  clients.forEach(client => {
-    client.items.forEach(u => {
-      if(!groups[u.num]){
-        groups[u.num] = { name:u.name, entries:[] };
-      }
-      groups[u.num].entries.push({
-        client: client.name,
-        size: u.size,
-        price: u.price,
-        comm: u.comm
-      });
-    });
-  });
-
-  const orderedNums = Object.keys(groups).map(Number).sort((a,b) => a - b);
-
-  const body = document.getElementById('articlesBody');
-  body.innerHTML = orderedNums.map(num => {
-    const g = groups[num];
-    const rows = g.entries.map(e => {
-      const total = e.price + e.comm;
-      return `
-        <div class="ag-row">
-          <span class="agclient">${e.client}${e.size ? `<span class="agsize">${e.size}</span>` : ''}</span>
-          <span class="agnums">${fmt(e.price)} + ${fmt(e.comm)} = <b>${fmt(total)}</b></span>
-        </div>`;
-    }).join('');
-    return `
-      <div class="article-group">
-        <div class="ag-head">
-          <span class="agname">#${num} ${g.name}</span>
-          <span class="agcount">${g.entries.length} venda${g.entries.length>1?'s':''}</span>
-        </div>
-        ${rows}
-      </div>`;
-  }).join('');
-}
-
-buildArticlesView();
-
-const overlay = document.getElementById('articlesOverlay');
-document.getElementById('openArticlesBtn').addEventListener('click', () => overlay.classList.add('open'));
-document.getElementById('closeArticlesBtn').addEventListener('click', () => overlay.classList.remove('open'));
-overlay.addEventListener('click', (e) => { if(e.target === overlay) overlay.classList.remove('open'); });
-</script>
 </body>
 </html>
