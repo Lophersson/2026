@@ -5,6 +5,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Artigos e Pedidos</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <style>
   * { box-sizing: border-box; }
   body {
@@ -44,6 +46,28 @@
     background: #000000;
     color: #ffffff;
   }
+  .search-bar {
+    margin-bottom: 16px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .search-bar input {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    padding: 8px 10px;
+    border: 1px solid #000000;
+    flex: 1;
+    max-width: 320px;
+  }
+  .search-bar button {
+    padding: 8px 12px;
+  }
+  .search-count {
+    font-size: 13px;
+    font-style: italic;
+    margin-bottom: 8px;
+  }
   .article {
     background: #ffffff;
     border: 1px solid #000000;
@@ -77,10 +101,6 @@
     font-weight: bold;
     margin-top: 6px;
   }
-  .portes-line {
-    font-size: 14px;
-    margin-top: 2px;
-  }
   .grand-total {
     font-size: 14px;
     font-weight: bold;
@@ -90,6 +110,15 @@
     font-size: 14px;
     font-weight: bold;
     margin-top: 6px;
+  }
+  .pdf-buttons {
+    margin-top: 10px;
+    display: flex;
+    gap: 8px;
+  }
+  .pdf-btn {
+    padding: 6px 10px;
+    font-size: 13px;
   }
   .hidden { display: none; }
 </style>
@@ -103,10 +132,29 @@
   <button id="btnClient" onclick="showView('client')">Ver por Clienta (Total)</button>
 </div>
 
-<div id="articleView"></div>
-<div id="clientView" class="hidden"></div>
+<div id="articleView">
+  <div class="search-bar">
+    <input type="text" id="articleSearch" placeholder="Buscar por número ou nome do artigo..." oninput="renderArticleView()">
+    <button onclick="clearArticleSearch()">Limpar</button>
+  </div>
+  <div id="articleSearchCount" class="search-count"></div>
+  <div id="articleResults"></div>
+</div>
+<div id="clientView" class="hidden">
+  <div class="search-bar">
+    <input type="text" id="clientSearch" placeholder="Buscar por nome ou apelido..." oninput="renderClientView()">
+    <button onclick="clearClientSearch()">Limpar</button>
+  </div>
+  <div id="clientSearchCount" class="search-count"></div>
+  <div id="clientResults"></div>
+</div>
 
 <script>
+// ---- Dados da vendedora (usados nas faturas PDF) ----
+const SELLER_NAME = "Ana Karina Marques";
+const SELLER_BANK = "Banco CTT";
+const SELLER_IBAN = "PT50 0193 0000 1051 6586 2107 7";
+
 // ---- Dados brutos (número, título, [preço1, preço2], clientes) ----
 const data = [
   {num:30, title:"Sapatilhas Minnie", price:[5,2], clients:[
@@ -120,23 +168,25 @@ const data = [
     {name:"Marina Silva", detail:"L"}
   ]},
   {num:32, title:"Esponjas de Maquiagem", price:[0.99,0.99], clients:[
-    {name:"Tânia Pinheiro", detail:"Vermelho e Roxo", qty:2},
+    {name:"Tânia Pinheiro", detail:"Vermelho", qty:1},
+    {name:"Tânia Pinheiro", detail:"Roxo", qty:1},
     {name:"Yulimar Vieira", detail:"Roxo"}
   ]},
   {num:33, title:"Meias Hello Kitty", price:[3,2], clients:[
-    {name:"Emily Sousa", detail:"3-6 e 7-10", qty:2}
+    {name:"Emily Sousa", detail:"3/6", qty:1},
+    {name:"Emily Sousa", detail:"7/10", qty:1}
   ]},
   {num:34, title:"Meias Stitch", price:[2,1.5], clients:[
-    {name:"Marina Silva", detail:"3-6a"},
-    {name:"Ana Silva", detail:"2-3a"},
-    {name:"Sandra Macedo", detail:"3-6a"}
+    {name:"Marina Silva", detail:"3/6a"},
+    {name:"Ana Silva", detail:"2/3a"},
+    {name:"Sandra Macedo", detail:"3/6a"}
   ]},
   {num:35, title:"Camisola Love", price:[3,2], clients:[]},
   {num:36, title:"Estojo Borboletas", price:[5,2], clients:[
-    {name:"Joana Ruim", detail:"2 uni", qty:2}
+    {name:"Joana Puim", detail:"", qty:2}
   ]},
-  {num:37, title:"Beje / capa (nome ilegível)", price:[3,2], clients:[
-    {name:"Joana Ruim", detail:"Patrulha"},
+  {num:37, title:"Rede banho brinquedos crianças", price:[3,2], clients:[
+    {name:"Joana Puim", detail:"Patrulha"},
     {name:"Palmiro Oliveira", detail:"Patrulha"}
   ]},
   {num:38, title:"Livro Squishmallow", price:[1.60,1], clients:[
@@ -153,11 +203,11 @@ const data = [
   {num:43, title:"Garrafa", price:[2,1.5], clients:[
     {name:"Cláudia Freitas", detail:"Rosa"},
     {name:"Alexandra Oliveira", detail:"Azul"},
-    {name:"Joana Ruim", detail:"Rosa"},
+    {name:"Joana Puim", detail:"Rosa"},
     {name:"Palmira Oliveira", detail:"Rosa"},
     {name:"Marina Silva", detail:"Azul"}
   ]},
-  {num:44, title:"Puzzle Fora", price:[1.99,1], clients:[
+  {num:44, title:"Puzzle Dora", price:[1.99,1], clients:[
     {name:"Emily Sousa", detail:""}
   ]},
   {num:45, title:"Puzzle Gabi", price:[1.99,1], clients:[
@@ -181,18 +231,18 @@ const data = [
     {name:"Tânia Pinheiro", detail:""}
   ]},
   {num:50, title:"Máscara de Olhos", price:[0.50,0.50], clients:[
-    {name:"Tânia Pinheiro", detail:"3 uni", qty:3},
-    {name:"Palmira Oliveira", detail:"3 uni", qty:3},
-    {name:"Marina Silva", detail:"2 uni", qty:2},
-    {name:"Fabiana Vieira", detail:"2 uni", qty:2},
-    {name:"Micaela Arruda", detail:"5 uni", qty:5},
-    {name:"Vanda Batista", detail:"2 uni", qty:2},
+    {name:"Tânia Pinheiro", detail:"", qty:3},
+    {name:"Palmira Oliveira", detail:"", qty:3},
+    {name:"Marina Silva", detail:"", qty:2},
+    {name:"Fabiana Vieira", detail:"", qty:2},
+    {name:"Micaela Arruda", detail:"", qty:5},
+    {name:"Vanda Batista", detail:"", qty:2},
     {name:"Vitória Santos", detail:""}
   ]},
   {num:51, title:"Pijama Pooh", price:[4,2], clients:[
     {name:"Marlene Oliveira", detail:""}
   ]},
-  {num:52, title:"Pijama Pasqueca", price:[5,2], clients:[]},
+  {num:52, title:"Pijama Croissants", price:[5,2], clients:[]},
   {num:53, title:"Pijama Breakfast", price:[5,2], clients:[]},
   {num:54, title:"Camisola Stitch", price:[2,1.5], clients:[
     {name:"Verónica Moniz", detail:""},
@@ -207,15 +257,15 @@ const data = [
     {name:"Carla Cruz", detail:"10/11"},
     {name:"Ritinha Couto", detail:"11/12"}
   ]},
-  {num:57, title:"Kit Guerreira do K-pop", price:[2.99,2], clients:[
+  {num:57, title:"Kit Guerreira do K-pop", price:[3.99,2], clients:[
     {name:"Verónica Moniz", detail:""},
-    {name:"Ritinha Couto", detail:"2 uni", qty:2},
+    {name:"Ritinha Couto", detail:"", qty:2},
     {name:"Vitória Santos", detail:""},
-    {name:"Sara Ficlor", detail:""},
-    {name:"Catarina Bego", detail:""},
-    {name:"Tatiana Ruim", detail:""},
-    {name:"Emily Sousa", detail:"(anulado — riscado)", cancelled:true},
-    {name:"Marisa João Silva", detail:""},
+    {name:"Sara Ficher", detail:""},
+    {name:"Catarina Rego", detail:""},
+    {name:"Tatiana Puim", detail:""},
+    /*{name:"Emily Sousa", detail:"(anulado — riscado)", cancelled:true},*/
+    {name:"Maria João Silva", detail:""},
     {name:"Martha Pereira", detail:""}
   ]},
   {num:58, title:"Pijama Minnie", price:[3,2], clients:[
@@ -226,13 +276,13 @@ const data = [
     {name:"Palmira Oliveira", detail:"24/30"}
   ]},
   {num:60, title:"Meias Pretas", price:[2,1.5], clients:[
-    {name:"Carla Cruz", detail:"2-3a"}
+    {name:"Carla Cruz", detail:"2/3a"}
   ]},
   {num:61, title:"Meias Rosa, Branca, Cinzenta", price:[2,1.5], clients:[
-    {name:"Maria Vitorino", detail:"3-4"},
-    {name:"Vitória Santos", detail:"4-5"},
-    {name:"Marina Silva", detail:"4-5"},
-    {name:"Tatiana Ruim", detail:"7/8"},
+    {name:"Maria Vitorino", detail:"3/4"},
+    {name:"Vitória Santos", detail:"4/5"},
+    {name:"Marina Silva", detail:"4/5"},
+    {name:"Tatiana Puim", detail:"7/8"},
     {name:"Ritinha Couto", detail:"4/5"}
   ]},
   {num:62, title:"Conjunto Urso", price:[4,2], clients:[]},
@@ -240,30 +290,30 @@ const data = [
     {name:"Sofia Antunes", detail:""}
   ]},
   {num:64, title:"Luvas Frozen", price:[3,2], clients:[
-    {name:"Tatiana Ruim", detail:""}
+    {name:"Tatiana Puim", detail:""}
   ]},
   {num:65, title:"Pijama Pooh", price:[10,2], clients:[
-    {name:"Tatiana Ruim", detail:""}
+    {name:"Tatiana Puim", detail:""}
   ]},
   {num:66, title:"Pijama Croissant", price:[10,2], clients:[]},
   {num:67, title:"Puzzle Stitch", price:[1.99,1], clients:[
     {name:"Yulimar Vieira", detail:""},
     {name:"Catarina Bego", detail:""}
   ]},
-  {num:68, title:"Puzzle Blue", price:[], clients:[]},
-  {num:69, title:"Puzzle Homem de Ferro", price:[], clients:[
+  {num:68, title:"Puzzle Blue", price:[1.99,1], clients:[]},
+  {num:69, title:"Puzzle Homem de Ferro", price:[1.99,1], clients:[
     {name:"Catarina Bego", detail:""}
   ]},
-  {num:70, title:"Puzzle Mickey", price:[], clients:[
+  {num:70, title:"Puzzle Mickey", price:[1.99,1], clients:[
     {name:"Catarina Bego", detail:""}
   ]},
-  {num:71, title:"Puzzle Hot Wheels", price:[], clients:[
+  {num:71, title:"Puzzle Hot Wheels", price:[1.99,1], clients:[
     {name:"Catarina Bego", detail:""}
   ]},
-  {num:72, title:"Puzzle Rapunzel", price:[], clients:[
+  {num:72, title:"Puzzle Rapunzel", price:[1.99,1], clients:[
     {name:"Vitória Santos", detail:""}
   ]},
-  {num:73, title:"Porta Anéis Kitty", price:[1.5], clients:[]}
+  {num:73, title:"Porta Anéis Kitty", price:[1.5,1], clients:[]}
 ];
 
 function fmt(n){ return n.toFixed(2).replace(".", ","); }
@@ -272,31 +322,57 @@ function commissionPerUnit(article){ return article.price && article.price.lengt
 const PORTES_1 = 5.40;
 const PORTES_2 = 8.93;
 
-// ---- Render vista por artigo ----
+function clearArticleSearch(){
+  document.getElementById('articleSearch').value = '';
+  renderArticleView();
+}
+
+// ---- Render vista por artigo (com filtro de busca) ----
 function renderArticleView(){
-  const el = document.getElementById('articleView');
+  const searchInput = document.getElementById('articleSearch');
+  const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+
+  const articles = query
+    ? data.filter(a => a.title.toLowerCase().includes(query) || String(a.num).includes(query))
+    : data;
+
+  const countEl = document.getElementById('articleSearchCount');
+  if(query){
+    countEl.textContent = `${articles.length} artigo(s) encontrado(s)`;
+  } else {
+    countEl.textContent = '';
+  }
+
+  const el = document.getElementById('articleResults');
   let html = '';
-  data.forEach(a=>{
-    const priceLabel = a.price.length ? ` (${a.price.map(p=>fmt(p)).join('+')})` : '';
-    html += `<div class="article"><div class="article-title"><span class="article-num">${a.num}</span> — ${a.title}<span class="price">${priceLabel}</span></div>`;
-    const active = a.clients.filter(c=>!c.cancelled);
-    if(active.length===0){
-      html += `<p class="empty">Sem pedidos registados</p>`;
-    } else {
-      html += '<ul>';
-      a.clients.forEach(c=>{
-        const strike = c.cancelled ? 'text-decoration:line-through;' : '';
-        html += `<li style="${strike}">${c.name}${c.detail ? ` <span class="detail">— ${c.detail}</span>` : ''}</li>`;
-      });
-      html += '</ul>';
-    }
-    html += '</div>';
-  });
+  if(articles.length === 0){
+    html = `<p class="empty">Nenhum artigo encontrado</p>`;
+  } else {
+    articles.forEach(a=>{
+      const priceLabel = a.price.length ? ` (${a.price.map(p=>fmt(p)).join('+')})` : '';
+      html += `<div class="article"><div class="article-title"><span class="article-num">${a.num}</span> — ${a.title}<span class="price">${priceLabel}</span></div>`;
+      const active = a.clients.filter(c=>!c.cancelled);
+      if(active.length===0){
+        html += `<p class="empty">Sem pedidos registados</p>`;
+      } else {
+        html += '<ol>';
+        a.clients.forEach(c=>{
+          const strike = c.cancelled ? 'text-decoration:line-through;' : '';
+          const repeat = c.qty || 1;
+          for(let i=0;i<repeat;i++){
+            html += `<li style="${strike}">${c.name}${c.detail ? ` <span class="detail">— ${c.detail}</span>` : ''}</li>`;
+          }
+        });
+        html += '</ol>';
+      }
+      html += '</div>';
+    });
+  }
   el.innerHTML = html;
 }
 
-// ---- Render vista por clienta ----
-function renderClientView(){
+// ---- Calcula totais por clienta ----
+function computeClientTotals(){
   const totals = {};
   data.forEach(a=>{
     const up = unitPrice(a);
@@ -310,29 +386,196 @@ function renderClientView(){
       totals[c.name].commission += cp*qty;
     });
   });
+  return Object.keys(totals).map(name=>({name, ...totals[name]}));
+}
 
-  const clients = Object.keys(totals).map(name=>({name, ...totals[name]}));
-  clients.sort((a,b)=> b.total - a.total);
+function clearClientSearch(){
+  document.getElementById('clientSearch').value = '';
+  renderClientView();
+}
 
-  const el = document.getElementById('clientView');
+// ---- Guarda a lista atualmente renderizada, para ligar os botões PDF ----
+let currentClientsList = [];
+
+// ---- Render vista por clienta (com filtro de busca) ----
+function renderClientView(){
+  const allClients = computeClientTotals();
+  allClients.sort((a,b)=> b.total - a.total);
+
+  const searchInput = document.getElementById('clientSearch');
+  const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+
+  const clients = query
+    ? allClients.filter(c=> c.name.toLowerCase().includes(query))
+    : allClients;
+
+  currentClientsList = clients;
+
+  const countEl = document.getElementById('clientSearchCount');
+  if(query){
+    countEl.textContent = `${clients.length} clienta(s) encontrada(s)`;
+  } else {
+    countEl.textContent = '';
+  }
+
+  const el = document.getElementById('clientResults');
   let html = '';
-  clients.forEach((c,idx)=>{
-    html += `<div class="client-block"><div class="client-name">${idx+1}. ${c.name}</div><ul>`;
-    c.items.forEach(it=>{
-      const qtyLabel = it.qty > 1 ? ` x${it.qty}` : '';
-      const detailLabel = it.detail ? ` — ${it.detail}` : '';
-      html += `<li><span class="article-num">${it.num}</span> — ${it.title}${detailLabel}${qtyLabel} <span class="price">(${fmt(it.lineTotal)}€)</span></li>`;
+  if(clients.length === 0){
+    html = `<p class="empty">Nenhuma clienta encontrada</p>`;
+  } else {
+    clients.forEach((c,idx)=>{
+      html += `<div class="client-block"><div class="client-name">${idx+1}. ${c.name}</div><ul>`;
+      c.items.forEach(it=>{
+        const qtyLabel = it.qty > 1 ? ` x${it.qty}` : '';
+        const detailLabel = it.detail ? ` — ${it.detail}` : '';
+        html += `<li><span class="article-num">${it.num}</span> — ${it.title}${detailLabel}${qtyLabel} <span class="price">(${fmt(it.lineTotal)}€)</span></li>`;
+      });
+      html += `</ul>`;
+      html += `<div class="client-total">Total artigos: ${fmt(c.total)}€</div>`;
+      html += `<div class="grand-total">Total com Portes de ${fmt(PORTES_1)}€: ${fmt(c.total + PORTES_1)}€</div>`;
+      html += `<div class="grand-total">Total com Portes de ${fmt(PORTES_2)}€: ${fmt(c.total + PORTES_2)}€</div>`;
+      html += `<div class="comm-line">Total comissão: ${fmt(c.commission)}€</div>`;
+      html += `<div class="pdf-buttons">
+        <button class="pdf-btn" data-idx="${idx}" data-portes="1">PDF 5,40</button>
+        <button class="pdf-btn" data-idx="${idx}" data-portes="2">PDF 8,93</button>
+      </div>`;
+      html += `</div>`;
     });
-    html += `</ul>`;
-    html += `<div class="client-total">Total artigos: ${fmt(c.total)}€</div>`;
-    html += `<div class="portes-line">Portes 1: ${fmt(PORTES_1)}€</div>`;
-    html += `<div class="portes-line">Portes 2: ${fmt(PORTES_2)}€</div>`;
-    html += `<div class="grand-total">Total com Portes 1: ${fmt(c.total + PORTES_1)}€</div>`;
-    html += `<div class="grand-total">Total com Portes 2: ${fmt(c.total + PORTES_2)}€</div>`;
-    html += `<div class="comm-line">Total comissão: ${fmt(c.commission)}€</div>`;
-    html += `</div>`;
-  });
+  }
   el.innerHTML = html;
+
+  // Liga os botões de PDF (evita problemas de escaping de nomes com onclick inline)
+  el.querySelectorAll('.pdf-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const idx = parseInt(btn.dataset.idx, 10);
+      const portesValue = btn.dataset.portes === '1' ? PORTES_1 : PORTES_2;
+      generateInvoicePDF(currentClientsList[idx], portesValue);
+    });
+  });
+}
+
+// ---- Gera a fatura em PDF (A4 vertical, 210mm x 297mm) ----
+function generateInvoicePDF(client, portesValue){
+  if(!client){ return; }
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+  const pageWidth = 210;
+  const margin = 18;
+  let y = 24;
+
+  // Cabeçalho
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(22);
+  doc.text('FATURA', margin, y);
+
+  doc.setFontSize(9);
+  doc.setFont('helvetica','normal');
+  const today = new Date();
+  const dateStr = today.toLocaleDateString('pt-PT');
+  doc.text(`Data de emissão: ${dateStr}`, pageWidth - margin, y - 6, {align:'right'});
+  doc.text(`Ref.: ${Date.now().toString().slice(-6)}`, pageWidth - margin, y, {align:'right'});
+
+  y += 5;
+  doc.setDrawColor(0);
+  doc.setLineWidth(0.7);
+  doc.line(margin, y, pageWidth - margin, y);
+  y += 10;
+
+  // Bloco vendedora
+  doc.setFontSize(10);
+  doc.setFont('helvetica','bold');
+  doc.text('VENDEDORA', margin, y);
+  y += 5.5;
+  doc.setFont('helvetica','normal');
+  doc.text(SELLER_NAME, margin, y);
+  y += 5;
+  doc.text(`${SELLER_BANK} — IBAN: ${SELLER_IBAN}`, margin, y);
+
+  // Bloco cliente (alinhado à direita)
+  let yClient = y - 10.5;
+  doc.setFont('helvetica','bold');
+  doc.text('CLIENTE', pageWidth - margin, yClient, {align:'right'});
+  yClient += 5.5;
+  doc.setFont('helvetica','normal');
+  doc.text(client.name, pageWidth - margin, yClient, {align:'right'});
+
+  y += 12;
+  doc.setDrawColor(0);
+  doc.setLineWidth(0.3);
+  doc.line(margin, y, pageWidth - margin, y);
+  y += 8;
+
+  // Tabela de artigos
+  const rows = client.items.map(it=>{
+    const detail = it.detail ? it.detail : '-';
+    const qty = it.qty || 1;
+    return [
+      String(it.num),
+      it.title,
+      detail,
+      String(qty),
+      `${fmt(it.unitPrice)}€`,
+      `${fmt(it.lineTotal)}€`
+    ];
+  });
+
+  doc.autoTable({
+    startY: y,
+    head: [['Nº','Artigo','Detalhe','Qtd','Preço Unit.','Total']],
+    body: rows,
+    margin: {left: margin, right: margin},
+    styles: { font:'helvetica', fontSize:9, cellPadding:2.3, textColor:[0,0,0], lineColor:[0,0,0], lineWidth:0.1 },
+    headStyles: { fillColor:[0,0,0], textColor:[255,255,255], fontStyle:'bold' },
+    alternateRowStyles: { fillColor:[245,245,245] },
+    columnStyles: {
+      0: {cellWidth: 14},
+      3: {cellWidth: 14, halign:'center'},
+      4: {cellWidth: 26, halign:'right'},
+      5: {cellWidth: 26, halign:'right'}
+    }
+  });
+
+  let finalY = doc.lastAutoTable.finalY + 10;
+
+  // Bloco de totais (sem comissão)
+  const boxWidth = 85;
+  const boxX = pageWidth - margin - boxWidth;
+
+  doc.setFontSize(10);
+  doc.setFont('helvetica','normal');
+  doc.text('Subtotal artigos:', boxX, finalY);
+  doc.text(`${fmt(client.total)}€`, pageWidth - margin, finalY, {align:'right'});
+  finalY += 6.5;
+
+  doc.text('Portes de envio:', boxX, finalY);
+  doc.text(`${fmt(portesValue)}€`, pageWidth - margin, finalY, {align:'right'});
+  finalY += 4;
+  doc.setLineWidth(0.4);
+  doc.line(boxX, finalY, pageWidth - margin, finalY);
+  finalY += 6.5;
+
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(13);
+  doc.text('TOTAL A PAGAR:', boxX, finalY);
+  doc.text(`${fmt(client.total + portesValue)}€`, pageWidth - margin, finalY, {align:'right'});
+
+  finalY += 16;
+  doc.setFont('helvetica','italic');
+  doc.setFontSize(9);
+  doc.text('Obrigada pela sua encomenda!', margin, finalY);
+
+  // Rodapé
+  doc.setDrawColor(0);
+  doc.setLineWidth(0.3);
+  doc.line(margin, 278, pageWidth - margin, 278);
+  doc.setFont('helvetica','normal');
+  doc.setFontSize(8);
+  doc.text('Pagamento por transferência bancária para o IBAN indicado acima.', margin, 283);
+  doc.text(`${SELLER_NAME} · ${SELLER_BANK} · ${SELLER_IBAN}`, margin, 288);
+
+  const safeName = client.name.replace(/[^a-zA-Z0-9]+/g,'_');
+  const portesTag = fmt(portesValue).replace(',', '_');
+  doc.save(`Fatura_${safeName}_Portes_${portesTag}.pdf`);
 }
 
 function showView(view){
