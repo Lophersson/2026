@@ -1,0 +1,348 @@
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resumo de Compras por Clienta</title>
+<link rel="preconnect" href="https://googleapis.com">
+<link href="https://googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F6EFE4;
+    --ink:#1c1a16;
+    --ink-dim:#6b6355;
+    --line:#1c1a16;
+    --gold:#a9752c;
+    --card:#ffffff;
+    --green:#3f7a3f;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'DM Sans', sans-serif;
+    padding:24px 16px 80px;
+  }
+  header{
+    max-width:760px;
+    margin:0 auto 28px;
+    text-align:center;
+  }
+  h1{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:700;
+    font-size:36px;
+    margin:0 0 4px;
+    letter-spacing:0.02em;
+  }
+  .sub{
+    font-family:'DM Mono', monospace;
+    font-size:12px;
+    color:var(--ink-dim);
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+  }
+  #container{
+    max-width:760px;
+    margin:0 auto;
+  }
+  .client-card{
+    background:var(--card);
+    border:2px solid var(--line);
+    border-radius:6px;
+    margin-bottom:20px;
+    overflow:hidden;
+  }
+  .client-card .head{
+    background:var(--ink);
+    color:var(--paper);
+    padding:12px 18px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .client-card .head .cname{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:700;
+    font-size:21px;
+  }
+  .client-card .head .csub{
+    font-family:'DM Mono', monospace;
+    font-size:11px;
+    color:#d9cdb2;
+  }
+  .client-card .items{
+    padding:14px 18px 4px;
+  }
+  .client-card .item-row{
+    display:flex;
+    justify-content:space-between;
+    font-size:13px;
+    padding:5px 0;
+    border-bottom:1px dashed #e0d5bd;
+  }
+  .client-card .item-row .iname{ color:var(--ink); }
+  .client-card .item-row .isize{
+    font-family:'DM Mono', monospace;
+    font-size:11px;
+    color:var(--ink-dim);
+    margin-left:6px;
+  }
+  .client-card .item-row .iprice{
+    font-family:'DM Mono', monospace;
+    white-space:nowrap;
+    padding-left:10px;
+  }
+  .client-card .totals{
+    padding:12px 18px 14px;
+    font-family:'DM Mono', monospace;
+    font-size:13px;
+  }
+  .client-card .totals .trow{
+    display:flex;
+    justify-content:space-between;
+    padding:2px 0;
+  }
+  .client-card .totals .trow.sub{ color:var(--ink-dim); }
+  .client-card .totals .trow.final{
+    font-weight:700;
+    font-size:14px;
+    border-top:1px solid var(--line);
+    margin-top:4px;
+    padding-top:6px;
+  }
+  .client-card .copy-row{
+    display:flex;
+    gap:10px;
+    padding:0 18px 18px;
+    flex-wrap:wrap;
+  }
+  .client-card .copy-row button{
+    flex:1;
+    min-width:160px;
+    font-family:'DM Sans', sans-serif;
+    font-size:12px;
+    font-weight:700;
+    padding:9px 10px;
+    border-radius:4px;
+    border:1px solid var(--ink);
+    background:transparent;
+    color:var(--ink);
+    cursor:pointer;
+  }
+  .client-card .copy-row button:hover{
+    background:var(--ink);
+    color:var(--paper);
+  }
+  .client-card .copy-row button.copied{
+    background:var(--green);
+    color:#fff;
+    border-color:var(--green);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Resumo de Compras por Clienta</h1>
+  <div class="sub">Direto 2 agosto 2026</div>
+</header>
+
+<div id="container"></div>
+
+<script>
+const PAYMENT_INFO = `Dados de pagamento:
+Vendedora: Ana Karina Marques.
+Titular: Leonor Dias.
+Banco CTT: PT50 0193 0000 1051 6586 2107 7.
+MB Way: +351 967 401 340.
+O Pagamento deve ser feito em menos de 48 horas. Caso contrário, será aplicado um cargo de 2€ por dia de atraso.
+Obrigada pela sua encomenda! ❤️`;
+
+const PORTES_A = 5.40;
+const PORTES_B = 8.93;
+
+const fmt = v => v.toLocaleString('pt-PT',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' €';
+
+// ---- Dados de clientas e artigos ----
+const clients = [
+  {
+    name:'Adelia Cordeiro',
+    items:[
+      {num:57,name:'decoração de bolos',size:'-',price:1.49,comm:1.00},
+      {num:60,name:'elásticos cabelo pretos e cinzas',size:'unid. 1',price:1.00,comm:1.00},
+      {num:66,name:'meias menina morangos',size:'7/10',price:1.00,comm:1.00},
+      {num:68,name:'meias cores flores',size:'11+',price:1.00,comm:1.00},
+      {num:69,name:'meias stitch set 7',size:'7/10',price:2.00,comm:1.50},
+    ]
+  },
+  {
+    name:'Alexandra Oliveira',
+    items:[
+      {num:65,name:'pijama monsters, inc. pixar aqua',size:'XL',price:4.00,comm:2.00},
+      {num:69,name:'meias stitch set 7',size:'11+',price:2.00,comm:1.50},
+    ]
+  },
+  {
+    name:'Carla Cruz',
+    items:[
+      {num:60,name:'elásticos cabelo pretos e cinzas',size:'-',price:1.00,comm:1.00},
+      {num:66,name:'meias menina morangos',size:'2/3',price:1.00,comm:1.00},
+      {num:68,name:'meias cores flores',size:'11+',price:1.00,comm:1.00},
+    ]
+  },
+  {
+    name:'Emily Sousa',
+    items:[
+      {num:50,name:'crema de mãos rosa',size:'unid. 1',price:1.20,comm:1.00},
+    ]
+  },
+  {
+    name:'Filipa C. Amaral',
+    items:[
+      {num:57,name:'decoração de bolos',size:'unid. 1',price:1.49,comm:1.00},
+      {num:63,name:'elásticos de cetim cores',size:null,price:1.00,comm:1.00},
+      {num:69,name:'meias stitch set 7',size:'11+',price:2.00,comm:1.50},
+    ]
+  },
+  {
+    name:'Liliana Couto',
+    items:[
+      {num:66,name:'meias menina morangos',size:'11+',price:1.00,comm:1.00},
+      {num:67,name:'meias bambi',size:'7/10',price:2.00,comm:1.50},
+    ]
+  },
+  {
+    name:'Lucia Vieira',
+    items:[
+      {num:43,name:'pijama cinzento escuro bratz',size:'2XS',price:5.00,comm:2.00},
+      {num:48,name:'pijama dinossauros verde',size:'3/4',price:5.00,comm:2.00},
+      {num:49,name:'conjunto blusa e saia menina "Los Angeles 1994"',size:'12 anos',price:5.99,comm:2.00},
+      {num:53,name:'capa telemóvel stitch — iPhone 15 Pro',size:'unid. 1',price:3.00,comm:2.00},
+      {num:53,name:'capa telemóvel stitch — iPhone 15 Pro',size:'-',price:3.00,comm:2.00},
+      {num:64,name:'bloco de gabbi dollhouse',size:null,price:2.00,comm:1.50},
+      {num:65,name:'pijama monsters, inc. pixar aqua',size:'2XL',price:4.00,comm:2.00},
+      {num:66,name:'meias menina morangos',size:'2/3',price:1.00,comm:1.00},
+      {num:67,name:'meias bambi',size:'7/10',price:2.00,comm:1.50},
+      {num:67,name:'meias bambi',size:'3/6',price:2.00,comm:1.50},
+      {num:66,name:'meias menina morangos',size:'7/10',price:1.00,comm:1.00},
+      {num:66,name:'meias menina morangos',size:'11+',price:1.00,comm:1.00},
+      {num:67,name:'meias bambi',size:'7/10',price:2.00,comm:1.50},
+      {num:70,name:'camisola menina sem mangas set x5',size:'7/8',price:2.00,comm:1.50},
+      {num:71,name:'calças azul bluey',size:'2/3',price:2.00,comm:1.50},
+    ]
+  },
+  {
+    name:'Maria Barroso',
+    items:[
+      {num:47,name:'calças de ganga urso',size:'12/18',price:7.00,comm:2.00},
+    ]
+  },
+  {
+    name:'Maria Vitorino',
+    items:[
+      {num:69,name:'meias stitch set 7',size:'2/3',price:2.00,comm:1.50},
+    ]
+  },
+  {
+    name:'Marlene Oliveira',
+    items:[
+      {num:66,name:'meias menina morangos',size:'2/3',price:1.00,comm:1.00},
+    ]
+  },
+  {
+    name:'Sara Ficher',
+    items:[
+      {num:61,name:'touca de cetim azul',size:null,price:1.00,comm:1.00},
+      {num:66,name:'meias menina morangos',size:'7/10',price:1.00,comm:1.00},
+      {num:68,name:'meias cores flores',size:'11+',price:1.00,comm:1.00},
+    ]
+  },
+];
+
+function buildCopyText(clientName, items, subtotal, portes){
+  const lines = items.map(u => {
+    const total = u.price + u.comm;
+    return u.size
+      ? `#${u.num} ${u.name} — ${u.size} — ${fmt(total)}`
+      : `#${u.num} ${u.name} — ${fmt(total)}`;
+  });
+  const total = subtotal + portes;
+  return `Resumo de compra — ${clientName}
+
+${lines.join('\n')}
+
+Subtotal artigos: ${fmt(subtotal)}
+Portes: ${fmt(portes)}
+Total a pagar: ${fmt(total)}
+
+${PAYMENT_INFO}`;
+}
+
+function copyToClipboard(text, btn){
+  navigator.clipboard.writeText(text).then(() => {
+    const original = btn.textContent;
+    btn.textContent = 'Copiado ✓';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = original; btn.classList.remove('copied'); }, 1600);
+  }).catch(() => {
+    alert('Não foi possível copiar automaticamente. Copia manualmente o texto.');
+  });
+}
+
+const container = document.getElementById('container');
+
+clients.forEach(client => {
+  const items = client.items;
+  const subtotal = items.reduce((s, u) => s + u.price + u.comm, 0);
+
+  const card = document.createElement('div');
+  card.className = 'client-card';
+
+  const head = document.createElement('div');
+  head.className = 'head';
+  head.innerHTML = `<span class="cname">${client.name}</span><span class="csub">${items.length} artigo${items.length>1?'s':''} · Subtotal ${fmt(subtotal)}</span>`;
+  card.appendChild(head);
+
+  const itemsDiv = document.createElement('div');
+  itemsDiv.className = 'items';
+  items.forEach(u => {
+    const row = document.createElement('div');
+    row.className = 'item-row';
+    row.innerHTML = `<span class="iname">#${u.num} ${u.name}${u.size ? `<span class="isize">${u.size}</span>` : ''}</span><span class="iprice">${fmt(u.price)} + ${fmt(u.comm)} = ${fmt(u.price + u.comm)}</span>`;
+    itemsDiv.appendChild(row);
+  });
+  card.appendChild(itemsDiv);
+
+  const totalsDiv = document.createElement('div');
+  totalsDiv.className = 'totals';
+  totalsDiv.innerHTML = `
+    <div class="trow sub"><span>Subtotal artigos</span><span>${fmt(subtotal)}</span></div>
+    <div class="trow final"><span>Total com portes 5,40€</span><span>${fmt(subtotal + PORTES_A)}</span></div>
+    <div class="trow final"><span>Total com portes 8,93€</span><span>${fmt(subtotal + PORTES_B)}</span></div>
+  `;
+  card.appendChild(totalsDiv);
+
+  const copyRow = document.createElement('div');
+  copyRow.className = 'copy-row';
+
+  const btnA = document.createElement('button');
+  btnA.textContent = `Copiar (portes 5,40€)`;
+  btnA.addEventListener('click', () => copyToClipboard(buildCopyText(client.name, items, subtotal, PORTES_A), btnA));
+
+  const btnB = document.createElement('button');
+  btnB.textContent = `Copiar (portes 8,93€)`;
+  btnB.addEventListener('click', () => copyToClipboard(buildCopyText(client.name, items, subtotal, PORTES_B), btnB));
+
+  copyRow.append(btnA, btnB);
+  card.appendChild(copyRow);
+
+  container.appendChild(card);
+});
+</script>
+</body>
+</html>
