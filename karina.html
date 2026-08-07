@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ateliê da Karina · Painel de Vendas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --creme:      #fdf7f2;
+    --rosa:       #f6c9d3;
+    --rosa-forte: #e8a3b5;
+    --lavanda:    #d9cdf0;
+    --menta:      #bfe6dc;
+    --pessego:    #f9dcc4;
+    --texto:      #5c4a52;
+    --texto-suave:#8a7783;
+    --branco:     #fffdfb;
+    --sombra:     0 10px 30px -12px rgba(150, 110, 130, 0.28);
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  body{
+    font-family:'Nunito', sans-serif;
+    color:var(--texto);
+    background:
+      radial-gradient(circle at 8% 12%, rgba(217,205,240,0.55), transparent 40%),
+      radial-gradient(circle at 92% 18%, rgba(191,230,220,0.55), transparent 42%),
+      radial-gradient(circle at 50% 100%, rgba(249,220,196,0.5), transparent 55%),
+      var(--creme);
+    min-height:100vh;
+    padding:56px 24px 80px;
+  }
+
+  .capa{
+    max-width:1080px;
+    margin:0 auto;
+  }
+
+  /* ---------- Cabeçalho / assinatura visual ---------- */
+  header{
+    text-align:center;
+    margin-bottom:64px;
+    position:relative;
+  }
+
+  .etiqueta{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:var(--branco);
+    border:1px solid rgba(232,163,181,0.5);
+    padding:6px 18px;
+    border-radius:999px;
+    font-size:0.8rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--rosa-forte);
+    font-weight:700;
+    box-shadow:var(--sombra);
+    margin-bottom:22px;
+  }
+
+  .etiqueta::before{
+    content:"";
+    width:8px; height:8px;
+    border-radius:50%;
+    background:var(--rosa-forte);
+    display:inline-block;
+  }
+
+  h1{
+    font-family:'Fredoka', sans-serif;
+    font-weight:600;
+    font-size:clamp(2.1rem, 5vw, 3.2rem);
+    color:#7a5566;
+    line-height:1.15;
+  }
+
+  h1 span{
+    color:var(--rosa-forte);
+  }
+
+  header p{
+    max-width:520px;
+    margin:16px auto 0;
+    color:var(--texto-suave);
+    font-size:1.02rem;
+  }
+
+  /* linha decorativa tipo "cabide" ligando as 3 fases */
+  .fluxo{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+    margin-top:34px;
+    color:var(--texto-suave);
+    font-family:'Fredoka', sans-serif;
+    font-size:0.85rem;
+    font-weight:500;
+  }
+  .fluxo .ponto{ opacity:0.55; }
+  .fluxo svg{ width:34px; height:12px; opacity:0.5; }
+
+  /* ---------- Secções ---------- */
+  section{
+    margin-bottom:58px;
+  }
+
+  .secao-titulo{
+    display:flex;
+    align-items:baseline;
+    gap:14px;
+    margin-bottom:8px;
+  }
+
+  .numero{
+    font-family:'Fredoka', sans-serif;
+    font-size:2.1rem;
+    font-weight:600;
+    color:var(--fase-cor, var(--rosa-forte));
+    opacity:0.85;
+  }
+
+  .secao-titulo h2{
+    font-family:'Fredoka', sans-serif;
+    font-weight:600;
+    font-size:1.6rem;
+    color:#6f5261;
+  }
+
+  .secao-desc{
+    color:var(--texto-suave);
+    font-size:0.96rem;
+    margin-bottom:26px;
+    margin-left:56px;
+  }
+
+  .grade{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(190px, 1fr));
+    gap:18px;
+  }
+
+  /* ---------- Cards ---------- */
+  .card{
+    background:var(--branco);
+    border-radius:20px;
+    padding:22px 20px;
+    text-decoration:none;
+    color:var(--texto);
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    box-shadow:var(--sombra);
+    border:1px solid rgba(0,0,0,0.03);
+    position:relative;
+    overflow:hidden;
+    transition:transform 0.28s ease, box-shadow 0.28s ease;
+  }
+
+  .card::before{
+    content:"";
+    position:absolute;
+    top:0; left:0; right:0;
+    height:6px;
+    background:var(--fase-cor, var(--rosa));
+    opacity:0.75;
+  }
+
+  .card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 18px 34px -14px rgba(150,110,130,0.38);
+  }
+
+  .card:focus-visible{
+    outline:3px solid var(--fase-cor, var(--rosa-forte));
+    outline-offset:3px;
+  }
+
+  .card .rotulo{
+    font-size:0.72rem;
+    text-transform:uppercase;
+    letter-spacing:0.07em;
+    color:var(--texto-suave);
+    font-weight:700;
+  }
+
+  .card .data{
+    font-family:'Fredoka', sans-serif;
+    font-size:1.35rem;
+    font-weight:600;
+    color:#6f5261;
+  }
+
+  .card .ano{
+    font-size:0.85rem;
+    color:var(--texto-suave);
+    font-weight:600;
+    margin-top:-6px;
+  }
+
+  .card .seta{
+    margin-top:6px;
+    font-size:0.85rem;
+    font-weight:700;
+    color:var(--fase-cor, var(--rosa-forte));
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+
+  .card:hover .seta{ gap:10px; }
+  .seta svg{ transition:transform 0.25s ease; }
+  .card:hover .seta svg{ transform:translateX(3px); }
+
+  /* Cores por fase */
+  #diretos  { --fase-cor: var(--rosa-forte); }
+  #clientas { --fase-cor: #a993d6; }
+  #pedidos  { --fase-cor: #4f9c86; }
+
+  #clientas .numero{ color:#a993d6; }
+  #pedidos  .numero{ color:#4f9c86; }
+
+  footer{
+    text-align:center;
+    color:var(--texto-suave);
+    font-size:0.85rem;
+    margin-top:20px;
+  }
+
+  footer strong{ color:var(--rosa-forte); }
+
+  @media (max-width:560px){
+    .secao-desc{ margin-left:0; }
+    body{ padding:40px 16px 60px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .card, .seta svg{ transition:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="capa">
+
+  <header>
+    <div class="etiqueta">Ateliê da Karina</div>
+    <h1>Painel de <span>Vendas Online</span></h1>
+    <p>Todos os acessos aos diretos, clientas e pedidos, organizados por data. Escolhe o card e segue para o registo correspondente.</p>
+    <div class="fluxo">
+      <span>Diretos</span>
+      <svg viewBox="0 0 34 12"><path d="M0 6 H30 M24 1 L30 6 L24 11" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Clientas</span>
+      <svg viewBox="0 0 34 12"><path d="M0 6 H30 M24 1 L30 6 L24 11" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Pedidos</span>
+    </div>
+  </header>
+
+  <!-- DIRETOS -->
+  <section id="diretos">
+    <div class="secao-titulo">
+      <span class="numero">01</span>
+      <h2>Diretos</h2>
+    </div>
+    <p class="secao-desc">Fichas dos artigos apresentados em cada direto.</p>
+    <div class="grade">
+      <a class="card" href="https://lophersson.github.io/2026/direto_260724.html" target="_blank" rel="noopener">
+        <span class="rotulo">Direto</span>
+        <span class="data">24 Jul</span>
+        <span class="ano">2026</span>
+        <span class="seta">Ver artigos <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+      <a class="card" href="https://lophersson.github.io/2026/direto_260727.html" target="_blank" rel="noopener">
+        <span class="rotulo">Direto</span>
+        <span class="data">27 Jul</span>
+        <span class="ano">2026</span>
+        <span class="seta">Ver artigos <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+      <a class="card" href="https://lophersson.github.io/2026/direto_260731.html" target="_blank" rel="noopener">
+        <span class="rotulo">Direto</span>
+        <span class="data">31 Jul</span>
+        <span class="ano">2026</span>
+        <span class="seta">Ver artigos <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+      <a class="card" href="https://lophersson.github.io/2026/direto_260802.html" target="_blank" rel="noopener">
+        <span class="rotulo">Direto</span>
+        <span class="data">02 Ago</span>
+        <span class="ano">2026</span>
+        <span class="seta">Ver artigos <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+      <a class="card" href="https://lophersson.github.io/2026/direto_260805.html" target="_blank" rel="noopener">
+        <span class="rotulo">Direto</span>
+        <span class="data">05 Ago</span>
+        <span class="ano">2026</span>
+        <span class="seta">Ver artigos <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+    </div>
+  </section>
+
+  <!-- CLIENTAS -->
+  <section id="clientas">
+    <div class="secao-titulo">
+      <span class="numero">02</span>
+      <h2>Clientas</h2>
+    </div>
+    <p class="secao-desc">Listagem das clientas e dos artigos que pediram.</p>
+    <div class="grade">
+      <a class="card" href="https://lophersson.github.io/2026/clientas_260724.html" target="_blank" rel="noopener">
+        <span class="rotulo">Clientas</span>
+        <span class="data">24 Jul</span>
+        <span class="ano">2026</span>
+        <span class="seta">Ver lista <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+      <a class="card" href="https://lophersson.github.io/2026/clientas_260727.html" target="_blank" rel="noopener">
+        <span class="rotulo">Clientas</span>
+        <span class="data">27 Jul</span>
+        <span class="ano">2026</span>
+        <span class="seta">Ver lista <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+      <a class="card" href="https://lophersson.github.io/2026/clientas_260731.html" target="_blank" rel="noopener">
+        <span class="rotulo">Clientas</span>
+        <span class="data">31 Jul</span>
+        <span class="ano">2026</span>
+        <span class="seta">Ver lista <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+      <a class="card" href="https://lophersson.github.io/2026/clientas_260802.html" target="_blank" rel="noopener">
+        <span class="rotulo">Clientas</span>
+        <span class="data">02 Ago</span>
+        <span class="ano">2026</span>
+        <span class="seta">Ver lista <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+      <a class="card" href="https://lophersson.github.io/2026/clientas_260805.html" target="_blank" rel="noopener">
+        <span class="rotulo">Clientas</span>
+        <span class="data">05 Ago</span>
+        <span class="ano">2026</span>
+        <span class="seta">Ver lista <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+    </div>
+  </section>
+
+  <!-- PEDIDOS -->
+  <section id="pedidos">
+    <div class="secao-titulo">
+      <span class="numero">03</span>
+      <h2>Pedidos</h2>
+    </div>
+    <p class="secao-desc">Faturas recebidas pelas clientas.</p>
+    <div class="grade">
+      <a class="card" href="https://lophersson.github.io/2026/pedidos_260724.html" target="_blank" rel="noopener">
+        <span class="rotulo">Pedidos</span>
+        <span class="data">24 Jul</span>
+        <span class="ano">2026</span>
+        <span class="seta">Ver faturas <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+      <a class="card" href="https://lophersson.github.io/2026/pedidos_260727.html" target="_blank" rel="noopener">
+        <span class="rotulo">Pedidos</span>
+        <span class="data">27 Jul</span>
+        <span class="ano">2026</span>
+        <span class="seta">Ver faturas <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+      <a class="card" href="https://lophersson.github.io/2026/pedidos_260731.html" target="_blank" rel="noopener">
+        <span class="rotulo">Pedidos</span>
+        <span class="data">31 Jul</span>
+        <span class="ano">2026</span>
+        <span class="seta">Ver faturas <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+      <a class="card" href="https://lophersson.github.io/2026/pedidos_260802.html" target="_blank" rel="noopener">
+        <span class="rotulo">Pedidos</span>
+        <span class="data">02 Ago</span>
+        <span class="ano">2026</span>
+        <span class="seta">Ver faturas <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+      <a class="card" href="https://lophersson.github.io/2026/pedidos_260805.html" target="_blank" rel="noopener">
+        <span class="rotulo">Pedidos</span>
+        <span class="data">05 Ago</span>
+        <span class="ano">2026</span>
+        <span class="seta">Ver faturas <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    Feito com carinho para <strong>Karina</strong> 💐
+  </footer>
+
+</div>
+
+</body>
+</html>
