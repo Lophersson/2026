@@ -1,5 +1,4 @@
-
-
+bash
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -321,7 +320,7 @@
     <div class="ficha-wrap">
       <table class="ficha">
         <tr>
-          <td class="num-cell" rowspan="3"><span class="num" id="numOut">82</span></td>
+          <td class="num-cell" rowspan="3"><span class="num" id="numOut">30</span></td>
           <td class="name-cell"><span class="art-name" contenteditable="true" id="nameOut">Nome do artigo</span></td>
         </tr>
         <tr>
@@ -361,7 +360,7 @@
 
     <div class="jump">
       <span>Ir ao nº</span>
-      <input type="number" id="jumpInput" min="82" max="114" value="82">
+      <input type="number" id="jumpInput" min="30" max="101" value="30">
       <button id="jumpBtn">Ir</button>
     </div>
     </div>
@@ -380,61 +379,63 @@
   tickClock();
   setInterval(tickClock, 1000);
 
-  // ---- Dados das fichas (82 → 114) ----
+  // ---- Dados das fichas (30 → 101) ----
+  // Preço = valor que fica para a loja (artigo da loja). Comissão = o que fica para Ana Karina Marques.
+  // Quando o artigo é próprio (sem custo de loja), Preço = 0,00 e Comissão = valor total cobrado à clienta.
   const datos = {
     30: { name:'calças pretas e amarelas space jam', price:0.00, comm:0.00, color:'preto e amarelo', sizes:[{s:'7/8',q:1}] },
     31: { name:'calças de ganga cinzentas', price:0.00, comm:0.00, color:'cinzento', sizes:[{s:'7',q:1}] },
-    32: { name:'calças fato treino pretas unlimited', price:0.00, comm:0.00, color:'preto', sizes:[{s:'146',q:1}] },
-    33: { name:'conjunto fato treino cinzento/preto Spiderman calças e casaco Marvel', price:0.00, comm:0.00, color:'cinzento e preto', sizes:[{s:'10',q:1}] },
-    34: { name:'calças ganga cinzento/pretas corda c&a', price:0.00, comm:0.00, color:'cinzento e preto', sizes:[{s:'9',q:1}] },
+    32: { name:'calças fato treino pretas unlimited', price:0.00, comm:1.00, color:'preto', sizes:[{s:'146',q:1}] },
+    33: { name:'conjunto fato treino cinzento/preto Spiderman calças e casaco Marvel', price:0.00, comm:3.00, color:'cinzento e preto', sizes:[{s:'10',q:1}] },
+    34: { name:'calças ganga cinzento/pretas corda c&a', price:0.00, comm:2.00, color:'cinzento e preto', sizes:[{s:'9',q:1}] },
     35: { name:'camisa azul santa Claus, Rudolf e árvores natal h&m', price:0.00, comm:0.00, color:'azul', sizes:[{s:'8/9',q:1}] },
     36: { name:'camisola preta manga comprida be in the game lefties', price:0.00, comm:0.00, color:'preta', sizes:[{s:'9/10',q:1}] },
-    37: { name:'sueter cinzento headphones', price:0.00, comm:0.00, color:'cinzento', sizes:[] },
+    37: { name:'sueter cinzento headphones', price:0.00, comm:1.00, color:'cinzento', sizes:[] },
     38: { name:'sueter malha cinzento cobra like my Flow', price:0.00, comm:0.00, color:'cinzento', sizes:[] },
-    39: { name:'calças pretas minecraft', price:0.00, comm:0.00, color:'preta', sizes:[{s:'9/10',q:1}] },
-    40: { name:'conjunto jurassic park', price:0.00, comm:0.00, color:'—', sizes:[{s:'10/11',q:1}] },
-    41: { name:'sueter cinzento run faster', price:0.00, comm:0.00, color:'cinzento', sizes:[{s:'134/140',q:1}] },
-    42: { name:'calças pretas fato treino monstro zipper', price:0.00, comm:0.00, color:'preta', sizes:[{s:'146',q:1}] },
+    39: { name:'calças pretas minecraft', price:0.00, comm:1.00, color:'preta', sizes:[{s:'9/10',q:1}] },
+    40: { name:'conjunto jurassic park', price:0.00, comm:1.50, color:'—', sizes:[{s:'10/11',q:1}] },
+    41: { name:'sueter cinzento run faster', price:0.00, comm:1.00, color:'cinzento', sizes:[{s:'134/140',q:1}] },
+    42: { name:'calças pretas fato treino monstro zipper', price:0.00, comm:2.00, color:'preta', sizes:[{s:'146',q:1}] },
     43: { name:'calças riscas azuis e cinzentas polar', price:0.00, comm:0.00, color:'azul e cinzento', sizes:[{s:'9/10',q:1}] },
     44: { name:'camisa preta unstopable atitude', price:0.00, comm:0.00, color:'preta', sizes:[{s:'5/6',q:1}] },
     45: { name:'sueter cinzento e azul gorila oculos neve', price:0.00, comm:0.00, color:'cinzento e azul', sizes:[{s:'7/8',q:1}] },
-    46: { name:'sueter Sonic azul escuro capuz', price:0.00, comm:0.00, color:'azul escuro', sizes:[{s:'11/12',q:1}] },
+    46: { name:'sueter Sonic azul escuro capuz', price:0.00, comm:3.00, color:'azul escuro', sizes:[{s:'11/12',q:1}] },
     47: { name:'sueter malha united colors of Benetton', price:0.00, comm:0.00, color:'—', sizes:[{s:'4/5',q:1}] },
-    48: { name:'sueter azul capuz cuadrados escocés new york city', price:0.00, comm:0.00, color:'azul', sizes:[{s:'10',q:1}] },
-    49: { name:'sueter cinzento cara amarela smiley', price:0.00, comm:0.00, color:'cinzento e amarelo', sizes:[{s:'10/12',q:1}] },
+    48: { name:'sueter azul capuz cuadrados escocés new york city', price:0.00, comm:3.00, color:'azul', sizes:[{s:'10',q:1}] },
+    49: { name:'sueter cinzento cara amarela smiley', price:0.00, comm:2.00, color:'cinzento e amarelo', sizes:[{s:'10/12',q:1}] },
     50: { name:'sueter malha azul celeste barco branco', price:0.00, comm:0.00, color:'azul celeste e branco', sizes:[{s:'18',q:1}] },
     51: { name:'sueter malha azul escuro', price:0.00, comm:0.00, color:'azul escuro', sizes:[{s:'3',q:1}] },
     52: { name:'sueter preta gola alta', price:0.00, comm:0.00, color:'preta', sizes:[{s:'4',q:1}] },
-    53: { name:'sueter capuz branco e laranxa animal', price:0.00, comm:0.00, color:'branco e laranxa', sizes:[{s:'3',q:1}] },
+    53: { name:'sueter capuz branco e laranxa animal', price:0.00, comm:3.00, color:'branco e laranxa', sizes:[{s:'3',q:1}] },
     54: { name:'camisola riscas azuis e brancas friends 4 ever', price:0.00, comm:0.00, color:'azul e branco', sizes:[{s:'122',q:1}] },
     55: { name:'calças ganga verde kiabi', price:0.00, comm:0.00, color:'verde', sizes:[{s:'9',q:1}] },
-    56: { name:'calças azul escuro c&a', price:0.00, comm:0.00, color:'azul escuro', sizes:[{s:'10',q:1}] },
-    57: { name:'calças castanhas', price:0.00, comm:0.00, color:'castanho', sizes:[{s:'8',q:1}] },
+    56: { name:'calças azul escuro c&a', price:0.00, comm:1.00, color:'azul escuro', sizes:[{s:'10',q:1}] },
+    57: { name:'calças castanhas', price:0.00, comm:1.00, color:'castanho', sizes:[{s:'8',q:1}] },
     58: { name:'sueter capuz branca e azul Hogwarts', price:0.00, comm:0.00, color:'branco e azul', sizes:[{s:'8/10',q:1}] },
-    60: { name:'sueter azul super Mario', price:0.00, comm:0.00, color:'azul', sizes:[{s:'10',q:1}] },
+    60: { name:'sueter azul super Mario', price:0.00, comm:2.50, color:'azul', sizes:[{s:'10',q:1}] },
     61: { name:'kit escolar k-pop demon hunters', price:0.00, comm:0.00, color:'roxo', sizes:[] },
     62: { name:'estojo roxo escolar borboletas zipper', price:0.00, comm:0.00, color:'roxo', sizes:[] },
     63: { name:'caderno de notas roxo copo e alimentos', price:1.99, comm:1.00, color:'roxo', sizes:[] },
     64: {name:'botines stitch', price:0.00, comm:0.00, color:'branco, azul, lilas', sizes:[{s:'35',q:2}]},
-    65: {name:'pyjama Marie com desenho de gato', price:0.00, comm:0.00, color:'branco/rosa', sizes:[{s:'XS',q:1},{s:'S',q:2},{s:'M',q:2},{s:'L',q:2},{s:'XL',q:1}]},
+    65: {name:'pyjama Marie com desenho de gato', price:7.00, comm:2.00, color:'branco/rosa', sizes:[{s:'XS',q:1},{s:'S',q:2},{s:'M',q:2},{s:'L',q:2},{s:'XL',q:1}]},
     66: {name:'caderno com coração rosa', price:0.00, comm:0.00, color:'azul/rosa', sizes:[{s:'A5',q:1}]},
     67: {name:'agenda arco-íris', price:1.99, comm:1.00, color:'rosa, amarelo, azul', sizes:[{s:'A5',q:1}]},
     68: {name:'agenda coraçoes estrelas', price:1.99, comm:1.00, color:'lilas', sizes:[{s:'A5',q:1}]},
-    69: {name:'colar e brincos Best Friend', price:0.00, comm:0.00, color:'dourado', sizes:[{s:'único',q:27}]},
-    70: {name:'meias cinzentas de algodão 3 pares', price:1.00, comm:1.00, color:'cinzento', sizes:[{s:'5/6',q:2}, {s:'6/7',q:1, {s:'8/9',q:1}]},
+    69: {name:'colar e brincos Best Friend', price:1.00, comm:1.00, color:'dourado', sizes:[{s:'único',q:27}]},
+    70: {name:'meias cinzentas de algodão 3 pares', price:1.00, comm:1.00, color:'cinzento', sizes:[{s:'5/6',q:2}, {s:'6/7',q:1}, {s:'8/9',q:1}]},
     71: {name:'meias rosas e brancas brilhos nylon 2 pares', price:1.00, comm:1.00, color:'rosa-claro', sizes:[{s:'2/3',q:2}, {s:'3/4',q:2}, {s:'5/6',q:2}, {s:'7/8',q:2}]},
     72: {name:'sapatilhas Mickey Mouse', price:0.00, comm:0.00, color:'branco/vermelho', sizes:[{s:'9/12',q:1},{s:'12/18',q:3}]},
-    73: {name:'boné de rede surf + chapéu verde', price:0.00, comm:0.00, color:'azul/verde', sizes:[{s:'2/4',q:4}]},
-    74: {name:'estojo pelo roxo Stitch', price:0.00, comm:0.00, color:'roxo', sizes:[{s:'único',q:4}]},
+    73: {name:'boné de rede surf + chapéu verde', price:1.00, comm:1.00, color:'azul/verde', sizes:[{s:'2/4',q:4}]},
+    74: {name:'estojo pelo roxo Stitch', price:2.00, comm:1.50, color:'roxo', sizes:[{s:'único',q:4}]},
     75: {name:'recipiente para pipocas', price:0.99, comm:0.99, color:'branco/vermelho', sizes:[{s:'único',q:2}]},
     76: {name:'camisola menina fuchsia tik tok', price:0.00, comm:0.00, color:'fuchsia', sizes:[{s:'10',q:1}]},
-    77: {name:'sueter peixe riscas verdes', price:0.00, comm:0.00, color:'verde', sizes:[{s:'3',q:1}]},
+    77: {name:'sueter peixe riscas verdes', price:0.00, comm:1.00, color:'verde', sizes:[{s:'3',q:1}]},
     78: {name:'camisola The Adventure', price:0.00, comm:0.00, color:'cinzenta', sizes:[{s:'4/6',q:1}]},
     79: {name:'Camisola preta básica', price:0.00, comm:0.00, color:'preto', sizes:[{s:'-',q:1}]},
     80: {name:'Camisola com Pai Natal', price:0.00, comm:0.00, color:'creme/vermelho', sizes:[{s:'-',q:1}]},
     81: {name:'Cachecol de malha com franjas', price:0.00, comm:0.00, color:'cinzento', sizes:[{s:'-',q:1}]},
     82: {name:'Camisola NYC', price:0.00, comm:0.00, color:'cinzento/rosa', sizes:[{s:'-',q:1}]},
-    83: {name:'Gorro de malha', price:0.00, comm:0.00, color:'azul-marinho', sizes:[{s:'-',q:1}]},
+    83: {name:'Gorro de malha', price:0.00, comm:1.00, color:'azul-marinho', sizes:[{s:'-',q:1}]},
     84: {name:'Camisola de malha tricolor', price:0.00, comm:0.00, color:'azul/vermelho/branco', sizes:[{s:'-',q:1}]},
     85: {name:'Cardigan de malha com botões', price:0.00, comm:0.00, color:'azul-marinho', sizes:[{s:'-',q:1}]},
     86: {name:'Casaco preto com capuz e bolsos', price:0.00, comm:0.00, color:'preto', sizes:[{s:'-',q:1}]},
@@ -450,9 +451,9 @@
     96: {name:'Casaco acolchoado preto', price:0.00, comm:0.00, color:'preto', sizes:[{s:'-',q:1}]},
     97: {name:'T-shirt com estampado de panda', price:0.00, comm:0.00, color:'turquesa', sizes:[{s:'-',q:1}]},
     98: {name:'T-shirt com chávena de chocolate', price:0.00, comm:0.00, color:'vermelho', sizes:[{s:'-',q:1}]},
-    99: {name:'Bandolete com padrão leopardo', price:0.00, comm:0.00, color:'castanho/preto', sizes:[{s:'-',q:1}]},
-    100: {name:'blender sponge vermelhos e azuis', price:0.00, comm:0.00, color:'vermelho e azul', sizes:[{s:'-',q:6}]},
-    101: {name: 'lapices ferramentas', price:0.00, comm:0.00, color:'azul e vermelho', sizes:[{s:'-',q:3}]},
+    99: {name:'Bandolete com padrão leopardo', price:1.00, comm:1.00, color:'castanho/preto', sizes:[{s:'-',q:1}]},
+    100: {name:'blender sponge vermelhos e azuis', price:0.00, comm:1.98, color:'azul', sizes:[{s:'-',q:6}]},
+    101: {name: 'lapices ferramentas', price:0.55, comm:0.55, color:'azul e vermelho', sizes:[{s:'-',q:3}]},
 
   };
 

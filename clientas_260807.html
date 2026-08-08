@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lista de Artigos Vendidos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EFEAF3;
+    --bg2:#E6DEEC;
+    --card:#FFFFFF;
+    --ink:#2B2530;
+    --muted:#786C84;
+    --plum:#6E3B5C;
+    --plum-dark:#54294A;
+    --line:#E4DCEA;
+    --stripe:#F8F5FA;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(circle at 15% 0%, var(--bg2), transparent 45%),
+      var(--bg);
+    color:var(--ink);
+    font-family:'Karla',sans-serif;
+    padding:32px 16px 80px;
+  }
+  .wrap{max-width:980px;margin:0 auto;}
+
+  header.top{text-align:center;margin-bottom:30px;}
+  header.top .eyebrow{
+    font-size:12px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--plum);font-weight:700;
+  }
+  header.top h1{
+    font-family:'Fraunces',serif;font-weight:600;font-style:italic;
+    font-size:34px;margin:6px 0 4px;color:var(--plum-dark);
+  }
+  header.top p{color:var(--muted);margin:0;font-size:14px;}
+
+  .card{
+    background:var(--card);
+    border-radius:16px;
+    border:1px solid var(--line);
+    box-shadow:0 10px 26px -16px rgba(84,41,74,.25);
+    overflow:hidden;
+  }
+
+  table{width:100%;border-collapse:collapse;font-size:13.5px;}
+  thead th{
+    text-align:left;
+    font-size:10.5px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:#fff;
+    background:linear-gradient(135deg,var(--plum) 0%, var(--plum-dark) 100%);
+    padding:12px 10px;
+    position:sticky;top:0;
+  }
+  tbody td{
+    padding:10px;
+    border-bottom:1px solid var(--line);
+    vertical-align:top;
+  }
+  tbody tr:nth-child(even){background:var(--stripe);}
+  tbody tr:hover{background:#F1E9F0;}
+  td.num{font-variant-numeric:tabular-nums;color:var(--muted);font-weight:700;}
+  td.price{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:var(--plum-dark);white-space:nowrap;}
+  td.qty{text-align:center;}
+  td.client{font-weight:600;}
+
+  tfoot td{
+    padding:14px 10px;
+    font-weight:700;
+    border-top:2px solid var(--line);
+    background:var(--stripe);
+  }
+  tfoot td.price{color:var(--plum-dark);font-size:15px;}
+
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:30px;}
+
+  @media (max-width:640px){
+    th:nth-child(2),td:nth-child(2){display:none;} /* cor */
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow">Registo de Vendas</div>
+    <h1>Lista de Artigos Vendidos</h1>
+    <p>Ordenados por número de artigo</p>
+  </header>
+
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>Nº</th>
+          <th>Artigo</th>
+          <th>Cor</th>
+          <th>Tamanho</th>
+          <th style="text-align:center;">Qtd</th>
+          <th>Cliente</th>
+          <th style="text-align:right;">Preço</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+      <tfoot>
+        <tr>
+          <td colspan="6">Total geral</td>
+          <td class="price" id="total-geral"></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <footer>Lista de referência interna — artigos ordenados pelo respetivo número no catálogo.</footer>
+</div>
+
+<script>
+const orders = [
+  {client:'Carla Cruz', num:32, nome:'Calças de fato de treino pretas Unlimited', cor:'Preto', tam:'146', qty:1, preco:1},
+  {client:'Carla Cruz', num:33, nome:'Conjunto de fato de treino Spiderman (calças e casaco) Marvel', cor:'Cinzento e preto', tam:'10', qty:1, preco:3},
+  {client:'Carla Cruz', num:34, nome:'Calças de ganga com corda C&A', cor:'Cinzento e preto', tam:'9', qty:1, preco:2},
+  {client:'Carla Cruz', num:39, nome:'Calças pretas Minecraft', cor:'Preto', tam:'9/10', qty:1, preco:1},
+  {client:'Carla Cruz', num:41, nome:'Camisola cinzenta Run Faster', cor:'Cinzento', tam:'134/140', qty:1, preco:1},
+  {client:'Carla Cruz', num:69, nome:'Colar e brincos Best Friend', cor:'Dourado', tam:'Único', qty:1, preco:2},
+
+  {client:'Karina Vieira', num:37, nome:'Camisola cinzenta Headphones', cor:'Cinzento', tam:'—', qty:1, preco:1},
+  {client:'Karina Vieira', num:40, nome:'Conjunto Jurassic Park', cor:'—', tam:'10/11', qty:1, preco:1.50},
+  {client:'Karina Vieira', num:42, nome:'Calças pretas de fato de treino Monstro (fecho)', cor:'Preto', tam:'146', qty:1, preco:2},
+  {client:'Karina Vieira', num:49, nome:'Camisola cinzenta Smiley', cor:'Cinzento e amarelo', tam:'10/12', qty:1, preco:2},
+  {client:'Karina Vieira', num:57, nome:'Calças castanhas', cor:'Castanho', tam:'8', qty:1, preco:1},
+
+  {client:'Vitoria Santos', num:46, nome:'Camisola Sonic com capuz', cor:'Azul escuro', tam:'11/12', qty:1, preco:3},
+
+  {client:'Carla Matos', num:48, nome:'Camisola com capuz, quadrados estilo escocês, New York City', cor:'Azul', tam:'10', qty:1, preco:3},
+  {client:'Carla Matos', num:60, nome:'Camisola azul Super Mario', cor:'Azul', tam:'10', qty:1, preco:2.50},
+
+  {client:'Tania Pinheiro', num:53, nome:'Camisola com capuz, animal', cor:'Branco e laranja', tam:'3', qty:1, preco:3},
+  {client:'Tania Pinheiro', num:68, nome:'Agenda corações e estrelas', cor:'Lilás', tam:'A5', qty:1, preco:2.99},
+  {client:'Tania Pinheiro', num:71, nome:'Meias com brilhos, nylon (2 pares)', cor:'Rosa-claro', tam:'9/12', qty:1, preco:2},
+
+  {client:'Joana Silva', num:56, nome:'Calças azul escuro C&A', cor:'Azul escuro', tam:'10', qty:1, preco:1},
+  {client:'Joana Silva', num:83, nome:'Gorro de malha', cor:'Azul-marinho', tam:'—', qty:1, preco:1},
+
+  {client:'Laudalina Silva', num:63, nome:'Caderno de notas, copo e alimentos', cor:'Roxo', tam:'—', qty:1, preco:2.99},
+  {client:'Laudalina Silva', num:65, nome:'Pijama Marie com desenho de gato', cor:'Branco/rosa', tam:'M', qty:1, preco:9.00},
+  {client:'Laudalina Silva', num:74, nome:'Estojo de pelo Stitch', cor:'Roxo', tam:'Único', qty:1, preco:3.50},
+
+  {client:'Adelia Cordeiro', num:69, nome:'Colar e brincos Best Friend', cor:'Dourado', tam:'Único', qty:1, preco:2},
+  {client:'Adelia Cordeiro', num:71, nome:'Meias com brilhos, nylon (2 pares)', cor:'Rosa-claro', tam:'12/18', qty:1, preco:2},
+  {client:'Adelia Cordeiro', num:73, nome:'Boné de rede surf + chapéu', cor:'Azul/verde', tam:'2/4', qty:1, preco:2},
+  {client:'Adelia Cordeiro', num:74, nome:'Estojo de pelo Stitch', cor:'Roxo', tam:'Único', qty:1, preco:3.50},
+  {client:'Adelia Cordeiro', num:101, nome:'Lápis em formato de ferramentas', cor:'Azul e vermelho', tam:'—', qty:1, preco:1.10},
+
+  {client:'Emily Sousa', num:73, nome:'Boné de rede surf + chapéu', cor:'Azul/verde', tam:'2/4', qty:1, preco:2},
+  {client:'Emily Sousa', num:75, nome:'Recipiente para pipocas', cor:'Branco/vermelho', tam:'Único', qty:2, preco:1.98},
+  {client:'Emily Sousa', num:99, nome:'Bandolete com padrão leopardo', cor:'Castanho/preto', tam:'—', qty:1, preco:2},
+
+  {client:'Leonor Dias', num:77, nome:'Camisola com peixe às riscas', cor:'Verde', tam:'3', qty:1, preco:1},
+
+  {client:'Maria Sacramento Vieira', num:74, nome:'Estojo de pelo Stitch', cor:'Roxo', tam:'Único', qty:1, preco:3.50},
+  {client:'Maria Sacramento Vieira', num:100, nome:'Esponja blender', cor:'Azul', tam:'—', qty:1, preco:1.98},
+];
+
+const fmt = n => n.toLocaleString('pt-PT', {minimumFractionDigits:2, maximumFractionDigits:2}) + '€';
+
+const ordenados = [...orders].sort((a,b)=> a.num - b.num);
+
+const tbody = document.getElementById('tbody');
+let totalGeral = 0;
+
+ordenados.forEach(o=>{
+  const linhaTotal = o.preco * o.qty;
+  totalGeral += linhaTotal;
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td class="num">${o.num}</td>
+    <td>${o.nome}</td>
+    <td>${o.cor}</td>
+    <td>${o.tam}</td>
+    <td class="qty">${o.qty}</td>
+    <td class="client">${o.client}</td>
+    <td class="price">${fmt(linhaTotal)}</td>
+  `;
+  tbody.appendChild(tr);
+});
+
+document.getElementById('total-geral').textContent = fmt(totalGeral);
+</script>
+</body>
+</html>
