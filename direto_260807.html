@@ -1,9 +1,8 @@
-bash
 <!DOCTYPE html>
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>DIRETO — 7 Agosto 2026</title>
 <link rel="preconnect" href="https://googleapis.com">
 <link href="https://googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -19,6 +18,9 @@ bash
     --line:#000000;
     --card-bg:#ffffff;
     --card-ink:#000000;
+    /* tamanho unificado para nome do artigo e todos os detalhes */
+    --detail-size: clamp(22px, 4.4vw, 50px);
+    --detail-label-size: clamp(16px, 3vw, 24px);
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;height:100%;}
@@ -27,11 +29,12 @@ bash
     color:var(--ink);
     font-family:'DM Sans', sans-serif;
     height:100vh;
+    height:100dvh;
     display:flex;
     flex-direction:column;
     align-items:center;
     justify-content:center;
-    padding:14px 16px;
+    padding:12px 12px;
     overflow:hidden;
   }
 
@@ -40,6 +43,7 @@ bash
     max-width:99vw;
     height:100%;
     max-height:98vh;
+    max-height:98dvh;
     display:flex;
     flex-direction:column;
     align-items:center;
@@ -94,7 +98,7 @@ bash
   h1.directo{
     font-family:'Cormorant Garamond', serif;
     font-weight:700;
-    font-size:clamp(30px, 4.6vh, 54px);
+    font-size:clamp(26px, 4.6vh, 54px);
     letter-spacing:0.14em;
     margin:0;
     color:var(--ink);
@@ -106,11 +110,12 @@ bash
   }
   .subline{
     font-family:'DM Mono', monospace;
-    font-size:20px;
-    letter-spacing:0.28em;
+    font-size:clamp(12px, 2.4vw, 20px);
+    letter-spacing:0.22em;
     text-transform:uppercase;
     color:var(--ink-dim);
     margin-top:2px;
+    text-align:center;
   }
 
   /* ---- FICHA ---- */
@@ -122,6 +127,7 @@ bash
     flex-direction:column;
     align-items:center;
     justify-content:center;
+    touch-action: pan-y;
   }
 
   .ficha-wrap{
@@ -131,6 +137,7 @@ bash
     min-height:0;
     display:flex;
     align-items:stretch;
+    user-select:none;
   }
 
   table.ficha{
@@ -154,7 +161,7 @@ bash
   .num-cell .num{
     font-family:'DM Mono', monospace;
     font-weight:700;
-    font-size:clamp(300px, 15vh, 150px);
+    font-size:clamp(370px, 15vh, 150px);
     line-height:1;
     color: black;
     letter-spacing:-0.02em;
@@ -167,8 +174,8 @@ bash
   .name-cell .art-name{
     font-family:'Cormorant Garamond', serif;
     font-weight:700;
-    font-size:clamp(50px, 5.6vh, 50px);
-    line-height:1.0;
+    font-size:var(--detail-size);
+    line-height:1.1;
     outline:none;
     display:block;
     color: black;
@@ -183,7 +190,7 @@ bash
   .price-cell .row{
     display:flex;
     justify-content:space-between;
-    font-size:clamp(30px, 5.6vh, 30px);
+    font-size:clamp(18px, 3.2vw, 30px);
     padding:clamp(2px, 0.6vh, 6px) 6px;
     color:#000000;
   }
@@ -197,7 +204,7 @@ bash
     padding-top:clamp(6px, 1vh, 10px);
     border-top:2px solid var(--card-ink);
     font-weight:700;
-    font-size:clamp(30px, 5.6vh, 30px);
+    font-size:clamp(18px, 3.2vw, 30px);
     color:var(--card-ink);
   }
 
@@ -221,23 +228,25 @@ bash
     padding-left:18px;
   }
   .details-label{
-    font-size:clamp(24px, 5.6vh, 24px);
+    font-size:var(--detail-label-size);
     letter-spacing:0.0em;
     color:var(--ink-dim);
     margin-bottom:4px;
   }
   .details-value{
-    font-size:clamp(20px, 5.6vh, 20px);
+    font-size:var(--detail-size);
     font-weight:700;
     color:var(--card-ink);
+    line-height:1.1;
   }
   .sizes-list{
     display:flex;
     flex-wrap:wrap;
     justify-content:center;
     gap:6px 12px;
-    font-size:clamp(20px, 5.6vh, 20px);
+    font-size:var(--detail-size);
     color:black;
+    line-height:1.1;
   }
   .sizes-list .size-chip b{
     color: red;
@@ -246,7 +255,7 @@ bash
   content: ";";
 }
   .sizes-empty{
-    font-size:clamp(20px, 5.6vh, 20px);
+    font-size:var(--detail-size);
     color:var(--ink-dim);
   }
 
@@ -254,50 +263,164 @@ bash
     background:rgba(0,0,0,0.06);
   }
 
+  /* ---- CONTROLS: navegação + busca na mesma linha, responsivo ---- */
   .controls{
     display:flex;
+    flex-direction:row;
     flex-wrap:wrap;
     align-items:center;
     justify-content:center;
-    gap:22px;
+    gap:14px 22px;
     flex:0 0 auto;
-    margin-top:clamp(20px, 2vh, 50px);
+    margin-top:clamp(14px, 2vh, 40px);
+    width:100%;
   }
 
-  .nav { display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; align-items: center !important; justify-content: center !important; gap: 22px !important; flex: 0 0 auto !important; height: 50px !important; min-height: 50px !important; margin-top: clamp(8px, 1.6vh, 16px) !important; width: 100% !important; }
-  .nav > div, .nav > ul { display: contents !important; }
-  .arrow-btn { width: 150px !important; height: 50px !important; flex-shrink: 0 !important; border-radius: 0%; border: 2px solid #000000; background: transparent; color: #000000; font-size: 17px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.18s, transform 0.12s; }
+  .nav {
+    display:flex;
+    flex-direction:row;
+    flex-wrap:nowrap;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    flex:0 0 auto;
+    height:auto;
+  }
+  .arrow-btn {
+    width:70px;
+    height:70px;
+    flex-shrink:0;
+    border-radius:10px;
+    border:3px solid #000000;
+    background:transparent;
+    color:#000000;
+    font-size:32px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:background 0.18s, transform 0.12s;
+    touch-action:manipulation;
+  }
   .arrow-btn:hover { background: rgba(0,0,0,0.08); }
-  .arrow-btn:active { transform: scale(0.92); }
+  .arrow-btn:active { transform: scale(0.92); background: rgba(0,0,0,0.12); }
   .arrow-btn:disabled { opacity: 0.25; cursor: default; }
   .arrow-btn:disabled:hover { background: transparent; }
-  .position { font-family: 'DM Mono', monospace; font-size: 24px; letter-spacing: 0.1em; color: var(--ink-dim); min-width: 70px; text-align: center; flex-shrink: 0 !important; }
-  .position b { color: #000000; }
-  .jump { display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; align-items: center !important; gap: 8px !important; font-family: 'DM Mono', monospace; font-size: 24px; color: var(--ink-dim); margin-top: 0 !important; flex-shrink: 0 !important; }
-  .jump input { width: 80px; height: 40px !important; background: #ffffff; border: 1px solid #000000; color: #000000; font-family: 'DM Mono', monospace; font-size: 24px; padding: 4px 8px; text-align: center; border-radius: 2px; }
-  .jump button { background: transparent; border: 1px solid #000000; color: #000000; font-family: 'DM Sans', sans-serif; font-size: 11px; padding: 4px 10px; border-radius: 2px; cursor: pointer; height: 28px !important; display: flex !important; align-items: center; }
-  .jump button:hover { background: rgba(0,0,0,0.06); }
 
-  @media (max-width: 480px){
-    body{ padding:8px 10px; }
+  .position {
+    font-family: 'DM Mono', monospace;
+    font-size: 26px;
+    letter-spacing: 0.08em;
+    color: var(--ink-dim);
+    min-width: 80px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .position b { color: #000000; font-size:30px; }
+
+  .jump {
+    display:flex;
+    flex-direction:row;
+    flex-wrap:nowrap;
+    align-items:center;
+    gap:10px;
+    font-family:'DM Mono', monospace;
+    font-size:22px;
+    color:var(--ink-dim);
+    flex-shrink:0;
+  }
+  .jump input {
+    width:90px;
+    height:56px;
+    background:#ffffff;
+    border:3px solid #000000;
+    color:#000000;
+    font-family:'DM Mono', monospace;
+    font-size:24px;
+    padding:4px 8px;
+    text-align:center;
+    border-radius:8px;
+  }
+  .jump button {
+    background:#000000;
+    border:3px solid #000000;
+    color:#ffffff;
+    font-family:'DM Sans', sans-serif;
+    font-weight:700;
+    font-size:16px;
+    padding:0 20px;
+    border-radius:8px;
+    cursor:pointer;
+    height:56px;
+    display:flex;
+    align-items:center;
+    transition:opacity 0.15s, transform 0.12s;
+  }
+  .jump button:hover { opacity:0.8; }
+  .jump button:active { transform:scale(0.94); }
+
+  .swipe-hint{
+    font-family:'DM Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.08em;
+    color:var(--ink-dim);
+    text-align:center;
+    margin-top:6px;
+    opacity:0.7;
+    display:none;
+  }
+
+  /* ---- RESPONSIVE: tablets ---- */
+  @media (max-width: 900px){
+    :root{
+      --detail-size: clamp(18px, 4.6vw, 34px);
+      --detail-label-size: clamp(13px, 2.6vw, 18px);
+    }
+    .num-cell .num{ font-size:clamp(54px, 16vh, 110px); }
+    table.ficha{ border-width:4px; }
+    table.ficha td{ border-width:4px; }
+  }
+
+  /* ---- RESPONSIVE: telemóvel ---- */
+  @media (max-width: 640px){
+    body{ padding:8px 8px; }
+    .stage{ max-height:99dvh; }
     .clock{ font-size:9px; }
     .clock .time{ font-size:11px; }
-    h1.directo{ font-size:clamp(20px, 6vw, 30px); }
-    .subline{ font-size:12px; letter-spacing:0.2em; }
+    h1.directo{ font-size:clamp(20px, 7vw, 30px); letter-spacing:0.1em; }
+    .subline{ font-size:11px; letter-spacing:0.16em; }
+
+    :root{
+      --detail-size: clamp(15px, 5vw, 24px);
+      --detail-label-size: clamp(11px, 3vw, 15px);
+    }
+
     table.ficha{ border-width:3px; }
     table.ficha td{ border-width:3px; }
-    .num-cell .num{ font-size:clamp(70px, 22vw, 110px); }
-    .name-cell{ padding:10px 10px; }
-    .name-cell .art-name{ font-size:clamp(22px, 6.5vw, 30px); }
-    .price-cell{ padding:8px 10px; }
-    .price-cell .row{ font-size:clamp(14px, 4vw, 17px); padding:3px 4px; }
-    .price-cell .row.total{ font-size:clamp(16px, 4.6vw, 20px); }
-    .details-cell{ padding:8px 10px; }
-    .details-grid{ flex-direction:column; gap:8px; }
-    .details-block + .details-block{ border-left:none; border-top:1px solid var(--card-ink); padding-left:0; padding-top:8px; }
-    .arrow-btn{ width:36px; height:36px; font-size:15px; }
-    .position{ font-size:11px; min-width:60px; }
-    .jump{ font-size:10px; }
+    .num-cell{ width:30%; padding:3px; }
+    .num-cell .num{ font-size:clamp(42px, 20vw, 80px); }
+    .name-cell{ padding:8px 8px; }
+    .price-cell{ padding:6px 8px; }
+    .price-cell .row{ font-size:clamp(13px, 4vw, 18px); padding:2px 3px; }
+    .price-cell .row.total{ font-size:clamp(14px, 4.4vw, 19px); }
+    .details-cell{ padding:6px 8px; }
+    .details-grid{ flex-direction:column; gap:6px; }
+    .details-block + .details-block{ border-left:none; border-top:1px solid var(--card-ink); padding-left:0; padding-top:6px; }
+
+    .controls{ gap:10px 12px; margin-top:10px; }
+    .nav{ gap:10px; }
+    .arrow-btn{ width:58px; height:58px; font-size:26px; border-radius:8px; }
+    .position{ font-size:16px; min-width:56px; }
+    .position b{ font-size:19px; }
+    .jump{ font-size:14px; gap:6px; }
+    .jump input{ width:66px; height:48px; font-size:18px; }
+    .jump button{ height:48px; font-size:14px; padding:0 14px; }
+
+    .swipe-hint{ display:block; }
+  }
+
+  @media (max-width: 360px){
+    .controls{ flex-direction:column; }
   }
 </style>
 </head>
@@ -317,7 +440,7 @@ bash
   </header>
 
   <main>
-    <div class="ficha-wrap">
+    <div class="ficha-wrap" id="fichaWrap">
       <table class="ficha">
         <tr>
           <td class="num-cell" rowspan="3"><span class="num" id="numOut">30</span></td>
@@ -351,6 +474,8 @@ bash
       </table>
     </div>
 
+    <div class="swipe-hint">← deslize para navegar →</div>
+
  <div class="controls">
     <div class="nav">
       <button class="arrow-btn" id="prevBtn" aria-label="Ficha anterior">←</button>
@@ -360,7 +485,7 @@ bash
 
     <div class="jump">
       <span>Ir ao nº</span>
-      <input type="number" id="jumpInput" min="30" max="101" value="30">
+      <input type="number" id="jumpInput" min="30" max="101" value="30" inputmode="numeric">
       <button id="jumpBtn">Ir</button>
     </div>
     </div>
@@ -494,6 +619,7 @@ bash
   const nextBtn = document.getElementById('nextBtn');
   const jumpInput = document.getElementById('jumpInput');
   const jumpBtn = document.getElementById('jumpBtn');
+  const fichaWrap = document.getElementById('fichaWrap');
 
   countOut.textContent = fichas.length;
 
@@ -564,6 +690,13 @@ bash
     }
   });
 
+  jumpInput.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter'){
+      e.preventDefault();
+      jumpBtn.click();
+    }
+  });
+
   [priceOut, commOut].forEach(el => {
     el.addEventListener('input', () => {
       const p = parseMoney(priceOut.textContent);
@@ -585,23 +718,59 @@ bash
     if(e.key === 'ArrowRight') goTo(idx + 1);
   });
 
+  // ---- Swipe tátil (esquerda/direita) para navegar entre fichas ----
   let touchStartX = 0;
   let touchStartY = 0;
-  const SWIPE_THRESHOLD = 40;
+  let touchActive = false;
+  const SWIPE_THRESHOLD = 45;
+  const SWIPE_MAX_OFFAXIS = 80;
 
+  function isEditableTarget(target){
+    return target === nameOut || target === priceOut || target === commOut ||
+           (target && target.closest && target.closest('[contenteditable="true"]'));
+  }
+
+  fichaWrap.addEventListener('touchstart', (e) => {
+    if(isEditableTarget(e.target)) { touchActive = false; return; }
+    touchActive = true;
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive:true });
+
+  fichaWrap.addEventListener('touchend', (e) => {
+    if(!touchActive) return;
+    touchActive = false;
+    const touchEndX = e.changedTouches[0].screenX;
+    const touchEndY = e.changedTouches[0].screenY;
+    const diffX = touchEndX - touchStartX;
+    const diffY = touchEndY - touchStartY;
+    if(Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(diffY) < SWIPE_MAX_OFFAXIS){
+      if(diffX < 0){
+        goTo(idx + 1); // deslizar para a esquerda → próxima ficha
+      } else {
+        goTo(idx - 1); // deslizar para a direita → ficha anterior
+      }
+    }
+  }, { passive:true });
+
+  // também permite deslizar em qualquer ponto do ecrã (fora de campos editáveis)
   document.addEventListener('touchstart', (e) => {
-    if(document.activeElement === nameOut || document.activeElement === priceOut || document.activeElement === commOut) return;
+    if(fichaWrap.contains(e.target)) return; // já tratado acima
+    if(isEditableTarget(e.target)) { touchActive = false; return; }
+    touchActive = true;
     touchStartX = e.changedTouches[0].screenX;
     touchStartY = e.changedTouches[0].screenY;
   }, { passive:true });
 
   document.addEventListener('touchend', (e) => {
-    if(document.activeElement === nameOut || document.activeElement === priceOut || document.activeElement === commOut) return;
+    if(fichaWrap.contains(e.target)) return; // já tratado acima
+    if(!touchActive) return;
+    touchActive = false;
     const touchEndX = e.changedTouches[0].screenX;
     const touchEndY = e.changedTouches[0].screenY;
     const diffX = touchEndX - touchStartX;
     const diffY = touchEndY - touchStartY;
-    if(Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > SWIPE_THRESHOLD){
+    if(Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(diffY) < SWIPE_MAX_OFFAXIS){
       if(diffX < 0){
         goTo(idx + 1);
       } else {
