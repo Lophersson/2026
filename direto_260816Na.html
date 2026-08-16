@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>CATÁLOGO - artigos 30-87</title>
+<link rel="preconnect" href="https://googleapis.com">
+<link href="https://googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --void:#ffffff;
+    --panel:#ffffff;
+    --gold:#000000;
+    --gold-dim:#333333;
+    --ink:#000000;
+    --ink-dim:#555555;
+    --red:#c62b32;
+    --line:#000000;
+    --card-bg:#ffffff;
+    --card-ink:#000000;
+    --detail-size: clamp(22px, 4.4vw, 50px);
+    --detail-label-size: clamp(16px, 3vw, 24px);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;height:100%;}
+  body{
+    background:#ffffff;
+    color:var(--ink);
+    font-family:'DM Sans', sans-serif;
+    height:100vh;
+    height:100dvh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:12px 12px;
+    overflow:hidden;
+  }
+  .stage{
+    width:100%;
+    max-width:99vw;
+    height:100%;
+    max-height:98vh;
+    max-height:98dvh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+  }
+  header{
+    width:100%;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    flex:0 0 auto;
+    margin-bottom:clamp(6px, 1.8vh, 16px);
+  }
+  .clock{
+    position:absolute;
+    top:0;
+    right:0;
+    text-align:right;
+    font-family:'DM Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.06em;
+    color:var(--ink-dim);
+    line-height:1.5;
+    text-transform:uppercase;
+  }
+  .clock .time{
+    color:var(--ink);
+    font-size:13px;
+    font-weight:700;
+  }
+  .title-row{
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .live-dot{
+    width:11px;
+    height:11px;
+    border-radius:50%;
+    background:var(--red);
+    box-shadow:0 0 10px 2px rgba(198,43,50,0.5);
+    animation:dotpulse 1.4s ease-in-out infinite;
+    flex-shrink:0;
+  }
+  @keyframes dotpulse{
+    0%,100%{opacity:1; transform:scale(1);}
+    50%{opacity:0.35; transform:scale(0.8);}
+  }
+  h1.directo{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:700;
+    font-size:clamp(26px, 4.6vh, 54px);
+    letter-spacing:0.14em;
+    margin:0;
+    color:var(--ink);
+    animation:blink 1.6s ease-in-out infinite;
+  }
+  @keyframes blink{
+    0%,45%,100%{opacity:1;}
+    50%,90%{opacity:0.22;}
+  }
+  .subline{
+    font-family:'DM Mono', monospace;
+    font-size:clamp(12px, 2.4vw, 20px);
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--ink-dim);
+    margin-top:2px;
+    text-align:center;
+  }
+  main{
+    width:100%;
+    flex:1 1 auto;
+    min-height:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    touch-action: pan-y;
+  }
+  .ficha-wrap{
+    width:100%;
+    max-width:none;
+    flex:1 1 auto;
+    min-height:0;
+    display:flex;
+    align-items:stretch;
+    user-select:none;
+  }
+  table.ficha{
+    width:100%;
+    border-collapse:collapse;
+    border:5px solid var(--line);
+    table-layout:fixed;
+    background:var(--card-bg);
+    color:var(--card-ink);
+  }
+  table.ficha td{
+    border:5px solid var(--line);
+    padding:0;
+  }
+  .num-cell{
+    width:28%;
+    text-align:center;
+    vertical-align:middle;
+    padding:5px;
+  }
+  .num-cell .num{
+    font-family:'DM Mono', monospace;
+    font-weight:700;
+    font-size:clamp(150px, 15vh, 370px);
+    line-height:1;
+    color: black;
+    letter-spacing:-0.02em;
+  }
+  .name-cell{
+    text-align:center;
+    vertical-align:middle;
+    padding:clamp(10px, 2vh, 22px) 30px;
+  }
+  .name-cell .art-name{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:700;
+    font-size:var(--detail-size);
+    line-height:1.1;
+    outline:none;
+    display:block;
+    color: black;
+    font-style:normal;
+  }
+  .price-cell{
+    text-align:center;
+    vertical-align:middle;
+    padding:clamp(8px, 1.6vh, 16px) 20px;
+    font-family:'DM Mono', monospace;
+  }
+  .price-cell .row{
+    display:flex;
+    justify-content:space-between;
+    font-size:clamp(18px, 3.2vw, 30px);
+    padding:clamp(2px, 0.6vh, 6px) 6px;
+    color:#000000;
+  }
+  .price-cell .row span:last-child{
+    outline:none;
+    min-width:70px;
+    text-align:right;
+  }
+  .price-cell .row.total{
+    margin-top:clamp(4px, 0.8vh, 8px);
+    padding-top:clamp(6px, 1vh, 10px);
+    border-top:2px solid var(--card-ink);
+    font-weight:700;
+    font-size:clamp(18px, 3.2vw, 30px);
+    color:var(--card-ink);
+  }
+  .details-cell{
+    padding:clamp(8px, 1.6vh, 16px) 20px;
+    font-family:'DM Mono', monospace;
+    vertical-align:middle;
+  }
+  .details-grid{
+    display:flex;
+    gap:18px;
+    align-items:stretch;
+  }
+  .details-block{
+    flex:1 1 0;
+    text-align:center;
+  }
+  .details-block + .details-block{
+    border-left:2px solid var(--card-ink);
+    padding-left:18px;
+  }
+  .details-label{
+    font-size:var(--detail-label-size);
+    letter-spacing:0.0em;
+    color:var(--ink-dim);
+    margin-bottom:4px;
+  }
+  .details-value{
+    font-size:var(--detail-size);
+    font-weight:700;
+    color:var(--card-ink);
+    line-height:1.1;
+  }
+  .sizes-list{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:6px 12px;
+    font-size:var(--detail-size);
+    color:black;
+    line-height:1.1;
+  }
+  .sizes-list .size-chip b{
+    color: red;
+  }
+  .sizes-list .size-chip b::after {
+  content: ";";
+}
+  .sizes-empty{
+    font-size:var(--detail-size);
+    color:var(--ink-dim);
+  }
+  .buyers-row{
+    margin-top:8px;
+    padding-top:8px;
+    border-top:1px dashed var(--card-ink);
+    text-align:center;
+  }
+  .buyers-row .details-label{margin-bottom:6px;}
+  .buyers-list{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:6px 10px;
+    font-size:calc(var(--detail-size) * 0.55);
+    color:#000;
+  }
+  .buyers-list .buyer-chip{
+    border:2px solid #000;
+    border-radius:20px;
+    padding:2px 10px;
+  }
+  .buyers-list .buyer-chip.erro{
+    text-decoration:line-through;
+    color:var(--ink-dim);
+    border-color:var(--red);
+  }
+  .erro-flag{
+    color:var(--red);
+    font-weight:700;
+  }
+  [contenteditable="true"]:focus{
+    background:rgba(0,0,0,0.06);
+  }
+  .controls{
+    display:flex;
+    flex-direction:row;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:center;
+    gap:14px 22px;
+    flex:0 0 auto;
+    margin-top:clamp(14px, 2vh, 40px);
+    width:100%;
+  }
+  .nav {
+    display:flex;
+    flex-direction:row;
+    flex-wrap:nowrap;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    flex:0 0 auto;
+    height:auto;
+  }
+  .arrow-btn {
+    width:70px;
+    height:70px;
+    flex-shrink:0;
+    border-radius:10px;
+    border:3px solid #000000;
+    background:transparent;
+    color:#000000;
+    font-size:32px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:background 0.18s, transform 0.12s;
+    touch-action:manipulation;
+  }
+  .arrow-btn:hover { background: rgba(0,0,0,0.08); }
+  .arrow-btn:active { transform: scale(0.92); background: rgba(0,0,0,0.12); }
+  .arrow-btn:disabled { opacity: 0.25; cursor: default; }
+  .arrow-btn:disabled:hover { background: transparent; }
+  .position {
+    font-family: 'DM Mono', monospace;
+    font-size: 26px;
+    letter-spacing: 0.08em;
+    color: var(--ink-dim);
+    min-width: 80px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .position b { color: #000000; font-size:30px; }
+  .jump {
+    display:flex;
+    flex-direction:row;
+    flex-wrap:nowrap;
+    align-items:center;
+    gap:10px;
+    font-family:'DM Mono', monospace;
+    font-size:22px;
+    color:var(--ink-dim);
+    flex-shrink:0;
+  }
+  .jump input {
+    width:90px;
+    height:56px;
+    background:#ffffff;
+    border:3px solid #000000;
+    color:#000000;
+    font-family:'DM Mono', monospace;
+    font-size:24px;
+    padding:4px 8px;
+    text-align:center;
+    border-radius:8px;
+  }
+  .jump button {
+    background:#000000;
+    border:3px solid #000000;
+    color:#ffffff;
+    font-family:'DM Sans', sans-serif;
+    font-weight:700;
+    font-size:16px;
+    padding:0 20px;
+    border-radius:8px;
+    cursor:pointer;
+    height:56px;
+    display:flex;
+    align-items:center;
+    transition:opacity 0.15s, transform 0.12s;
+  }
+  .jump button:hover { opacity:0.8; }
+  .jump button:active { transform:scale(0.94); }
+  .swipe-hint{
+    font-family:'DM Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.08em;
+    color:var(--ink-dim);
+    text-align:center;
+    margin-top:6px;
+    opacity:0.7;
+    display:none;
+  }
+  @media (max-width: 900px){
+    :root{
+      --detail-size: clamp(18px, 4.6vw, 34px);
+      --detail-label-size: clamp(13px, 2.6vw, 18px);
+    }
+    .num-cell .num{ font-size:clamp(54px, 16vh, 110px); }
+    table.ficha{ border-width:4px; }
+    table.ficha td{ border-width:4px; }
+  }
+  @media (max-width: 640px){
+    body{ padding:8px 8px; }
+    .stage{ max-height:99dvh; }
+    .clock{ font-size:9px; }
+    .clock .time{ font-size:11px; }
+    h1.directo{ font-size:clamp(20px, 7vw, 30px); letter-spacing:0.1em; }
+    .subline{ font-size:11px; letter-spacing:0.16em; }
+    :root{
+      --detail-size: clamp(15px, 5vw, 24px);
+      --detail-label-size: clamp(11px, 3vw, 15px);
+    }
+    table.ficha{ border-width:3px; }
+    table.ficha td{ border-width:3px; }
+    .num-cell{ width:30%; padding:3px; }
+    .num-cell .num{ font-size:clamp(42px, 20vw, 80px); }
+    .name-cell{ padding:8px 8px; }
+    .price-cell{ padding:6px 8px; }
+    .price-cell .row{ font-size:clamp(13px, 4vw, 18px); padding:2px 3px; }
+    .price-cell .row.total{ font-size:clamp(14px, 4.4vw, 19px); }
+    .details-cell{ padding:6px 8px; }
+    .details-grid{ flex-direction:column; gap:6px; }
+    .details-block + .details-block{ border-left:none; border-top:1px solid var(--card-ink); padding-left:0; padding-top:6px; }
+    .controls{ gap:10px 12px; margin-top:10px; }
+    .nav{ gap:10px; }
+    .arrow-btn{ width:58px; height:58px; font-size:26px; border-radius:8px; }
+    .position{ font-size:16px; min-width:56px; }
+    .position b{ font-size:19px; }
+    .jump{ font-size:14px; gap:6px; }
+    .jump input{ width:66px; height:48px; font-size:18px; }
+    .jump button{ height:48px; font-size:14px; padding:0 14px; }
+    .swipe-hint{ display:block; }
+    .buyers-list{ font-size:11px; }
+  }
+  @media (max-width: 360px){
+    .controls{ flex-direction:column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <header>
+    <div class="clock">
+      <div class="date" id="dateOut">—</div>
+      <div class="time" id="timeOut">—</div>
+    </div>
+    <div class="title-row">
+      <span class="live-dot"></span>
+      <h1 class="directo">CATÁLOGO</h1>
+    </div>
+    <div class="subline">Artigos 30 – 87</div>
+  </header>
+
+  <main>
+    <div class="ficha-wrap" id="fichaWrap">
+      <table class="ficha">
+        <tr>
+          <td class="num-cell" rowspan="3"><span class="num" id="numOut">30</span></td>
+          <td class="name-cell"><span class="art-name" contenteditable="true" id="nameOut">Nome do artigo</span></td>
+        </tr>
+        <tr>
+          <td class="price-cell">
+            <div class="row"><span>Preço</span><span contenteditable="true" id="priceOut">0,00 €</span></div>
+            <div class="row"><span>Comissão</span><span contenteditable="true" id="commOut">0,00 €</span></div>
+            <div class="row total"><span>Total a pagar</span><span id="totalOut">0,00 €</span></div>
+          </td>
+        </tr>
+        <tr>
+          <td class="details-cell">
+            <div class="details-grid">
+              <div class="details-block">
+                <div class="details-label">Cor</div>
+                <div class="details-value" id="colorOut">—</div>
+              </div>
+              <div class="details-block">
+                <div class="details-label">units</div>
+                <div class="details-value" id="unitsOut">1</div>
+              </div>
+              <div class="details-block" style="flex:2 1 0;">
+                <div class="details-label">Tallas</div>
+                <div class="sizes-list" id="sizesOut"></div>
+              </div>
+            </div>
+            <div class="buyers-row" id="buyersRow" style="display:none;">
+              <div class="details-label">Reservado</div>
+              <div class="buyers-list" id="buyersOut"></div>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="swipe-hint">← deslize para navegar →</div>
+
+ <div class="controls">
+    <div class="nav">
+      <button class="arrow-btn" id="prevBtn" aria-label="Ficha anterior">←</button>
+      <div class="position"><b id="posOut">1</b> / <span id="countOut">58</span></div>
+      <button class="arrow-btn" id="nextBtn" aria-label="Ficha seguinte">→</button>
+    </div>
+
+    <div class="jump">
+      <span>Ir ao nº</span>
+      <input type="number" id="jumpInput" min="30" max="87" value="30" inputmode="numeric">
+      <button id="jumpBtn">Ir</button>
+    </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  // ---- Relógio em direto ----
+  const dateOut = document.getElementById('dateOut');
+  const timeOut = document.getElementById('timeOut');
+  function tickClock(){
+    const now = new Date();
+    dateOut.textContent = now.toLocaleDateString('pt-PT', { day:'2-digit', month:'2-digit', year:'numeric' });
+    timeOut.textContent = now.toLocaleTimeString('pt-PT', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+  }
+  tickClock();
+  setInterval(tickClock, 1000);
+
+  // ---- Dados das fichas (30 → 87) — versão em português ----
+  // Preço e comissão não foram fornecidos na lista original — ficam a 0,00 €
+  // e podem ser editados diretamente na ficha (campos editáveis).
+  const datos = {
+
+    30:{ name:'Mala tiracolo prateada, pequena e retangular, alça comprida, acabamento brilhante', price:0, comm:0, color:'Prateado', sizes:[] },
+    31:{ name:'Saia de tule rosa-claro boneca Barbie, volumosa, várias camadas de tule', price:0, comm:0, color:'Rosa-claro', sizes:[] },
+    32:{ name:'Casaco/sweatshirt rosa-choque, com fecho e capuz', price:0, comm:0, color:'Rosa-choque', sizes:[] },
+    33:{ name:'Casaco/sweatshirt roxo, com fecho e capuz', price:0, comm:0, color:'Roxo', sizes:[] },
+    34:{ name:'Calções de ganga verde-caqui, desgastados, com rasgões e efeito desfiado', price:0, comm:0, color:'Verde-caqui', sizes:[] },
+    35:{ name:'Leggings azul-claro com pintas brancas e desenhos de Daisy em azul', price:0, comm:0, color:'Azul-claro', sizes:[] },
+    36:{ name:'Conjunto de tops desportivos (rosa, coral e lilás)', price:0, comm:0, color:'Rosa/Coral/Lilás', sizes:[] },
+    37:{ name:'Conjunto branco/creme com letras grandes em laranja/vermelho NICE', price:0, comm:0, color:'Branco/Creme', sizes:[] },
+    38:{ name:'Camisola rosa-claro de malha, com pequenos motivos/relevos decorativos', price:0, comm:0, color:'Rosa-claro', sizes:[] },
+    39:{ name:'Peça rosa com pintas multicolor (pretas, brancas e rosas) e faixa rosa mais intensa', price:0, comm:0, color:'Rosa', sizes:[] },
+    40:{ name:'T-shirt cinzenta da Mafalda, desenho grande a branco e preto, detalhes vermelhos', price:0, comm:0, color:'Cinzento', sizes:[] },
+    41:{ name:'T-shirt cinzento estampado, motivos florais, letras amarelas/rosas Kindness', price:0, comm:0, color:'Cinzento', sizes:[] },
+    42:{ name:'Braçadeiras criança azul, estampado com animais/desenhos brancos e azuis', price:0, comm:0, color:'Azul', sizes:[] },
+    43:{ name:'Toalha do Stitch, azul e branca às riscas, com Stitch e texto decorativo', price:0, comm:0, color:'Azul/Branco', sizes:[] },
+    44:{ name:'Estojo rosa aos quadrados brancos/lilases, ursos', price:0, comm:0, color:'Rosa', sizes:[] },
+    45:{ name:'Headband azul com imagem do Stitch', price:0, comm:0, color:'Azul', sizes:[] },
+    46:{ name:'Encaracolador/escova de pestanas do Stitch, em blíster rosa', price:0, comm:0, color:'Rosa', sizes:[] },
+    47:{ name:'Frasco de gel de sabão em forma de boneco de gengibre, transparente/bege, detalhes vermelho, verde e preto', price:0, comm:0, color:'Bege', sizes:[] },
+    48:{ name:'Espelho pequeno em caixinha redonda rosa, com coração decorativo', price:0, comm:0, color:'Rosa', sizes:[], qty:2 },
+    49:{ name:'Pack de canetas Mickey, várias cores, cabeças/personagens do Mickey', price:0, comm:0, color:'Multicolor', sizes:[] },
+    50:{ name:'Lip liner castanho', price:0, comm:0, color:'Multicolor', sizes:[] },
+    51:{ name:'Lancheira Batman', price:0, comm:0, color:'Vermelho', sizes:[] },
+    52:{ name:'Boneca de cabelo ruivo, camisola amarela, calções azuis e ténis', price:0, comm:0, color:'—', sizes:[] },
+    53:{ name:'Boneca de vestido turquesa, cabelo ruivo, vestido comprido azul/turquesa com estampados roxos', price:0, comm:0, color:'Turquesa', sizes:[] },
+    54:{ name:'Boneca de vestido lilás, cabelo loiro, vestido comprido roxo com estampado floral', price:0, comm:0, color:'Lilás', sizes:[] },
+    55:{ name:'Boneca de vestido multicolor, cabelo roxo, vestido verde, rosa e amarelo', price:0, comm:0, color:'Multicolor', sizes:[] },
+    56:{ name:'Boneca de vestido rosa e branco, cabelo castanho, vestido rosa e casaco branco de pelo', price:0, comm:0, color:'Rosa/Branco', sizes:[] },
+    57:{ name:'Boneca de vestido branco, cabelo preto comprido, vestido branco e meias/calças cinzentas', price:0, comm:0, color:'Branco', sizes:[] },
+    58:{ name:'Boneca de pele escura com conjunto estampado, camisola multicolor e saia rosa estampada', price:0, comm:0, color:'Multicolor', sizes:[] },
+    59:{ name:'Boneca de vestido rosa com pintas estampa de melancia, cabelo loiro, vestido rosa com pintas pretas', price:0, comm:0, color:'Rosa', sizes:[] },
+    60:{ name:'Boneca sereia, cabelo branco, top turquesa e cauda com estampado rosado/lilás', price:0, comm:0, color:'Turquesa', sizes:[] },
+    61:{ name:'Boneca de vestido roxo, vestido comprido violeta e cabelo loiro', price:0, comm:0, color:'Roxo', sizes:[] },
+    62:{ name:'Boneca de vestido branco, vestido comprido branco com detalhes delicados e cabelo loiro', price:0, comm:0, color:'Branco', sizes:[] },
+    63:{ name:'Boneca de vestido azul-claro, vestido comprido com estampado de pequenas flores', price:0, comm:0, color:'Azul-claro', sizes:[] },
+    64:{ name:'Boneca pequena de cabelo preto, vestida de azul, rosa e branco, sobre base transparente', price:0, comm:0, color:'Multicolor', sizes:[] },
+    65:{ name:'Boneca pequena de cabelo roxo, roupa colorida, sobre base transparente', price:0, comm:0, color:'Multicolor', sizes:[] },
+    66:{ name:'Boneca pequena de cabelo castanho, vestido multicolor, sobre base transparente', price:0, comm:0, color:'Multicolor', sizes:[] },
+    67:{ name:'Boneco pequeno de cabelo ruivo, camisa aos quadrados e calças de ganga', price:0, comm:0, color:'—', sizes:[] },
+    68:{ name:'Boneca de pele verde, cabelo roxo e turquesa, vestido preto/roxo com estampado', price:0, comm:0, color:'Preto/Roxo', sizes:[] },
+    69:{ name:'Boneca de cabelo azul/turquesa, conjunto preto e verde com leggings estampadas', price:0, comm:0, color:'Preto/Verde', sizes:[] },
+    70:{ name:'Boneca de vestido turquesa, vestido comprido azul/turquesa e cabelo loiro', price:0, comm:0, color:'Turquesa', sizes:[] },
+    71:{ name:'Boneca com gorro rosa, camisola preta com desenho verde, calças/saia azul e capa rosa', price:0, comm:0, color:'Rosa', sizes:[] },
+    72:{ name:'Boneca de pele escura, camisola turquesa e saia branca com estampado floral multicolor', price:0, comm:0, color:'Turquesa', sizes:[] },
+    73:{ name:'Boneca de vestido rosa, vestido comprido rosa com detalhes brilhantes', price:0, comm:0, color:'Rosa', sizes:[] },
+    74:{ name:'Boneca sereia de cauda amarela, com detalhes rosas e turquesas', price:0, comm:0, color:'Amarelo', sizes:[] },
+    75:{ name:'Boneca sereia de cauda multicolor, azul, rosa, laranja e amarela', price:0, comm:0, color:'Multicolor', sizes:[] },
+    76:{ name:'Boneca sereia de cauda rosa/roxa, brilhante em tons de rosa e lilás', price:0, comm:0, color:'Rosa/Roxo', sizes:[] },
+    77:{ name:'Boneca de cabelo multicolor (lilás, rosa e azul), camisola estampada e calções', price:0, comm:0, color:'Multicolor', sizes:[] },
+    78:{ name:'Boneca — cabelo comprido castanho, camisola preta com o número 3, saia/calções cor de laranja, meias brancas e sapatos cor-de-rosa', price:0, comm:0, color:'Cinzento/Laraja/Rosa', sizes:[] },
+    79:{ name:'Pack de roupa interior masculina – 6 cuecas, branco, azul e cinzento, com letras e padrões desportivos', price:0, comm:0, color:'Branco/Azul/Cinzento', sizes:[] },
+    80:{ name:'Pack de cuecas Frozen – 6 unidades, tons de azul, lilás e roxo, com personagens e flocos de neve de Frozen', price:0, comm:0, color:'Azul/Lilás/Roxo', sizes:[] },
+    81:{ name:'Pack de roupa interior masculina – 10 cuecas, verde-camuflado, laranja, cinzento e preto, com caveiras e desenhos urbanos', price:0, comm:0, color:'Verde-camuflado/Laranja/Preto', sizes:[] },
+    82:{ name:'Pack de 4 camisolas interiores, azul, branco, coral e cinzento, com diferentes desenhos e padrões coloridos', price:0, comm:0, color:'Azul/Branco/Coral/Cinzento', sizes:[] },
+    83:{ name:'Caneta/porta-canetas do Stitch, azul-claro e cinzento, com três canetas coloridas (azul, laranja e verde) e desenhos do Stitch', price:0, comm:0, color:'Azul-claro/Cinzento', sizes:[] },
+    84:{ name:'Porta-chaves, argola metálica prateada com fita vermelha com a inscrição "Good Luck", coração rosa e pequeno balde de pipocas vermelho e branco', price:0, comm:0, color:'Prateado/Vermelho', sizes:[] },
+    85:{ name:'Perfume Fleur Blanche, frasco pequeno de 10 ml, branco e dourado, embalagem branca com detalhes dourados', price:0, comm:0, color:'Branco/Dourado', sizes:[] }
+
+  };
+
+  // ---- Normaliza cada entrada de "sizes" para o formato {s, q} ----
+  function normalizeSizes(sizes){
+    return (sizes || []).map(sz => {
+      if (sz !== null && typeof sz === 'object' && 's' in sz) {
+        return { s: sz.s, q: (typeof sz.q === 'number') ? sz.q : 1 };
+      }
+      return { s: String(sz), q: 1 };
+    });
+  }
+
+  // ---- Constrói a lista de fichas a partir de "datos" ----
+  const fichas = Object.keys(datos)
+    .sort((a, b) => parseInt(a, 10) - parseInt(b, 10))
+    .map(num => {
+      const d = datos[num];
+      const sizes = normalizeSizes(d.sizes);
+      const units = (typeof d.units === 'number')
+        ? d.units
+        : (typeof d.qty === 'number')
+          ? d.qty
+          : (sizes.length ? sizes.reduce((sum, sz) => sum + sz.q, 0) : 1);
+      return {
+        num,
+        name: d.name,
+        price: d.price,
+        comm: d.comm,
+        color: d.color || '—',
+        sizes,
+        units,
+        buyers: d.buyers || [],
+        erro: !!d.erro
+      };
+    });
+
+  let idx = 0;
+
+  const numOut = document.getElementById('numOut');
+  const nameOut = document.getElementById('nameOut');
+  const priceOut = document.getElementById('priceOut');
+  const commOut = document.getElementById('commOut');
+  const totalOut = document.getElementById('totalOut');
+  const colorOut = document.getElementById('colorOut');
+  const unitsOut = document.getElementById('unitsOut');
+  const sizesOut = document.getElementById('sizesOut');
+  const buyersRow = document.getElementById('buyersRow');
+  const buyersOut = document.getElementById('buyersOut');
+  const posOut = document.getElementById('posOut');
+  const countOut = document.getElementById('countOut');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const jumpInput = document.getElementById('jumpInput');
+  const jumpBtn = document.getElementById('jumpBtn');
+  const fichaWrap = document.getElementById('fichaWrap');
+
+  countOut.textContent = fichas.length;
+
+  function parseMoney(str){
+    const clean = str.replace(/[^\d,.-]/g,'').replace(',', '.');
+    const val = parseFloat(clean);
+    return isNaN(val) ? 0 : val;
+  }
+  function fmtMoney(val){
+    return val.toLocaleString('pt-PT', { minimumFractionDigits:2, maximumFractionDigits:2 }) + ' €';
+  }
+
+  function saveCurrentEdits(){
+    const f = fichas[idx];
+    const html = nameOut.innerHTML.trim();
+    f.name = html || 'Nome do artigo';
+    f.price = parseMoney(priceOut.textContent);
+    f.comm = parseMoney(commOut.textContent);
+  }
+
+  function renderSizes(sizes){
+    sizesOut.innerHTML = '';
+    if(!sizes || sizes.length === 0){
+      const span = document.createElement('span');
+      span.className = 'sizes-empty';
+      span.textContent = 'Sem tallas (talla única)';
+      sizesOut.appendChild(span);
+      return;
+    }
+    sizes.forEach(sz => {
+      const chip = document.createElement('span');
+      chip.className = 'size-chip';
+      chip.innerHTML = sz.s + '<b>x' + sz.q + '</b>';
+      sizesOut.appendChild(chip);
+    });
+  }
+
+  function renderBuyers(buyers){
+    buyersOut.innerHTML = '';
+    if(!buyers || buyers.length === 0){
+      buyersRow.style.display = 'none';
+      return;
+    }
+    buyersRow.style.display = 'block';
+    buyers.forEach(b => {
+      const chip = document.createElement('span');
+      const isErro = /erro/i.test(b);
+      chip.className = 'buyer-chip' + (isErro ? ' erro' : '');
+      chip.textContent = b.replace(/\s*—\s*ERRO/i, '');
+      buyersOut.appendChild(chip);
+    });
+  }
+
+  function render(){
+    const f = fichas[idx];
+    numOut.textContent = f.num;
+    nameOut.innerHTML = f.erro ? (f.name + ' <span class="erro-flag">(ERRO)</span>') : f.name;
+    priceOut.textContent = fmtMoney(f.price);
+    commOut.textContent = fmtMoney(f.comm);
+    totalOut.textContent = fmtMoney(f.price + f.comm);
+    colorOut.textContent = f.color;
+    unitsOut.textContent = f.units;
+    renderSizes(f.sizes);
+    renderBuyers(f.buyers);
+    posOut.textContent = idx + 1;
+    jumpInput.value = f.num;
+    prevBtn.disabled = idx === 0;
+    nextBtn.disabled = idx === fichas.length - 1;
+  }
+
+  function goTo(newIdx){
+    saveCurrentEdits();
+    idx = Math.max(0, Math.min(fichas.length - 1, newIdx));
+    render();
+  }
+
+  prevBtn.addEventListener('click', () => goTo(idx - 1));
+  nextBtn.addEventListener('click', () => goTo(idx + 1));
+
+  jumpBtn.addEventListener('click', () => {
+    const target = jumpInput.value.trim();
+    if(target !== ''){
+      const found = fichas.findIndex(f => String(f.num) === target);
+      if(found !== -1) goTo(found);
+    }
+  });
+
+  jumpInput.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter'){
+      e.preventDefault();
+      jumpBtn.click();
+    }
+  });
+
+  [priceOut, commOut].forEach(el => {
+    el.addEventListener('input', () => {
+      const p = parseMoney(priceOut.textContent);
+      const c = parseMoney(commOut.textContent);
+      totalOut.textContent = fmtMoney(p + c);
+    });
+  });
+
+  nameOut.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter'){
+      e.preventDefault();
+      document.execCommand('insertLineBreak');
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if(document.activeElement === nameOut || document.activeElement === priceOut || document.activeElement === commOut) return;
+    if(e.key === 'ArrowLeft') goTo(idx - 1);
+    if(e.key === 'ArrowRight') goTo(idx + 1);
+  });
+
+  // ---- Swipe tátil ----
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let touchActive = false;
+  const SWIPE_THRESHOLD = 45;
+  const SWIPE_MAX_OFFAXIS = 80;
+
+  function isEditableTarget(target){
+    return target === nameOut || target === priceOut || target === commOut ||
+           (target && target.closest && target.closest('[contenteditable="true"]'));
+  }
+
+  fichaWrap.addEventListener('touchstart', (e) => {
+    if(isEditableTarget(e.target)) { touchActive = false; return; }
+    touchActive = true;
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive:true });
+
+  fichaWrap.addEventListener('touchend', (e) => {
+    if(!touchActive) return;
+    touchActive = false;
+    const touchEndX = e.changedTouches[0].screenX;
+    const touchEndY = e.changedTouches[0].screenY;
+    const diffX = touchEndX - touchStartX;
+    const diffY = touchEndY - touchStartY;
+    if(Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(diffY) < SWIPE_MAX_OFFAXIS){
+      if(diffX < 0){
+        goTo(idx + 1);
+      } else {
+        goTo(idx - 1);
+      }
+    }
+  }, { passive:true });
+
+  document.addEventListener('touchstart', (e) => {
+    if(fichaWrap.contains(e.target)) return;
+    if(isEditableTarget(e.target)) { touchActive = false; return; }
+    touchActive = true;
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive:true });
+
+  document.addEventListener('touchend', (e) => {
+    if(fichaWrap.contains(e.target)) return;
+    if(!touchActive) return;
+    touchActive = false;
+    const touchEndX = e.changedTouches[0].screenX;
+    const touchEndY = e.changedTouches[0].screenY;
+    const diffX = touchEndX - touchStartX;
+    const diffY = touchEndY - touchStartY;
+    if(Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(diffY) < SWIPE_MAX_OFFAXIS){
+      if(diffX < 0){
+        goTo(idx + 1);
+      } else {
+        goTo(idx - 1);
+      }
+    }
+  }, { passive:true });
+
+  render();
+</script>
+</body>
+</html>
