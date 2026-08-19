@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>DIRETO - 16 Agosto 2026</title>
+<link rel="preconnect" href="https://googleapis.com">
+<link href="https://googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --void:#ffffff;
+    --panel:#ffffff;
+    --gold:#000000;
+    --gold-dim:#333333;
+    --ink:#000000;
+    --ink-dim:#555555;
+    --red:#c62b32;
+    --line:#000000;
+    --card-bg:#ffffff;
+    --card-ink:#000000;
+    --detail-size: clamp(22px, 4.4vw, 50px);
+    --detail-label-size: clamp(16px, 3vw, 24px);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;height:100%;}
+  body{
+    background:#ffffff;
+    color:var(--ink);
+    font-family:'DM Sans', sans-serif;
+    height:100vh;
+    height:100dvh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:12px 12px;
+    overflow:hidden;
+  }
+  .stage{
+    width:100%;
+    max-width:99vw;
+    height:100%;
+    max-height:98vh;
+    max-height:98dvh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+  }
+  header{
+    width:100%;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    flex:0 0 auto;
+    margin-bottom:clamp(6px, 1.8vh, 16px);
+  }
+  .clock{
+    position:absolute;
+    top:0;
+    right:0;
+    text-align:right;
+    font-family:'DM Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.06em;
+    color:var(--ink-dim);
+    line-height:1.5;
+    text-transform:uppercase;
+  }
+  .clock .time{
+    color:var(--ink);
+    font-size:13px;
+    font-weight:700;
+  }
+  .title-row{
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .live-dot{
+    width:11px;
+    height:11px;
+    border-radius:50%;
+    background:var(--red);
+    box-shadow:0 0 10px 2px rgba(198,43,50,0.5);
+    animation:dotpulse 1.4s ease-in-out infinite;
+    flex-shrink:0;
+  }
+  @keyframes dotpulse{
+    0%,100%{opacity:1; transform:scale(1);}
+    50%{opacity:0.35; transform:scale(0.8);}
+  }
+  h1.directo{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:700;
+    font-size:clamp(26px, 4.6vh, 54px);
+    letter-spacing:0.14em;
+    margin:0;
+    color:var(--ink);
+    animation:blink 1.6s ease-in-out infinite;
+  }
+  @keyframes blink{
+    0%,45%,100%{opacity:1;}
+    50%,90%{opacity:0.22;}
+  }
+  .subline{
+    font-family:'DM Mono', monospace;
+    font-size:clamp(12px, 2.4vw, 20px);
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--ink-dim);
+    margin-top:2px;
+    text-align:center;
+  }
+  main{
+    width:100%;
+    flex:1 1 auto;
+    min-height:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    touch-action: pan-y;
+  }
+  .ficha-wrap{
+    width:100%;
+    max-width:none;
+    flex:1 1 auto;
+    min-height:0;
+    display:flex;
+    align-items:stretch;
+    user-select:none;
+  }
+  table.ficha{
+    width:100%;
+    border-collapse:collapse;
+    border:5px solid var(--line);
+    table-layout:fixed;
+    background:var(--card-bg);
+    color:var(--card-ink);
+  }
+  table.ficha td{
+    border:5px solid var(--line);
+    padding:0;
+  }
+  .num-cell{
+    width:28%;
+    text-align:center;
+    vertical-align:middle;
+    padding:5px;
+  }
+  .num-cell .num{
+    font-family:'DM Mono', monospace;
+    font-weight:700;
+    font-size:clamp(330px, 15vh, 370px);
+    line-height:1;
+    color: black;
+    letter-spacing:-0.02em;
+  }
+  .name-cell{
+    text-align:center;
+    vertical-align:middle;
+    padding:clamp(10px, 2vh, 22px) 30px;
+  }
+  .name-cell .art-name{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:700;
+    font-size:var(--detail-size);
+    line-height:1.1;
+    outline:none;
+    display:block;
+    color: black;
+    font-style:normal;
+  }
+  .price-cell{
+    text-align:center;
+    vertical-align:middle;
+    padding:clamp(8px, 1.6vh, 16px) 20px;
+    font-family:'DM Mono', monospace;
+  }
+  .price-cell .row{
+    display:flex;
+    justify-content:space-between;
+    font-size:clamp(18px, 3.2vw, 30px);
+    padding:clamp(2px, 0.6vh, 6px) 6px;
+    color:#000000;
+  }
+  .price-cell .row span:last-child{
+    outline:none;
+    min-width:70px;
+    text-align:right;
+  }
+  .price-cell .row.total{
+    margin-top:clamp(4px, 0.8vh, 8px);
+    padding-top:clamp(6px, 1vh, 10px);
+    border-top:2px solid var(--card-ink);
+    font-weight:700;
+    font-size:clamp(18px, 3.2vw, 30px);
+    color:var(--card-ink);
+  }
+  .details-cell{
+    padding:clamp(8px, 1.6vh, 16px) 20px;
+    font-family:'DM Mono', monospace;
+    vertical-align:middle;
+  }
+  .details-grid{
+    display:flex;
+    gap:18px;
+    align-items:stretch;
+  }
+  .details-block{
+    flex:1 1 0;
+    text-align:center;
+  }
+  .details-block + .details-block{
+    border-left:2px solid var(--card-ink);
+    padding-left:18px;
+  }
+  .details-label{
+    font-size:var(--detail-label-size);
+    letter-spacing:0.0em;
+    color:var(--ink-dim);
+    margin-bottom:4px;
+  }
+  .details-value{
+    font-size:var(--detail-size);
+    font-weight:700;
+    color:var(--card-ink);
+    line-height:1.1;
+  }
+  .sizes-list{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:6px 12px;
+    font-size:var(--detail-size);
+    color:black;
+    line-height:1.1;
+  }
+  .sizes-list .size-chip b{
+    color: red;
+  }
+  .sizes-list .size-chip b::after {
+  content: ";";
+}
+  .sizes-empty{
+    font-size:var(--detail-size);
+    color:var(--ink-dim);
+  }
+  .buyers-row{
+    margin-top:8px;
+    padding-top:8px;
+    border-top:1px dashed var(--card-ink);
+    text-align:center;
+  }
+  .buyers-row .details-label{margin-bottom:6px;}
+  .buyers-list{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:6px 10px;
+    font-size:calc(var(--detail-size) * 0.55);
+    color:#000;
+  }
+  .buyers-list .buyer-chip{
+    border:2px solid #000;
+    border-radius:20px;
+    padding:2px 10px;
+  }
+  .buyers-list .buyer-chip.erro{
+    text-decoration:line-through;
+    color:var(--ink-dim);
+    border-color:var(--red);
+  }
+  .erro-flag{
+    color:var(--red);
+    font-weight:700;
+  }
+  [contenteditable="true"]:focus{
+    background:rgba(0,0,0,0.06);
+  }
+  .controls{
+    display:flex;
+    flex-direction:row;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:center;
+    gap:14px 22px;
+    flex:0 0 auto;
+    margin-top:clamp(14px, 2vh, 40px);
+    width:100%;
+  }
+  .nav {
+    display:flex;
+    flex-direction:row;
+    flex-wrap:nowrap;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    flex:0 0 auto;
+    height:auto;
+  }
+  .arrow-btn {
+    width:70px;
+    height:70px;
+    flex-shrink:0;
+    border-radius:10px;
+    border:3px solid #000000;
+    background:transparent;
+    color:#000000;
+    font-size:32px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:background 0.18s, transform 0.12s;
+    touch-action:manipulation;
+  }
+  .arrow-btn:hover { background: rgba(0,0,0,0.08); }
+  .arrow-btn:active { transform: scale(0.92); background: rgba(0,0,0,0.12); }
+  .arrow-btn:disabled { opacity: 0.25; cursor: default; }
+  .arrow-btn:disabled:hover { background: transparent; }
+  .position {
+    font-family: 'DM Mono', monospace;
+    font-size: 26px;
+    letter-spacing: 0.08em;
+    color: var(--ink-dim);
+    min-width: 80px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .position b { color: #000000; font-size:30px; }
+  .jump {
+    display:flex;
+    flex-direction:row;
+    flex-wrap:nowrap;
+    align-items:center;
+    gap:10px;
+    font-family:'DM Mono', monospace;
+    font-size:22px;
+    color:var(--ink-dim);
+    flex-shrink:0;
+  }
+  .jump input {
+    width:90px;
+    height:56px;
+    background:#ffffff;
+    border:3px solid #000000;
+    color:#000000;
+    font-family:'DM Mono', monospace;
+    font-size:24px;
+    padding:4px 8px;
+    text-align:center;
+    border-radius:8px;
+  }
+  .jump button {
+    background:#000000;
+    border:3px solid #000000;
+    color:#ffffff;
+    font-family:'DM Sans', sans-serif;
+    font-weight:700;
+    font-size:16px;
+    padding:0 20px;
+    border-radius:8px;
+    cursor:pointer;
+    height:56px;
+    display:flex;
+    align-items:center;
+    transition:opacity 0.15s, transform 0.12s;
+  }
+  .jump button:hover { opacity:0.8; }
+  .jump button:active { transform:scale(0.94); }
+  .swipe-hint{
+    font-family:'DM Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.08em;
+    color:var(--ink-dim);
+    text-align:center;
+    margin-top:6px;
+    opacity:0.7;
+    display:none;
+  }
+  @media (max-width: 900px){
+    :root{
+      --detail-size: clamp(18px, 4.6vw, 34px);
+      --detail-label-size: clamp(13px, 2.6vw, 18px);
+    }
+    .num-cell .num{ font-size:clamp(54px, 16vh, 110px); }
+    table.ficha{ border-width:4px; }
+    table.ficha td{ border-width:4px; }
+  }
+  @media (max-width: 640px){
+    body{ padding:8px 8px; }
+    .stage{ max-height:99dvh; }
+    .clock{ font-size:9px; }
+    .clock .time{ font-size:11px; }
+    h1.directo{ font-size:clamp(20px, 7vw, 30px); letter-spacing:0.1em; }
+    .subline{ font-size:11px; letter-spacing:0.16em; }
+    :root{
+      --detail-size: clamp(15px, 5vw, 24px);
+      --detail-label-size: clamp(11px, 3vw, 15px);
+    }
+    table.ficha{ border-width:3px; }
+    table.ficha td{ border-width:3px; }
+    .num-cell{ width:30%; padding:3px; }
+    .num-cell .num{ font-size:clamp(42px, 20vw, 80px); }
+    .name-cell{ padding:8px 8px; }
+    .price-cell{ padding:6px 8px; }
+    .price-cell .row{ font-size:clamp(13px, 4vw, 18px); padding:2px 3px; }
+    .price-cell .row.total{ font-size:clamp(14px, 4.4vw, 19px); }
+    .details-cell{ padding:6px 8px; }
+    .details-grid{ flex-direction:column; gap:6px; }
+    .details-block + .details-block{ border-left:none; border-top:1px solid var(--card-ink); padding-left:0; padding-top:6px; }
+    .controls{ gap:10px 12px; margin-top:10px; }
+    .nav{ gap:10px; }
+    .arrow-btn{ width:58px; height:58px; font-size:26px; border-radius:8px; }
+    .position{ font-size:16px; min-width:56px; }
+    .position b{ font-size:19px; }
+    .jump{ font-size:14px; gap:6px; }
+    .jump input{ width:66px; height:48px; font-size:18px; }
+    .jump button{ height:48px; font-size:14px; padding:0 14px; }
+    .swipe-hint{ display:block; }
+    .buyers-list{ font-size:11px; }
+  }
+  @media (max-width: 360px){
+    .controls{ flex-direction:column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <header>
+    <div class="clock">
+      <div class="date" id="dateOut">—</div>
+      <div class="time" id="timeOut">—</div>
+    </div>
+    <div class="title-row">
+      <span class="live-dot"></span>
+      <h1 class="directo">DIRETO</h1>
+    </div>
+    <div class="subline">16 Agosto 2026</div>
+  </header>
+
+  <main>
+    <div class="ficha-wrap" id="fichaWrap">
+      <table class="ficha">
+        <tr>
+          <td class="num-cell" rowspan="3"><span class="num" id="numOut">30</span></td>
+          <td class="name-cell"><span class="art-name" contenteditable="true" id="nameOut">Nome do artigo</span></td>
+        </tr>
+        <tr>
+          <td class="price-cell">
+            <div class="row"><span>Preço</span><span contenteditable="true" id="priceOut">0,00 €</span></div>
+            <div class="row"><span>Comissão</span><span contenteditable="true" id="commOut">0,00 €</span></div>
+            <div class="row total"><span>Total a pagar</span><span id="totalOut">0,00 €</span></div>
+          </td>
+        </tr>
+        <tr>
+          <td class="details-cell">
+            <div class="details-grid">
+              <div class="details-block">
+                <div class="details-label">Cor</div>
+                <div class="details-value" id="colorOut">—</div>
+              </div>
+              <div class="details-block">
+                <div class="details-label">units</div>
+                <div class="details-value" id="unitsOut">1</div>
+              </div>
+              <div class="details-block" style="flex:2 1 0;">
+                <div class="details-label">Tallas</div>
+                <div class="sizes-list" id="sizesOut"></div>
+              </div>
+            </div>
+            <div class="buyers-row" id="buyersRow" style="display:none;">
+              <div class="details-label">Reservado</div>
+              <div class="buyers-list" id="buyersOut"></div>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="swipe-hint">← deslize para navegar →</div>
+
+ <div class="controls">
+    <div class="nav">
+      <button class="arrow-btn" id="prevBtn" aria-label="Ficha anterior">←</button>
+      <div class="position"><b id="posOut">1</b> / <span id="countOut">52</span></div>
+      <button class="arrow-btn" id="nextBtn" aria-label="Ficha seguinte">→</button>
+    </div>
+
+    <div class="jump">
+      <span>Ir ao nº</span>
+      <input type="number" id="jumpInput" min="30" max="81" value="30" inputmode="numeric">
+      <button id="jumpBtn">Ir</button>
+    </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  // ---- Relógio em direto ----
+  const dateOut = document.getElementById('dateOut');
+  const timeOut = document.getElementById('timeOut');
+  function tickClock(){
+    const now = new Date();
+    dateOut.textContent = now.toLocaleDateString('pt-PT', { day:'2-digit', month:'2-digit', year:'numeric' });
+    timeOut.textContent = now.toLocaleTimeString('pt-PT', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+  }
+  tickClock();
+  setInterval(tickClock, 1000);
+
+  // ---- Dados das fichas (30 → 81) — versão em português ----
+  // Preço e comissão não foram fornecidos na lista original — ficam a 0,00 €
+  // e podem ser editados diretamente na ficha (campos editáveis).
+  const datos = {
+
+    30:{ name:'Borracha elétrica – rosa, verde-menta ou preto (embalagem "Electric Eraser" rosa, verde ou preta)', price:0, comm:0, color:'Rosa/Verde-menta/Preto', sizes:[] },
+    31:{ name:'Conjunto de canetas "Pens 3x" – lilás/roxo (com bonecos tipo ursinho/morango), verde-menta (mesmo desenho noutra cor)', price:0, comm:0, color:'Lilás/Verde-menta', sizes:[] },
+    32:{ name:'Conjunto de canetas de gel perfumadas "Kawaii Cuties Scented Gel Pens 16x" – multicor (caixa rosa às riscas)', price:0, comm:0, color:'Multicolor', sizes:[] },
+    33:{ name:'Estojo escolar da Frozen "Keep Calm & Let It Go" – azul/rosa (Elsa e Anna estampadas)', price:0, comm:0, color:'Azul/Rosa', sizes:[] },
+    34:{ name:'Estojo tipo pop-it – multicor em degradê (rosa, roxo, azul, amarelo)', price:0, comm:0, color:'Multicolor', sizes:[] },
+    35:{ name:'Estojo Minecraft "TNT" – preto (com estampado verde/vermelho tipo explosão)', price:0, comm:0, color:'Preto', sizes:[] },
+    36:{ name:'Chinelos Disney Stitch – branco com faixa rosa estampada', price:0, comm:0, color:'Branco/Rosa', sizes:[] },
+    37:{ name:'Ténis Primark (tamanho 24) – cinzento com detalhes amarelo/verde néon', price:0, comm:0, color:'Cinzento', sizes:[] },
+    38:{ name:'Botas de atacadores Mickey Mouse – preto com interior/atacadores vermelhos', price:0, comm:0, color:'Preto/Vermelho', sizes:[] },
+    39:{ name:'Ténis de velcro "High" – branco com interior laranja/coral', price:0, comm:0, color:'Branco', sizes:[] },
+    40:{ name:'Ténis Stitch – branco com atacadores e detalhes rosas', price:0, comm:0, color:'Branco/Rosa', sizes:[] },
+    41:{ name:'Ténis desportivos com olhinhos na traseira tipo crocodilo – azul-marinho com verde-lima', price:0, comm:0, color:'Azul-marinho', sizes:[] },
+    42:{ name:'Ténis com dois pompons de pelo – branco', price:0, comm:0, color:'Branco', sizes:[] },
+    43:{ name:'Botins de três velcros – castanho/camel (forro de borrego)', price:0, comm:0, color:'Castanho', sizes:[] },
+    44:{ name:'Ténis lisos – branco', price:0, comm:0, color:'Branco', sizes:[] },
+    45:{ name:'Mocassins com fivela dourada (Primark tamanho 40) – bege/taupe', price:0, comm:0, color:'Bege', sizes:[] },
+    46:{ name:'Pantufas de peluche Coala – cinzento', price:0, comm:0, color:'Cinzento', sizes:[] },
+    47:{ name:'Pijama estampado "Meow Meow" – cinzento com letras laranjas', price:0, comm:0, color:'Cinzento', sizes:[] },
+    48:{ name:'Vestido Desigual "La Chula Barcelona Niña y León" – azul-marinho', price:0, comm:0, color:'Azul-marinho', sizes:[] },
+    49:{ name:'Vestido com folho e lantejoulas de gato – preto com detalhe branco/rosa', price:0, comm:0, color:'Preto', sizes:[] },
+    50:{ name:'Saia da Minnie em tule com bolinhas douradas – vermelho', price:0, comm:0, color:'Vermelho', sizes:[] },
+    51:{ name:'Pijama com bengalas de caramelo (Primark, tamanho XS) – rosa', price:0, comm:0, color:'Rosa', sizes:[] },
+    52:{ name:'Saia/tecido xadrez pata-de-galo – branco e preto', price:0, comm:0, color:'Branco/Preto', sizes:[] },
+    53:{ name:'Sweatshirt lisa – branco-sujo/cru', price:0, comm:0, color:'Branco-sujo', sizes:[] },
+    54:{ name:'Casaco técnico com fecho – cinzento-claro', price:0, comm:0, color:'Cinzento-claro', sizes:[] },
+    55:{ name:'T-shirt "Dragon Ball Z" – azul-marinho com estampado branco', price:0, comm:0, color:'Azul-marinho', sizes:[] },
+    56:{ name:'Sweatshirt com dinossauro "Roar" – creme', price:0, comm:0, color:'Creme', sizes:[] },
+    57:{ name:'Sweatshirt com capuz de peluche "Break the Rule" – cinzento', price:0, comm:0, color:'Cinzento', sizes:[] },
+    58:{ name:'Sweatshirt floral "Brooklyn 86" – cinzento com flores rosas', price:0, comm:0, color:'Cinzento', sizes:[] },
+    59:{ name:'T-shirt sem mangas "MINNIE" com lantejoulas – cinzento-escuro com letras brancas/rosas', price:0, comm:0, color:'Cinzento-escuro', sizes:[] },
+    60:{ name:'Gorro de malha Hello Kitty às riscas – preto e rosa', price:0, comm:0, color:'Preto/Rosa', sizes:[] },
+    61:{ name:'Gorro de malha com raios – cinzento com estampado preto', price:0, comm:0, color:'Cinzento', sizes:[] },
+    62:{ name:'T-shirt de cãozinho pug – verde-menta (marca H&M)', price:0, comm:0, color:'Verde-menta', sizes:[] },
+    63:{ name:'T-shirt "...ARE REAL" com estampado brilhante – preto com detalhe rosa/dourado', price:0, comm:0, color:'Preto', sizes:[] },
+    64:{ name:'T-shirt Snoopy "XOXOXO" às riscas – branco com preto', price:0, comm:0, color:'Branco/Preto', sizes:[] },
+    65:{ name:'Calças de ganga – azul-denim', price:0, comm:0, color:'Azul-denim', sizes:[] },
+    66:{ name:'Pijama Bugs Bunny – creme com preto', price:0, comm:0, color:'Creme/Preto', sizes:[] },
+    67:{ name:'Sweatshirt "Llama-me" com remendo de peluche – azul-marinho com rosa/bege', price:0, comm:0, color:'Azul-marinho', sizes:[] },
+    68:{ name:'T-shirt animal print "LOVE" – cinzento com leopardo', price:0, comm:0, color:'Cinzento', sizes:[] },
+    69:{ name:'Pijama rosa', price:0, comm:0, color:'Rosa', sizes:[] },
+    70:{ name:'Pijama às riscas – rosa-choque', price:0, comm:0, color:'Rosa-choque', sizes:[] },
+    71:{ name:'Pijama menina com bolinhas – branco/azul-celeste', price:0, comm:0, color:'Branco/Azul-celeste', sizes:[] },
+    72:{ name:'Fato "Harley Quinn Suicide Squad" – vermelho com preto', price:0, comm:0, color:'Vermelho/Preto', sizes:[] },
+    73:{ name:'Pijama/fato Batman com capuz – preto e cinzento', price:0, comm:0, color:'Preto/Cinzento', sizes:[] },
+    74:{ name:'Pijama/fato Superman com capuz – azul e vermelho', price:0, comm:0, color:'Azul/Vermelho', sizes:[] },
+    75:{ name:"T-shirt \"What's Up Doc?\" (Bugs Bunny) – cinzento", price:0, comm:0, color:'Cinzento', sizes:[] },
+    76:{ name:'Fato "Royal Skeleton" – preto com estampado branco', price:0, comm:0, color:'Preto', sizes:[] },
+    77:{ name:'Casaco biker de couro sintético – preto', price:0, comm:0, color:'Preto', sizes:[] },
+    78:{ name:'Fato de morcego com capuz – preto e roxo', price:0, comm:0, color:'Preto/Roxo', sizes:[] },
+    79:{ name:'T-shirt "Unicorn Breakfast" – azul-celeste', price:0, comm:0, color:'Azul-celeste', sizes:[] },
+    80:{ name:'Pijama com corações – branco com rosa', price:0, comm:0, color:'Branco/Rosa', sizes:[] },
+    81:{ name:'Mochila floral – bege com flores rosas', price:0, comm:0, color:'Bege', sizes:[] },
+    82:{ name:'Leggings pretos Dancing is everything', price:0, comm:0, color:'Preto/Fuchsia', sizes:[] },
+    83:{ name:'Pijama cachorro azul puntos brancos', price:0, comm:0, color:'Azul/Branco', sizes:[] },
+   
+
+  };
+
+  // ---- Normaliza cada entrada de "sizes" para o formato {s, q} ----
+  function normalizeSizes(sizes){
+    return (sizes || []).map(sz => {
+      if (sz !== null && typeof sz === 'object' && 's' in sz) {
+        return { s: sz.s, q: (typeof sz.q === 'number') ? sz.q : 1 };
+      }
+      return { s: String(sz), q: 1 };
+    });
+  }
+
+  // ---- Constrói a lista de fichas a partir de "datos" ----
+  const fichas = Object.keys(datos)
+    .sort((a, b) => parseInt(a, 10) - parseInt(b, 10))
+    .map(num => {
+      const d = datos[num];
+      const sizes = normalizeSizes(d.sizes);
+      const units = (typeof d.units === 'number')
+        ? d.units
+        : (typeof d.qty === 'number')
+          ? d.qty
+          : (sizes.length ? sizes.reduce((sum, sz) => sum + sz.q, 0) : 1);
+      return {
+        num,
+        name: d.name,
+        price: d.price,
+        comm: d.comm,
+        color: d.color || '—',
+        sizes,
+        units,
+        buyers: d.buyers || [],
+        erro: !!d.erro
+      };
+    });
+
+  let idx = 0;
+
+  const numOut = document.getElementById('numOut');
+  const nameOut = document.getElementById('nameOut');
+  const priceOut = document.getElementById('priceOut');
+  const commOut = document.getElementById('commOut');
+  const totalOut = document.getElementById('totalOut');
+  const colorOut = document.getElementById('colorOut');
+  const unitsOut = document.getElementById('unitsOut');
+  const sizesOut = document.getElementById('sizesOut');
+  const buyersRow = document.getElementById('buyersRow');
+  const buyersOut = document.getElementById('buyersOut');
+  const posOut = document.getElementById('posOut');
+  const countOut = document.getElementById('countOut');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const jumpInput = document.getElementById('jumpInput');
+  const jumpBtn = document.getElementById('jumpBtn');
+  const fichaWrap = document.getElementById('fichaWrap');
+
+  countOut.textContent = fichas.length;
+
+  function parseMoney(str){
+    const clean = str.replace(/[^\d,.-]/g,'').replace(',', '.');
+    const val = parseFloat(clean);
+    return isNaN(val) ? 0 : val;
+  }
+  function fmtMoney(val){
+    return val.toLocaleString('pt-PT', { minimumFractionDigits:2, maximumFractionDigits:2 }) + ' €';
+  }
+
+  function saveCurrentEdits(){
+    const f = fichas[idx];
+    const html = nameOut.innerHTML.trim();
+    f.name = html || 'Nome do artigo';
+    f.price = parseMoney(priceOut.textContent);
+    f.comm = parseMoney(commOut.textContent);
+  }
+
+  function renderSizes(sizes){
+    sizesOut.innerHTML = '';
+    if(!sizes || sizes.length === 0){
+      const span = document.createElement('span');
+      span.className = 'sizes-empty';
+      span.textContent = 'Sem tallas (talla única)';
+      sizesOut.appendChild(span);
+      return;
+    }
+    sizes.forEach(sz => {
+      const chip = document.createElement('span');
+      chip.className = 'size-chip';
+      chip.innerHTML = sz.s + '<b>x' + sz.q + '</b>';
+      sizesOut.appendChild(chip);
+    });
+  }
+
+  function renderBuyers(buyers){
+    buyersOut.innerHTML = '';
+    if(!buyers || buyers.length === 0){
+      buyersRow.style.display = 'none';
+      return;
+    }
+    buyersRow.style.display = 'block';
+    buyers.forEach(b => {
+      const chip = document.createElement('span');
+      const isErro = /erro/i.test(b);
+      chip.className = 'buyer-chip' + (isErro ? ' erro' : '');
+      chip.textContent = b.replace(/\s*—\s*ERRO/i, '');
+      buyersOut.appendChild(chip);
+    });
+  }
+
+  function render(){
+    const f = fichas[idx];
+    numOut.textContent = f.num;
+    nameOut.innerHTML = f.erro ? (f.name + ' <span class="erro-flag">(ERRO)</span>') : f.name;
+    priceOut.textContent = fmtMoney(f.price);
+    commOut.textContent = fmtMoney(f.comm);
+    totalOut.textContent = fmtMoney(f.price + f.comm);
+    colorOut.textContent = f.color;
+    unitsOut.textContent = f.units;
+    renderSizes(f.sizes);
+    renderBuyers(f.buyers);
+    posOut.textContent = idx + 1;
+    jumpInput.value = f.num;
+    prevBtn.disabled = idx === 0;
+    nextBtn.disabled = idx === fichas.length - 1;
+  }
+
+  function goTo(newIdx){
+    saveCurrentEdits();
+    idx = Math.max(0, Math.min(fichas.length - 1, newIdx));
+    render();
+  }
+
+  prevBtn.addEventListener('click', () => goTo(idx - 1));
+  nextBtn.addEventListener('click', () => goTo(idx + 1));
+
+  jumpBtn.addEventListener('click', () => {
+    const target = jumpInput.value.trim();
+    if(target !== ''){
+      const found = fichas.findIndex(f => String(f.num) === target);
+      if(found !== -1) goTo(found);
+    }
+  });
+
+  jumpInput.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter'){
+      e.preventDefault();
+      jumpBtn.click();
+    }
+  });
+
+  [priceOut, commOut].forEach(el => {
+    el.addEventListener('input', () => {
+      const p = parseMoney(priceOut.textContent);
+      const c = parseMoney(commOut.textContent);
+      totalOut.textContent = fmtMoney(p + c);
+    });
+  });
+
+  nameOut.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter'){
+      e.preventDefault();
+      document.execCommand('insertLineBreak');
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if(document.activeElement === nameOut || document.activeElement === priceOut || document.activeElement === commOut) return;
+    if(e.key === 'ArrowLeft') goTo(idx - 1);
+    if(e.key === 'ArrowRight') goTo(idx + 1);
+  });
+
+  // ---- Swipe tátil ----
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let touchActive = false;
+  const SWIPE_THRESHOLD = 45;
+  const SWIPE_MAX_OFFAXIS = 80;
+
+  function isEditableTarget(target){
+    return target === nameOut || target === priceOut || target === commOut ||
+           (target && target.closest && target.closest('[contenteditable="true"]'));
+  }
+
+  fichaWrap.addEventListener('touchstart', (e) => {
+    if(isEditableTarget(e.target)) { touchActive = false; return; }
+    touchActive = true;
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive:true });
+
+  fichaWrap.addEventListener('touchend', (e) => {
+    if(!touchActive) return;
+    touchActive = false;
+    const touchEndX = e.changedTouches[0].screenX;
+    const touchEndY = e.changedTouches[0].screenY;
+    const diffX = touchEndX - touchStartX;
+    const diffY = touchEndY - touchStartY;
+    if(Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(diffY) < SWIPE_MAX_OFFAXIS){
+      if(diffX < 0){
+        goTo(idx + 1);
+      } else {
+        goTo(idx - 1);
+      }
+    }
+  }, { passive:true });
+
+  document.addEventListener('touchstart', (e) => {
+    if(fichaWrap.contains(e.target)) return;
+    if(isEditableTarget(e.target)) { touchActive = false; return; }
+    touchActive = true;
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive:true });
+
+  document.addEventListener('touchend', (e) => {
+    if(fichaWrap.contains(e.target)) return;
+    if(!touchActive) return;
+    touchActive = false;
+    const touchEndX = e.changedTouches[0].screenX;
+    const touchEndY = e.changedTouches[0].screenY;
+    const diffX = touchEndX - touchStartX;
+    const diffY = touchEndY - touchStartY;
+    if(Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(diffY) < SWIPE_MAX_OFFAXIS){
+      if(diffX < 0){
+        goTo(idx + 1);
+      } else {
+        goTo(idx - 1);
+      }
+    }
+  }, { passive:true });
+
+  render();
+</script>
+</body>
+</html>
