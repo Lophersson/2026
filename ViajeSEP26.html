@@ -6,10 +6,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
   /* ============================================================
-     PARA EDITAR LOS LUGARES DE COMIDA:
+     PARA EDITAR LAS ACTIVIDADES:
      Busca cada bloque <!-- DÍA X --> más abajo en el código y
      escribe el texto directamente dentro de cada <div class="fill">
-     (donde pone AQUÍ ->). Es texto estático, no un campo del navegador.
+     (y la hora en <div class="time">). Es texto estático, no un
+     campo del navegador.
      ============================================================ */
   *{ box-sizing:border-box; margin:0; padding:0; }
   html,body{
@@ -109,7 +110,7 @@
   }
 
   .day-body{
-    padding: 2px 16px 12px 88px;
+    padding: 2px 16px 12px 24px;
     border-top: 1px solid #f1e2c9;
   }
   .day-body.empty{ display:none; }
@@ -118,9 +119,14 @@
     padding-top: 8px;
     display:flex; align-items:baseline; gap:8px;
   }
+  .meal .time{
+    font-size: 11px; font-weight:800; color:#c4622d;
+    width: 42px; flex-shrink:0;
+    font-variant-numeric: tabular-nums;
+  }
   .meal .lbl{
     font-size: 9px; letter-spacing:1px; text-transform:uppercase; color:#b98a52; font-weight:700;
-    width: 68px; flex-shrink:0;
+    width: 66px; flex-shrink:0;
   }
   .fill{
     font-size: 12.5px; font-weight:600; line-height:1.35; color:#3a2c22;
@@ -162,7 +168,8 @@
     header .range{ text-align:left; }
     .day summary{ gap:10px; }
     .day summary .date-block{ width:48px; }
-    .day-body{ padding-left: 62px; }
+    .day-body{ padding-left: 16px; }
+    .meal .lbl{ width:58px; }
   }
 
   @media print{
@@ -182,7 +189,7 @@
     <div class="title-block">
       <div class="eyebrow">Ruta A Coruña · Ferrolterra</div>
       <h1>Planning semanal</h1>
-      <div class="sub">Comidas y actividades día a día</div>
+      <div class="sub">Actividades hora a hora</div>
     </div>
     <div class="range">
       <div><b>Lunes 7</b> — Domingo 13</div>
@@ -191,7 +198,7 @@
   </header>
 
   <!-- DÍA 1 — LUNES 7 -->
-  <details class="day" open>
+  <details class="day">
     <summary>
       <span class="chev">▶</span>
       <span class="date-block">
@@ -206,7 +213,7 @@
   </details>
 
   <!-- DÍA 2 — MARTES 8 -->
-  <details class="day" open>
+  <details class="day">
     <summary>
       <span class="chev">▶</span>
       <span class="date-block">
@@ -220,18 +227,35 @@
     </summary>
     <div class="day-body">
       <div class="meal">
+        <div class="time">9:00</div>
         <div class="lbl">Desayuno</div>
         <div class="fill">Confeitura</div>
       </div>
       <div class="meal">
+        <div class="time">10:00</div>
+        <div class="lbl">Visita 1</div>
+        <div class="fill">Ferrol Cidade</div>
+      </div>
+      <div class="meal">
+        <div class="time">12:00</div>
         <div class="lbl">Aperitivo</div>
         <div class="fill">Porto</div>
+      </div>
+      <div class="meal">
+        <div class="time">16:00</div>
+        <div class="lbl">Visita 2</div>
+        <div class="fill">Centro Comercial Odeón</div>
+      </div>
+      <div class="meal">
+        <div class="time">19:00</div>
+        <div class="lbl">Reunión</div>
+        <div class="fill">Marta, Miguel y Jimmy</div>
       </div>
     </div>
   </details>
 
   <!-- DÍA 3 — MIÉRCOLES 9 -->
-  <details class="day" open>
+  <details class="day">
     <summary>
       <span class="chev">▶</span>
       <span class="date-block">
@@ -245,18 +269,30 @@
     </summary>
     <div class="day-body">
       <div class="meal">
+        <div class="time">9:00</div>
+        <div class="lbl">Visita 1</div>
+        <div class="fill">Ferrol Praias</div>
+      </div>
+      <div class="meal">
+        <div class="time">12:00</div>
         <div class="lbl">Aperitivo</div>
         <div class="fill">Finca dos Mares</div>
       </div>
       <div class="meal">
+        <div class="time">14:00</div>
         <div class="lbl">Comida</div>
         <div class="fill">Boa Onda</div>
+      </div>
+      <div class="meal">
+        <div class="time">17:00</div>
+        <div class="lbl">Visita 2</div>
+        <div class="fill">Mirador Coto de Ancos</div>
       </div>
     </div>
   </details>
 
   <!-- DÍA 4 — JUEVES 10 -->
-  <details class="day" open>
+  <details class="day">
     <summary>
       <span class="chev">▶</span>
       <span class="date-block">
@@ -270,24 +306,61 @@
     </summary>
     <div class="day-body">
       <div class="meal">
+        <div class="time">9:00</div>
+        <div class="lbl">Visita 1</div>
+        <div class="fill">Mugardos</div>
+      </div>
+      <div class="meal">
+        <div class="time">10:00</div>
+        <div class="lbl">Visita 2</div>
+        <div class="fill">Ares</div>
+      </div>
+      <div class="meal">
+        <div class="time">11:00</div>
+        <div class="lbl">Visita 3</div>
+        <div class="fill">Redes</div>
+      </div>
+      <div class="meal">
+        <div class="time">12:00</div>
         <div class="lbl">Aperitivo</div>
         <div class="fill">Porto de Redes</div>
       </div>
+      <div class="meal">
+        <div class="time">13:30</div>
+        <div class="lbl">Visita 4</div>
+        <div class="fill">Cabanas</div>
+      </div>
+      <div class="meal">
+        <div class="time">14:30</div>
+        <div class="lbl">Visita 5</div>
+        <div class="fill">Pontedeume</div>
+      </div>
+      <div class="meal">
+        <div class="time">16:00</div>
+        <div class="lbl">Visita 6</div>
+        <div class="fill">Fragas do Eume</div>
+      </div>
+      <div class="meal">
+        <div class="time">17:00</div>
+        <div class="lbl">Visita 7</div>
+        <div class="fill">Mosteiro de Caaveiro</div>
+      </div>
+      <div class="meal">
+        <div class="time">19:00</div>
+        <div class="lbl">Visita 8</div>
+        <div class="fill">Betanzos</div>
+      </div>
     </div>
-    <!--<div class="day-body">
-      <div class="meal">
-        <div class="lbl">Comida</div>
-        <div class="fill">Taberna do Caaveiro</div>
-      </div>
-      <div class="meal">
-        <div class="lbl">Cena</div>
-        <div class="fill">Mesón O Pote</div>
-      </div>
-    </div>-->
+    <!--
+      Comida y cena de este día estaban comentadas en el original:
+      Comida: Taberna do Caaveiro
+      Cena: Mesón O Pote
+      Descoméntalas aquí como bloques .meal con su hora si las quieres activar.
+    -->
   </details>
 
   <!-- DÍA 5 — VIERNES 11 -->
-  <details class="day" open>
+  <details class="day">
     <summary>
       <span class="chev">▶</span>
       <span class="date-block">
@@ -300,15 +373,26 @@
       </span>
     </summary>
     <div class="day-body">
-    <div class="meal">
+      <div class="meal">
+        <div class="time">9:00</div>
+        <div class="lbl">Visita 1</div>
+        <div class="fill">A Coruña Centro</div>
+      </div>
+      <div class="meal">
+        <div class="time">14:00</div>
         <div class="lbl">Comida</div>
         <div class="fill">La Piadina/Cambalache</div>
       </div>
-  </div>
+      <div class="meal">
+        <div class="time">17:00</div>
+        <div class="lbl">Visita 2</div>
+        <div class="fill">Centro Comercial Marineda</div>
+      </div>
+    </div>
   </details>
 
   <!-- DÍA 6 — SÁBADO 12 -->
-  <details class="day" open>
+  <details class="day">
     <summary>
       <span class="chev">▶</span>
       <span class="date-block">
@@ -322,18 +406,59 @@
     </summary>
     <div class="day-body">
       <div class="meal">
+        <div class="time">9:00</div>
         <div class="lbl">Desayuno</div>
         <div class="fill">Eder</div>
       </div>
-      <!--<div class="meal">
-        <div class="lbl">Comida</div>
-        <div class="fill">Leira Antiga</div>
-      </div>-->
+      <div class="meal">
+        <div class="time">10:00</div>
+        <div class="lbl">Visita 1</div>
+        <div class="fill">Valdoviño</div>
+      </div>
+      <div class="meal">
+        <div class="time">11:00</div>
+        <div class="lbl">Visita 2</div>
+        <div class="fill">Pantín</div>
+      </div>
+      <div class="meal">
+        <div class="time">12:00</div>
+        <div class="lbl">Visita 3</div>
+        <div class="fill">Cedeira</div>
+      </div>
+      <div class="meal">
+        <div class="time">13:00</div>
+        <div class="lbl">Visita 4</div>
+        <div class="fill">San Román</div>
+      </div>
+      <div class="meal">
+        <div class="time">14:00</div>
+        <div class="lbl">Visita 5</div>
+        <div class="fill">Gondón</div>
+      </div>
+      <div class="meal">
+        <div class="time">15:00</div>
+        <div class="lbl">Visita 6</div>
+        <div class="fill">Régoa</div>
+      </div>
+      <div class="meal">
+        <div class="time">16:30</div>
+        <div class="lbl">Visita 7</div>
+        <div class="fill">Serra da Capelada</div>
+      </div>
+      <div class="meal">
+        <div class="time">18:00</div>
+        <div class="lbl">Visita 8</div>
+        <div class="fill">Santo André de Teixido</div>
+      </div>
     </div>
+    <!--
+      Comida de este día estaba comentada en el original: Leira Antiga
+      Descoméntala como bloque .meal con su hora si la quieres activar.
+    -->
   </details>
 
   <!-- DÍA 7 — DOMINGO 13 -->
-  <details class="day" open>
+  <details class="day">
     <summary>
       <span class="chev">▶</span>
       <span class="date-block">
@@ -345,10 +470,17 @@
         <div class="plan-title">Regreso a Barcelos</div>
       </span>
     </summary>
+    <div class="day-body">
+      <div class="meal">
+        <div class="time">9:00</div>
+        <div class="lbl">Regreso</div>
+        <div class="fill">Barcelos</div>
+      </div>
+    </div>
   </details>
 
   <div class="toolbar">
-    <div class="legend no-print">Texto estático: edita el contenido de cada &lt;div class="fill"&gt; directamente en el código</div>
+    <div class="legend no-print">Texto estático: edita la hora y el contenido de cada bloque &lt;div class="meal"&gt; directamente en el código</div>
     <div class="btn-group no-print">
       <button class="toggle-btn" onclick="toggleAll(true)">Abrir todo</button>
       <button class="toggle-btn" onclick="toggleAll(false)">Cerrar todo</button>
