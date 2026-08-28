@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -197,9 +199,9 @@
      Nombre arriba (full width) · Número abajo-izquierda · Precio abajo-derecha */
   @media (min-width: 900px){
     :root{
-      --name-size: clamp(28px, 4.2vw, 64px);
-      --num-size: clamp(160px, 46vh, 460px);
-      --price-size: clamp(70px, 18vh, 180px);
+      --name-size: clamp(24px, 4.0vw, 60px);
+      --num-size: clamp(180px, 50vh, 500px);
+      --price-size: clamp(80px, 20vh, 180px);
     }
     body{ padding:24px; }
     .ficha-vertical{
@@ -394,7 +396,7 @@
      ========================================================= */
   const items = [
     { name: "Casaco acolchoado preto e bege", preco: 0.00, comissao: 8.00 },
-    { name: "Pack de Gabby Dollhouse 300 stickers + stamper gato", preco: 2.00, comissao: 1.50 },
+    { name: "Pack Gabby Dollhouse 300 stickers + stamper gato", preco: 2.00, comissao: 1.50 },
     { name: "Marcadores Disney pack x2", preco: 2.00, comissao: 1.50 },
     { name: "Conjunto de Quaderno y lápis de cor da Hello Kitty", preco: 1.59, comissao: 1.00 },
     { name: "Pack Kuromi Keychan + 3 marcadores", preco: 0.99, comissao: 0.99 },
@@ -419,27 +421,27 @@
     { name: "Pijama Play Station", preco: 0.00, comissao: 3.00 },
     { name: "Camisola preta gola C&A", preco: 0.00, comissao: 3.00 },
     { name: "Camisola branca gola C&A", preco: 0.00, comissao: 3.00 },
-    { name: "Colar coraçoes", preco: 0.00, comissao: 0.00 },
-    { name: "Sueter Hello Kitty & Friends", preco: 0.00, comissao: 0.00 },
-    { name: "Sueter Stitch", preco: 0.00, comissao: 0.00 },
-    { name: "Boné Minecraf", preco: 0.00, comissao: 0.00 },
-    { name: "Pijama Mickey & Minnie Smack", preco: 0.00, comissao: 0.00 },
-    { name: "Conjunto rosa Minnie", preco: 0.00, comissao: 0.00 },
-    { name: "Pijama Lilás Girls Night Paw Patrol", preco: 0.00, comissao: 0.00 },
-    { name: "Pijama Hello Kitty", preco: 0.00, comissao: 0.00 },
-    { name: "Conjunto Gabby Dollhouse", preco: 0.00, comissao: 0.00 },
-    { name: "Leggings Azul Marinho", preco: 0.00, comissao: 0.00 },
-    { name: "Calças de ganga Unicornio", preco: 0.00, comissao: 0.00 },
-    { name: "Casaco Lá Ovelha Bluey", preco: 0.00, comissao: 0.00 },
-    { name: "Pijama Bambi", preco: 0.00, comissao: 0.00 },
-    { name: "Meias Pack x5 Menina 2/3", preco: 0.00, comissao: 0.00 },
-    { name: "Lip Liner", preco: 0.00, comissao: 0.00 },
-    { name: "Black Mascara", preco: 0.00, comissao: 0.00 },
-    { name: "Agenda Rosa, Amarela y Verde", preco: 0.00, comissao: 0.00 },
-    { name: "Agenda Rosa Coraçao", preco: 0.00, comissao: 0.00 },
-    { name: "Agenda Verde", preco: 0.00, comissao: 0.00 },
-    { name: "Agenda Coraçao Lá Rosa", preco: 0.00, comissao: 0.00 },
-    { name: "Palhas Stitch x4", preco: 0.00, comissao: 0.00 },
+    { name: "Colar coraçoes", preco: 1.00, comissao: 1.00 },
+    { name: "Sueter Hello Kitty & Friends", preco: 4.00, comissao: 2.00 },
+    { name: "Sueter Stitch", preco: 3.00, comissao: 2.00 },
+    { name: "Boné Minecraf", preco: 0.00, comissao: 7.50 },
+    { name: "Pijama Mickey & Minnie Smack", preco: 8.00, comissao: 2.00 },
+    { name: "Conjunto rosa Minnie", preco: 0.00, comissao: 14.00 },
+    { name: "Pijama Lilás Girls Night Paw Patrol", preco: 6.00, comissao: 2.00 },
+    { name: "Pijama Hello Kitty", preco: 5.99, comissao: 2.00 },
+    { name: "Conjunto Gabby Dollhouse", preco: 8.00, comissao: 2.00 },
+    { name: "Leggings Azul Marinho", preco: 2.00, comissao: 1.50 },
+    { name: "Calças de ganga Unicornio", preco: 5.00, comissao: 2.00 },
+    { name: "Casaco Lá Ovelha Bluey", preco: 10.00, comissao: 2.00 },
+    { name: "Macacão bebé Bambi", preco: 5.00, comissao: 2.00 },
+    { name: "Meias Pack x5 Menina 2/3", preco: 1.00, comissao: 1.00 },
+    { name: "Lip Liner", preco: 1.00, comissao: 1.00 },
+    { name: "Black Mascara", preco: 1.00, comissao: 1.00 },
+    { name: "Agenda Rosa, Amarela y Verde", preco: 1.99, comissao: 1.00 },
+    { name: "Agenda Rosa Coraçao", preco: 1.99, comissao: 1.00 },
+    { name: "Agenda Verde", preco: 3.49, comissao: 2.00 },
+    { name: "Notebook Coraçao Lá Rosa", preco: 1.18, comissao: 1.00 },
+    { name: "Palhas Stitch x4", preco: 2.00, comissao: 1.50 },
   ];
 
   /* Número inicial de la numeración en pantalla.
