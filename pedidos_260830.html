@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pedidos 30 agosto 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      :root{
+        --bg:#EFEAF3; --bg2:#E6DEEC; --card:#FFFFFF; --ink:#2B2530; --muted:#786C84;
+        --plum:#6E3B5C; --plum-dark:#54294A; --teal:#3E7C7B; --teal-bg:#E6F1EF;
+        --line:#E4DCEA; --gold:#B98A3E; --stripe:#F8F5FA;
+      }
+      *{box-sizing:border-box;}
+      body{
+        margin:0;
+        background:radial-gradient(circle at 15% 0%, var(--bg2), transparent 45%), var(--bg);
+        color:var(--ink); font-family:'Karla',sans-serif; padding:32px 16px 80px;
+      }
+      .wrap{max-width:880px;margin:0 auto;}
+
+      header.top{text-align:center;margin-bottom:36px;}
+      header.top .eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--plum);font-weight:700;}
+      header.top h1{font-family:'Fraunces',serif;font-weight:600;font-style:italic;font-size:38px;margin:6px 0 4px;color:var(--plum-dark);}
+      header.top p{color:var(--muted);margin:0;font-size:14px;}
+
+      .view-toggle{display:flex;justify-content:center;gap:10px;margin-bottom:30px;flex-wrap:wrap;}
+      .toggle-btn{
+        border:1.5px solid var(--plum);background:#fff;color:var(--plum);font-family:'Karla',sans-serif;
+        font-weight:700;font-size:13.5px;padding:10px 18px;border-radius:999px;cursor:pointer;
+        transition:background .2s ease, color .2s ease;
+      }
+      .toggle-btn:hover{background:var(--bg2);}
+      .toggle-btn.active{background:var(--plum);color:#fff;}
+
+      .client-nav{margin-bottom:30px;}
+      .client-nav h2{
+        font-family:'Fraunces',serif;font-size:15px;letter-spacing:.04em;text-transform:uppercase;
+        color:var(--muted);margin:0 0 12px;text-align:center;
+      }
+      .client-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:12px;}
+      .client-tile{
+        aspect-ratio:1/1;border:1.5px solid var(--line);background:var(--card);border-radius:14px;
+        cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;
+        text-align:center;padding:8px;gap:2px;color:var(--plum-dark);
+        box-shadow:0 6px 16px -10px rgba(84,41,74,.25);
+        transition:transform .15s ease, background .2s ease, box-shadow .2s ease;
+        position:relative;
+      }
+      .client-tile:hover{transform:translateY(-3px);background:var(--bg2);box-shadow:0 10px 20px -12px rgba(84,41,74,.35);}
+      .client-tile:active{transform:translateY(0) scale(.97);}
+      .client-tile .first{font-weight:700;font-size:13.5px;line-height:1.2;}
+      .client-tile .last{font-weight:500;font-size:11.5px;color:var(--muted);line-height:1.2;}
+      .client-tile .badge{
+        position:absolute;top:6px;right:6px;background:var(--teal);color:#fff;font-size:10px;font-weight:700;
+        border-radius:999px;padding:1px 6px;
+      }
+
+      .seller-card{
+        background:var(--card);border-radius:16px;padding:20px 24px;margin-bottom:40px;
+        box-shadow:0 8px 24px -12px rgba(84,41,74,.25);display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px 24px;border:1px solid var(--line);
+      }
+      .seller-card div span.lbl{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:3px;}
+      .seller-card div span.val{font-weight:700;font-size:14.5px;color:var(--ink);}
+
+      .summary{
+        background:var(--card);border-radius:16px;padding:22px 24px;margin-bottom:44px;
+        border:1px solid var(--line);box-shadow:0 8px 24px -14px rgba(84,41,74,.2);
+      }
+      .summary h2{font-family:'Fraunces',serif;font-size:19px;margin:0 0 14px;color:var(--plum-dark);}
+      table.summary-table{width:100%;border-collapse:collapse;font-size:14px;}
+      table.summary-table th{
+        text-align:left;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+        padding:0 8px 8px;border-bottom:1px solid var(--line);
+      }
+      table.summary-table td{padding:9px 8px;border-bottom:1px dashed var(--line);}
+      table.summary-table tr:last-child td{border-bottom:none;}
+      table.summary-table td.num{text-align:right;font-variant-numeric:tabular-nums;}
+      .summary-table .lockcell{color:var(--teal);font-weight:700;}
+      .total-comm-box{
+        margin-top:16px;background:var(--teal-bg);color:var(--teal);border-radius:10px;padding:12px 16px;
+        display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:14.5px;
+      }
+      .total-comm-box .tag{font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em;opacity:.85;}
+      .total-comm-box .val{font-size:18px;}
+
+      .grand-totals{margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+      .grand-totals .box{border-radius:10px;padding:12px 14px;background:var(--stripe);border:1px solid var(--line);}
+      .grand-totals .box .lbl{display:block;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-bottom:3px;}
+      .grand-totals .box .val{font-weight:700;font-size:17px;color:var(--plum-dark);}
+      .grand-totals .box.comm .val{color:var(--teal);}
+
+      a.client-link{color:var(--plum-dark);text-decoration:none;font-weight:700;border-bottom:1.5px dotted var(--plum);cursor:pointer;}
+      a.client-link:hover{color:var(--plum);}
+
+      .cards{display:flex;flex-direction:column;gap:28px;}
+
+      .ticket{
+        position:relative;background:var(--card);border-radius:18px;box-shadow:0 14px 30px -16px rgba(84,41,74,.3);
+        border:1px solid var(--line);overflow:hidden;
+      }
+      .ticket.highlight{animation:pulseRing 1.4s ease;}
+      @keyframes pulseRing{
+        0%{box-shadow:0 0 0 0 rgba(110,59,92,.55);}
+        100%{box-shadow:0 0 0 14px rgba(110,59,92,0);}
+      }
+      .ticket .hole{
+        position:absolute;top:22px;left:22px;width:14px;height:14px;border-radius:50%;
+        background:var(--bg);box-shadow:inset 0 0 0 1px var(--line);
+      }
+      .ticket-head{
+        background:linear-gradient(135deg,var(--plum) 0%, var(--plum-dark) 100%);color:#fff;
+        padding:20px 26px 20px 50px;display:flex;justify-content:space-between;align-items:baseline;
+        flex-wrap:wrap;gap:6px;
+      }
+      .ticket-head h3{font-family:'Fraunces',serif;font-weight:600;font-size:22px;margin:0;}
+      .ticket-head .count{font-size:12.5px;opacity:.85;font-weight:500;}
+
+      .ticket-body{padding:20px 26px 24px;}
+
+      table.items{width:100%;border-collapse:collapse;font-size:13.5px;}
+      table.items th{
+        text-align:left;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+        padding:0 6px 8px;border-bottom:1px solid var(--line);
+      }
+      table.items td{padding:9px 6px;border-bottom:1px dashed var(--line);vertical-align:top;}
+      table.items td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
+
+      .totals{margin-top:14px;padding-top:4px;}
+      .totals .row{display:flex;justify-content:space-between;padding:7px 6px;font-size:14px;}
+      .totals .row.grand{
+        border-top:1.5px dashed var(--line);margin-top:4px;padding-top:12px;font-weight:700;font-size:16px;color:var(--plum-dark);
+      }
+      .totals .row.hidden-note{
+        background:var(--teal-bg);border-radius:10px;color:var(--teal);font-weight:700;margin-top:8px;
+      }
+      .totals .row.hidden-note .tag{font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em;opacity:.85;}
+
+      .actions{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;}
+      .actions button{
+        flex:1 1 200px;border:none;border-radius:10px;padding:12px 14px;font-family:'Karla',sans-serif;
+        font-weight:700;font-size:13.5px;cursor:pointer;color:#fff;background:var(--plum);
+        transition:transform .12s ease, background .2s ease;
+      }
+      .actions button:hover{background:var(--plum-dark);}
+      .actions button:active{transform:scale(.97);}
+      .actions button.copied{background:var(--teal);}
+      .actions button .sub{display:block;font-weight:500;font-size:11px;opacity:.85;margin-top:2px;}
+
+      .lista-toggle{display:flex;justify-content:center;gap:10px;margin-bottom:18px;flex-wrap:wrap;}
+      .sort-btn{
+        border:1.5px solid var(--plum);background:#fff;color:var(--plum);font-family:'Karla',sans-serif;
+        font-weight:700;font-size:12.5px;padding:8px 14px;border-radius:999px;cursor:pointer;
+        transition:background .2s ease, color .2s ease;
+      }
+      .sort-btn:hover{background:var(--bg2);}
+      .sort-btn.active{background:var(--plum);color:#fff;}
+
+      .card{background:var(--card);border-radius:16px;border:1px solid var(--line);box-shadow:0 10px 26px -16px rgba(84,41,74,.25);overflow:hidden;}
+      table.lista-table{width:100%;border-collapse:collapse;font-size:13.5px;}
+      table.lista-table thead th{
+        text-align:left;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:#fff;
+        background:linear-gradient(135deg,var(--plum) 0%, var(--plum-dark) 100%);padding:12px 10px;
+      }
+      table.lista-table tbody td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top;}
+      table.lista-table tbody tr:nth-child(even){background:var(--stripe);}
+      table.lista-table tbody tr:hover{background:#F1E9F0;}
+      table.lista-table td.num{font-variant-numeric:tabular-nums;color:var(--muted);font-weight:700;}
+      table.lista-table td.price{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:var(--plum-dark);white-space:nowrap;}
+      table.lista-table td.qty{text-align:center;}
+      table.lista-table td.client{font-weight:600;}
+      table.lista-table tfoot td{padding:14px 10px;font-weight:700;border-top:2px solid var(--line);background:var(--stripe);}
+      table.lista-table tfoot td.price{color:var(--plum-dark);font-size:15px;}
+
+      @media (max-width:640px){ table.lista-table .hide-mobile{display:none;} }
+      @media (max-width:520px){ .ticket-head{padding-left:44px;} table.items{font-size:12.5px;} table.items .hide-mobile{display:none;} }
+
+      footer{text-align:center;color:var(--muted);font-size:12px;margin-top:50px;}
+      footer .note{margin-top:6px;color:var(--plum);}
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="top">
+        <div class="eyebrow">Loja de Roupa &amp; Acessórios Novos e de Segunda Mão</div>
+        <h1>Pedidos de Clientas 30 agosto 2026</h1>
+        <p>Pedidos recolhidos durante o DIRETO — prontos a copiar e enviar por Messenger</p>
+      </header>
+
+      <div class="view-toggle">
+        <button id="btn-view-contas" class="toggle-btn active">🧾 Contas por clienta</button>
+        <button id="btn-view-lista" class="toggle-btn">📦 Lista por artigo</button>
+      </div>
+
+      <div id="view-contas">
+        <nav class="client-nav">
+          <h2>Clientas</h2>
+          <div class="client-grid" id="client-grid"></div>
+        </nav>
+
+        <div class="seller-card">
+          <div><span class="lbl">Vendedora</span><span class="val">Ana Karina Marques</span></div>
+          <div><span class="lbl">Titular da conta</span><span class="val">Leonor Dias</span></div>
+          <div><span class="lbl">IBAN — Banco CTT</span><span class="val">PT50 0193 0000 1051 6586 2107 7</span></div>
+          <div><span class="lbl">MB WAY</span><span class="val">+351 967 401 340</span></div>
+        </div>
+
+        <div class="summary">
+          <h2>Resumo geral</h2>
+          <table class="summary-table">
+            <thead>
+              <tr><th>Cliente</th><th class="num">Nº artigos</th><th class="num">Total se confirmar</th><th class="num">Comissão 🔒</th></tr>
+            </thead>
+            <tbody id="summary-body"></tbody>
+          </table>
+          <div class="grand-totals" id="grand-totals"></div>
+          <div class="total-comm-box" id="total-comm-box"></div>
+        </div>
+
+        <div class="cards" id="cards"></div>
+      </div>
+
+      <div id="view-lista" style="display:none;">
+        <div class="lista-toggle">
+          <button id="btn-sort-num" class="sort-btn active">🔢 Ordenar por nº de artigo</button>
+          <button id="btn-sort-cliente" class="sort-btn">🔤 Ordenar por clienta (A-Z)</button>
+        </div>
+        <div class="card">
+          <table class="lista-table">
+            <thead id="thead-lista"></thead>
+            <tbody id="tbody-lista"></tbody>
+            <tfoot id="tfoot-lista"></tfoot>
+          </table>
+        </div>
+      </div>
+
+      <footer>
+        Comissão visível apenas nesta página — nunca incluída no texto copiado para as clientas.
+        <div class="note">Dados extraídos diretamente do registo do DIRETO de 30 agosto 2026 e da lista de pedidos das clientas. Os artigos sem clienta associada (nº 30, 31, 32, 37, 39, 44, 49, 55, 58, 60, 61, 62, 65, 66, 68, 70, 72) ainda não têm compradora registada e não aparecem aqui — estão apenas na ficha de preços atualizada.</div>
+      </footer>
+    </div>
+
+    <script>
+      const SELLER = {
+        nome: "Ana Karina Marques",
+        titular: "Leonor Dias",
+        iban: "PT50 0193 0000 1051 6586 2107 7",
+        mbway: "+351 967 401 340"
+      };
+
+      // preco = valor do artigo isolado (fica na loja). comm = comissão (fica com a vendedora).
+      // Dados extraídos do registo do DIRETO 30 agosto 2026 cruzados com a lista de pedidos das clientas.
+      // c.precoOverride permite registar um preço diferente do preço-base do artigo para uma clienta em concreto
+      // (mantém-se a comissão do artigo, mas o valor do artigo em si muda para essa linha).
+      const articles = [
+        {num:33, nome:'Mala tiracolo do Bambi', preco:7.00, comm:2.00, cor:'—', clientes:[
+          {nome:'Paula Garcia', det:'—'}]},
+        {num:34, nome:'Pack de 2 pijamas do Ursinho Pooh', preco:4.00, comm:2.00, cor:'—', clientes:[
+          {nome:'Palmira Oliveira Furtado', det:'—'}]},
+        {num:35, nome:'Pack de 6 elásticos de cabelo da Gabby Dollhouse', preco:1.00, comm:1.00, cor:'—', clientes:[
+          {nome:'Marina Silva', det:'—'}]},
+        {num:36, nome:'Pendente para telemóvel do Stitch', preco:1.00, comm:1.00, cor:'—', clientes:[
+          {nome:'Laudalina Silva', det:'—'}]},
+        {num:38, nome:'Carteira/porta-moedas verde com ilustração', preco:0.00, comm:3.00, cor:'—', clientes:[
+          {nome:'Palmira Oliveira Furtado', det:'—'}]},
+        {num:40, nome:'Conjunto infantil cor creme com orelhas estilo Mickey', preco:4.00, comm:2.00, cor:'—', clientes:[
+          {nome:'Palmira Oliveira Furtado', det:'—'}]},
+        {num:41, nome:'Estojo do Stitch Roxo', preco:2.00, comm:1.50, cor:'—', clientes:[
+          {nome:'Paula Garcia', det:'—'}]},
+        {num:42, nome:'Pack de 2 pulseiras laváveis do Stitch', preco:1.00, comm:1.00, cor:'—', clientes:[
+          {nome:'Palmira Oliveira Furtado', det:'—'}]},
+        {num:43, nome:'Conjunto de brinquedos Dino Dart', preco:1.70, comm:1.00, cor:'—', clientes:[
+          {nome:'Andreia Godinho', det:'—'}]},
+        {num:45, nome:'Boião pequeno Nourishing Primer', preco:1.00, comm:1.00, cor:'—', clientes:[
+          {nome:'Tânia Pinheiro', det:'—'}]},
+        {num:46, nome:'Máscara labial noturna maçá e caramelo', preco:1.00, comm:1.00, cor:'—', clientes:[
+          {nome:'Beatriz Silva', det:'—'}]},
+        {num:47, nome:'Batons Satin Lip Stick', preco:1.00, comm:1.00, cor:'—', clientes:[
+          {nome:'Maria Sacramento Vieira', det:'—'},
+          {nome:'Andreia Godinho', det:'—'}]},
+        {num:48, nome:'Rimmel Flutter Frenzy em embalagem rosa', preco:1.00, comm:1.00, cor:'—', clientes:[
+          {nome:'Beatriz Silva', det:'—'},
+          {nome:'Maria Sacramento Vieira', det:'—'}]},
+        {num:50, nome:'Mealheiros com cadeado, personagens infantis', preco:1.39, comm:1.00, cor:'—', clientes:[
+          {nome:'Marina Silva', det:'Stitch'},
+          {nome:'Marina Silva', det:'Gabby'}]},
+        {num:51, nome:'Dispensador de creme de mãos de matcha', preco:2.00, comm:1.50, cor:'—', clientes:[
+          {nome:'Paula Garcia', det:'—'}]},
+        {num:52, nome:'Canetas K-POP x3', preco:1.59, comm:1.00, cor:'—', clientes:[
+          {nome:'Marina Silva', det:'—'},
+          {nome:'Paula Garcia', det:'—'}]},
+        {num:53, nome:'Canetas Gel com cheiro x16', preco:1.99, comm:1.00, cor:'—', clientes:[
+          {nome:'Marcia Raposo', det:'—', qty:2}]},
+        {num:54, nome:'Cinzeiro bola bilhar preta núm 8.', preco:1.55, comm:1.00, cor:'—', clientes:[
+          {nome:'Marcia Raposo', det:'—'}]},
+        {num:56, nome:'Tintas Acrilicas', preco:2.00, comm:1.50, cor:'—', clientes:[
+          {nome:'Paula Garcia', det:'—'}]},
+        {num:57, nome:'Body mista Mafalda Women´Secret', preco:4.99, comm:2.00, cor:'—', clientes:[
+          {nome:'Paula Garcia', det:'—'}]},
+        {num:59, nome:'Jeggings Ganga Primark tamanho 40', preco:12.00, comm:2.00, cor:'—', clientes:[
+          {nome:'Isabel Blayer Marques', det:'—'}]},
+        {num:63, nome:'Sueter branco dinossauros', preco:4.00, comm:2.00, cor:'—', clientes:[
+          {nome:'Isabel Blayer Marques', det:'—'}]},
+        {num:64, nome:'Pijama Marie XS', preco:7.00, comm:2.00, cor:'—', clientes:[
+          {nome:'Silvia Correia', det:'—'}]},
+        {num:67, nome:'Creme de maos coreano', preco:1.20, comm:1.00, cor:'—', clientes:[
+          {nome:'Marcia Raposo', det:'—'}]},
+        {num:69, nome:'Lapis ferramentas x2', preco:0.55, comm:0.55, cor:'—', clientes:[
+          {nome:'Andreia Godinho', det:'—', qty:2}]},
+        {num:71, nome:'Panho, molde tomate e culher', preco:1.20, comm:1.00, cor:'—', clientes:[
+          {nome:'Tânia Pinheiro', det:'—'}]}
+      ];
+
+      const fmt = n => n.toLocaleString('pt-PT', {minimumFractionDigits:2, maximumFractionDigits:2}) + '€';
+      const slugify = str => str.toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+        .replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+
+      // agrupar por clienta: cada pedido vira uma "linha de artigo" (preco = valor total do artigo)
+      const byClient = {};
+      articles.forEach(a=>{
+        a.clientes.forEach(c=>{
+          const qty = c.qty || 1;
+          const precoBase = (typeof c.precoOverride === 'number') ? c.precoOverride : a.preco;
+          if(!byClient[c.nome]) byClient[c.nome] = [];
+          byClient[c.nome].push({
+            num:a.num, nome:a.nome, cor:a.cor, tam:c.det || '—', qty:qty,
+            preco:precoBase+a.comm, comm:a.comm
+          });
+        });
+      });
+
+      // achatar todos os pedidos (para a vista "Lista por artigo")
+      const orders = [];
+      articles.forEach(a=>{
+        a.clientes.forEach(c=>{
+          const qty = c.qty || 1;
+          const precoBase = (typeof c.precoOverride === 'number') ? c.precoOverride : a.preco;
+          orders.push({client:c.nome, num:a.num, nome:a.nome, cor:a.cor, tam:c.det || '—', qty:qty, preco:precoBase+a.comm, comm:a.comm});
+        });
+      });
+
+      // --- alternar vistas ---
+      const btnContas = document.getElementById('btn-view-contas');
+      const btnLista = document.getElementById('btn-view-lista');
+      const viewContas = document.getElementById('view-contas');
+      const viewLista = document.getElementById('view-lista');
+
+      btnContas.addEventListener('click', ()=>{
+        viewContas.style.display = '';
+        viewLista.style.display = 'none';
+        btnContas.classList.add('active');
+        btnLista.classList.remove('active');
+      });
+      btnLista.addEventListener('click', ()=>{
+        viewContas.style.display = 'none';
+        viewLista.style.display = '';
+        btnLista.classList.add('active');
+        btnContas.classList.remove('active');
+      });
+
+      function goToClient(slug){
+        viewContas.style.display = '';
+        viewLista.style.display = 'none';
+        btnContas.classList.add('active');
+        btnLista.classList.remove('active');
+        const target = document.getElementById('ticket-'+slug);
+        if(target){
+          target.scrollIntoView({behavior:'smooth', block:'center'});
+          target.classList.remove('highlight');
+          void target.offsetWidth;
+          target.classList.add('highlight');
+        }
+      }
+      function bindClientLinks(){
+        document.querySelectorAll('.client-link').forEach(link=>{
+          link.addEventListener('click', e=>{
+            e.preventDefault();
+            goToClient(link.dataset.slug);
+          });
+        });
+      }
+
+      // --- resumo geral (baseado no total SE a clienta confirmar tudo o que pediu) ---
+      const totalComissoesGeral = orders.reduce((s,o)=>s+o.comm*o.qty,0);
+      document.getElementById('total-comm-box').innerHTML =
+        `<span class="tag">🔒 Total de comissões (se tudo for confirmado)</span><span class="val">${fmt(totalComissoesGeral)}</span>`;
+
+      const totalSemComissao = orders.reduce((s,o)=>s+(o.preco-o.comm)*o.qty,0);
+      const totalComComissao = orders.reduce((s,o)=>s+o.preco*o.qty,0);
+      document.getElementById('grand-totals').innerHTML = `
+        <div class="box"><span class="lbl">Soma dos artigos sem comissão</span><span class="val">${fmt(totalSemComissao)}</span></div>
+        <div class="box comm"><span class="lbl">Soma dos artigos com comissão</span><span class="val">${fmt(totalComComissao)}</span></div>
+      `;
+
+      // --- grelha de clientas ---
+      const clientGrid = document.getElementById('client-grid');
+      Object.keys(byClient).sort((a,b)=>a.localeCompare(b,'pt')).forEach(clientName=>{
+        const slug = slugify(clientName);
+        const parts = clientName.split(' ');
+        const first = parts[0];
+        const last = parts.slice(1).join(' ');
+        const qty = byClient[clientName].reduce((s,i)=>s+i.qty,0);
+
+        const tile = document.createElement('div');
+        tile.className = 'client-tile';
+        tile.innerHTML = `<span class="badge">${qty}</span><span class="first">${first}</span><span class="last">${last}</span>`;
+        tile.addEventListener('click', ()=> goToClient(slug));
+        clientGrid.appendChild(tile);
+      });
+
+      // --- resumo por clienta + tickets tipo fatura ---
+      const summaryBody = document.getElementById('summary-body');
+      const cardsWrap = document.getElementById('cards');
+
+      Object.keys(byClient).sort((a,b)=>a.localeCompare(b,'pt')).forEach(clientName=>{
+        const items = byClient[clientName];
+        const totalPreco = items.reduce((s,i)=>s+i.preco*i.qty,0);
+        const totalComm = items.reduce((s,i)=>s+i.comm*i.qty,0);
+        const totalQty = items.reduce((s,i)=>s+i.qty,0);
+
+        // linha no resumo
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td><a href="#" class="client-link" data-slug="${slugify(clientName)}">${clientName}</a></td><td class="num">${totalQty}</td><td class="num">${fmt(totalPreco)}</td><td class="num lockcell">${fmt(totalComm)}</td>`;
+        summaryBody.appendChild(tr);
+
+        // ticket / conta
+        const ticket = document.createElement('div');
+        ticket.id = 'ticket-'+slugify(clientName);
+        ticket.className = 'ticket';
+
+        const rowsHtml = items.map(i=>`
+          <tr>
+            <td class="num">${i.num}</td>
+            <td>${i.nome}</td>
+            <td class="hide-mobile">${i.cor}</td>
+            <td>${i.tam}</td>
+            <td class="num">${i.qty}</td>
+            <td class="num">${fmt(i.preco*i.qty)}</td>
+          </tr>`).join('');
+
+        ticket.innerHTML = `
+          <div class="hole"></div>
+          <div class="ticket-head">
+            <h3>${clientName}</h3>
+            <span class="count">${totalQty} artigo${totalQty>1?'s':''} pedidos</span>
+          </div>
+          <div class="ticket-body">
+            <table class="items">
+              <thead><tr><th>Nº</th><th>Artigo</th><th class="hide-mobile">Cor</th><th>Tam.</th><th class="num">Qtd</th><th class="num">Preço</th></tr></thead>
+              <tbody>${rowsHtml}</tbody>
+            </table>
+            <div class="totals">
+              <div class="row"><span>Subtotal artigos</span><span>${fmt(totalPreco)}</span></div>
+              <div class="row"><span>Total com portes 5,40€</span><span>${fmt(totalPreco+5.40)}</span></div>
+              <div class="row"><span>Total com portes 8,93€</span><span>${fmt(totalPreco+8.93)}</span></div>
+              <div class="row hidden-note"><span class="tag">🔒 Só para mim — comissão</span><span>${fmt(totalComm)}</span></div>
+            </div>
+            <div class="actions">
+              <button data-portes="5.40">Copiar mensagem<span class="sub">Portes 5,40€</span></button>
+              <button data-portes="8.93">Copiar mensagem<span class="sub">Portes 8,93€</span></button>
+            </div>
+          </div>
+        `;
+
+        cardsWrap.appendChild(ticket);
+
+        ticket.querySelectorAll('.actions button').forEach(btn=>{
+          btn.addEventListener('click', ()=>{
+            const portes = parseFloat(btn.dataset.portes);
+            const total = totalPreco + portes;
+
+            const linhas = items.map(i=>{
+              const linhaTotal = fmt(i.preco*i.qty);
+              return `• ${i.nome} — Cor: ${i.cor} — Tamanho: ${i.tam} — Qtd: ${i.qty} — ${linhaTotal}`;
+            }).join('\n');
+
+            const texto =
+`Olá ${clientName}! 💕
+
+Aqui está o resumo do seu pedido:
+
+${linhas}
+
+Subtotal: ${fmt(totalPreco)}
+Portes: ${fmt(portes)}
+Total a pagar: ${fmt(total)}
+
+Dados para pagamento:
+Vendedora: ${SELLER.nome}
+Titular da conta: ${SELLER.titular}
+IBAN (Banco CTT): ${SELLER.iban}
+MB WAY: ${SELLER.mbway}
+
+Muito obrigada pelo seu interesse! 🌸
+
+Aviso: caso o pagamento não seja efetuado no prazo de 48 horas, será aplicado um custo adicional de 2€/dia.`;
+
+            navigator.clipboard.writeText(texto).then(()=>{
+              const original = btn.innerHTML;
+              btn.classList.add('copied');
+              btn.innerHTML = 'Copiado! ✓<span class="sub">Pronto para o Messenger</span>';
+              setTimeout(()=>{
+                btn.classList.remove('copied');
+                btn.innerHTML = original;
+              }, 1800);
+            });
+          });
+        });
+      });
+
+      // --- vista "Lista por artigo" (tabela ordenável) ---
+      const theadLista = document.getElementById('thead-lista');
+      const tbodyLista = document.getElementById('tbody-lista');
+      const tfootLista = document.getElementById('tfoot-lista');
+
+      function renderListaTable(mode){
+        const linhas = orders.map(o=>({
+          ...o,
+          precoArtigo: (o.preco - o.comm) * o.qty,
+          comissao: o.comm * o.qty,
+          total: o.preco * o.qty
+        }));
+
+        if(mode === 'cliente'){
+          linhas.sort((a,b)=> a.client.localeCompare(b.client,'pt') || (('' + a.num).localeCompare('' + b.num)));
+          theadLista.innerHTML = `
+            <tr>
+              <th>Cliente</th><th>Nº</th><th>Artigo</th><th class="hide-mobile">Cor</th><th>Detalhe</th>
+              <th style="text-align:center;">Qtd</th><th style="text-align:right;">Preço do artigo</th>
+              <th style="text-align:right;">Comissão</th><th style="text-align:right;">Total</th>
+            </tr>`;
+        } else {
+          linhas.sort((a,b)=> ('' + a.num).localeCompare('' + b.num, undefined, {numeric:true}));
+          theadLista.innerHTML = `
+            <tr>
+              <th>Nº</th><th>Artigo</th><th class="hide-mobile">Cor</th><th>Detalhe</th>
+              <th style="text-align:center;">Qtd</th><th>Cliente</th>
+              <th style="text-align:right;">Preço do artigo</th><th style="text-align:right;">Comissão</th><th style="text-align:right;">Total</th>
+            </tr>`;
+        }
+
+        let totalPrecoArtigo = 0, totalComissao = 0, totalGeral = 0;
+        if(linhas.length === 0){
+          tbodyLista.innerHTML = `<tr><td colspan="9" style="text-align:center;color:var(--muted);font-style:italic;padding:20px;">Sem pedidos registados</td></tr>`;
+        } else {
+          tbodyLista.innerHTML = linhas.map(o=>{
+            totalPrecoArtigo += o.precoArtigo;
+            totalComissao += o.comissao;
+            totalGeral += o.total;
+            const slug = slugify(o.client);
+            const clienteCell = `<a href="#" class="client-link" data-slug="${slug}">${o.client}</a>`;
+
+            if(mode === 'cliente'){
+              return `<tr>
+                <td class="client">${clienteCell}</td><td class="num">${o.num}</td><td>${o.nome}</td>
+                <td class="hide-mobile">${o.cor}</td><td>${o.tam}</td><td class="qty">${o.qty}</td>
+                <td class="price">${fmt(o.precoArtigo)}</td><td class="price">${fmt(o.comissao)}</td><td class="price">${fmt(o.total)}</td>
+              </tr>`;
+            }
+            return `<tr>
+              <td class="num">${o.num}</td><td>${o.nome}</td><td class="hide-mobile">${o.cor}</td><td>${o.tam}</td>
+              <td class="qty">${o.qty}</td><td class="client">${clienteCell}</td>
+              <td class="price">${fmt(o.precoArtigo)}</td><td class="price">${fmt(o.comissao)}</td><td class="price">${fmt(o.total)}</td>
+            </tr>`;
+          }).join('');
+        }
+
+        tfootLista.innerHTML = `
+          <tr>
+            <td colspan="6">Total geral</td>
+            <td class="price">${fmt(totalPrecoArtigo)}</td>
+            <td class="price">${fmt(totalComissao)}</td>
+            <td class="price">${fmt(totalGeral)}</td>
+          </tr>`;
+
+        bindClientLinks();
+      }
+
+      renderListaTable('num');
+
+      const btnSortNum = document.getElementById('btn-sort-num');
+      const btnSortCliente = document.getElementById('btn-sort-cliente');
+      btnSortNum.addEventListener('click', ()=>{
+        renderListaTable('num');
+        btnSortNum.classList.add('active');
+        btnSortCliente.classList.remove('active');
+      });
+      btnSortCliente.addEventListener('click', ()=>{
+        renderListaTable('cliente');
+        btnSortCliente.classList.add('active');
+        btnSortNum.classList.remove('active');
+      });
+
+      bindClientLinks();
+    </script>
+  </body>
+</html>
