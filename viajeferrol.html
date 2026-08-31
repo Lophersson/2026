@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Itinerario y Gastos · 7–13 Septiembre 2026</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  /* ============================================================
+     PARA EDITAR:
+     Busca cada bloque <!-- DÍA X --> más abajo en el código.
+     Cada actividad es un <div class="item">. Si tiene gasto,
+     lleva un <div class="amount">XX,XX €</div> — cambia solo ese
+     número. Para AÑADIR un gasto, copia un bloque .item con
+     .amount y pégalo donde quieras dentro del día. Para QUITAR
+     uno, borra su bloque .item entero.
+     El total del día, el total del viaje y la mitad de cada uno
+     se calculan solos con JavaScript al cargar la página, leyendo
+     todos los .amount que haya escritos — no hace falta sumar
+     nada a mano en el código.
+     Es un HTML estático: no hay botones ni memoria en el
+     navegador, solo lectura de lo que está escrito aquí.
+     ============================================================ */
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{
+    background: linear-gradient(180deg,#fbf3e7 0%, #f6ead8 100%);
+    color:#3a2c22;
+    font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+    min-height:100%;
+  }
+  body{ padding: 28px 16px 44px; }
+
+  .sheet{ max-width: 720px; margin: 0 auto; }
+
+  /* ---------- HEADER ---------- */
+  header{
+    padding: 20px 24px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #c4622d 0%, #a8471f 100%);
+    color: #fff8ef;
+    display:flex; justify-content:space-between; align-items:center;
+    flex-wrap: wrap; gap: 10px;
+    margin-bottom: 18px;
+    box-shadow: 0 8px 24px -8px rgba(164,70,30,0.45);
+  }
+  header .title-block .eyebrow{
+    font-size: 10.5px; letter-spacing: 2.5px; text-transform:uppercase;
+    color:#f6d9b8; margin-bottom:4px; font-weight:600;
+  }
+  header h1{ font-size: 21px; font-weight:700; letter-spacing: 0.2px; }
+  header .sub{ font-size:11.5px; color:#f7e3cd; margin-top:2px; }
+  header .range{ text-align:right; font-size:12px; color:#f7e3cd; line-height:1.5; }
+  header .range b{ color:#fff; font-size:13px; }
+
+  /* ---------- TOTAL BARS ---------- */
+  .total-bars{ display:flex; gap:9px; margin-bottom: 14px; flex-wrap:wrap; }
+  .grand-total-bar{
+    flex: 1 1 220px;
+    display:flex; justify-content:space-between; align-items:center;
+    background:#3a2c22;
+    color:#fff8ef;
+    border-radius: 14px;
+    padding: 12px 18px;
+    box-shadow: 0 4px 12px -4px rgba(58,44,34,0.35);
+  }
+  .grand-total-bar.split{ background:#a8471f; }
+  .grand-total-bar .lbl{
+    font-size: 10.5px; letter-spacing:2px; text-transform:uppercase; color:#e3c9a8;
+  }
+  .grand-total-bar.split .lbl{ color:#f7dcc0; }
+  .grand-total-bar .val{ font-size: 18px; font-weight:800; color:#ffd93d; }
+  .grand-total-bar.split .val{ color:#fff8ef; }
+
+  /* ---------- DAY CARDS ---------- */
+  .day{
+    background:#fffaf3;
+    border: 1px solid #ecdcc4;
+    border-radius: 14px;
+    margin-bottom: 9px;
+    overflow:hidden;
+    box-shadow: 0 1px 3px rgba(120,80,40,0.06);
+    transition: box-shadow .15s ease;
+  }
+  .day[open]{ box-shadow: 0 4px 14px -4px rgba(120,80,40,0.15); }
+
+  .day summary{
+    list-style:none; cursor:pointer;
+    padding: 11px 16px;
+    display:flex; align-items:center; gap:14px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .day summary::-webkit-details-marker{ display:none; }
+
+  .day summary .chev{
+    font-size: 11px; color:#c4622d;
+    transition: transform .18s ease; flex-shrink:0; width:10px;
+  }
+  .day[open] summary .chev{ transform: rotate(90deg); }
+
+  .day summary .date-block{
+    flex-shrink:0; width: 58px; text-align:center;
+    background:#f7e6cf; border-radius: 10px; padding: 5px 2px;
+  }
+  .day summary .weekday{
+    font-size: 8.5px; letter-spacing: 1px; text-transform:uppercase; color:#a8471f; font-weight:700;
+  }
+  .day summary .date{ font-size: 15px; font-weight:800; color:#3a2c22; }
+
+  .day summary .plan-col{ flex:1; min-width:0; }
+  .day summary .plan{
+    font-size: 9px; letter-spacing:1.2px; text-transform:uppercase; color:#c4622d; font-weight:700;
+  }
+  .day summary .plan-title{
+    font-size: 12.5px; font-weight:600; line-height:1.3; color:#3a2c22; margin-top: 1px;
+  }
+  .day summary .day-total{
+    flex-shrink:0; font-size: 13.5px; font-weight:800; color:#a8471f;
+    font-variant-numeric: tabular-nums;
+    background:#f7e6cf; border-radius: 8px; padding: 4px 8px;
+  }
+
+  .day-body{ padding: 2px 16px 12px 24px; border-top: 1px solid #f1e2c9; }
+
+  .item{
+    padding-top: 8px;
+    display:flex; align-items:baseline; gap:8px;
+  }
+  .item .time{
+    font-size: 11px; font-weight:800; color:#c4622d;
+    width: 42px; flex-shrink:0; font-variant-numeric: tabular-nums;
+  }
+  .item .lbl{
+    font-size: 9px; letter-spacing:1px; text-transform:uppercase; color:#b98a52; font-weight:700;
+    width: 66px; flex-shrink:0;
+  }
+  .fill{
+    font-size: 12.5px; font-weight:600; line-height:1.35; color:#3a2c22; flex:1;
+  }
+  .amount{
+    font-size: 12px; font-weight:800; color:#a8471f;
+    font-variant-numeric: tabular-nums;
+    flex-shrink:0;
+    background:#fbeedb; border-radius: 6px; padding: 2px 6px;
+  }
+
+  .day-subtotal{
+    margin-top: 8px; padding-top: 8px; border-top: 1px dashed #ecdcc4;
+    display:flex; justify-content:space-between; align-items:baseline;
+  }
+  .day-subtotal .lbl{
+    font-size: 9px; letter-spacing:1px; text-transform:uppercase; color:#b98a52; font-weight:700;
+  }
+  .day-subtotal .amount{ font-size:13.5px; background:transparent; padding:0; }
+
+  /* ---------- FOOTER ---------- */
+  .toolbar{
+    display:flex; justify-content:space-between; align-items:center;
+    flex-wrap:wrap; gap:10px; margin-top: 16px;
+  }
+  .toolbar .legend{ font-size: 10px; color:#a68a63; letter-spacing:0.2px; }
+  .btn-group{ display:flex; gap:8px; }
+  .pdf-btn, .toggle-btn{
+    font-family: inherit; font-size:11px; letter-spacing:0.5px; text-transform:uppercase; font-weight:600;
+    border:none; border-radius: 9px; padding:9px 16px; cursor:pointer;
+  }
+  .pdf-btn{ color:#fff8ef; background:#c4622d; }
+  .pdf-btn:hover{ background:#a8471f; }
+  .toggle-btn{ color:#a8471f; background:#fff8ef; border:1px solid #ecdcc4; }
+  .toggle-btn:hover{ background:#f7e6cf; }
+
+  @media (max-width: 560px){
+    header{ flex-direction:column; align-items:flex-start; }
+    header .range{ text-align:left; }
+    .day summary{ gap:10px; }
+    .day summary .date-block{ width:48px; }
+    .day-body{ padding-left: 16px; }
+    .item .lbl{ width:58px; }
+  }
+
+  @media print{
+    body{ background:#fff; padding:0; }
+    .no-print{ display:none !important; }
+    header{ box-shadow:none; }
+    .grand-total-bar{ box-shadow:none; }
+    .day{ box-shadow:none; border:1px solid #ecdcc4; break-inside: avoid; }
+    .day-body{ display:block !important; padding-left:16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sheet">
+  <header>
+    <div class="title-block">
+      <div class="eyebrow">Ruta A Coruña · Ferrolterra</div>
+      <h1>Itinerario y gastos</h1>
+      <div class="sub">Actividades hora a hora, con los gastos de cada una</div>
+    </div>
+    <div class="range">
+      <div><b>Lunes 7</b> — Domingo 13</div>
+      <div>Septiembre 2026</div>
+    </div>
+  </header>
+
+  <div class="total-bars">
+    <div class="grand-total-bar">
+      <div class="lbl">Total 7 días</div>
+      <div class="val" id="grandTotal">0,00 €</div>
+    </div>
+    <div class="grand-total-bar split">
+      <div class="lbl">Cada uno · Humberto &amp; Karina</div>
+      <div class="val" id="splitTotal">0,00 €</div>
+    </div>
+  </div>
+
+  <!-- DÍA 1 — LUNES 7 -->
+  <details class="day" data-day="1">
+    <summary>
+      <span class="chev">▶</span>
+      <span class="date-block">
+        <div class="weekday">Lunes</div>
+        <div class="date">7 Sep</div>
+      </span>
+      <span class="plan-col">
+        <div class="plan">Ida</div>
+        <div class="plan-title">Barcelos → Ferrol</div>
+      </span>
+      <span class="day-total">0,00 €</span>
+    </summary>
+    <div class="day-body">
+      <div class="item">
+        <div class="time">7:00</div>
+        <div class="lbl">Viaje</div>
+        <div class="fill">Gasóleo ida</div>
+        <div class="amount">60,00 €</div>
+      </div>
+      <div class="item">
+        <div class="time">8:00</div>
+        <div class="lbl">Peaje</div>
+        <div class="fill">Portagens ida</div>
+        <div class="amount">32,00 €</div>
+      </div>
+      <div class="day-subtotal">
+        <div class="lbl">Total del día</div>
+        <div class="amount">0,00 €</div>
+      </div>
+    </div>
+  </details>
+
+  <!-- DÍA 2 — MARTES 8 -->
+  <details class="day" data-day="2">
+    <summary>
+      <span class="chev">▶</span>
+      <span class="date-block">
+        <div class="weekday">Martes</div>
+        <div class="date">8 Sep</div>
+      </span>
+      <span class="plan-col">
+        <div class="plan">1º</div>
+        <div class="plan-title">Ferrol Cidade y Centro Comercial Odeón</div>
+      </span>
+      <span class="day-total">0,00 €</span>
+    </summary>
+    <div class="day-body">
+      <div class="item">
+        <div class="time">9:00</div>
+        <div class="lbl">Desayuno</div>
+        <div class="fill">Confeitura</div>
+        <div class="amount">10,00 €</div>
+      </div>
+      <div class="item">
+        <div class="time">10:00</div>
+        <div class="lbl">Visita 1</div>
+        <div class="fill">Plaza de España - Galiano</div>
+      </div>
+      <div class="item">
+        <div class="time">10:30</div>
+        <div class="lbl">Visita 2</div>
+        <div class="fill">Plaza de Armas - Calle Real</div>
+      </div>
+      <div class="item">
+        <div class="time">11:00</div>
+        <div class="lbl">Visita 3</div>
+        <div class="fill">Amboage - Concatedral San Julián</div>
+      </div>
+      <div class="item">
+        <div class="time">11:30</div>
+        <div class="lbl">Visita 4</div>
+        <div class="fill">Mirador Parador y Reina Sofía</div>
+      </div>
+      <div class="item">
+        <div class="time">12:00</div>
+        <div class="lbl">Aperitivo</div>
+        <div class="fill">Porto y Caminito A Malata</div>
+      </div>
+      <div class="item">
+        <div class="time">13:00</div>
+        <div class="lbl">Comida</div>
+        <div class="fill">En casa</div>
+      </div>
+      <div class="item">
+        <div class="time">16:00</div>
+        <div class="lbl">Visita 5</div>
+        <div class="fill">Centro Comercial Odeón (supermercado)</div>
+        <div class="amount">40,00 €</div>
+      </div>
+      <div class="item">
+        <div class="time">19:00</div>
+        <div class="lbl">Reunión</div>
+        <div class="fill">Marta, Miguel y Jimmy (cafés)</div>
+        <div class="amount">10,00 €</div>
+      </div>
+      <div class="day-subtotal">
+        <div class="lbl">Total del día</div>
+        <div class="amount">0,00 €</div>
+      </div>
+    </div>
+  </details>
+
+  <!-- DÍA 3 — MIÉRCOLES 9 -->
+  <details class="day" data-day="3">
+    <summary>
+      <span class="chev">▶</span>
+      <span class="date-block">
+        <div class="weekday">Miércoles</div>
+        <div class="date">9 Sep</div>
+      </span>
+      <span class="plan-col">
+        <div class="plan">2º</div>
+        <div class="plan-title">Ferrol Praias, Mirador Coto de Ancos</div>
+      </span>
+      <span class="day-total">0,00 €</span>
+    </summary>
+    <div class="day-body">
+      <div class="item">
+        <div class="time">9:00</div>
+        <div class="lbl">Visita 1</div>
+        <div class="fill">Castillo San Felipe</div>
+      </div>
+      <div class="item">
+        <div class="time">10:00</div>
+        <div class="lbl">Visita 2</div>
+        <div class="fill">Playa Doniños</div>
+      </div>
+      <div class="item">
+        <div class="time">11:00</div>
+        <div class="lbl">Visita 3</div>
+        <div class="fill">Faro Prior</div>
+      </div>
+      <div class="item">
+        <div class="time">12:00</div>
+        <div class="lbl">Aperitivo</div>
+        <div class="fill">Finca dos Mares</div>
+        <div class="amount">6,00 €</div>
+      </div>
+      <div class="item">
+        <div class="time">13:00</div>
+        <div class="lbl">Comida</div>
+        <div class="fill">Restaurante — cumpleaños del padre</div>
+        <div class="amount">75,00 €</div>
+      </div>
+      <div class="item">
+        <div class="time">15:00</div>
+        <div class="lbl">Visita 4</div>
+        <div class="fill">Mirador Coto de Ancos</div>
+      </div>
+      <div class="item">
+        <div class="time">16:00</div>
+        <div class="lbl">Visita 5</div>
+        <div class="fill">Cascada de Belelle</div>
+      </div>
+      <div class="item">
+        <div class="time">19:00</div>
+        <div class="lbl">Reunión</div>
+        <div class="fill">Amigos (cafés)</div>
+        <div class="amount">10,00 €</div>
+      </div>
+      <div class="day-subtotal">
+        <div class="lbl">Total del día</div>
+        <div class="amount">0,00 €</div>
+      </div>
+    </div>
+  </details>
+
+  <!-- DÍA 4 — JUEVES 10 -->
+  <details class="day" data-day="4">
+    <summary>
+      <span class="chev">▶</span>
+      <span class="date-block">
+        <div class="weekday">Jueves</div>
+        <div class="date">10 Sep</div>
+      </span>
+      <span class="plan-col">
+        <div class="plan">3º</div>
+        <div class="plan-title">Mugardos, Ares, Redes, Cabanas, Pontedeume, Fragas do Eume, Mosteiro de Caaveiro, Betanzos</div>
+      </span>
+      <span class="day-total">0,00 €</span>
+    </summary>
+    <div class="day-body">
+      <div class="item">
+        <div class="time">9:00</div>
+        <div class="lbl">Visita 1</div>
+        <div class="fill">Mugardos</div>
+      </div>
+      <div class="item">
+        <div class="time">09:45</div>
+        <div class="lbl">Visita 2</div>
+        <div class="fill">Ares</div>
+      </div>
+      <div class="item">
+        <div class="time">10:15</div>
+        <div class="lbl">Visita 3</div>
+        <div class="fill">Redes</div>
+      </div>
+      <div class="item">
+        <div class="time">11:00</div>
+        <div class="lbl">Aperitivo</div>
+        <div class="fill">Porto de Redes</div>
+        <div class="amount">6,00 €</div>
+      </div>
+      <div class="item">
+        <div class="time">11:45</div>
+        <div class="lbl">Visita 4</div>
+        <div class="fill">Cabanas Playa Magdalena</div>
+      </div>
+      <div class="item">
+        <div class="time">12:15</div>
+        <div class="lbl">Visita 5</div>
+        <div class="fill">Pontedeume</div>
+      </div>
+      <div class="item">
+        <div class="time">13:00</div>
+        <div class="lbl">Comida</div>
+        <div class="fill"><a href="https://riocoves.com/carta/" target="_blank">Cantina Rio Covés</a></div>
+      </div>
+      <div class="item">
+        <div class="time">15:00</div>
+        <div class="lbl">Visita 6</div>
+        <div class="fill">Fragas do Eume</div>
+      </div>
+      <div class="item">
+        <div class="time">17:00</div>
+        <div class="lbl">Visita 7</div>
+        <div class="fill">Mosteiro de Caaveiro</div>
+      </div>
+      <div class="item">
+        <div class="time">18:00</div>
+        <div class="lbl">Visita 8</div>
+        <div class="fill">Betanzos</div>
+      </div>
+      <div class="day-subtotal">
+        <div class="lbl">Total del día</div>
+        <div class="amount">0,00 €</div>
+      </div>
+    </div>
+  </details>
+
+  <!-- DÍA 5 — VIERNES 11 -->
+  <details class="day" data-day="5">
+    <summary>
+      <span class="chev">▶</span>
+      <span class="date-block">
+        <div class="weekday">Viernes</div>
+        <div class="date">11 Sep</div>
+      </span>
+      <span class="plan-col">
+        <div class="plan">4º</div>
+        <div class="plan-title">A Coruña Centro y Centro Comercial Marineda</div>
+      </span>
+      <span class="day-total">0,00 €</span>
+    </summary>
+    <div class="day-body">
+      <div class="item">
+        <div class="time">09:45</div>
+        <div class="lbl">Peaje</div>
+        <div class="fill">Peaje de acceso a A Coruña</div>
+        <div class="amount">7,00 €</div>
+      </div>
+      <div class="item">
+        <div class="time">10:00</div>
+        <div class="lbl">Visita 1</div>
+        <div class="fill">A Coruña Centro Cantones Rua Real</div>
+      </div>
+      <div class="item">
+        <div class="time">11:00</div>
+        <div class="lbl">Visita 2</div>
+        <div class="fill">A Coruña Plaza María Pita - Torre de Hércules</div>
+      </div>
+      <div class="item">
+        <div class="time">12:00</div>
+        <div class="lbl">Visita 3</div>
+        <div class="fill">A Coruña Monte de San Pedro (helados)</div>
+        <div class="amount">8,00 €</div>
+      </div>
+      <div class="item">
+        <div class="time">13:00</div>
+        <div class="lbl">Comida</div>
+        <div class="fill">Cambalache María Pita</div>
+      </div>
+      <div class="item">
+        <div class="time">17:00</div>
+        <div class="lbl">Visita 4</div>
+        <div class="fill">Centro Comercial Marineda e Ikea</div>
+      </div>
+      <div class="day-subtotal">
+        <div class="lbl">Total del día</div>
+        <div class="amount">0,00 €</div>
+      </div>
+    </div>
+  </details>
+
+  <!-- DÍA 6 — SÁBADO 12 -->
+  <details class="day" data-day="6">
+    <summary>
+      <span class="chev">▶</span>
+      <span class="date-block">
+        <div class="weekday">Sábado</div>
+        <div class="date">12 Sep</div>
+      </span>
+      <span class="plan-col">
+        <div class="plan">5º</div>
+        <div class="plan-title">Valdoviño, Pantín, Gondón, Cedeira, Serra da Capelada, Santo André de Teixido</div>
+      </span>
+      <span class="day-total">0,00 €</span>
+    </summary>
+    <div class="day-body">
+      <div class="item">
+        <div class="time">9:00</div>
+        <div class="lbl">Desayuno</div>
+        <div class="fill">Memories Eder</div>
+        <div class="amount">10,00 €</div>
+      </div>
+      <div class="item">
+        <div class="time">09:45</div>
+        <div class="lbl">Visita 1</div>
+        <div class="fill">Valdoviño Playa</div>
+      </div>
+      <div class="item">
+        <div class="time">10:15</div>
+        <div class="lbl">Visita 2</div>
+        <div class="fill">Pantín Playa</div>
+      </div>
+      <div class="item">
+        <div class="time">11:00</div>
+        <div class="lbl">Visita 3</div>
+        <div class="fill">Gondón Casa familiar y Rio</div>
+      </div>
+      <div class="item">
+        <div class="time">12:00</div>
+        <div class="lbl">Visita 4</div>
+        <div class="fill">Cedeira Playa, Plaza Roja</div>
+      </div>
+      <div class="item">
+        <div class="time">13:00</div>
+        <div class="lbl">Comida</div>
+        <div class="fill">Leira Antiga</div>
+      </div>
+      <div class="item">
+        <div class="time">15:00</div>
+        <div class="lbl">Visita 5</div>
+        <div class="fill">Serra da Capelada</div>
+      </div>
+      <div class="item">
+        <div class="time">16:00</div>
+        <div class="lbl">Visita 6</div>
+        <div class="fill">Santo André de Teixido - Régoa</div>
+      </div>
+      <div class="item">
+        <div class="time">17:00</div>
+        <div class="lbl">Visita 7</div>
+        <div class="fill"><a href="https://www.tripadvisor.es/Hotel_Review-g1916824-d1874918-Reviews-Hotel_Semaforo_de_Bares-Manon_Province_of_A_Coruna_Galicia.html" target="_blank">Hotel Semáforo de Bares</a> (cafés)</div>
+        <div class="amount">6,00 €</div>
+      </div>
+      <div class="day-subtotal">
+        <div class="lbl">Total del día</div>
+        <div class="amount">0,00 €</div>
+      </div>
+    </div>
+  </details>
+
+  <!-- DÍA 7 — DOMINGO 13 -->
+  <details class="day" data-day="7">
+    <summary>
+      <span class="chev">▶</span>
+      <span class="date-block">
+        <div class="weekday">Domingo</div>
+        <div class="date">13 Sep</div>
+      </span>
+      <span class="plan-col">
+        <div class="plan">Vuelta</div>
+        <div class="plan-title">Ferrol → Barcelos</div>
+      </span>
+      <span class="day-total">0,00 €</span>
+    </summary>
+    <div class="day-body">
+      <div class="item">
+        <div class="time">7:00</div>
+        <div class="lbl">Regreso</div>
+        <div class="fill">Gasóleo vuelta</div>
+        <div class="amount">60,00 €</div>
+      </div>
+      <div class="item">
+        <div class="time">8:00</div>
+        <div class="lbl">Peaje</div>
+        <div class="fill">Portagens vuelta</div>
+        <div class="amount">32,00 €</div>
+      </div>
+      <div class="day-subtotal">
+        <div class="lbl">Total del día</div>
+        <div class="amount">0,00 €</div>
+      </div>
+    </div>
+  </details>
+
+  <div class="toolbar">
+    <div class="legend no-print">Texto estático: edita el importe de cada &lt;div class="amount"&gt; en el código; los totales se recalculan solos al cargar la página</div>
+    <div class="btn-group no-print">
+      <button class="toggle-btn" onclick="toggleAll(true)">Abrir todo</button>
+      <button class="toggle-btn" onclick="toggleAll(false)">Cerrar todo</button>
+      <button class="pdf-btn" onclick="window.print()">Descargar PDF</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function toggleAll(open){
+    document.querySelectorAll('.day').forEach(d => d.open = open);
+  }
+
+  function parseAmount(str){
+    if(!str) return 0;
+    const n = parseFloat(String(str).replace(/[^\d,.-]/g,'').replace(/\./g,'').replace(',', '.'));
+    return isNaN(n) ? 0 : n;
+  }
+
+  function formatAmount(n){
+    return n.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+  }
+
+  function calcAll(){
+    let grand = 0;
+    document.querySelectorAll('.day').forEach(dayEl => {
+      // solo los .amount que están dentro de un .item (no el del propio subtotal)
+      const itemAmounts = dayEl.querySelectorAll('.item .amount');
+      let daySum = 0;
+      itemAmounts.forEach(el => { daySum += parseAmount(el.textContent); });
+
+      const subtotalEl = dayEl.querySelector('.day-subtotal .amount');
+      const badgeEl = dayEl.querySelector('.day-total');
+      if (subtotalEl) subtotalEl.textContent = formatAmount(daySum);
+      if (badgeEl) badgeEl.textContent = formatAmount(daySum);
+
+      grand += daySum;
+    });
+
+    document.getElementById('grandTotal').textContent = formatAmount(grand);
+    document.getElementById('splitTotal').textContent = formatAmount(grand / 2);
+  }
+
+  document.addEventListener('DOMContentLoaded', calcAll);
+</script>
+
+</body>
+</html>
