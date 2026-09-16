@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<title>Horário do Daniel - 6ºB</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Baloo+2:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --seg:#FF6B6B;
+    --ter:#4ECDC4;
+    --qua:#FFD166;
+    --qui:#6A8EFC;
+    --sex:#B983FF;
+    --bg:#FFF8ED;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    padding:24px 12px 60px;
+    background:var(--bg);
+    background-image:
+      radial-gradient(circle at 10% 10%, #ffe1e1 0%, transparent 25%),
+      radial-gradient(circle at 90% 15%, #d8f7f2 0%, transparent 25%),
+      radial-gradient(circle at 85% 90%, #fff2c9 0%, transparent 25%),
+      radial-gradient(circle at 5% 85%, #e6e2ff 0%, transparent 25%);
+    font-family:'Baloo 2', sans-serif;
+    color:#333;
+  }
+  h1{
+    text-align:center;
+    font-family:'Fredoka', sans-serif;
+    font-size:2.1em;
+    color:#2E2E52;
+    margin:0 0 2px;
+  }
+  .sub{
+    text-align:center;
+    font-size:1.05em;
+    color:#5b5b7a;
+    margin-bottom:22px;
+  }
+  .wrap{
+    max-width:1200px;
+    margin:0 auto;
+    overflow-x:auto;
+    border-radius:24px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.12);
+    background:#fff;
+    padding:14px;
+  }
+  table{
+    border-collapse:separate;
+    border-spacing:8px;
+    width:100%;
+    min-width:900px;
+  }
+  th{
+    font-family:'Fredoka', sans-serif;
+    font-size:1.25em;
+    color:#fff;
+    padding:12px 6px;
+    border-radius:16px;
+    text-align:center;
+  }
+  th.hora{
+    background:#2E2E52;
+    font-size:1em;
+    min-width:90px;
+  }
+  th.seg{background:var(--seg);}
+  th.ter{background:var(--ter);}
+  th.qua{background:var(--qua); color:#5a4200;}
+  th.qui{background:var(--qui);}
+  th.sex{background:var(--sex);}
+
+  td.hora{
+    background:#f0eefc;
+    font-weight:700;
+    text-align:center;
+    border-radius:14px;
+    padding:10px 4px;
+    color:#2E2E52;
+    font-size:0.95em;
+    vertical-align:middle;
+    white-space:nowrap;
+  }
+  td.aula{
+    border-radius:16px;
+    padding:10px 10px;
+    vertical-align:middle;
+    min-width:150px;
+    text-align:center;
+  }
+  td.vazio{
+    background:repeating-linear-gradient(45deg,#f4f4f4,#f4f4f4 10px,#eeeeee 10px,#eeeeee 20px);
+    border-radius:16px;
+  }
+  .materia{
+    display:block;
+    font-family:'Fredoka', sans-serif;
+    font-weight:700;
+    font-size:1.05em;
+    color:#222;
+    line-height:1.25;
+  }
+  .prof{
+    display:block;
+    font-size:0.78em;
+    color:#555;
+    margin-top:4px;
+    font-weight:500;
+  }
+  .sala{
+    display:inline-block;
+    margin-top:5px;
+    font-size:0.72em;
+    background:rgba(255,255,255,0.65);
+    padding:2px 8px;
+    border-radius:10px;
+    color:#333;
+    font-weight:700;
+  }
+  .split{
+    font-size:0.72em;
+    line-height:1.3;
+  }
+
+  /* cores por disciplina */
+  .c-port{background:#FFD9D9;}
+  .c-mat{background:#D6F5D0;}
+  .c-hgp{background:#FFE7B3;}
+  .c-em{background:#E3D6FF;}
+  .c-ing{background:#D0EFFF;}
+  .c-cn{background:#C9F7E9;}
+  .c-ev{background:#FFE0F0;}
+  .c-et{background:#FFF0C2;}
+  .c-edf{background:#D0FFDB;}
+  .c-cid{background:#F0E0FF;}
+  .c-emrc{background:#f4f4f4;}
+
+  .emoji{font-size:1.3em; display:block; margin-bottom:2px;}
+
+  .legenda{
+    max-width:1200px;
+    margin:26px auto 0;
+    background:#fff;
+    border-radius:20px;
+    padding:18px 22px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.08);
+  }
+  .legenda h2{
+    font-family:'Fredoka', sans-serif;
+    font-size:1.2em;
+    color:#2E2E52;
+    margin:0 0 10px;
+  }
+  .legenda ul{
+    list-style:none;
+    margin:0; padding:0;
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
+    gap:6px 18px;
+  }
+  .legenda li{
+    font-size:0.9em;
+    color:#444;
+  }
+  .legenda b{color:#222;}
+
+  @media (max-width:600px){
+    h1{font-size:1.5em;}
+    table{min-width:700px;}
+  }
+
+  .almoco{
+    text-align:center;
+    background:linear-gradient(90deg,#FFE29A,#FFD9A0);
+    border-radius:16px;
+    padding:8px;
+    font-family:'Fredoka', sans-serif;
+    font-weight:700;
+    color:#5a4200;
+    font-size:1.05em;
+  }
+
+  @page{
+    size:landscape;
+    margin:8mm;
+  }
+  @media print{
+    html, body{
+      -webkit-print-color-adjust:exact;
+      print-color-adjust:exact;
+      color-adjust:exact;
+      background:#fff !important;
+      background-image:none !important;
+      padding:0;
+      margin:0;
+    }
+    *{
+      -webkit-print-color-adjust:exact !important;
+      print-color-adjust:exact !important;
+      color-adjust:exact !important;
+    }
+    h1{font-size:1.4em; margin-top:0;}
+    .sub{margin-bottom:10px; font-size:0.9em;}
+    .wrap{
+      box-shadow:none;
+      border-radius:0;
+      padding:0;
+      max-width:100%;
+    }
+    table{
+      min-width:0;
+      width:100%;
+      border-spacing:4px;
+      table-layout:fixed;
+    }
+    th{font-size:0.85em; padding:6px 4px;}
+    td.hora{font-size:0.75em; padding:5px 2px;}
+    td.aula{padding:5px 4px; min-width:0;}
+    .materia{font-size:0.78em;}
+    .prof{font-size:0.62em;}
+    .sala{font-size:0.6em; padding:1px 5px;}
+    .split{font-size:0.6em;}
+    .emoji{font-size:1em;}
+    .legenda{
+      box-shadow:none;
+      padding:8px 12px;
+      margin-top:10px;
+    }
+    .legenda h2{font-size:0.95em;}
+    .legenda li{font-size:0.75em;}
+    .almoco{font-size:0.85em; padding:5px;}
+  }
+</style>
+</head>
+<body>
+
+<h1>🎒 Horário do Daniel</h1>
+<div class="sub">6ºB · Agr. de Escolas Gonçalo Nunes, Barcelos · Ano letivo 26-27</div>
+
+<div class="wrap">
+<table>
+  <tr>
+    <th class="hora">Hora</th>
+    <th class="seg">Segunda</th>
+    <th class="ter">Terça</th>
+    <th class="qua">Quarta</th>
+    <th class="qui">Quinta</th>
+    <th class="sex">Sexta</th>
+  </tr>
+
+  <tr>
+    <td class="hora">8:20<br>9:10</td>
+    <td class="aula vazio"></td>
+    <td class="aula c-em"><span class="emoji">🎵</span><span class="materia">Educação Musical</span><span class="prof">Maria José Fiúza Batista Matos</span><span class="sala">S31</span></td>
+    <td class="aula vazio"></td>
+    <td class="aula c-ev"><span class="emoji">🎨</span><span class="materia">Educação Visual</span><span class="prof">Eugénio Lima Ribeiro</span><span class="sala">S19</span></td>
+    <td class="aula c-port"><span class="emoji">📖</span><span class="materia">Português</span><span class="prof">Sandra Cristina Gil de Miranda</span><span class="sala">S03</span></td>
+  </tr>
+
+  <tr>
+    <td class="hora">9:15<br>10:05</td>
+    <td class="aula c-port"><span class="emoji">📖</span><span class="materia">Português</span><span class="prof">Sandra Cristina Gil de Miranda</span><span class="sala">S03</span></td>
+    <td rowspan="2" class="aula c-port"><span class="emoji">📖</span><span class="materia">Português</span><span class="prof">Sandra Cristina Gil de Miranda</span><span class="sala">S03</span></td>
+    <td class="aula c-cn"><span class="emoji">🌱</span><span class="materia">Ciências Naturais</span><span class="prof">Álvaro Miguel Moreira Lopes</span><span class="sala">S03</span></td>
+    <td rowspan="2" class="aula c-mat"><span class="emoji">🔢</span><span class="materia">Matemática</span><span class="prof">Isabel Maria Felgueira Rodrigues Rosas</span><span class="sala">S19</span></td>
+    <td rowspan="2" class="aula c-mat"><span class="emoji">🔢</span><span class="materia">Matemática</span><span class="prof">Isabel Maria Felgueira Rodrigues Rosas</span><span class="sala">S03</span></td>
+  </tr>
+
+  <tr>
+    <td class="hora">10:25<br>11:15</td>
+    <td class="aula c-hgp"><span class="emoji">🏰</span><span class="materia">História e Geografia de Portugal</span><span class="prof">Sara Neto de Azevedo</span><span class="sala">S03</span></td>
+    <td class="aula c-cid split">
+      <span class="emoji">💻</span>
+      <b>Ciências da Computação</b><br>Custódio Ricardino Sousa Lomba (S1/S32)<br><br>
+      <b>Tec. Informação e Comunicação</b><br>Carla Fernandes Duarte (S2/S05)
+    </td>
+  </tr>
+
+  <tr>
+    <td class="hora">11:25<br>12:15</td>
+    <td class="aula c-em"><span class="emoji">🎵</span><span class="materia">Educação Musical</span><span class="prof">Maria José Fiúza Batista Matos</span><span class="sala">S31</span></td>
+    <td rowspan="2" class="aula c-mat"><span class="emoji">🔢</span><span class="materia">Matemática</span><span class="prof">Isabel Maria Felgueira Rodrigues Rosas</span><span class="sala">S03</span></td>
+    <td rowspan="2" class="aula c-ing"><span class="emoji">🇬🇧</span><span class="materia">Inglês</span><span class="prof">Arlete Sofia Souto Monteiro</span><span class="sala">S03</span></td>
+    <td class="aula c-et"><span class="emoji">🛠️</span><span class="materia">Educação Tecnológica</span><span class="prof">Eugénio Lima Ribeiro</span><span class="sala">S19</span></td>
+    <td class="aula c-cn"><span class="emoji">🌱</span><span class="materia">Ciências Naturais</span><span class="prof">Álvaro Miguel Moreira Lopes</span><span class="sala">S03</span></td>
+  </tr>
+
+  <tr>
+    <td class="hora">12:20<br>13:10</td>
+    <td class="aula c-cid split">
+      <span class="emoji">🤝</span>
+      <b>Cidadania e Desenvolvimento</b><br>Arlete Sofia Souto Monteiro (S07)<br><br>
+      <b>DT / Apoio ao Estudo</b><br>(S03)
+    </td>
+    <td class="aula vazio"></td>
+    <td class="aula vazio"></td>
+  </tr>
+
+  <tr>
+    <td class="hora">13:20<br>14:10</td>
+    <td class="almoco" colspan="5">🍽️ Almoço</td>
+  </tr>
+
+  <tr>
+    <td class="hora">14:15<br>15:05</td>
+    <td class="aula c-ing"><span class="emoji">🇬🇧</span><span class="materia">Inglês</span><span class="prof">Arlete Sofia Souto Monteiro</span><span class="sala">S03</span></td>
+    <td class="aula vazio"></td>
+    <td class="aula vazio"></td>
+    <td class="aula c-hgp"><span class="emoji">🏰</span><span class="materia">História e Geografia de Portugal</span><span class="prof">Sara Neto de Azevedo</span><span class="sala">S03</span></td>
+    <td class="aula vazio"></td>
+  </tr>
+
+  <tr>
+    <td class="hora">15:15<br>16:05</td>
+    <td rowspan="2" class="aula c-edf"><span class="emoji">⚽</span><span class="materia">Educação Física</span><span class="prof">Diamantino José Martins Pereira</span><span class="sala">G2</span></td>
+    <td class="aula vazio"></td>
+    <td class="aula vazio"></td>
+    <td class="aula c-edf"><span class="emoji">⚽</span><span class="materia">Educação Física</span><span class="prof">Diamantino José Martins Pereira</span><span class="sala">G1</span></td>
+    <td class="aula vazio"></td>
+  </tr>
+
+  <tr>
+    <td class="hora">16:25<br>17:15</td>
+    <td class="aula vazio"></td>
+    <td class="aula vazio"></td>
+    <td class="aula vazio"></td>
+    <td class="aula vazio"></td>
+  </tr>
+</table>
+</div>
+
+<div class="legenda">
+  <h2>🗒️ Legenda de horas</h2>
+  <ul>
+    <li>Manhã: <b>8:20 – 13:10</b></li>
+    <li>Tarde: <b>14:15 – 17:15</b></li>
+    <li>A hora das <b>8:20 às 9:10 de Segunda-feira</b> está livre (EMRC riscado no horário original)</li>
+  </ul>
+</div>
+
+</body>
+</html>
