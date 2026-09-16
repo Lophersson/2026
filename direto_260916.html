@@ -3,9 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>DIRETO - DOMINGO 30 AGOSTO 2026</title>
-<link rel="preconnect" href="https://googleapis.com">
-<link href="https://googleapis.com" rel="stylesheet">
+<title>DIRETO - QUARTA FEIRA 16 SETEMBRO 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=DM+Mono:wght@500;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --void:#ffffff;
@@ -19,7 +20,6 @@
     --card-bg:#ffffff;
     --card-ink:#000000;
 
-    /* Tamaños móviles (impacto vertical) */
     --name-size: clamp(20px, 6vw, 34px);
     --num-size: clamp(120px, 42vh, 280px);
     --price-size: clamp(36px, 9vh, 62px);
@@ -127,7 +127,6 @@
     touch-action: pan-y;
   }
 
-  /* ===== Ficha (grid: se reordena en desktop vía media query) ===== */
   .ficha-vertical {
     width:100%;
     height: 100%;
@@ -143,7 +142,6 @@
     color: var(--card-ink);
   }
 
-  /* Bloque Nombre */
   .name-block {
     grid-area: name;
     text-align: center;
@@ -160,7 +158,6 @@
     color: #000000;
   }
 
-  /* Bloque Número */
   .num-block {
     grid-area: num;
     display: flex;
@@ -178,7 +175,6 @@
     letter-spacing: -0.05em;
   }
 
-  /* Bloque Precio (desglose pequeño + total) */
   .price-block {
     grid-area: price;
     text-align: center;
@@ -206,8 +202,6 @@
     display: inline-block;
   }
 
-  /* ===== DESKTOP / PANTALLA COMPLETA =====
-     Nombre arriba (full width) · Número abajo-izquierda · Precio abajo-derecha */
   @media (min-width: 900px){
     :root{
       --name-size: clamp(24px, 4.0vw, 60px);
@@ -243,7 +237,6 @@
     }
   }
 
-  /* Controles inferiores comprimidos */
   .controls{
     display:flex;
     flex-direction:column;
@@ -354,7 +347,7 @@
 <div class="stage">
   <header>
     <div class="clock">
-      <span id="clock-date">16 SET/span><br>
+      <span id="clock-date">16 SET</span><br>
       <span class="time" id="clock-time">18:15</span>
     </div>
     <div class="title-row">
@@ -398,16 +391,7 @@
 </div>
 
 <script>
-  /* =========================================================
-     LISTA DE ARTIGOS — EDITA AQUI
-     Cada artigo tem: nome, preco (base) e comissao.
-     No ecrã mostra-se o desglose (preco + comissao) pequeno
-     e o TOTAL grande = preco + comissao.
-     Podes apagar/adicionar linhas livremente (não precisa
-     de tocar em mais nada no código).
-     ========================================================= */
   const items = [
-    /* COMISSAO DE 2 EUROS */
     { name: "vestido natalicio 3/4 anos", preco: 8.00, comissao: 2.00 },
     { name: "macacao rena newborn azul bege", preco: 7.00, comissao: 2.00 },
     { name: "pijama snoopy", preco: 6.99, comissao: 2.00 },
@@ -435,28 +419,27 @@
     { name: "meias minnie", preco: 3.00, comissao: 2.00 },
     { name: "estojo borboleta lilás", preco: 5.00, comissao: 2.00 },
     { name: "pantufas minnie", preco: 3.00, comissao: 2.00 },
-    /* COMISSAO DE 1,50 EUROS */
     { name: "meias cinzentas x3", preco: 2.00, comissao: 1.50 },
     { name: "meias pretas x3", preco: 2.00, comissao: 1.50 },
-    /* COMISSAO DE 1 EURO */
     { name: "canetas k-pop", preco: 1.59, comissao: 1.00 },
     { name: "camisola zippy rena 5/6", preco: 1.00, comissao: 1.00 },
     { name: "canetas k-pop", preco: 1.59, comissao: 1.00 },
     { name: "mini perfumes", preco: 1.00, comissao: 1.00 },
     { name: "meias coloridas x5", preco: 1.00, comissao: 1.00 },
-    /* COMISSAO DE MENOS DE 1 EURO */
     { name: "lapis x24", preco: 0.99, comissao: 0.99 },  
     { name: "portadocumentos", preco: 0.58, comissao: 0.58 },
     { name: "libros de pintar", preco: 1.59, comissao: 1.00 }, 
     { name: "estojo spiderman", preco: 2.99, comissao: 2.00 }, 
   ];
 
-  /* Número inicial de la numeración en pantalla.
-     El array 'items' NO se reordena: el primer elemento
-     se mostrará como START_NUM, el segundo como START_NUM+1, etc. */
   const START_NUM = 30;
 
   let currentIndex = 0;
+
+  document.addEventListener('DOMContentLoaded', init);
+  if (document.readyState !== 'loading') init();
+
+  function init(){
 
   const nameEl = document.querySelector('.art-name');
   const numEl = document.querySelector('.num');
@@ -530,6 +513,8 @@
   setInterval(updateClock, 30000);
 
   render();
+
+  } // fin de init()
 </script>
 
 </body>
