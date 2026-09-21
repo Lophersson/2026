@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Pedidos 18 setembro 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,600&family=Karla:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EFEAF3;--bg2:#E6DEEC;--card:#fff;--ink:#2B2530;--muted:#786C84;--plum:#6E3B5C;--plum-d:#54294A;--teal:#3E7C7B;--teal-bg:#E6F1EF;--line:#E4DCEA;--stripe:#F8F5FA;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Karla',sans-serif;padding:32px 16px 80px}
+.wrap{max-width:880px;margin:0 auto}
+header{text-align:center;margin-bottom:30px}
+.eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--plum);font-weight:700}
+h1{font-family:'Fraunces',serif;font-weight:600;font-style:italic;font-size:34px;margin:6px 0 4px;color:var(--plum-d)}
+header p{color:var(--muted);margin:0;font-size:14px}
+.tg{display:flex;justify-content:center;gap:10px;margin-bottom:24px;flex-wrap:wrap}
+.tb{border:1.5px solid var(--plum);background:#fff;color:var(--plum);font:700 13.5px 'Karla',sans-serif;padding:10px 18px;border-radius:999px;cursor:pointer}
+.tb.active{background:var(--plum);color:#fff}
+h2.t{font-family:'Fraunces',serif;font-size:15px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:0 0 12px;text-align:center}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:12px;margin-bottom:30px}
+.tile{aspect-ratio:1;border:1.5px solid var(--line);background:var(--card);border-radius:14px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px;color:var(--plum-d);position:relative}
+.tile:hover{background:var(--bg2)}
+.tile b{font-size:13.5px}.tile i{font-style:normal;font-size:11.5px;color:var(--muted)}
+.tile .bd{position:absolute;top:6px;right:6px;background:var(--teal);color:#fff;font-size:10px;font-weight:700;border-radius:999px;padding:1px 6px}
+.box,.seller,.summary{background:var(--card);border-radius:16px;border:1px solid var(--line);box-shadow:0 8px 24px -14px rgba(84,41,74,.25)}
+.seller{padding:20px 24px;margin-bottom:30px;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px 24px}
+.lbl{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.val{font-weight:700;font-size:14.5px}
+.summary{padding:22px 24px;margin-bottom:36px}
+.summary h2{font-family:'Fraunces',serif;font-size:19px;margin:0 0 14px;color:var(--plum-d)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{text-align:left;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:0 6px 8px;border-bottom:1px solid var(--line)}
+td{padding:9px 6px;border-bottom:1px dashed var(--line);vertical-align:top}
+.n{text-align:right!important;white-space:nowrap;font-variant-numeric:tabular-nums}
+.lock{color:var(--teal);font-weight:700}
+.tot{margin-top:14px;background:var(--teal-bg);color:var(--teal);border-radius:10px;padding:12px 16px;display:flex;justify-content:space-between;font-weight:700}
+.gt{margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.gt div{border-radius:10px;padding:12px 14px;background:var(--stripe);border:1px solid var(--line)}
+.gt .val{font-size:17px;color:var(--plum-d)}
+a.cl{color:var(--plum-d);text-decoration:none;font-weight:700;border-bottom:1.5px dotted var(--plum);cursor:pointer}
+.cards{display:flex;flex-direction:column;gap:28px}
+.ticket{background:var(--card);border-radius:18px;box-shadow:0 14px 30px -16px rgba(84,41,74,.3);border:1px solid var(--line);overflow:hidden}
+.ticket.hl{animation:p 1.4s}
+@keyframes p{0%{box-shadow:0 0 0 0 rgba(110,59,92,.55)}100%{box-shadow:0 0 0 14px rgba(110,59,92,0)}}
+.th{background:linear-gradient(135deg,var(--plum),var(--plum-d));color:#fff;padding:20px 26px;display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:6px}
+.th h3{font-family:'Fraunces',serif;font-weight:600;font-size:22px;margin:0}
+.th span{font-size:12.5px;opacity:.85}
+.tbd{padding:20px 26px 24px}
+.row{display:flex;justify-content:space-between;padding:7px 6px;font-size:14px}
+.row.g{border-top:1.5px dashed var(--line);margin-top:4px;padding-top:12px;font-weight:700;font-size:16px;color:var(--plum-d)}
+.row.h{background:var(--teal-bg);border-radius:10px;color:var(--teal);font-weight:700;margin-top:8px}
+.act{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap}
+.act button{flex:1 1 200px;border:0;border-radius:10px;padding:12px 14px;font:700 13.5px 'Karla',sans-serif;cursor:pointer;color:#fff;background:var(--plum)}
+.act button.ok{background:var(--teal)}
+.act small{display:block;font-weight:500;font-size:11px;opacity:.85;margin-top:2px}
+.sort{display:flex;justify-content:center;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+.lt{overflow-x:auto}
+.lt thead th{color:#fff;background:linear-gradient(135deg,var(--plum),var(--plum-d));padding:12px 10px}
+.lt td{padding:10px}
+.lt tbody tr:nth-child(even){background:var(--stripe)}
+.lt tfoot td{font-weight:700;border-top:2px solid var(--line);background:var(--stripe)}
+footer{text-align:center;color:var(--muted);font-size:12px;margin-top:50px;line-height:1.6}
+footer .note{margin-top:8px;color:var(--plum)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<div class="eyebrow">Loja de Roupa &amp; Acessórios Novos e de Segunda Mão</div>
+<h1>Pedidos de Clientas 18 setembro 2026</h1>
+<p>Pedidos recolhidos durante o DIRETO — prontos a copiar e enviar por Messenger</p>
+</header>
+<div class="tg">
+<button id="bc" class="tb active">🧾 Contas por clienta</button>
+<button id="bl" class="tb">📦 Lista por artigo</button>
+</div>
+<div id="vc">
+<h2 class="t">Clientas</h2>
+<div class="grid" id="grid"></div>
+<div class="seller">
+<div><span class="lbl">Vendedora</span><span class="val">Ana Karina Marques</span></div>
+<div><span class="lbl">Titular da conta</span><span class="val">Leonor Dias</span></div>
+<div><span class="lbl">IBAN — Banco CTT</span><span class="val">PT50 0193 0000 1051 6586 2107 7</span></div>
+<div><span class="lbl">MB WAY</span><span class="val">+351 967 401 340</span></div>
+</div>
+<div class="summary">
+<h2>Resumo geral</h2>
+<table><thead><tr><th>Cliente</th><th class="n">Nº artigos</th><th class="n">Total se confirmar</th><th class="n">Comissão 🔒</th></tr></thead><tbody id="sb"></tbody></table>
+<div class="gt" id="gt"></div>
+<div class="tot" id="tot"></div>
+</div>
+<div class="cards" id="cards"></div>
+</div>
+<div id="vl" style="display:none">
+<div class="sort">
+<button id="sn" class="tb active">🔢 Ordenar por nº de artigo</button>
+<button id="sc" class="tb">🔤 Ordenar por clienta (A-Z)</button>
+</div>
+<div class="box lt"><table><thead id="lh"></thead><tbody id="lb"></tbody><tfoot id="lf"></tfoot></table></div>
+</div>
+<footer>
+Comissão visível apenas nesta página — nunca incluída no texto copiado para as clientas.
+<div class="note">
+Dados cruzados entre a lista manuscrita do DIRETO de 18 de setembro de 2026 e a ficha de preços do DIRETO.<br>
+Nº 49 (Sofia Filipa) riscado na lista — cancelado, não incluído. Notas soltas sem clienta: nº 32 (saia cinzento escuro pregueada) e nº 45 (camisola bordô lisa). Nº 88 escrito como "leggings" na lista; na ficha do DIRETO é "calças cinzentas".<br>
+<span id="free"></span>
+</div>
+</footer>
+</div>
+<script>
+const SELLER={nome:"Ana Karina Marques",titular:"Leonor Dias",iban:"PT50 0193 0000 1051 6586 2107 7",mbway:"+351 967 401 340"};
+// [nº, artigo, comissão (preço base 0€), clienta]
+const A=[
+[30,'pijama cinzento e rosa “Friday” com estampado corações',1,'Carla Cruz'],
+[33,'macacão rena com fecho e capuz cornos, bege com coração',1,'Sofia Filipa'],
+[35,'t-shirt verde-água com lantejoulas',1,'Sofia Filipa'],
+[39,'camisola rosa com coelho e flores',1,'Sofia Filipa'],
+[40,'t-shirt branca “Sport Dept”',1,'Sofia Filipa'],
+[41,'t-shirt branca com unicórnio',1,'Carla Cruz'],
+[43,'leggings pretas com letras brancas',1,'Sofia Filipa'],
+[46,'leggings cinzenta clara',1,'Didia Escobar Silva'],
+[47,'leggings pretas “YO”',1,'Didia Escobar Silva'],
+[48,'casaco FILA azul, branco e cinzento',3,'Sofia Filipa'],
+[50,'camisola cinzenta “Brooklyn 86”',1,'Carla Cruz'],
+[51,'casaco cinzento com pelo',1,'Sofia Filipa'],
+[54,'leggings roxas',1,'Didia Escobar Silva'],
+[58,'leggings pretas Snoopy “Bonk”',1,'Carla Cruz'],
+[64,'t-shirt branca “Bonjour Paris”',1,'Carla Cruz'],
+[65,'t-shirt camuflada verde',1,'Sofia Filipa'],
+[66,'t-shirt rosa choque',1,'Maria Sacramento'],
+[68,'casaco floral azul-escuro com fecho',1,'Sofia Filipa'],
+[69,'macacão cinzento com botões dourados',3,'Didia Escobar Silva'],
+[77,'t-shirt branca “California”',1,'Didia Escobar Silva'],
+[80,'t-shirt branca cassete “Play my”',1,'Didia Escobar Silva'],
+[84,'camisola cinzenta com bailarina',1,'Carla Cruz'],
+[86,'leggings vermelhas com brilhos',1,'Carla Cruz'],
+[88,'calças cinzentas',1,'Carla Cruz'],
+[89,'camisola cinzenta camuflada com rosa',1,'Carla Cruz']
+];
+const PRECO=0;
+const orders=A.map(([num,nome,comm,client])=>({num,nome,comm,client,preco:PRECO+comm,qty:1}));
+const fmt=n=>n.toLocaleString('pt-PT',{minimumFractionDigits:2,maximumFractionDigits:2})+'€';
+const slug=s=>s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+const $=id=>document.getElementById(id);
+const sum=(a,f)=>a.reduce((s,o)=>s+f(o),0);
+const by={};orders.forEach(o=>(by[o.client]=by[o.client]||[]).push(o));
+const names=Object.keys(by).sort((a,b)=>a.localeCompare(b,'pt'));
+
+// artigos livres (30–89 sem clienta)
+const sold=new Set(orders.map(o=>o.num));const free=[];
+for(let n=30;n<=89;n++)if(!sold.has(n))free.push(n);
+$('free').textContent='Artigos sem clienta associada: '+free.join(', ')+'.';
+
+// vistas
+function show(c){$('vc').style.display=c?'':'none';$('vl').style.display=c?'none':'';$('bc').classList.toggle('active',c);$('bl').classList.toggle('active',!c)}
+$('bc').onclick=()=>show(true);$('bl').onclick=()=>show(false);
+function go(s){show(true);const t=$('ticket-'+s);if(t){t.scrollIntoView({behavior:'smooth',block:'center'});t.classList.remove('hl');void t.offsetWidth;t.classList.add('hl')}}
+function bind(){document.querySelectorAll('.cl').forEach(l=>l.onclick=e=>{e.preventDefault();go(l.dataset.s)})}
+
+// resumo geral
+$('tot').innerHTML=`<span>🔒 Total de comissões (se tudo for confirmado)</span><span>${fmt(sum(orders,o=>o.comm))}</span>`;
+$('gt').innerHTML=`<div><span class="lbl">Soma dos artigos sem comissão</span><span class="val">${fmt(sum(orders,o=>o.preco-o.comm))}</span></div><div><span class="lbl">Soma dos artigos com comissão</span><span class="val">${fmt(sum(orders,o=>o.preco))}</span></div>`;
+
+names.forEach(name=>{
+const its=by[name],s=slug(name),tp=sum(its,i=>i.preco),tc=sum(its,i=>i.comm),tq=its.length;
+const [f,...r]=name.split(' ');
+const tile=document.createElement('div');tile.className='tile';
+tile.innerHTML=`<span class="bd">${tq}</span><b>${f}</b><i>${r.join(' ')}</i>`;tile.onclick=()=>go(s);$('grid').appendChild(tile);
+const tr=document.createElement('tr');
+tr.innerHTML=`<td><a href="#" class="cl" data-s="${s}">${name}</a></td><td class="n">${tq}</td><td class="n">${fmt(tp)}</td><td class="n lock">${fmt(tc)}</td>`;$('sb').appendChild(tr);
+const t=document.createElement('div');t.id='ticket-'+s;t.className='ticket';
+t.innerHTML=`<div class="th"><h3>${name}</h3><span>${tq} artigo${tq>1?'s':''} pedido${tq>1?'s':''}</span></div>
+<div class="tbd"><table><thead><tr><th>Nº</th><th>Artigo</th><th class="n">Preço</th></tr></thead><tbody>${its.map(i=>`<tr><td>${i.num}</td><td>${i.nome}</td><td class="n">${fmt(i.preco)}</td></tr>`).join('')}</tbody></table>
+<div style="margin-top:14px">
+<div class="row"><span>Subtotal artigos</span><span>${fmt(tp)}</span></div>
+<div class="row"><span>Total com portes 5,40€</span><span>${fmt(tp+5.4)}</span></div>
+<div class="row"><span>Total com portes 8,93€</span><span>${fmt(tp+8.93)}</span></div>
+<div class="row h"><span>🔒 Só para mim — comissão</span><span>${fmt(tc)}</span></div></div>
+<div class="act"><button data-p="5.40">Copiar mensagem<small>Portes 5,40€</small></button><button data-p="8.93">Copiar mensagem<small>Portes 8,93€</small></button></div></div>`;
+$('cards').appendChild(t);
+t.querySelectorAll('.act button').forEach(b=>b.onclick=()=>{
+const p=parseFloat(b.dataset.p);
+const linhas=its.map(i=>`• ${i.num} — ${i.nome} — ${fmt(i.preco)}`).join('\n');
+const txt=`Olá ${name}! 💕
+
+Aqui está o resumo do seu pedido:
+
+${linhas}
+
+Subtotal: ${fmt(tp)}
+Portes: ${fmt(p)}
+Total a pagar: ${fmt(tp+p)}
+
+Dados para pagamento:
+Vendedora: ${SELLER.nome}
+Titular da conta: ${SELLER.titular}
+IBAN (Banco CTT): ${SELLER.iban}
+MB WAY: ${SELLER.mbway}
+
+Muito obrigada pelo seu interesse! 🌸
+
+Aviso: caso o pagamento não seja efetuado no prazo de 48 horas, será aplicado um custo adicional de 2€/dia.`;
+navigator.clipboard.writeText(txt).then(()=>{const o=b.innerHTML;b.classList.add('ok');b.innerHTML='Copiado! ✓<small>Pronto para o Messenger</small>';setTimeout(()=>{b.classList.remove('ok');b.innerHTML=o},1800)})});
+});
+
+// lista por artigo
+function lista(mode){
+const L=orders.map(o=>({...o,pa:o.preco-o.comm}));
+const cell=c=>`<a href="#" class="cl" data-s="${slug(c)}">${c}</a>`;
+if(mode==='c'){L.sort((a,b)=>a.client.localeCompare(b.client,'pt')||a.num-b.num);
+$('lh').innerHTML='<tr><th>Cliente</th><th>Nº</th><th>Artigo</th><th class="n">Preço do artigo</th><th class="n">Comissão</th><th class="n">Total</th></tr>';
+$('lb').innerHTML=L.map(o=>`<tr><td><b>${cell(o.client)}</b></td><td>${o.num}</td><td>${o.nome}</td><td class="n">${fmt(o.pa)}</td><td class="n">${fmt(o.comm)}</td><td class="n">${fmt(o.preco)}</td></tr>`).join('');
+}else{L.sort((a,b)=>a.num-b.num);
+$('lh').innerHTML='<tr><th>Nº</th><th>Artigo</th><th>Cliente</th><th class="n">Preço do artigo</th><th class="n">Comissão</th><th class="n">Total</th></tr>';
+$('lb').innerHTML=L.map(o=>`<tr><td>${o.num}</td><td>${o.nome}</td><td><b>${cell(o.client)}</b></td><td class="n">${fmt(o.pa)}</td><td class="n">${fmt(o.comm)}</td><td class="n">${fmt(o.preco)}</td></tr>`).join('');}
+$('lf').innerHTML=`<tr><td colspan="3">Total geral</td><td class="n">${fmt(sum(L,o=>o.pa))}</td><td class="n">${fmt(sum(L,o=>o.comm))}</td><td class="n">${fmt(sum(L,o=>o.preco))}</td></tr>`;
+bind();}
+lista('n');
+$('sn').onclick=()=>{lista('n');$('sn').classList.add('active');$('sc').classList.remove('active')};
+$('sc').onclick=()=>{lista('c');$('sc').classList.add('active');$('sn').classList.remove('active')};
+bind();
+</script>
+</body>
+</html>
