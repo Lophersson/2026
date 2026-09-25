@@ -1,8 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ateliê da Karina · Painel de Vendas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,14 +13,17 @@
     --creme:      #fdf7f2;
     --rosa:       #f6c9d3;
     --rosa-forte: #e8a3b5;
-    --lavanda:    #d9cdf0;
     --menta:      #bfe6dc;
-    --pessego:    #f9dcc4;
+    --menta-forte:#4f9c86;
     --texto:      #5c4a52;
     --texto-suave:#8a7783;
     --branco:     #fffdfb;
     --sombra:     0 10px 30px -12px rgba(150, 110, 130, 0.28);
+    box-sizing:border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
+  html{ scroll-padding-top: env(safe-area-inset-top, 0px); }
 
   *{ box-sizing:border-box; margin:0; padding:0; }
 
@@ -27,117 +31,131 @@
     font-family:'Nunito', sans-serif;
     color:var(--texto);
     background:
-      radial-gradient(circle at 8% 12%, rgba(217,205,240,0.55), transparent 40%),
-      radial-gradient(circle at 92% 18%, rgba(191,230,220,0.55), transparent 42%),
-      radial-gradient(circle at 50% 100%, rgba(249,220,196,0.5), transparent 55%),
+      radial-gradient(circle at 8% 12%, rgba(217,205,240,0.4), transparent 40%),
+      radial-gradient(circle at 92% 18%, rgba(191,230,220,0.5), transparent 42%),
+      radial-gradient(circle at 50% 100%, rgba(249,220,196,0.45), transparent 55%),
       var(--creme);
     min-height:100vh;
-    padding:56px 24px 80px;
+    padding:40px 20px 56px;
   }
 
-  .capa{
-    max-width:1080px;
-    margin:0 auto;
-  }
+  .capa{ max-width:1080px; margin:0 auto; }
 
-  /* ---------- Cabeçalho / assinatura visual ---------- */
-  header{
+  .assinatura{
     text-align:center;
-    margin-bottom:64px;
-    position:relative;
+    margin-bottom:34px;
+  }
+  .assinatura .etiqueta{
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--branco);
+    border:1px solid rgba(232,163,181,0.5);
+    padding:6px 18px; border-radius:999px;
+    font-size:0.78rem; letter-spacing:0.04em;
+    color:var(--rosa-forte); font-weight:700;
+    box-shadow:var(--sombra);
+  }
+  .assinatura .etiqueta::before{
+    content:""; width:8px; height:8px; border-radius:50%;
+    background:var(--rosa-forte); display:inline-block;
+  }
+  .assinatura h1{
+    font-family:'Fredoka', sans-serif; font-weight:600;
+    font-size:clamp(1.7rem, 4vw, 2.4rem);
+    color:#7a5566; margin-top:16px;
   }
 
-  .etiqueta{
+  /* ---------- Ecrã inicial: dois botões grandes ---------- */
+  #inicio{
+    display:flex;
+    gap:22px;
+    max-width:900px;
+    margin:60px auto 0;
+  }
+  .botao-secao{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    justify-content:flex-end;
+    gap:6px;
+    min-height:260px;
+    padding:32px 28px;
+    border:none;
+    border-radius:26px;
+    cursor:pointer;
+    text-align:left;
+    font-family:'Nunito', sans-serif;
+    color:var(--branco);
+    box-shadow:0 18px 40px -16px rgba(120,80,100,0.4);
+    transition:transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .botao-secao:hover{ transform:translateY(-5px); box-shadow:0 24px 46px -16px rgba(120,80,100,0.48); }
+  .botao-secao:focus-visible{ outline:3px solid #fff; outline-offset:3px; }
+  #botao-diretos{ background:linear-gradient(150deg, #f2a8bc, var(--rosa-forte)); }
+  #botao-pedidos{ background:linear-gradient(150deg, #7fc2ab, var(--menta-forte)); }
+  .botao-secao .numero-fichas{
+    font-family:'Fredoka', sans-serif;
+    font-size:0.85rem;
+    opacity:0.85;
+  }
+  .botao-secao .titulo-grande{
+    font-family:'Fredoka', sans-serif;
+    font-weight:600;
+    font-size:clamp(1.8rem, 4.5vw, 2.6rem);
+  }
+
+  @media (max-width:640px){
+    #inicio{ flex-direction:column; }
+    .botao-secao{ min-height:150px; }
+  }
+
+  /* ---------- Ecrãs de secção ---------- */
+  .ecra-secao{ display:none; }
+  .ecra-secao.ativo{ display:block; }
+
+  .barra-nav{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:30px;
+  }
+  .nav-botao{
     display:inline-flex;
     align-items:center;
     gap:8px;
     background:var(--branco);
-    border:1px solid rgba(232,163,181,0.5);
-    padding:6px 18px;
-    border-radius:999px;
-    font-size:0.8rem;
-    letter-spacing:0.08em;
-    text-transform:uppercase;
-    color:var(--rosa-forte);
+    border:1px solid rgba(0,0,0,0.06);
+    color:var(--texto);
+    font-family:'Nunito', sans-serif;
     font-weight:700;
+    font-size:0.9rem;
+    padding:10px 18px;
+    border-radius:999px;
+    cursor:pointer;
     box-shadow:var(--sombra);
-    margin-bottom:22px;
+    transition:transform 0.18s ease;
   }
-
-  .etiqueta::before{
-    content:"";
-    width:8px; height:8px;
-    border-radius:50%;
-    background:var(--rosa-forte);
-    display:inline-block;
+  .nav-botao:hover{ transform:translateY(-2px); }
+  .nav-botao:focus-visible{ outline:2px solid var(--rosa-forte); outline-offset:2px; }
+  .nav-botao.atual{
+    color:var(--branco);
+    border-color:transparent;
   }
+  #diretos .nav-botao.atual{ background:var(--rosa-forte); }
+  #pedidos .nav-botao.atual{ background:var(--menta-forte); }
 
-  h1{
+  .titulo-secao{
     font-family:'Fredoka', sans-serif;
     font-weight:600;
-    font-size:clamp(2.1rem, 5vw, 3.2rem);
-    color:#7a5566;
-    line-height:1.15;
-  }
-
-  h1 span{
-    color:var(--rosa-forte);
-  }
-
-  header p{
-    max-width:520px;
-    margin:16px auto 0;
-    color:var(--texto-suave);
-    font-size:1.02rem;
-  }
-
-  /* linha decorativa tipo "cabide" ligando as fases */
-  .fluxo{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    gap:10px;
-    margin-top:34px;
-    color:var(--texto-suave);
-    font-family:'Fredoka', sans-serif;
-    font-size:0.85rem;
-    font-weight:500;
-  }
-  .fluxo .ponto{ opacity:0.55; }
-  .fluxo svg{ width:34px; height:12px; opacity:0.5; }
-
-  /* ---------- Secções ---------- */
-  section{
-    margin-bottom:58px;
-  }
-
-  .secao-titulo{
-    display:flex;
-    align-items:baseline;
-    gap:14px;
-    margin-bottom:8px;
-  }
-
-  .numero{
-    font-family:'Fredoka', sans-serif;
-    font-size:2.1rem;
-    font-weight:600;
-    color:var(--fase-cor, var(--rosa-forte));
-    opacity:0.85;
-  }
-
-  .secao-titulo h2{
-    font-family:'Fredoka', sans-serif;
-    font-weight:600;
-    font-size:1.6rem;
+    font-size:1.7rem;
     color:#6f5261;
+    margin-bottom:6px;
   }
-
-  .secao-desc{
+  .desc-secao{
     color:var(--texto-suave);
-    font-size:0.96rem;
+    font-size:0.95rem;
     margin-bottom:26px;
-    margin-left:56px;
   }
 
   .grade{
@@ -146,7 +164,6 @@
     gap:18px;
   }
 
-  /* ---------- Cards ---------- */
   .card{
     background:var(--branco);
     border-radius:20px;
@@ -160,86 +177,40 @@
     border:1px solid rgba(0,0,0,0.03);
     position:relative;
     overflow:hidden;
-    transition:transform 0.28s ease, box-shadow 0.28s ease;
+    transition:transform 0.2s ease, box-shadow 0.2s ease;
   }
-
   .card::before{
-    content:"";
-    position:absolute;
-    top:0; left:0; right:0;
-    height:6px;
-    background:var(--fase-cor, var(--rosa));
-    opacity:0.75;
+    content:""; position:absolute; top:0; left:0; right:0; height:6px;
+    background:var(--fase-cor, var(--rosa)); opacity:0.75;
   }
-
-  .card:hover{
-    transform:translateY(-6px);
-    box-shadow:0 18px 34px -14px rgba(150,110,130,0.38);
-  }
-
-  .card:focus-visible{
-    outline:3px solid var(--fase-cor, var(--rosa-forte));
-    outline-offset:3px;
-  }
+  .card:hover{ transform:translateY(-5px); box-shadow:0 18px 34px -14px rgba(150,110,130,0.38); }
+  .card:focus-visible{ outline:3px solid var(--fase-cor, var(--rosa-forte)); outline-offset:3px; }
 
   .card .rotulo{
-    font-size:0.72rem;
-    text-transform:uppercase;
-    letter-spacing:0.07em;
-    color:var(--texto-suave);
-    font-weight:700;
+    font-size:0.72rem; letter-spacing:0.04em; color:var(--texto-suave); font-weight:700;
   }
-
   .card .data{
-    font-family:'Fredoka', sans-serif;
-    font-size:1.35rem;
-    font-weight:600;
-    color:#6f5261;
+    font-family:'Fredoka', sans-serif; font-size:1.35rem; font-weight:600; color:#6f5261;
   }
-
-  .card .ano{
-    font-size:0.85rem;
-    color:var(--texto-suave);
-    font-weight:600;
-    margin-top:-6px;
-  }
-
+  .card .ano{ font-size:0.85rem; color:var(--texto-suave); font-weight:600; margin-top:-6px; }
   .card .seta{
-    margin-top:6px;
-    font-size:0.85rem;
-    font-weight:700;
-    color:var(--fase-cor, var(--rosa-forte));
-    display:flex;
-    align-items:center;
-    gap:6px;
+    margin-top:6px; font-size:0.85rem; font-weight:700; color:var(--fase-cor, var(--rosa-forte));
+    display:flex; align-items:center; gap:6px;
   }
-
   .card:hover .seta{ gap:10px; }
-  .seta svg{ transition:transform 0.25s ease; }
+  .seta svg{ transition:transform 0.2s ease; }
   .card:hover .seta svg{ transform:translateX(3px); }
 
-  /* Cores por fase */
-  #diretos  { --fase-cor: var(--rosa-forte); }
-  #pedidos  { --fase-cor: #4f9c86; }
-
-  #pedidos  .numero{ color:#4f9c86; }
+  #diretos .card{ --fase-cor: var(--rosa-forte); }
+  #pedidos .card{ --fase-cor: var(--menta-forte); }
 
   footer{
-    text-align:center;
-    color:var(--texto-suave);
-    font-size:0.85rem;
-    margin-top:20px;
+    text-align:center; color:var(--texto-suave); font-size:0.85rem; margin-top:46px;
   }
-
   footer strong{ color:var(--rosa-forte); }
 
-  @media (max-width:560px){
-    .secao-desc{ margin-left:0; }
-    body{ padding:40px 16px 60px; }
-  }
-
   @media (prefers-reduced-motion: reduce){
-    .card, .seta svg{ transition:none; }
+    .card, .seta svg, .botao-secao, .nav-botao{ transition:none; }
   }
 </style>
 </head>
@@ -247,288 +218,109 @@
 
 <div class="capa">
 
-  <header>
-    <div class="etiqueta">Ateliê da Karina</div>
-    <h1>Painel de <span>Vendas Online</span></h1>
-    <p>Todos os acessos aos diretos e pedidos, organizados por data. Escolhe o card e segue para o registo correspondente.</p>
-    <div class="fluxo">
-      <span>Diretos</span>
-      <svg viewBox="0 0 34 12"><path d="M0 6 H30 M24 1 L30 6 L24 11" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span>Pedidos</span>
-    </div>
-  </header>
+  <div class="assinatura">
+    <span class="etiqueta">Ateliê da Karina</span>
+    <h1>Painel de Vendas Online</h1>
+  </div>
 
-  <!-- DIRETOS -->
-  <section id="diretos">
-    <div class="secao-titulo">
-      <span class="numero">01</span>
-      <h2>Diretos</h2>
+  <!-- ECRÃ INICIAL -->
+  <div id="inicio">
+    <button class="botao-secao" id="botao-diretos" onclick="irPara('diretos')">
+      <span class="numero-fichas" id="contagem-diretos"></span>
+      <span class="titulo-grande">Diretos</span>
+    </button>
+    <button class="botao-secao" id="botao-pedidos" onclick="irPara('pedidos')">
+      <span class="numero-fichas" id="contagem-pedidos"></span>
+      <span class="titulo-grande">Pedidos</span>
+    </button>
+  </div>
+
+  <!-- ECRÃ DIRETOS -->
+  <section class="ecra-secao" id="diretos">
+    <div class="barra-nav">
+      <button class="nav-botao" onclick="irPara('inicio')">← Início</button>
+      <button class="nav-botao atual">Diretos</button>
+      <button class="nav-botao" onclick="irPara('pedidos')">Pedidos →</button>
     </div>
-    <p class="secao-desc">Fichas dos artigos apresentados em cada direto.</p>
-    <div class="grade">
-      <a class="card" href="https://lophersson.github.io/2026/direto_260724.html" target="_blank" rel="noopener">
-        <span class="rotulo">Direto</span>
-        <span class="data">24 Jul</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver artigos <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-      <a class="card" href="https://lophersson.github.io/2026/direto_260729.html" target="_blank" rel="noopener">
-        <span class="rotulo">Direto</span>
-        <span class="data">29 Jul</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver artigos <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-      <a class="card" href="https://lophersson.github.io/2026/direto_260731.html" target="_blank" rel="noopener">
-        <span class="rotulo">Direto</span>
-        <span class="data">31 Jul</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver artigos <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-      <a class="card" href="https://lophersson.github.io/2026/direto_260802.html" target="_blank" rel="noopener">
-        <span class="rotulo">Direto</span>
-        <span class="data">02 Ago</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver artigos <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-      <a class="card" href="https://lophersson.github.io/2026/direto_260805.html" target="_blank" rel="noopener">
-        <span class="rotulo">Direto</span>
-        <span class="data">05 Ago</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver artigos <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-      <a class="card" href="https://lophersson.github.io/2026/direto_260807.html" target="_blank" rel="noopener">
-        <span class="rotulo">Direto</span>
-        <span class="data">07 Ago</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver artigos <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-      <a class="card" href="https://lophersson.github.io/2026/direto_260810.html" target="_blank" rel="noopener">
-        <span class="rotulo">Direto</span>
-        <span class="data">10 Ago</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver artigos <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-      <a class="card" href="https://lophersson.github.io/2026/direto_260812.html" target="_blank" rel="noopener">
-        <span class="rotulo">Direto</span>
-        <span class="data">12 Ago</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver artigos <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-      <a class="card" href="https://lophersson.github.io/2026/direto_260814.html" target="_blank" rel="noopener">
-        <span class="rotulo">Direto</span>
-        <span class="data">14 Ago</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver artigos <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-      <a class="card" href="https://lophersson.github.io/2026/direto_260816.html" target="_blank" rel="noopener">
-        <span class="rotulo">Direto</span>
-        <span class="data">16 Ago</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver artigos <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-       <a class="card" href="https://lophersson.github.io/2026/direto_260819.html" target="_blank" rel="noopener">
-        <span class="rotulo">Direto</span>
-        <span class="data">19 Ago</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver artigos <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-      </a>
-       <a class="card" href="https://lophersson.github.io/2026/direto_260821.html" target="_blank" rel="noopener">
-        <span class="rotulo">Direto</span>
-        <span class="data">21 Ago</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver artigos <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-       <a class="card" href="https://lophersson.github.io/2026/direto_260823.html" target="_blank" rel="noopener">
-        <span class="rotulo">Direto</span>
-        <span class="data">23 Ago</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver artigos <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-      </a>
-       <a class="card" href="https://lophersson.github.io/2026/direto_260827.html" target="_blank" rel="noopener">
-        <span class="rotulo">Direto</span>
-        <span class="data">27 Ago</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver artigos <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-        <a class="card" href="https://lophersson.github.io/2026/direto_260830.html" target="_blank" rel="noopener">
-        <span class="rotulo">Direto</span>
-        <span class="data">30 Ago</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver artigos <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-      <a class="card" href="https://lophersson.github.io/2026/direto_260916.html" target="_blank" rel="noopener">
-        <span class="rotulo">Direto</span>
-        <span class="data">16 Set</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver artigos <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-      <a class="card" href="https://lophersson.github.io/2026/direto_260918.html" target="_blank" rel="noopener">
-        <span class="rotulo">Direto</span>
-        <span class="data">18 Set</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver artigos <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-       <a class="card" href="https://lophersson.github.io/2026/direto_260920.html" target="_blank" rel="noopener">
-        <span class="rotulo">Direto</span>
-        <span class="data">20 Set</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver artigos <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-      </a>
-       <a class="card" href="https://lophersson.github.io/2026/direto_260924.html" target="_blank" rel="noopener">
-        <span class="rotulo">Direto</span>
-        <span class="data">24 Set</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver artigos <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-      </a>
-       <a class="card" href="https://lophersson.github.io/2026/direto_260927.html" target="_blank" rel="noopener">
-        <span class="rotulo">Direto</span>
-        <span class="data">27 Set</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver artigos <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-    </div>
+    <h2 class="titulo-secao">Diretos</h2>
+    <p class="desc-secao">Fichas dos artigos apresentados em cada direto.</p>
+    <div class="grade" id="grade-diretos"></div>
   </section>
 
-  <!-- PEDIDOS -->
-  <section id="pedidos">
-    <div class="secao-titulo">
-      <span class="numero">02</span>
-      <h2>Pedidos</h2>
+  <!-- ECRÃ PEDIDOS -->
+  <section class="ecra-secao" id="pedidos">
+    <div class="barra-nav">
+      <button class="nav-botao" onclick="irPara('inicio')">← Início</button>
+      <button class="nav-botao" onclick="irPara('diretos')">← Diretos</button>
+      <button class="nav-botao atual">Pedidos</button>
     </div>
-    <p class="secao-desc">Faturas recebidas pelas clientas.</p>
-    <div class="grade">
-      <a class="card" href="https://lophersson.github.io/2026/pedidos_260724.html" target="_blank" rel="noopener">
-        <span class="rotulo">Pedidos</span>
-        <span class="data">24 Jul</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver faturas <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-      <a class="card" href="https://lophersson.github.io/2026/pedidos_260729.html" target="_blank" rel="noopener">
-        <span class="rotulo">Pedidos</span>
-        <span class="data">29 Jul</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver faturas <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-      <a class="card" href="https://lophersson.github.io/2026/pedidos_260731.html" target="_blank" rel="noopener">
-        <span class="rotulo">Pedidos</span>
-        <span class="data">31 Jul</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver faturas <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-      <a class="card" href="https://lophersson.github.io/2026/pedidos_260802.html" target="_blank" rel="noopener">
-        <span class="rotulo">Pedidos</span>
-        <span class="data">02 Ago</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver faturas <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-      <a class="card" href="https://lophersson.github.io/2026/pedidos_260805.html" target="_blank" rel="noopener">
-        <span class="rotulo">Pedidos</span>
-        <span class="data">05 Ago</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver faturas <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-      <a class="card" href="https://lophersson.github.io/2026/pedidos_260807.html" target="_blank" rel="noopener">
-        <span class="rotulo">Pedidos</span>
-        <span class="data">07 Ago</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver faturas <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-      <a class="card" href="https://lophersson.github.io/2026/pedidos_260810.html" target="_blank" rel="noopener">
-        <span class="rotulo">Pedidos</span>
-        <span class="data">10 Ago</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver faturas <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-        <a class="card" href="https://lophersson.github.io/2026/pedidos_260812.html" target="_blank" rel="noopener">
-        <span class="rotulo">Pedidos</span>
-        <span class="data">12 Ago</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver faturas <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-        <a class="card" href="https://lophersson.github.io/2026/pedidos_260814.html" target="_blank" rel="noopener">
-        <span class="rotulo">Pedidos</span>
-        <span class="data">14 Ago</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver faturas <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-       <a class="card" href="https://lophersson.github.io/2026/pedidos_260816.html" target="_blank" rel="noopener">
-        <span class="rotulo">Pedidos</span>
-        <span class="data">16 Ago</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver faturas <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-       <a class="card" href="https://lophersson.github.io/2026/pedidos_260819.html" target="_blank" rel="noopener">
-        <span class="rotulo">Pedidos</span>
-        <span class="data">19 Ago</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver faturas <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-      <a class="card" href="https://lophersson.github.io/2026/pedidos_260821.html" target="_blank" rel="noopener">
-        <span class="rotulo">Pedidos</span>
-        <span class="data">21 Ago</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver faturas <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-       <a class="card" href="https://lophersson.github.io/2026/pedidos_260823.html" target="_blank" rel="noopener">
-        <span class="rotulo">Pedidos</span>
-        <span class="data">23 Ago</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver faturas <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-      <a class="card" href="https://lophersson.github.io/2026/pedidos_260827.html" target="_blank" rel="noopener">
-        <span class="rotulo">Pedidos</span>
-        <span class="data">27 Ago</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver faturas <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-      <a class="card" href="https://lophersson.github.io/2026/pedidos_260830.html" target="_blank" rel="noopener">
-        <span class="rotulo">Pedidos</span>
-        <span class="data">30 Ago</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver faturas <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-      <a class="card" href="https://lophersson.github.io/2026/pedidos_260916.html" target="_blank" rel="noopener">
-        <span class="rotulo">Pedidos</span>
-        <span class="data">16 Set</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver faturas <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-      <a class="card" href="https://lophersson.github.io/2026/pedidos_260918.html" target="_blank" rel="noopener">
-        <span class="rotulo">Pedidos</span>
-        <span class="data">18 Set</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver faturas <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-      <a class="card" href="https://lophersson.github.io/2026/pedidos_260920.html" target="_blank" rel="noopener">
-        <span class="rotulo">Pedidos</span>
-        <span class="data">20 Set</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver faturas <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-      <a class="card" href="https://lophersson.github.io/2026/pedidos_260924.html" target="_blank" rel="noopener">
-        <span class="rotulo">Pedidos</span>
-        <span class="data">24 Set</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver faturas <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-      <a class="card" href="https://lophersson.github.io/2026/pedidos_260927.html" target="_blank" rel="noopener">
-        <span class="rotulo">Pedidos</span>
-        <span class="data">27 Set</span>
-        <span class="ano">2026</span>
-        <span class="seta">Ver faturas <svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-    </div>
+    <h2 class="titulo-secao">Pedidos</h2>
+    <p class="desc-secao">Faturas recebidas pelas clientas.</p>
+    <div class="grade" id="grade-pedidos"></div>
   </section>
 
-  <footer>
-    Feito com carinho de @Lophersson para <strong>Karina</strong> 💐
-  </footer>
+  <footer>Feito com carinho de @Lophersson para <strong>Karina</strong> 💐</footer>
 
 </div>
+
+<script>
+  const setaSvg = '<svg width="14" height="10" viewBox="0 0 14 10"><path d="M0 5 H12 M8 1 L12 5 L8 9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  // datas [ano, mes-abreviado, dia]
+  const datas = [
+    ["27","Set","2026"], ["24","Set","2026"], ["20","Set","2026"],
+    ["18","Set","2026"], ["16","Set","2026"], ["30","Ago","2026"],
+    ["27","Ago","2026"], ["23","Ago","2026"], ["21","Ago","2026"],
+    ["19","Ago","2026"], ["16","Ago","2026"], ["14","Ago","2026"],
+    ["12","Ago","2026"], ["10","Ago","2026"], ["07","Ago","2026"],
+    ["05","Ago","2026"], ["02","Ago","2026"], ["31","Jul","2026"],
+    ["29","Jul","2026"], ["24","Jul","2026"]
+  ];
+
+  const mesNumero = { Jul:"07", Ago:"08", Set:"09" };
+
+  function slug(dia, mes, ano){
+    return ano.slice(2) + mesNumero[mes] + dia;
+  }
+
+  function construirGrade(id, prefixo, rotulo, textoSeta){
+    const container = document.getElementById(id);
+    let html = "";
+    datas.forEach(([dia, mes, ano]) => {
+      const url = `https://lophersson.github.io/2026/${prefixo}_${slug(dia, mes, ano)}.html`;
+      html += `
+        <a class="card" href="${url}" target="_blank" rel="noopener">
+          <span class="rotulo">${rotulo}</span>
+          <span class="data">${dia} ${mes}</span>
+          <span class="ano">${ano}</span>
+          <span class="seta">${textoSeta} ${setaSvg}</span>
+        </a>`;
+    });
+    container.innerHTML = html;
+  }
+
+  construirGrade("grade-diretos", "direto", "Direto", "Ver artigos");
+  construirGrade("grade-pedidos", "pedidos", "Pedidos", "Ver faturas");
+
+  document.getElementById("contagem-diretos").textContent = datas.length + " fichas";
+  document.getElementById("contagem-pedidos").textContent = datas.length + " faturas";
+
+  function irPara(destino){
+    document.getElementById("inicio").style.display = destino === "inicio" ? "flex" : "none";
+    document.querySelectorAll(".ecra-secao").forEach(el => el.classList.remove("ativo"));
+    if(destino !== "inicio"){
+      document.getElementById(destino).classList.add("ativo");
+    }
+    window.scrollTo({ top: 0, behavior: "instant" });
+    history.replaceState(null, "", destino === "inicio" ? "#" : "#" + destino);
+  }
+
+  // permite abrir diretamente numa secção via #diretos ou #pedidos
+  const hash = window.location.hash.replace("#", "");
+  if(hash === "diretos" || hash === "pedidos"){
+    irPara(hash);
+  }
+</script>
 
 </body>
 </html>
