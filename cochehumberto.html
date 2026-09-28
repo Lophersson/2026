@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nissan Note: legalización en Portugal</title>
+<style>
+:root{--bg:#eef1f4;--card:#fff;--ink:#14202b;--mut:#55636f;--line:#cfd7de;--acc:#1f4fa3;--ok:#1b7a4b;--warn:#a85a00;--warnbg:#fff3e2;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#11171c;--card:#1a232a;--ink:#e8eef3;--mut:#9aa8b4;--line:#2d3a44;--acc:#7ea6f0;--ok:#5fcf98;--warn:#ffb457;--warnbg:#2b2114}}
+:root[data-theme="dark"]{--bg:#11171c;--card:#1a232a;--ink:#e8eef3;--mut:#9aa8b4;--line:#2d3a44;--acc:#7ea6f0;--ok:#5fcf98;--warn:#ffb457;--warnbg:#2b2114}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:760px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:1.7rem;line-height:1.15;margin:0 0 6px;letter-spacing:-.01em}
+h2{font-size:1.15rem;margin:34px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--acc)}
+.sub{color:var(--mut);margin:0 0 16px}
+.warn{background:var(--warnbg);border-left:4px solid var(--warn);padding:12px 14px;border-radius:6px;margin:14px 0}
+.warn b{color:var(--warn)}
+.warn ul{margin:6px 0 0;padding-left:18px}
+ol.route{list-style:none;margin:0;padding:0 0 0 22px;border-left:3px solid var(--line)}
+.step{position:relative;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin:0 0 12px 10px}
+.step:before{content:attr(data-n);position:absolute;left:-42px;top:12px;width:28px;height:28px;border-radius:50%;background:var(--acc);color:#fff;font-weight:700;font-size:.85rem;display:grid;place-items:center}
+.step.done{opacity:.55}
+.step h3{margin:0 0 4px;font-size:1.02rem;display:flex;gap:8px;align-items:flex-start}
+.step h3 input{margin-top:5px;width:18px;height:18px;flex:none}
+.step p{margin:4px 0;font-size:.94rem}
+.meta{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.85rem;color:var(--mut);margin-top:6px}
+.meta b{color:var(--ink)}
+.cost{color:var(--ok);font-weight:600}
+.fix{font-size:.85rem;color:var(--warn);margin-top:6px}
+a{color:var(--acc)}
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);font-size:.92rem}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+td:last-child,th:last-child{text-align:right;white-space:nowrap}
+.wrap{overflow-x:auto}
+tfoot td{font-weight:700}
+small{color:var(--mut)}
+ul.src{padding-left:18px;font-size:.88rem}
+</style>
+</head>
+<body>
+<main>
+<h1>Nissan Note 1.5 dCi 86 cv (2006)</h1>
+<p class="sub">Del registro en Ferrol a la matrícula portuguesa. Pasos contrastados con fuentes oficiales portuguesas (gov.pt, Portal das Finanças, IMT) en septiembre de 2026. Marca cada paso al completarlo: se guarda en este navegador.</p>
+
+<div class="warn"><b>Lo que he corregido de tu guía original</b>
+<ul>
+<li><b>CRUE:</b> el plazo es de 30 días una vez cumplidos los 3 meses de estancia, no solo "al cumplir 90 días".</li>
+<li><b>Carné español:</b> el registro en el IMT es gratuito y el plazo (60 días) cuenta desde que empiezas a residir, no desde el CRUE. No hace falta canjearlo mientras esté vigente.</li>
+<li><b>Exención del ISV:</b> se puede pedir hasta 12 meses después de trasladar la residencia (no 6). Con exención se presenta antes la solicitud y después la DAV en régimen especial.</li>
+<li><b>DAV:</b> si el coche ya está en Portugal, el plazo general de 20 días hábiles corre desde su entrada. Consulta en la Alfândega cómo te afecta si ya pasó.</li>
+<li><b>IUC:</b> tu coche es de 2006, así que va por la categoría A (más barata; no depende del CO₂). Los 90 días que indicabas no aparecen en las fuentes.</li>
+<li><b>Faltaba:</b> inscribirte en el Sistema de Fiscalidade Automóvel (obligatorio para presentar la DAV) y el seguro.</li>
+</ul></div>
+
+<h2>Fase 1. Regularizar tu residencia</h2>
+<ol class="route" id="f1"></ol>
+
+<h2>Fase 2. Legalizar el coche</h2>
+<ol class="route" id="f2"></ol>
+
+<h2>Costes estimados</h2>
+<div class="wrap"><table>
+<thead><tr><th>Concepto</th><th>Importe</th></tr></thead>
+<tbody>
+<tr><td>CRUE</td><td>15 €</td></tr>
+<tr><td>Certificado de Conformidad (CoC)</td><td>100–300 €</td></tr>
+<tr><td>Inspección IPO categoría B</td><td>≈ 93–128 €</td></tr>
+<tr><td>Tasa IMT (con CoC)</td><td>45 €</td></tr>
+<tr><td>Matrículas físicas</td><td>20–40 €</td></tr>
+<tr><td>Registo Automóvel</td><td>55–65 €</td></tr>
+</tbody>
+<tfoot><tr><td>Total fijo aproximado</td><td>≈ 330–590 €</td></tr></tfoot>
+</table></div>
+<p><small>Sin ISV ni IUC. El ISV puede ser 0 € con exención; si no la obtienes, un coche de más de 10 años recibe la reducción máxima por antigüedad (80 % en la parte de cilindrada), pero usa el simulador oficial con los datos de tu ficha técnica. Los importes varían según proveedor y año: confírmalos antes de pagar.</small></p>
+
+<h2>Fuentes consultadas</h2>
+<ul class="src">
+<li><a href="https://www2.gov.pt/servicos/tratar-do-imposto-de-um-veiculo-comprado-no-estrangeiro">gov.pt: imposto de veículo comprado no estrangeiro (DAV, plazos)</a></li>
+<li><a href="https://www2.gov.pt/servicos/pedir-a-isencao-do-imposto-sobre-veiculos-quando-se-vem-morar-para-portugal">gov.pt: exención de ISV al trasladar la residencia</a></li>
+<li><a href="https://www2.gov.pt/servicos/trocar-carta-de-conducao-estrangeira-por-portuguesa">gov.pt: carné extranjero y registro en el IMT</a></li>
+<li><a href="https://info.portaldasfinancas.gov.pt/pt/destaques/Paginas/IUC_Veiculos_importados.aspx">Portal das Finanças: IUC de vehículos importados</a></li>
+<li><a href="https://informacoeseservicos.lisboa.pt/servicos/detalhe/registo-de-cidadao-da-uniao-europeia-certificado">Câmara de Lisboa: CRUE (plazos)</a></li>
+</ul>
+<p><small>Guía orientativa, no asesoría legal. Verifica importes y requisitos con la Câmara de Barcelos, la Alfândega y el IMT.</small></p>
+</main>
+<script>
+var F1=[
+["Certificado de residencia (CRUE)","Câmara Municipal de Barcelos, en persona. Suele pedirse pasaporte o DNI, NIF, prueba de domicilio y prueba de medios o contrato de trabajo; varía según la cámara, así que pregunta antes.","Entre el mes 3 y el mes 4 de estancia","15 €","Se emite en el acto"],
+["Actualizar NIF y domicilio fiscal","Finanças o Portal das Finanças. Hazlo justo tras el CRUE.","Tras el CRUE","Gratis",""],
+["Alta en el Sistema de Fiscalidade Automóvel","Portal das Finanças, con tu acceso. Es imprescindible para presentar la DAV y solicitar la exención.","Antes de la fase 2","Gratis",""],
+["Registrar el carné español en el IMT","Online o en ventanilla, con documento de identidad, carné y comprobante de residencia. No hace falta canjearlo mientras esté vigente.","60 días desde que empiezas a residir","Gratis","Es una obligación aparte del CRUE"]
+];
+var F2=[
+["Preparar la documentación en España","Ficha técnica, permiso de circulación y factura o prueba de propiedad. Pregunta a la DGT (o a tu gestoría) cómo dar de baja el coche en España y qué acredita ese trámite; hazlo en el momento correcto para que no te quede sin seguro ni matrícula.","Antes de la DAV","Consultar","Ojo con el impuesto municipal de Ferrol"],
+["Solicitar la exención del ISV por traslado de residencia","Portal das Finanças > Serviços Aduaneiros > formulario 1460.1. Requisitos: haber residido en otro país y que el coche fuera tuyo al menos 6 meses antes del traslado. Una sola vez cada 10 años; no puedes venderlo ni cederlo en 12 meses.","Hasta 12 meses tras el traslado de residencia","Gratis","Si no la obtienes, pagas ISV en la DAV"],
+["Certificado de Conformidad (CoC)","Pídelo a Nissan (marca o concesionario). Si no existe, el IMT puede asignar un número de homologación nacional.","Antes de la inspección","100–300 €",""],
+["Inspección IPO categoría B","Inspección extraordinaria en un centro autorizado para categoría B. Comprueba con el IMT el orden exacto respecto a la DAV.","Antes de pedir la matrícula","≈ 93–128 €",""],
+["Declaración Aduanera de Vehículos (DAV)","Portal das Finanças > Serviços Aduaneiros > DAV. Con exención, en régimen especial una vez aprobada. Sin ella, se liquida el ISV y se paga en 10 días hábiles.","20 días hábiles desde la entrada del coche","Gratis (ISV aparte)","No presentarla a tiempo puede acarrear multas"],
+["Matrícula en el IMT y Documento Único Automóvel","Pago de la tasa (45 € con CoC) y solicitud del certificado de matrícula. Compra las placas.","60 días tras la regularización fiscal","45 € + 20–40 €",""],
+["Registo Automóvel (IRN)","Registro de propiedad a tu nombre. Confirma si se tramita junto a la matrícula.","Inmediatamente después","55–65 €",""],
+["Seguro portugués","Necesario para circular con la matrícula portuguesa.","Antes de circular","Según póliza","No estaba en tu guía"],
+["Pago del IUC","Portal das Finanças. Tu coche (matriculado en 2006) va por la categoría A: depende de cilindrada, combustible y año. Hoy se paga en el mes de la matrícula portuguesa; las reglas de pago cambian a partir de 2027.","Según el calendario vigente","Anual, bajo","Confirma el importe en el Portal"]
+];
+function render(list,id,off){var ol=document.getElementById(id),saved={};try{saved=JSON.parse(localStorage.getItem("nn")||"{}")}catch(e){}
+list.forEach(function(s,i){var n=i+1+off,li=document.createElement("li");li.className="step"+(saved[n]?" done":"");li.setAttribute("data-n",n);
+li.innerHTML='<h3><input type="checkbox" '+(saved[n]?"checked":"")+' aria-label="Completado"><span>'+s[0]+'</span></h3><p>'+s[1]+'</p><div class="meta"><span><b>Plazo:</b> '+s[2]+'</span><span><b>Coste:</b> <span class="cost">'+s[3]+'</span></span></div>'+(s[4]?'<div class="fix">'+s[4]+'</div>':'');
+li.querySelector("input").onchange=function(e){li.classList.toggle("done",e.target.checked);try{var d=JSON.parse(localStorage.getItem("nn")||"{}");d[n]=e.target.checked;localStorage.setItem("nn",JSON.stringify(d))}catch(x){}};
+ol.appendChild(li)})}
+render(F1,"f1",0);render(F2,"f2",F1.length);
+</script>
+</body>
+</html>
