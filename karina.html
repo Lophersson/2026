@@ -268,7 +268,7 @@
 
   // datas [ano, mes-abreviado, dia]
   const datas = [
-    ["27","Set","2026"], ["24","Set","2026"], ["20","Set","2026"],
+    ["01","Out","2026"], ["27","Set","2026"], ["24","Set","2026"], ["20","Set","2026"],
     ["18","Set","2026"], ["16","Set","2026"], ["30","Ago","2026"],
     ["27","Ago","2026"], ["23","Ago","2026"], ["21","Ago","2026"],
     ["19","Ago","2026"], ["16","Ago","2026"], ["14","Ago","2026"],
@@ -277,7 +277,7 @@
     ["29","Jul","2026"], ["24","Jul","2026"]
   ];
 
-  const mesNumero = { Jul:"07", Ago:"08", Set:"09" };
+  const mesNumero = { Jul:"07", Ago:"08", Set:"09", Out:"10" };
 
   function slug(dia, mes, ano){
     return ano.slice(2) + mesNumero[mes] + dia;
