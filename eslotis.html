@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Conversor EUR ⇄ PLN · Cracóvia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f1e9dc; --card:#faf5ec; --field:#fffdf8; --ink:#3b2b1d; --muted:#8a7660;
+  --line:#e0d2bc; --accent:#a9812f; --accent-ink:#fff9ea; --soft:#efe3cf;
+  --shadow:0 24px 50px -28px rgba(59,43,29,.45);
+}
+:root[data-theme="dark"]{
+  --bg:#120e28; --card:#1b1640; --field:#15113a; --ink:#f0eaff; --muted:#a79ed3;
+  --line:#352f6b; --accent:#f08cc6; --accent-ink:#1a1030; --soft:#241e52;
+  --shadow:0 24px 50px -28px rgba(0,0,0,.7);
+}
+*{box-sizing:border-box;margin:0}
+html{background:var(--bg)}
+body{
+  min-height:100vh; padding:20px 16px 40px; display:flex; flex-direction:column; align-items:center;
+  font-family:'DM Sans',system-ui,sans-serif; color:var(--ink); background:var(--bg);
+  transition:background .3s,color .3s;
+}
+.bar{width:100%;max-width:480px;display:flex;justify-content:space-between;gap:8px;margin-bottom:22px}
+.chip{
+  font:500 .8rem 'DM Sans',sans-serif; color:var(--ink); background:var(--card);
+  border:1px solid var(--line); border-radius:999px; padding:9px 14px; cursor:pointer;
+  transition:border-color .2s,transform .1s;
+}
+.chip:hover{border-color:var(--accent)} .chip:active{transform:scale(.97)}
+.chip:focus-visible,input:focus-visible,.refresh:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+main{
+  width:100%;max-width:480px;background:var(--card);border:1px solid var(--line);
+  border-radius:22px;padding:30px 24px 26px;box-shadow:var(--shadow);
+}
+h1{font:600 2.3rem/1.1 'Cormorant Garamond',Georgia,serif;letter-spacing:.2px}
+.sub{color:var(--muted);margin:8px 0 26px;font-size:.95rem}
+.field{
+  background:var(--field);border:1px solid var(--line);border-radius:16px;
+  padding:14px 16px 12px;transition:border-color .2s,box-shadow .2s;
+}
+.field:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent)}
+.field label{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted)}
+.field label b{font:500 .8rem 'DM Mono',monospace;color:var(--accent)}
+.field input{
+  width:100%;border:0;background:transparent;color:var(--ink);margin-top:4px;
+  font:500 2rem 'DM Mono',monospace;padding:2px 0;outline:none;
+}
+.swap{text-align:center;color:var(--accent);font-size:1.4rem;line-height:1;margin:10px 0}
+.rates{margin-top:22px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rate{background:var(--soft);border-radius:14px;padding:12px 14px}
+.rate small{display:block;color:var(--muted);font-size:.74rem;margin-bottom:3px}
+.rate span{font:500 .98rem 'DM Mono',monospace}
+.status{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px;font-size:.78rem;color:var(--muted)}
+.status.warn{color:var(--accent)}
+.refresh{
+  font:500 .78rem 'DM Sans',sans-serif;color:var(--accent);background:none;
+  border:1px solid var(--line);border-radius:999px;padding:6px 12px;cursor:pointer;white-space:nowrap;
+}
+.refresh:hover{border-color:var(--accent)}
+h2{font:600 1.35rem 'Cormorant Garamond',Georgia,serif;margin:28px 0 10px}
+.quick{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.quick ul{list-style:none;padding:0;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.quick li{display:flex;justify-content:space-between;gap:8px;padding:9px 12px;font:400 .85rem 'DM Mono',monospace}
+.quick li+li{border-top:1px solid var(--line)}
+.quick li span:last-child{color:var(--accent)}
+.tip{margin-top:22px;font-size:.85rem;line-height:1.55;color:var(--muted);border-left:3px solid var(--accent);padding-left:12px}
+@media (max-width:380px){.quick{grid-template-columns:1fr}.field input{font-size:1.7rem}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <button class="chip" id="langBtn" type="button"></button>
+  <button class="chip" id="themeBtn" type="button"></button>
+</div>
+
+<main>
+  <h1 id="title"></h1>
+  <p class="sub" id="sub"></p>
+
+  <div class="field">
+    <label for="eur"><span id="lblEur"></span><b>EUR</b></label>
+    <input id="eur" type="text" inputmode="decimal" autocomplete="off" value="100">
+  </div>
+  <div class="swap" aria-hidden="true">⇅</div>
+  <div class="field">
+    <label for="pln"><span id="lblPln"></span><b>PLN</b></label>
+    <input id="pln" type="text" inputmode="decimal" autocomplete="off">
+  </div>
+
+  <div class="rates">
+    <div class="rate"><small>1 EUR</small><span id="r1"></span></div>
+    <div class="rate"><small>1 PLN</small><span id="r2"></span></div>
+  </div>
+
+  <div class="status" id="statusBox">
+    <span id="status"></span>
+    <button class="refresh" id="refreshBtn" type="button"></button>
+  </div>
+
+  <h2 id="quickTitle"></h2>
+  <div class="quick">
+    <ul id="quickEur"></ul>
+    <ul id="quickPln"></ul>
+  </div>
+
+  <p class="tip" id="tip"></p>
+</main>
+
+<script>
+const TXT = {
+  pt: {
+    locale:'pt-PT', langBtn:'Traduzir para espanhol', themeLight:'Modo escuro', themeDark:'Modo claro',
+    title:'Euro ⇄ Zlóti', sub:'Para a nossa viagem a Cracóvia',
+    lblEur:'Tenho (euros)', lblPln:'Tenho (zlótis)', refresh:'Atualizar',
+    loading:'A obter a taxa…', ok:(d,s)=>`Taxa de ${d} · ${s}`,
+    cache:(d)=>`Sem ligação · última taxa guardada (${d})`,
+    approx:'Sem ligação · taxa aproximada, volte a tentar',
+    quickTitle:'Referência rápida',
+    tip:'Dica: em Cracóvia, pague sempre em zlótis (PLN) e recuse a conversão proposta pelo terminal. As casas de câmbio e os cartões aplicam uma margem sobre esta taxa de referência.'
+  },
+  es: {
+    locale:'es-ES', langBtn:'Traducir al portugués', themeLight:'Modo oscuro', themeDark:'Modo claro',
+    title:'Euro ⇄ Esloti', sub:'Para nuestro viaje a Cracovia',
+    lblEur:'Tengo (euros)', lblPln:'Tengo (eslotis)', refresh:'Actualizar',
+    loading:'Obteniendo la tasa…', ok:(d,s)=>`Tasa del ${d} · ${s}`,
+    cache:(d)=>`Sin conexión · última tasa guardada (${d})`,
+    approx:'Sin conexión · tasa aproximada, vuelve a intentarlo',
+    quickTitle:'Referencia rápida',
+    tip:'Consejo: en Cracovia paga siempre en eslotis (PLN) y rechaza la conversión que propone el datáfono. Las casas de cambio y las tarjetas aplican un margen sobre esta tasa de referencia.'
+  }
+};
+
+const $ = id => document.getElementById(id);
+const FALLBACK_RATE = 4.25;
+let lang = 'pt', rate = FALLBACK_RATE, rateInfo = {state:'loading'}, last = 'eur';
+
+const SOURCES = [
+  { name:'Frankfurter · BCE', url:'https://api.frankfurter.dev/v1/latest?base=EUR&symbols=PLN',
+    pick:d => ({ r:d.rates.PLN, date:d.date }) },
+  { name:'open.er-api.com', url:'https://open.er-api.com/v6/latest/EUR',
+    pick:d => ({ r:d.rates.PLN, date:(d.time_last_update_utc||'').slice(5,16) }) }
+];
+
+function parse(v){
+  v = (v||'').trim().replace(/\s/g,'');
+  if(!v) return NaN;
+  if(v.includes(',') && v.includes('.')){
+    v = v.lastIndexOf(',') > v.lastIndexOf('.') ? v.replace(/\./g,'').replace(',','.') : v.replace(/,/g,'');
+  } else v = v.replace(',','.');
+  return parseFloat(v);
+}
+const fmt = (n,d=2,group=true) =>
+  new Intl.NumberFormat(TXT[lang].locale,{minimumFractionDigits:d,maximumFractionDigits:d,useGrouping:group}).format(n);
+
+function convert(){
+  const src = last === 'eur' ? $('eur') : $('pln');
+  const dst = last === 'eur' ? $('pln') : $('eur');
+  const n = parse(src.value);
+  dst.value = isNaN(n) ? '' : fmt(last === 'eur' ? n*rate : n/rate, 2, false);
+}
+
+function renderStatic(){
+  const t = TXT[lang];
+  document.documentElement.lang = lang;
+  $('langBtn').textContent = t.langBtn;
+  $('themeBtn').textContent = document.documentElement.dataset.theme === 'dark' ? t.themeDark : t.themeLight;
+  $('title').textContent = t.title; $('sub').textContent = t.sub;
+  $('lblEur').textContent = t.lblEur; $('lblPln').textContent = t.lblPln;
+  $('refreshBtn').textContent = t.refresh; $('quickTitle').textContent = t.quickTitle; $('tip').textContent = t.tip;
+  $('r1').textContent = fmt(rate,4) + ' PLN';
+  $('r2').textContent = fmt(1/rate,4) + ' EUR';
+  const s = rateInfo, box = $('statusBox');
+  box.classList.toggle('warn', s.state === 'approx' || s.state === 'cache');
+  $('status').textContent = s.state === 'ok' ? t.ok(s.date, s.source)
+    : s.state === 'cache' ? t.cache(s.date) : s.state === 'approx' ? t.approx : t.loading;
+  $('quickEur').innerHTML = [5,10,20,50,100,200].map(v => `<li><span>${v} €</span><span>${fmt(v*rate,2)} zł</span></li>`).join('');
+  $('quickPln').innerHTML = [10,20,50,100,200,500].map(v => `<li><span>${v} zł</span><span>${fmt(v/rate,2)} €</span></li>`).join('');
+}
+
+async function loadRate(){
+  rateInfo = {state:'loading'}; renderStatic();
+  for(const s of SOURCES){
+    try{
+      const res = await fetch(s.url,{cache:'no-store'});
+      if(!res.ok) throw new Error(res.status);
+      const {r,date} = s.pick(await res.json());
+      if(!(r > 0)) throw new Error('bad rate');
+      rate = r; rateInfo = {state:'ok', date, source:s.name};
+      try{ localStorage.setItem('eurpln', JSON.stringify({rate:r, date})); }catch(e){}
+      renderStatic(); convert(); return;
+    }catch(e){ /* intenta la siguiente fuente */ }
+  }
+  try{
+    const c = JSON.parse(localStorage.getItem('eurpln'));
+    if(c && c.rate > 0){ rate = c.rate; rateInfo = {state:'cache', date:c.date}; renderStatic(); convert(); return; }
+  }catch(e){}
+  rate = FALLBACK_RATE; rateInfo = {state:'approx'}; renderStatic(); convert();
+}
+
+$('eur').addEventListener('input', () => { last = 'eur'; convert(); });
+$('pln').addEventListener('input', () => { last = 'pln'; convert(); });
+$('refreshBtn').addEventListener('click', loadRate);
+$('langBtn').addEventListener('click', () => { lang = lang === 'pt' ? 'es' : 'pt'; renderStatic(); convert(); });
+$('themeBtn').addEventListener('click', () => {
+  const r = document.documentElement;
+  if(r.dataset.theme === 'dark') delete r.dataset.theme; else r.dataset.theme = 'dark';
+  renderStatic();
+});
+
+renderStatic(); convert(); loadRate();
+</script>
+</body>
+</html>
