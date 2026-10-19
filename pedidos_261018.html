@@ -103,17 +103,19 @@ footer{text-align:center;color:var(--muted);font-size:12px;margin-top:50px;line-
 const SELLER={nome:"Ana Karina Marques",titular:"Leonor Dias",iban:"PT50 0193 0000 1051 6586 2107 7",mbway:"+351 967 401 340"};
 // [nº, artigo, preço loja (0 se só há comissão), comissão, clienta]
 // Preço 0 + comissão 0 = preço ainda por definir
-const CC='Carolina Moniz',KPD='Kristina Patrício Dutra',MC='Mónica Câmara',LV='Lúcia Vieira',MCo='Micaela Cordeiro',JA='Jeane Alex',AO='Alexandra Oliveira',SEM='Por atribuir';
+const CC='Carolina Moniz',KPD='Kristina Patrício Dutra',MC='Mónica Câmara',LV='Lúcia Vieira',MCo='Micaela Cordeiro',JA='Jeane Alex',AO='Alexandra Oliveira',BV='Bárbara Vultão',SEM='Por atribuir';
 const A=[
 [32,'vestido floral de bombazina azul',0,2,'Carla Cruz'],
 [34,'camisola Lanidor com cervo',0,2.5,JA],
+[41,'fato morcego roxo e preto + collants 6/12m',7,2,BV],
 [46,'perfume de chocolate',4.59,2,LV],
 [46,'perfume de chocolate',4.59,2,MCo],
 [47,'perfume de marshmallow',4.59,2,LV],
 [47,'perfume de marshmallow',4.59,2,'Paula Carreiro'],
 [49,'vestido cinzento SFT',0,2,JA],
 [50,'suéter branco Gocco com cavalo',0,3,JA],
-[55,'pijama azul-marinho Patrulha Pata',5,2,SEM],
+[55,'pijama azul-marinho Patrulha Pata',5,2,LV],
+[57,'sapatilhas azul e verde crocodilo olhinhos',5,2,BV],
 [58,'pijama Disney Winnie the Pooh',4,2,AO],
 [59,'lip balm Aloé Vera, cor verde',0.87,0.87,CC],
 [60,'lip balm Pearl Shine, cor rosa',0.87,0.87,CC],
@@ -133,7 +135,7 @@ const A=[
 [79,'tapete de secretária unicórnio',0.99,0.99,CC],
 [80,'estojo de beleza ×6, lã branca',4.94,2,KPD],
 [80,'estojo de beleza ×6, lã branca',4.94,2,MC],
-[81,'caixa de beleza ×4 Wellness & Bath Set ×3',0,0,CC],
+[81,'caixa de beleza ×4 Wellness & Bath Set ×3',2.88,2,CC],
 [85,'casaco comprido efeito pelo, preto, Guess',0,50,KPD]
 ];
 const orders=A.map(([num,nome,base,comm,client])=>({num,nome,base,comm,client,preco:base+comm}));
